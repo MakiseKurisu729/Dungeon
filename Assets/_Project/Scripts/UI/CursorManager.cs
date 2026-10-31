@@ -1,0 +1,147 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 上下文光标：默认 / 队友选择 / 敌人攻击 / 可交互信息。
+/// 悬停敌人时攻击光标自动染红（白色贴图乘色）；每张光标可配自己的热点（治切换瞬移）。
+/// </summary>
+public class CursorManager : MonoBehaviour
+{
+    public static CursorManager instance;
+
+    public enum Hover { None, Pointer, Select, Attack, Info }
+
+    [Header("光标贴图（白色/灰色系，程序染色）")]
+    public Texture2D defaultCursor;
+    public Texture2D pointerCursor;
+    public Texture2D selectCursor;
+    public Texture2D attackCursor;
+    public Texture2D infoCursor;
+
+    [Header("各光标热点（图标内点击点的像素坐标，原点=图标左上角）")]
+    public Vector2 defaultHotspot = Vector2.zero;
+    public Vector2 pointerHotspot = Vector2.zero;
+    public Vector2 selectHotspot = Vector2.zero;
+    public Vector2 attackHotspot = Vector2.zero;
+    public Vector2 infoHotspot = Vector2.zero;
+
+    [Header("状态颜色")]
+    public Color selectColor = new Color(0.3f, 1f, 0.5f);
+    public Color attackColor = new Color(1f, 0.25f, 0.25f);
+    public Color infoColor = new Color(1f, 0.85f, 0.2f);
+
+    [Header("点选射线（Layer）")]
+    public LayerMask clickableLayers = ~0;
+
+    public bool AlwaysPointer { get; set; }
+    public bool ForceDefault { get; set; }
+
+    Dictionary<Texture2D, Dictionary<Color, Texture2D>> _tintCache;
+    Hover _hover = Hover.None;
+
+    void Awake()
+    {
+        instance = this;
+        _tintCache = new Dictionary<Texture2D, Dictionary<Color, Texture2D>>();
+    }
+
+    void Update()
+    {
+        if (UIManager.instance != null && UIManager.instance.IsInventoryOpen)
+        {
+            SetHover(Hover.Pointer);
+            Apply(pointerCursor, pointerHotspot, Color.white);
+            return;
+        }
+
+        if (SkillInputController.instance != null && SkillInputController.IsTargeting)
+        {
+            SetHover(Hover.Pointer);
+            Apply(pointerCursor, pointerHotspot, Color.white);
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, 300f, clickableLayers);
+
+        UnitHealth enemy = null;
+        Interactable inter = null;
+        Selectable selectable = null;
+        UnitHealth playerUnit = null;
+        foreach (var h in hits)
+        {
+            if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)
+                selectable = h.collider.GetComponentInParent<Selectable>();
+            if (enemy == null)
+            {
+                var uh = h.collider.GetComponentInParent<UnitHealth>();
+                if (uh != null && uh.team == Team.Monster && !uh.dead) enemy = uh;
+            }
+            if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
+                inter = h.collider.GetComponentInParent<Interactable>();
+            if (playerUnit == null)
+            {
+                var uh = h.collider.GetComponentInParent<UnitHealth>();
+                if (uh != null && uh.team == Team.Player) playerUnit = uh;
+            }
+        }
+
+        if (inter != null && selectable == null)
+        {
+            SetHover(Hover.Info);
+            Apply(infoCursor, infoHotspot, infoColor);
+        }
+        else if (selectable != null)
+        {
+            SetHover(Hover.Select);
+            Apply(selectCursor, selectHotspot, selectColor);
+        }
+        else if (enemy != null)
+        {
+            SetHover(Hover.Attack);
+            Apply(attackCursor, attackHotspot, attackColor);   // ★ 攻击光标染红
+        }
+        else
+        {
+            SetHover(Hover.Pointer);
+            Apply(pointerCursor, pointerHotspot, Color.white);
+        }
+    }
+
+    void SetHover(Hover h) { _hover = h; }
+
+    void Apply(Texture2D tex, Vector2 hotspot, Color tint)
+    {
+        if (tex == null) return;
+        // 白色贴图按需染色；彩色贴图用原图
+        bool needTint = tint != Color.white && IsGrayscaleish(tex);
+        Texture2D finalTex = needTint ? GetTinted(tex, tint) : tex;
+        Cursor.SetCursor(finalTex, hotspot, CursorMode.Auto);
+    }
+
+    bool IsGrayscaleish(Texture2D tex)
+    {
+        // 简化：采样中心像素判断是否接近灰白（r≈g≈b）
+        Color c = tex.GetPixel(tex.width / 2, tex.height / 2);
+        return Mathf.Abs(c.r - c.g) < 0.05f && Mathf.Abs(c.g - c.b) < 0.05f;
+    }
+
+    Texture2D GetTinted(Texture2D src, Color tint)
+    {
+        if (!_tintCache.TryGetValue(src, out var inner))
+        {
+            inner = new Dictionary<Color, Texture2D>();
+            _tintCache[src] = inner;
+        }
+        if (inner.TryGetValue(tint, out var cached) && cached != null) return cached;
+
+        var copy = new Texture2D(src.width, src.height, TextureFormat.RGBA32, false);
+        var px = src.GetPixels();
+        for (int i = 0; i < px.Length; i++)
+            px[i] = new Color(px[i].r * tint.r, px[i].g * tint.g, px[i].b * tint.b, px[i].a);
+        copy.SetPixels(px);
+        copy.Apply();
+        inner[tint] = copy;
+        return copy;
+    }
+}
