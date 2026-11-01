@@ -8,8 +8,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class UnitBrain : MonoBehaviour
 {
+    [InspectorName("导航代理")]
     public NavMeshAgent agent;
+    [InspectorName("数值资产")]
     public UnitStats stats;
+    [InspectorName("战斗执行器")]
     public MonoBehaviour combat;        // 实现 ICharacterCombat（剑/弓）
 
     protected Transform target;

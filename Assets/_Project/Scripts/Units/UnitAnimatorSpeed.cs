@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class UnitAnimatorSpeed : MonoBehaviour
 {
+    [InspectorName("数值资产")]
     public UnitStats stats;
     Animator _animator;
 

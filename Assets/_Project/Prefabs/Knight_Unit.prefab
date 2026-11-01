@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 1142945820008185855}
   - component: {fileID: 1116910718786336663}
   - component: {fileID: 2428230424868387509}
+  - component: {fileID: -63824219877848339}
   m_Layer: 8
   m_Name: Knight_Unit
   m_TagString: Player
@@ -376,6 +377,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: e310ce4757caa0d45a80cba0519d9ed7, type: 2}
+--- !u!114 &-63824219877848339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2235231795659222389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320fed9a55133164dacf5c734d4d0756, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 7770671265982002315}
+  brain: {fileID: 3667470874929338347}
+  agent: {fileID: 7278873611264672489}
+  animator: {fileID: 8697894307817638407}
+  dieTrigger: Die
+  reviveTrigger: Revive
+  rescueTime: 3
+  rescueRange: 2.5
+  reviveHp: 1
+  riseDuration: 1.2
 --- !u!1001 &1837856430033410893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -562,7 +585,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 13febfe5d6f179a4dacb33afc5b210f8, type: 2}
+      objectReference: {fileID: 22100000, guid: 63996c7686507be4084e7792bd1f21c5,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

@@ -6,8 +6,11 @@ using UnityEngine;
 /// </summary>
 public class Chest : MonoBehaviour
 {
+    [InspectorName("盖子")]
     public Transform lid;
+    [InspectorName("开启角度")]
     public float openAngle = -110f;
+    [InspectorName("开启时长")]
     public float openDuration = 0.4f;
 
     bool _opened;

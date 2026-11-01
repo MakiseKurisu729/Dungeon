@@ -12,12 +12,16 @@ public class SkillInputController : MonoBehaviour
     public static SkillInputController instance;
     public static bool IsTargeting { get; private set; }
 
+    [InspectorName("快捷施法")]
     [Tooltip("快捷施法：跳过目标指示，直接对最近敌人释放")]
     public bool quickCast = false;
 
+    [InspectorName("技能指示器")]
     public SkillIndicator indicator;
+    [InspectorName("技能按键")]
     public KeyCode[] skillKeys = { KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R };
 
+    [InspectorName("敌人缓存刷新间隔")]
     [Tooltip("敌人列表缓存刷新间隔（秒）")]
     public float enemyCacheInterval = 0.25f;
 

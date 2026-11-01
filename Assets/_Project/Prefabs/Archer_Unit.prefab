@@ -195,6 +195,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -63824219877848339, guid: 7a7ec5d3f1c7a1b43937a595bbf97898,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 6225212749770758965}
     - target: {fileID: 1116910718786336663, guid: 7a7ec5d3f1c7a1b43937a595bbf97898,
         type: 3}
       propertyPath: selectionRing
@@ -215,6 +220,16 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 6225212749770758965}
+    - target: {fileID: 1142945820008185855, guid: 7a7ec5d3f1c7a1b43937a595bbf97898,
+        type: 3}
+      propertyPath: skills.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142945820008185855, guid: 7a7ec5d3f1c7a1b43937a595bbf97898,
+        type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1762501509026315396, guid: 7a7ec5d3f1c7a1b43937a595bbf97898,
         type: 3}
       propertyPath: animator
@@ -491,7 +506,7 @@ Animator:
   m_GameObject: {fileID: 6994480875077599720}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d535e3e4820c6cb439fb7776e227fc7d, type: 3}
-  m_Controller: {fileID: 9100000, guid: 03a6f0ba606a44644a09a185ceae3a76, type: 2}
+  m_Controller: {fileID: 22100000, guid: 43cff6784ab87864cb7ad1a8bb625ad4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

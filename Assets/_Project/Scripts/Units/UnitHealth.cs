@@ -2,10 +2,8 @@ using UnityEngine;
 
 public enum BodyPartType { Normal, Weak, Hard, Critical }
 
-/// <summary>
-/// 统一生命：受击管线（破防/部位倍率）；DamageInfo 打包上下文；
-/// C# 事件（同域）+ EventBus（跨域：飘字/掉落/统计）。
-/// </summary>
+/// <summary>统一生命：受击管线（破防/部位倍率）；DamageInfo + 事件。
+/// TakeHit 为 virtual（带盾单位可重写）；支持 Revive 复活（倒地救援用）。</summary>
 public class UnitHealth : MonoBehaviour
 {
     public UnitStats stats;
@@ -21,6 +19,7 @@ public class UnitHealth : MonoBehaviour
 
     public event System.Action<DamageInfo> OnHit;
     public event System.Action OnDeath;
+    public event System.Action OnRevived;
 
     Renderer[] _renderers;
     Color[] _colors;
@@ -50,8 +49,7 @@ public class UnitHealth : MonoBehaviour
         }
     }
 
-    // 武器命中管线（来源可追）
-    public bool TakeHit(float rawDamage, float sharpness, DamageType damageType, Vector3 hitPos, UnitHealth source = null)
+    public virtual bool TakeHit(float rawDamage, float sharpness, DamageType damageType, Vector3 hitPos, UnitHealth source = null)
     {
         if (dead) return true;
         var info = new DamageInfo
@@ -75,7 +73,6 @@ public class UnitHealth : MonoBehaviour
         return true;
     }
 
-    // 直接伤害（怪物攻击等无破防场景）
     public void ApplyDamage(float amount, Vector3 hitPos, UnitHealth source = null)
     {
         ApplyDamageInfo(new DamageInfo
@@ -92,8 +89,8 @@ public class UnitHealth : MonoBehaviour
         hp -= final;
         Flash();
 
-        OnHit?.Invoke(info);                            // 同域事件（僵直等）
-        EventBus.Publish(new DamageDealtEvent { info = info });   // 跨域事件（飘字/音效/统计）
+        OnHit?.Invoke(info);
+        EventBus.Publish(new DamageDealtEvent { info = info });
 
         if (hp <= 0f)
         {
@@ -101,6 +98,15 @@ public class UnitHealth : MonoBehaviour
             OnDeath?.Invoke();
             EventBus.Publish(new UnitDiedEvent { unit = this });
         }
+    }
+
+    // ★ 复活（倒地救援）
+    public void Revive(float hpValue)
+    {
+        if (!dead) return;
+        dead = false;
+        hp = Mathf.Clamp(hpValue, 1f, maxHp);
+        OnRevived?.Invoke();
     }
 
     public void HealFull() { if (!dead) hp = maxHp; }

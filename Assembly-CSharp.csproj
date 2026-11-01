@@ -66,21 +66,28 @@
   <ItemGroup>
     <Compile Include="Assets\_Project\Scripts\Player\SkillInputController.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\CursorManager.cs" />
+    <Compile Include="Assets\_Project\Scripts\System\ForestGenerator.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\SelectionManager.cs" />
+    <Compile Include="Assets\_Project\Scripts\System\DungeonDoor.cs" />
+    <Compile Include="Assets\_Project\Scripts\UI\MainMenuPanel.cs" />
     <Compile Include="Assets\_Project\Scripts\System\Interactable.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SkillEffects.cs" />
     <Compile Include="Assets\_Project\Scripts\Core\EventBus.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\Team.cs" />
+    <Compile Include="Assets\_Project\Scripts\UI\BasePanel.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\BossBrain.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\CharacterBrain.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\ShieldedUnitHealth.cs" />
     <Compile Include="Assets\_Project\Scripts\Debug\Mirror.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\DamageInfo.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\SlotClickHandler.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\Projectile.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\Selectable.cs" />
+    <Compile Include="Assets\_Project\Scripts\Combat\SkillEffectFireball.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\SkillBarUI.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\WorldHealthBar.cs" />
     <Compile Include="Assets\_Project\Scripts\Items\ItemData.cs" />
@@ -91,6 +98,7 @@
     <Compile Include="Assets\_Project\Scripts\System\Chest.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\PlayerCommandController.cs" />
     <Compile Include="Assets\_Project\Scripts\Core\GameFlow.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\SkeletonWander.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\UnitAnimatorSpeed.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\InventoryUI.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
@@ -101,15 +109,23 @@
     <Compile Include="Assets\_Project\Scripts\Combat\SkillEffectBase.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\UnitBrain.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\MonsterBrain.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\Visibility.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SwordSwing.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\ICharacterCombat.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\SkillIndicator.cs" />
     <Compile Include="Assets\_Project\Scripts\Core\PauseManager.cs" />
+    <Compile Include="Assets\_Project\Scripts\System\FogOfWar.cs" />
+    <Compile Include="Assets\_Project\Scripts\System\SkeletonSpawner.cs" />
+    <Compile Include="Assets\_Project\Scripts\Combat\FireballProjectile.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\HUD.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\RangedCombat.cs" />
     <Compile Include="Assets\_Project\Scripts\Items\Inventory.cs" />
+    <Compile Include="Assets\_Project\Scripts\UI\EscMenuPanel.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\SleepingSkeleton.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
+    <Compile Include="Assets\_Project\Scripts\Combat\ExplosionFx.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\UnitMana.cs" />
+    <Compile Include="Assets\_Project\Scripts\Units\DownedRescue.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\WeaponData.cs" />
     <Compile Include="Assets\_Project\Scripts\Framework\Cooldown.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\CombatFeedback.cs" />
@@ -118,6 +134,7 @@
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\DamageNumber.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\SkillSystem.cs" />
+    <Compile Include="Assets\_Project\Scripts\UI\TransitionFader.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SimplePool.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +144,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\_Project\Art\kaykit-forest\KayKit_Forest_Nature_Pack_1.0_FREE\License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\_Project\Art\kaykit-adventurers\KayKit_Adventurers_2.0_FREE\License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
@@ -153,6 +171,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\_Project\Art\Shaders\FogOfWarUnlit.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>

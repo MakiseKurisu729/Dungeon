@@ -6,7 +6,9 @@ using UnityEngine;
 public class CharacterBrain : UnitBrain
 {
     [Header("交互")]
+    [InspectorName("单位动画器")]
     public Animator unitAnimator;
+    [InspectorName("交互额外距离")]
     public float interactExtraRange = 0.6f;   // 比交互物尺寸再大一圈
 
     Transform _orderedTarget;

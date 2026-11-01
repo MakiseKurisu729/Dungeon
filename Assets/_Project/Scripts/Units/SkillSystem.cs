@@ -6,9 +6,12 @@ using UnityEngine;
 /// </summary>
 public class SkillSystem : MonoBehaviour
 {
+    [InspectorName("蓝量组件")]
     public UnitMana mana;
+    [InspectorName("近战执行器")]
     public SwordSwing sword;
 
+    [InspectorName("技能槽")]
     [Tooltip("Q/W/E/R，空槽留空")]
     public SkillData[] skills = new SkillData[4];
 

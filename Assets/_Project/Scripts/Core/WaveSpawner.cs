@@ -7,12 +7,17 @@ public class WaveSpawner : MonoBehaviour
     [System.Serializable]
     public class Wave
     {
+        [InspectorName("单位预制体")]
         public GameObject[] unitPrefabs;    // 带 UnitHealth+UnitBrain 的完整单位预制体
+        [InspectorName("生成偏移")]
         public Vector3[] offsets;
     }
 
+    [InspectorName("波次列表")]
     public Wave[] waves;
+    [InspectorName("波次间隔")]
     public float waveDelay = 3f;
+    [InspectorName("每波血量增幅")]
     public float hpScalePerWave = 0.3f;
 
     readonly List<UnitHealth> _alive = new List<UnitHealth>();

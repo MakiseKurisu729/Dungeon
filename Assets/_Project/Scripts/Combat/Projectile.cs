@@ -1,6 +1,7 @@
 using UnityEngine;
 
-/// <summary>抛射物基类：追踪+抛物线+到达结算（DamageInfo 管线）+对象池回收。</summary>
+/// <summary>抛射物基类：追踪+抛物线+到达结算（DamageInfo 管线）+对象池回收。
+/// Launch 时清除拖尾残留，防止池化复用带旧轨迹。</summary>
 public class Projectile : MonoBehaviour
 {
     [HideInInspector] public UnitHealth target;
@@ -23,6 +24,10 @@ public class Projectile : MonoBehaviour
         _lastPos = start;
         _t = 0f;
         _fallbackEnd = target != null ? target.transform.position : start + transform.forward * 5f;
+        transform.localScale = Vector3.one;
+        // ★ 清除拖尾残留（池化复用防旧轨迹）
+        var trail = GetComponentInChildren<TrailRenderer>();
+        if (trail != null) trail.Clear();
     }
 
     protected virtual Vector3 ComputeEnd()

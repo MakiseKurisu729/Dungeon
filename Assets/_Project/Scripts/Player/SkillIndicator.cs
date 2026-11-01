@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>技能指示器：脚下范围圈 + 中心到鼠标点的指向线。</summary>
 public class SkillIndicator : MonoBehaviour
 {
+    [InspectorName("指示器材质")]
     public Material mat;   // RingMat 即可
 
     LineRenderer _ring;

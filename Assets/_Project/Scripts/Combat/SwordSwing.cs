@@ -11,46 +11,71 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
     public enum AttackMode { SingleTarget, Sweep }   // 单体=锁定目标；扫掠=窗口内群体（平砍AOE留此开关）
 
     [Header("引用")]
+    [InspectorName("武器")]
     public Transform sword;
+    [InspectorName("盾牌")]
     public Transform shield;
+    [InspectorName("武器资产")]
     public WeaponData weapon;
+    [InspectorName("圈材质")]
     public Material ringMaterial;
+    [InspectorName("拖尾材质")]
     public Material trailMaterial;
+    [InspectorName("数值资产")]
     public UnitStats stats;
+    [InspectorName("生命组件")]
     public UnitHealth health;
 
     [Header("攻击模式")]
+    [InspectorName("攻击模式")]
     [Tooltip("单体=只打发起攻击时锁定的目标；扫掠=窗口内群体（留作平砍AOE开关）")]
     public AttackMode attackMode = AttackMode.SingleTarget;
+    [InspectorName("命中距离")]
     [Tooltip("单体模式下允许命中的最远距离（对齐 UnitStats 攻击距离）")]
     public float hitRange = 2.2f;
 
     [Header("攻击动画")]
+    [InspectorName("攻击时长")]
     public float attackLen = 0.8f;
+    [InspectorName("判定窗口起")]
     [Range(0f, 1f)] public float activeStart = 0.35f;
+    [InspectorName("判定窗口止")]
     [Range(0f, 1f)] public float activeEnd = 0.55f;
 
     [Header("动画状态名（UpperBody 层）")]
-    public string attackStateName = "Attack";
+    [InspectorName("攻击状态名")]
+    public string attackStateName = "Attack_Draw";
+    [InspectorName("技能状态名")]
     public string skillStateName = "Skill";
-    public int attackLayer = 1;
+    [InspectorName("攻击动画层")]
+    public int attackLayer = 0;
 
     [Header("命中")]
+    [InspectorName("剑刃长度")]
     public float bladeLength = 1.05f;
+    [InspectorName("命中半径")]
     public float hitRadius = 0.28f;
 
     [Header("强化斩（技能用）")]
+    [InspectorName("技能攻击时长")]
     public float skillLen = 1.3f;
+    [InspectorName("技能判定窗口起")]
     [Range(0f, 1F)] public float skillActiveStart = 0.5f;
+    [InspectorName("技能判定窗口止")]
     [Range(0f, 1f)] public float skillActiveEnd = 0.7f;
 
     [Header("伤害")]
+    [InspectorName("力道基础")]
     public float strengthBase = 1f;
+    [InspectorName("力道加成系数")]
     public float strengthDamageFactor = 0.5f;
+    [InspectorName("伤害倍率")]
     public float dmgMult = 1f;
 
     [Header("调试可视化")]
+    [InspectorName("调试可视化")]
     public bool showDebug = true;
+    [InspectorName("拖尾保留时长")]
     public float trailPersistTime = 0.25f;
 
     Animator _animator;

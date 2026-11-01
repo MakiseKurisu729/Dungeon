@@ -1,34 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 上下文光标：默认 / 队友选择 / 敌人攻击 / 可交互信息。
-/// 悬停敌人时攻击光标自动染红（白色贴图乘色）；每张光标可配自己的热点（治切换瞬移）。
-/// </summary>
+/// <summary>上下文光标：默认/选择/攻击/交互 四态。白色贴图自动染色，热点可调。
+/// 交互光标（interactCursor）检查器自拖；悬停 Interactable 时换用并显示其 hint。</summary>
 public class CursorManager : MonoBehaviour
 {
     public static CursorManager instance;
 
-    public enum Hover { None, Pointer, Select, Attack, Info }
+    public enum Hover { None, Pointer, Select, Attack, Interact }
 
     [Header("光标贴图（白色/灰色系，程序染色）")]
     public Texture2D defaultCursor;
     public Texture2D pointerCursor;
     public Texture2D selectCursor;
     public Texture2D attackCursor;
-    public Texture2D infoCursor;
+    [Tooltip("交互光标：悬停可交互物（倒地队友/宝箱/门）时显示，自拖图标")]
+    public Texture2D interactCursor;
 
     [Header("各光标热点（图标内点击点的像素坐标，原点=图标左上角）")]
     public Vector2 defaultHotspot = Vector2.zero;
     public Vector2 pointerHotspot = Vector2.zero;
     public Vector2 selectHotspot = Vector2.zero;
     public Vector2 attackHotspot = Vector2.zero;
-    public Vector2 infoHotspot = Vector2.zero;
+    public Vector2 interactHotspot = Vector2.zero;
 
     [Header("状态颜色")]
     public Color selectColor = new Color(0.3f, 1f, 0.5f);
     public Color attackColor = new Color(1f, 0.25f, 0.25f);
-    public Color infoColor = new Color(1f, 0.85f, 0.2f);
+    public Color interactColor = new Color(1f, 0.85f, 0.2f);
 
     [Header("点选射线（Layer）")]
     public LayerMask clickableLayers = ~0;
@@ -48,18 +47,10 @@ public class CursorManager : MonoBehaviour
     void Update()
     {
         if (UIManager.instance != null && UIManager.instance.IsInventoryOpen)
-        {
-            SetHover(Hover.Pointer);
-            Apply(pointerCursor, pointerHotspot, Color.white);
-            return;
-        }
+        { SetHover(Hover.Pointer); Apply(pointerCursor, pointerHotspot, Color.white); return; }
 
         if (SkillInputController.instance != null && SkillInputController.IsTargeting)
-        {
-            SetHover(Hover.Pointer);
-            Apply(pointerCursor, pointerHotspot, Color.white);
-            return;
-        }
+        { SetHover(Hover.Pointer); Apply(pointerCursor, pointerHotspot, Color.white); return; }
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hits = Physics.RaycastAll(ray, 300f, clickableLayers);
@@ -67,7 +58,6 @@ public class CursorManager : MonoBehaviour
         UnitHealth enemy = null;
         Interactable inter = null;
         Selectable selectable = null;
-        UnitHealth playerUnit = null;
         foreach (var h in hits)
         {
             if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)
@@ -79,17 +69,20 @@ public class CursorManager : MonoBehaviour
             }
             if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
                 inter = h.collider.GetComponentInParent<Interactable>();
-            if (playerUnit == null)
-            {
-                var uh = h.collider.GetComponentInParent<UnitHealth>();
-                if (uh != null && uh.team == Team.Player) playerUnit = uh;
-            }
         }
 
         if (inter != null && selectable == null)
         {
-            SetHover(Hover.Info);
-            Apply(infoCursor, infoHotspot, infoColor);
+            SetHover(Hover.Interact);
+            if (interactCursor != null)
+            {
+                Apply(interactCursor, interactHotspot, interactColor);
+                if (!string.IsNullOrEmpty(inter.hint)) GameData.SetMessage(inter.hint);
+            }
+            else
+            {
+                Apply(pointerCursor, pointerHotspot, Color.white);
+            }
         }
         else if (selectable != null)
         {
@@ -99,7 +92,7 @@ public class CursorManager : MonoBehaviour
         else if (enemy != null)
         {
             SetHover(Hover.Attack);
-            Apply(attackCursor, attackHotspot, attackColor);   // ★ 攻击光标染红
+            Apply(attackCursor, attackHotspot, attackColor);
         }
         else
         {
@@ -113,7 +106,6 @@ public class CursorManager : MonoBehaviour
     void Apply(Texture2D tex, Vector2 hotspot, Color tint)
     {
         if (tex == null) return;
-        // 白色贴图按需染色；彩色贴图用原图
         bool needTint = tint != Color.white && IsGrayscaleish(tex);
         Texture2D finalTex = needTint ? GetTinted(tex, tint) : tex;
         Cursor.SetCursor(finalTex, hotspot, CursorMode.Auto);
@@ -121,7 +113,6 @@ public class CursorManager : MonoBehaviour
 
     bool IsGrayscaleish(Texture2D tex)
     {
-        // 简化：采样中心像素判断是否接近灰白（r≈g≈b）
         Color c = tex.GetPixel(tex.width / 2, tex.height / 2);
         return Mathf.Abs(c.r - c.g) < 0.05f && Mathf.Abs(c.g - c.b) < 0.05f;
     }
@@ -129,10 +120,7 @@ public class CursorManager : MonoBehaviour
     Texture2D GetTinted(Texture2D src, Color tint)
     {
         if (!_tintCache.TryGetValue(src, out var inner))
-        {
-            inner = new Dictionary<Color, Texture2D>();
-            _tintCache[src] = inner;
-        }
+        { inner = new Dictionary<Color, Texture2D>(); _tintCache[src] = inner; }
         if (inner.TryGetValue(tint, out var cached) && cached != null) return cached;
 
         var copy = new Texture2D(src.width, src.height, TextureFormat.RGBA32, false);

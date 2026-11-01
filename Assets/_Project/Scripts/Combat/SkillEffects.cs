@@ -8,13 +8,18 @@ using UnityEngine;
 public class BashEffect : SkillEffectBase
 {
     [Header("时序（对齐动画帧）")]
+    [InspectorName("盾击总时长")]
     public float totalTime = 0.6f;
+    [InspectorName("盾击命中时机")]
     [Tooltip("结算时间点（秒）= 砸中帧 ÷ 采样率")]
     public float hitTime = 0.3f;
 
     [Header("击退参数")]
+    [InspectorName("僵直时长")]
     public float stagger = 0.5f;
+    [InspectorName("击退距离")]
     public float knockDist = 2f;
+    [InspectorName("击退时长")]
     public float knockDuration = 0.3f;
 
     public override bool CanCast(SkillSystem caster, Transform target)

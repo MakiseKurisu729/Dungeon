@@ -1,60 +1,115 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// UI 管理器（唯一咽喉）：所有面板的显示/隐藏只允许经过这里。
-/// 每次切换打印调用栈——如果面板被"幽灵"点亮，日志会指认凶手。
+/// UI 咽喉：所有面板开关只走这里。场景里面板物体保持激活，初始隐藏由本类 Awake 统一执行。
+/// Tab=背包 I=属性 C=装备（窗口组进栈，Esc 关栈顶）；Esc 栈空=Esc菜单（接管暂停）。
+/// 开始界面与 Esc 菜单为独占面板（不进栈）；未开始游戏/团灭时 Esc 菜单不响应。
 /// </summary>
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    [Tooltip("背包/箱子面板的总根")]
-    public GameObject inventoryRoot;
+    [Header("面板")]
+    [InspectorName("背包面板")]
+    public InventoryUI inventoryPanel;
+    [InspectorName("属性面板")]
+    public BasePanel statsPanel;      // 第二批建，先空着
+    [InspectorName("装备面板")]
+    public BasePanel equipPanel;      // 第三批建，先空着
+    [InspectorName("Esc菜单面板")]
+    public EscMenuPanel escMenuPanel;
+    [InspectorName("主菜单面板")]
+    public MainMenuPanel mainMenuPanel;
 
-    public bool IsInventoryOpen
-    {
-        get { return inventoryRoot != null && inventoryRoot.activeSelf; }
-    }
+    int _serial;
+    readonly List<BasePanel> _stack = new List<BasePanel>();
+
+    public bool IsInventoryOpen { get { return inventoryPanel != null && inventoryPanel.IsOpen; } }
+    public bool IsAnyPanelOpen { get { return _stack.Count > 0; } }
 
     void Awake()
     {
         instance = this;
-        SetVisible(inventoryRoot, false, "Awake 初始隐藏");
+        // ★ 初始隐藏统一接管：面板物体在场景里保持激活，隐藏权 100% 归这里
+        if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false);
+        if (escMenuPanel != null) escMenuPanel.gameObject.SetActive(false);
+    }
+
+    void Start()
+    {
+        if (mainMenuPanel != null) OpenPanel(mainMenuPanel);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && IsInventoryOpen)
-            HideInventory();
+        bool gameOn = GameFlow.GameStarted
+                      && (GameFlow.instance == null || !GameFlow.instance.IsWiped);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_stack.Count > 0)
+            {
+                ClosePanel(_stack[_stack.Count - 1]);
+                return;
+            }
+            if (gameOn && escMenuPanel != null)
+            {
+                if (escMenuPanel.IsOpen) ClosePanel(escMenuPanel);
+                else OpenPanel(escMenuPanel);
+            }
+            return;
+        }
+
+        if (!gameOn) return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (IsInventoryOpen) HideInventory();
-            else ShowInventory(null, null);   // Tab = 只开背包
+            if (IsInventoryOpen) ClosePanel(inventoryPanel);
+            else ShowInventory(null, null);
         }
+        if (Input.GetKeyDown(KeyCode.I)) Toggle(statsPanel);
+        if (Input.GetKeyDown(KeyCode.C)) Toggle(equipPanel);
     }
 
-    /// <summary>打开背包/箱子面板。chestInv 为空 = 仅背包模式。</summary>
+    void Toggle(BasePanel p)
+    {
+        if (p == null) return;
+        if (p.IsOpen) ClosePanel(p);
+        else OpenPanel(p);
+    }
+
+    public void OpenPanel(BasePanel panel, object userData = null)
+    {
+        if (panel == null) { Debug.LogError("[UIManager] 面板为空！"); return; }
+        if (panel.IsOpen) return;
+        _serial++;
+        panel.Open(_serial, userData);
+        if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))
+            _stack.Add(panel);
+        Debug.Log($"[UIManager] 打开 {panel.name}（序号 {_serial}）");
+    }
+
+    public void ClosePanel(BasePanel panel)
+    {
+        if (panel == null || !panel.IsOpen) return;
+        _stack.Remove(panel);
+        panel.Close();
+        Debug.Log($"[UIManager] 关闭 {panel.name}");
+    }
+
+    // ===== 旧接口兼容（Chest 等调用方零改动）=====
     public void ShowInventory(Inventory chestInv, Chest chest)
     {
-        if (InventoryUI.instance != null)
-            InventoryUI.instance.SetData(chestInv, chest);
-        SetVisible(inventoryRoot, true, "ShowInventory");
+        if (inventoryPanel == null) { Debug.LogError("[UIManager] inventoryPanel 槽为空"); return; }
+        if (chestInv == null && SelectionManager.instance != null && SelectionManager.instance.Primary != null)
+            inventoryPanel.BindPlayer(SelectionManager.instance.Primary.GetComponentInParent<Inventory>());
+        inventoryPanel.SetChestData(chestInv, chest);
+        OpenPanel(inventoryPanel);
     }
 
     public void HideInventory()
     {
-        SetVisible(inventoryRoot, false, "HideInventory");
-        if (InventoryUI.instance != null)
-            InventoryUI.instance.SetData(null, null);
-    }
-
-    // 唯一的 SetActive 咽喉
-    void SetVisible(GameObject go, bool visible, string reason)
-    {
-        if (go == null) { Debug.LogError("[UIManager] 目标面板为空！检查 inventoryRoot 槽"); return; }
-        if (go.activeSelf == visible) return;
-        go.SetActive(visible);
-        Debug.Log($"[UIManager] {go.name} → {(visible ? "显示" : "隐藏")}（{reason}）\n{System.Environment.StackTrace}");
+        ClosePanel(inventoryPanel);
     }
 }

@@ -6,8 +6,10 @@ using UnityEngine;
 /// </summary>
 public abstract class SkillEffectBase : ScriptableObject
 {
+    [InspectorName("需要目标")]
     [Tooltip("是否需要选定敌方目标")]
     public bool needTarget = true;
+    [InspectorName("范围")]
     public float range = 2.5f;
 
     public abstract bool CanCast(SkillSystem caster, Transform target);

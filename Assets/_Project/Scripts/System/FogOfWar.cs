@@ -1,12 +1,15 @@
 using UnityEngine;
 
-/// <summary>LoL 式战争迷雾：程序化网格板（放高空，无碰撞不挡射线）。
-/// 玩家单位周围一圈永久揭开，其余暗色迷雾；揭开边缘平滑过渡。
-/// 材质用 Particles/Unlit（支持顶点色），完整透明参数。</summary>
+/// <summary>LoL 式战争迷雾：程序化网格板。材质手动拖入（URP Particles/Unlit + Surface=透明），
+/// 顶点色驱动：透明=已探索，暗色=迷雾。玩家周围一圈永久揭开。</summary>
 public class FogOfWar : MonoBehaviour
 {
+    [Header("材质（手动建：URP Particles/Unlit + Surface=透明）")]
+    public Material fogMaterial;
+
+    [Header("布局")]
     [Tooltip("迷雾覆盖边长（米，以本物体为中心）")]
-    public float mapSize = 150f;
+    public float mapSize = 210f;
     [Tooltip("网格密度（每边顶点数）")]
     public int resolution = 96;
     [Tooltip("清晰半径（≈角色视野圈）")]
@@ -26,6 +29,8 @@ public class FogOfWar : MonoBehaviour
 
     void Start()
     {
+        if (fogMaterial == null)
+        { Debug.LogError("[FogOfWar] 材质槽为空！请拖入 Particles/Unlit 透明材质", this); return; }
         BuildMesh();
         int n = _verts.Length;
         _reveal = new float[n];
@@ -58,34 +63,16 @@ public class FogOfWar : MonoBehaviour
             }
         _mesh.vertices = _verts; _mesh.uv = uv; _mesh.triangles = tris;
         var mf = gameObject.AddComponent<MeshFilter>();
+        mf.mesh = _mesh;
         var mr = gameObject.AddComponent<MeshRenderer>();
-        // ★ 首选自写最简 URP Unlit（Dungeon/FogOfWar：顶点色+透明+双面），
-        //   不赌 URP Particles/Unlit 运行时拼属性；找不到时回退 Particles/Unlit 并补全全部透明参数
-        var shader = Shader.Find("Dungeon/FogOfWar");
-        Material mat;
-        if (shader != null)
-        {
-            mat = new Material(shader);
-        }
-        else
-        {
-            mat = new Material(Shader.Find("Universal Render Pipeline/Particles/Unlit"));
-            mat.SetFloat("_Surface", 1f);
-            mat.SetFloat("_Blend", 0f);
-            mat.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            mat.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            mat.SetFloat("_ZWrite", 0f);
-            mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-            mat.SetOverrideTag("RenderType", "Transparent");
-            mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-        }
-        mr.material = mat;
+        mr.sharedMaterial = fogMaterial;
         mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         mr.receiveShadows = false;
     }
 
     void Update()
     {
+        if (_mesh == null) return;
         _timer += Time.deltaTime;
         if (_timer >= 0.1f) { _timer = 0f; RevealTick(); }
         LerpColors();
@@ -115,7 +102,7 @@ public class FogOfWar : MonoBehaviour
                     new Vector2(lp.x, lp.z));
                 float v = Mathf.InverseLerp(revealRadius - edgeSoftness, revealRadius + edgeSoftness, d);
                 int i = y * n + x;
-                if (v < _reveal[i]) _reveal[i] = v;   // 只减不增 = 永久揭开
+                if (v < _reveal[i]) _reveal[i] = v;
             }
     }
 

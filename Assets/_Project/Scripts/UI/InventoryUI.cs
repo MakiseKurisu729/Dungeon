@@ -4,23 +4,27 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// 背包/箱子双面板视图（纯视图：不管显隐，UIManager 负责开关）。
-/// Player Inv 留空时自动找第一个玩家单位（按 Team，不靠物体名）。
+/// 背包面板（纯视图）：OnInit 自动找玩家背包+校验槽；OnOpen 刷新；OnClose 清本次数据。
+/// 显隐完全由 UIManager（基类 Open/Close）驱动，本类不碰 SetActive。
 /// </summary>
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : BasePanel
 {
     public static InventoryUI instance;
 
+    [InspectorName("玩家背包")]
     public Inventory playerInv;
+    [InspectorName("宝箱格子容器")]
     public Transform chestGrid;
+    [InspectorName("玩家格子容器")]
     public Transform playerGrid;
+    [InspectorName("格子底图")]
     public Sprite slotBg;
 
     Inventory _chestInv;
     Chest _chest;
     readonly List<GameObject> _slots = new List<GameObject>();
 
-    void Awake()
+    protected override void OnInit()
     {
         instance = this;
         if (playerInv == null)
@@ -34,14 +38,32 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    /// <summary>由 UIManager 调用：设置当前数据并刷新。</summary>
-    public void SetData(Inventory chestInv, Chest chest)
+    /// <summary>主选切换时重新绑定玩家背包（Tab 跟随主选）。</summary>
+    public void BindPlayer(Inventory inv)
+    {
+        playerInv = inv;
+    }
+
+    /// <summary>由 UIManager 在打开前调用：设置本次的箱子数据。</summary>
+    public void SetChestData(Inventory chestInv, Chest chest)
     {
         _chestInv = chestInv;
         _chest = chest;
+    }
+
+    protected override void OnOpen(object userData)
+    {
         if (chestGrid != null && chestGrid.parent != null)
-            chestGrid.parent.gameObject.SetActive(chestInv != null);
+            chestGrid.parent.gameObject.SetActive(_chestInv != null);
         Refresh();
+    }
+
+    protected override void OnClose()
+    {
+        if (chestGrid != null && chestGrid.parent != null)
+            chestGrid.parent.gameObject.SetActive(true);
+        _chestInv = null;
+        _chest = null;
     }
 
     void Refresh()
@@ -73,7 +95,7 @@ public class InventoryUI : MonoBehaviour
                 iimg.sprite = item.icon;
                 iimg.raycastTarget = false;
                 var rt = icon.GetComponent<RectTransform>();
-                rt.anchorMin = Vector2.zero; rt.anchorMax = Vector3.one;
+                rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
                 rt.offsetMin = new Vector2(5, 5); rt.offsetMax = new Vector2(-5, -5);
             }
 

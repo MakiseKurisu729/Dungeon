@@ -4,11 +4,17 @@ using UnityEngine.UI;
 /// <summary>技能栏：跟随主选角色；图标/冷却遮罩(纵向缩放)/耗蓝变灰/按键标签。</summary>
 public class SkillBarUI : MonoBehaviour
 {
+    [InspectorName("槽位图标")]
     public Image[] slotIcons = new Image[4];
+    [InspectorName("冷却遮罩")]
     public Image[] cdMasks = new Image[4];     // 黑遮罩，轴心 Y=0，缩放 Y=剩余冷却比例
+    [InspectorName("按键标签")]
     public Text[] keyLabels = new Text[4];
+    [InspectorName("耗蓝标签")]
     public Text[] costLabels = new Text[4];
+    [InspectorName("蓝量充足颜色")]
     public Color enoughMana = Color.white;
+    [InspectorName("蓝量不足颜色")]
     public Color notEnoughMana = new Color(1f, 1f, 1f, 0.35f);
 
     void Update()

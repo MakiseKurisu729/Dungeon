@@ -3,7 +3,9 @@ using UnityEngine;
 /// <summary>法力值：固定上限、每秒自动回复、技能消耗。不衰减、不积攒。</summary>
 public class UnitMana : MonoBehaviour
 {
+    [InspectorName("蓝量上限")]
     public float max = 100f;
+    [InspectorName("每秒回复")]
     public float regenPerSec = 10f;   // 测试期回复，平衡期再调
     public float current { get; private set; }
 

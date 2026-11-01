@@ -3,22 +3,35 @@ using UnityEngine;
 /// <summary>远程执行器：动画时钟轮询放箭帧；箭矢带伤害来源（DamageInfo 溯源）。</summary>
 public class RangedCombat : MonoBehaviour, ICharacterCombat
 {
+    [InspectorName("弓")]
     public Transform bow;
+    [InspectorName("箭矢预制体")]
     public GameObject arrowPrefab;
+    [InspectorName("数值资产")]
     public UnitStats stats;
+    [InspectorName("生命组件")]
     public UnitHealth health;
+    [InspectorName("攻击触发器名")]
     [Tooltip("与动画器参数一致：玩家弓手填 Attack，骷髅弓手填 AttackRanged")]
     public string attackTrigger = "Attack";
 
     [Header("动画状态名（用于读取播放进度）")]
+    [InspectorName("拉弓状态名")]
     public string drawStateName = "Attack_Draw";
+    [InspectorName("放箭状态名")]
     public string releaseStateName = "Attack_Release";
 
+    [InspectorName("攻击时长")]
     public float attackLen = 1.0f;
+    [InspectorName("释放帧比例")]
     [Range(0f, 1f)] public float releasePoint = 0.45f;
+    [InspectorName("伤害")]
     public float damage = 12f;
+    [InspectorName("锋利度")]
     public float sharpness = 8f;
+    [InspectorName("飞行时长")]
     public float flightDuration = 0.7f;
+    [InspectorName("抛物线高度")]
     public float arcHeight = 1.2f;
 
     Animator _animator;

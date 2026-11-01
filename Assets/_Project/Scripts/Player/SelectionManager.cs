@@ -3,14 +3,13 @@ using UnityEngine;
 
 /// <summary>
 /// 选择系统：左键=单选友军；Ctrl+左键=加选；Ctrl+A 全选；1~4 热键=切换选中；
-/// 反引号清空；点敌人=选定：点亮其预制体下的 EnemyRing 子物体（LoL 式红圈）；
-/// 换目标/点空地/目标死亡 → 圈切换或熄灭。瞄准技能时左键让给施法。
+/// 反引号清空；点敌人=选定并标记（红圈）；点击交互物=选中单位走过去执行交互；
+/// 瞄准技能时左键让给施法。
 /// </summary>
 public class SelectionManager : MonoBehaviour
 {
     public static SelectionManager instance;
 
-    [InspectorName("可点击层")]
     public LayerMask clickableLayers = ~0;
 
     readonly List<Selectable> _all = new List<Selectable>();
@@ -32,7 +31,6 @@ public class SelectionManager : MonoBehaviour
 
     void Start()
     {
-        // ★ 兜底注册：OnEnable 时序不保证，开场统一收集一次
         foreach (var s in FindObjectsByType<Selectable>(FindObjectsSortMode.None))
             Register(s);
     }
@@ -64,7 +62,6 @@ public class SelectionManager : MonoBehaviour
     {
         if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
 
-        // 1~4 快速选人：toggle——按1选骑士，按2加选弓手，再按取消
         for (int i = 0; i < 4; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
@@ -84,19 +81,11 @@ public class SelectionManager : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(0)) { _downPos = Input.mousePosition; _moved = false; }
-        bool targeting = SkillInputController.instance != null && SkillInputController.IsTargeting;
-        if (!targeting && Input.GetMouseButton(0) && ((Vector2)Input.mousePosition - _downPos).magnitude > 8f)
-        {
+        if (Input.GetMouseButton(0) && ((Vector2)Input.mousePosition - _downPos).magnitude > 8f)
             _moved = true;
-            if (_cam != null) _cam.LeftDragPan = true;   // 左键拖动=平移视角，本次按下不再算点选
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (_cam != null) _cam.LeftDragPan = false;
-            if (!_moved && !targeting) HandleClick();
-        }
+        if (Input.GetMouseButtonUp(0) && !_moved && !(SkillInputController.instance != null && SkillInputController.IsTargeting))
+            HandleClick();
 
-        // ★ 选定的敌人死亡 → 圈熄灭
         if (_enemySelected != null && _enemySelected.dead)
             SelectEnemy(null);
 
@@ -141,7 +130,7 @@ public class SelectionManager : MonoBehaviour
         }
         else if (enemy != null)
         {
-            SelectEnemy(enemy);                      // ★ 点亮新目标的圈（旧的自动灭）
+            SelectEnemy(enemy);
             foreach (var s in _selected)
             {
                 var brain = s.GetComponent<CharacterBrain>();
@@ -150,6 +139,7 @@ public class SelectionManager : MonoBehaviour
         }
         else if (inter != null)
         {
+            // ★ 点击交互物：选中单位走过去执行（走到范围后由目标自己的逻辑接管，如 DownedRescue 自动读条）
             foreach (var s in _selected)
             {
                 var brain = s.GetComponent<CharacterBrain>();
@@ -159,7 +149,7 @@ public class SelectionManager : MonoBehaviour
         else
         {
             SingleSelect(null);
-            SelectEnemy(null);                       // ★ 点空地：圈熄灭
+            SelectEnemy(null);
         }
     }
 
@@ -182,18 +172,16 @@ public class SelectionManager : MonoBehaviour
         foreach (var s in _all) if (s != null) s.SetSelected(_selected.Contains(s));
     }
 
-    // ===== 选定的敌人（LoL 式红圈 = 目标预制体下的 EnemyRing 子物体）=====
+    // ===== 选定的敌人（红圈 = 预制体下的 EnemyRing 子物体）=====
     UnitHealth _enemySelected;
-    GameObject _enemyRing;   // 当前亮着的圈
+    GameObject _enemyRing;
 
     void SelectEnemy(UnitHealth uh)
     {
-        // 旧圈先灭
         if (_enemyRing != null) { _enemyRing.SetActive(false); _enemyRing = null; }
         _enemySelected = uh;
         if (uh == null) return;
 
-        // 新圈点亮：约定子物体名 EnemyRing（预制体里做好，默认隐藏）
         var ring = uh.transform.Find("EnemyRing");
         if (ring != null)
         {

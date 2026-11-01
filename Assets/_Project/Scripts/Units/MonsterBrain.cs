@@ -8,21 +8,34 @@ using UnityEngine;
 public class MonsterBrain : UnitBrain
 {
     [Header("攻击")]
+    [InspectorName("使用自身攻击动画")]
     public bool useOwnAttackAnim = true;
+    [InspectorName("攻击触发器名")]
     public string attackTrigger = "AttackMelee";
+    [InspectorName("攻击状态名")]
     [Tooltip("攻击状态名（动画时钟读进度用）：近战 Attack_Melee / 弩手 Shoot")]
     public string attackStateName = "Attack_Melee";
+    [InspectorName("攻击时长")]
     public float attackLen = 0.8f;
+    [InspectorName("判定窗口起")]
     [Range(0f, 1f)] public float activeStart = 0.35f;
+    [InspectorName("判定窗口止")]
     [Range(0f, 1f)] public float activeEnd = 0.65f;
+    [InspectorName("命中距离")]
     public float hitRange = 2.2f;
+    [InspectorName("命中高度")]
     public float hitHeight = 1.5f;
+    [InspectorName("攻击冷却")]
     public float attackCooldown = 2f;
+    [InspectorName("收招距离倍率")]
     public float cancelAttackRangeMult = 1.6f;
 
     [Header("动画参数名")]
+    [InspectorName("移速参数名")]
     public string speedParam = "Speed";
+    [InspectorName("受击触发器名")]
     public string hitTrigger = "Hit";
+    [InspectorName("死亡触发器名")]
     public string deathTrigger = "Die";
 
     UnitHealth _self;

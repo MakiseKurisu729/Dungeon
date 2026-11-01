@@ -6,7 +6,9 @@ using UnityEngine;
 /// </summary>
 public class Mirror : MonoBehaviour
 {
+    [InspectorName("玩家相机")]
     public Transform playerCam;   // Main Camera
+    [InspectorName("镜像相机")]
     public Transform mirrorCam;   // MirrorCam
 
     void LateUpdate()

@@ -4,8 +4,11 @@ using UnityEngine.UI;
 /// <summary>HUD：金币/等级/消息 + 按 U 升级。血蓝条由头顶 WorldHealthBar 负责。</summary>
 public class HUD : MonoBehaviour
 {
+    [InspectorName("金币文本")]
     public Text goldText;
+    [InspectorName("等级文本")]
     public Text levelText;
+    [InspectorName("消息文本")]
     public Text messageText;
 
     string _lastMessage;
