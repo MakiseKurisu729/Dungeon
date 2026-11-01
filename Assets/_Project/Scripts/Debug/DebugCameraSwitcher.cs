@@ -9,37 +9,54 @@ using UnityEngine;
 /// </summary>
 public class DebugCameraSwitcher : MonoBehaviour
 {
+    [InspectorName("相机")]
     public Transform cam;
+    [InspectorName("注视目标")]
     public Transform lookTarget;
 
     public bool IsDragging { get { return _dragging; } }
 
     [Header("俯视（默认，RTS 自由相机）")]
+    [InspectorName("俯视偏移")]
     public Vector3 topOffset = new Vector3(0f, 9f, -5f);
+    [InspectorName("俯视俯仰角")]
     [Range(30f, 85f)] public float topPitch = 55f;
+    [InspectorName("俯视视野")]
     [Range(30f, 100f)] public float topFov = 50f;
+    [InspectorName("旋转速度")]
     [Tooltip("Z/X 旋转速度（度/秒，暂停时也可用）")]
     public float rotateSpeed = 120f;
+    [InspectorName("平移灵敏度")]
     [Tooltip("拖动平移灵敏度")]
     public float panScale = 0.05f;
+    [InspectorName("允许平移")]
        [Tooltip("允许左键拖动平移——第3步选择系统接入后会改为「有选择时自动禁用」")]
     public bool allowPan = true;
+    [InspectorName("焦点目标")]
     [Tooltip("空格回中 / Y 锁定跟随的目标（暂时拖骑士，之后由选择系统设置）")]
     public Transform focusTarget;
+    [InspectorName("瞄准约束")]
     public Behaviour aimConstraint;
 
     [Header("第一人称（实验性）")]
+    [InspectorName("第一人称局部位置")]
     public Vector3 fpLocalPos = new Vector3(0f, 0.02f, -0.12f);
+    [InspectorName("第一人称视野")]
     [Range(30f, 100f)] public float fpFov = 72f;
 
     [Header("第三人称·后上方")]
+    [InspectorName("后方位局部位置")]
     public Vector3 backLocalPos = new Vector3(0f, 0.55f, -3.2f);
     [Header("第三人称·正面")]
+    [InspectorName("前方位局部位置")]
     public Vector3 frontLocalPos = new Vector3(0f, 0.55f, 3f);
+    [InspectorName("注视高度")]
     public float lookHeight = 0.8f;
 
     [Header("第一人称隐藏（PlayerBody 层）")]
+    [InspectorName("身体层名")]
     public string bodyLayerName = "PlayerBody";
+    [InspectorName("隐藏关键词")]
     public string[] hideKeywords = { "head", "helmet", "visor", "body", "cape", "belt", "torso", "beard" };
 
     int _mode;
@@ -57,6 +74,10 @@ public class DebugCameraSwitcher : MonoBehaviour
     bool _lockFollow;        // Y 锁定
     Vector2 _dragStart;
     bool _dragging;
+    bool _leftDragPan;       // 选择系统注入：选中单位时左键拖动也平移视角（超过阈值后置 true）
+
+    /// <summary>由选择系统注入：左键拖拽平移视角进行中（选中单位时替代 allowPan 的左键）。</summary>
+    public bool LeftDragPan { set { _leftDragPan = value; } }
 
     void Start()
     {
@@ -130,8 +151,8 @@ public class DebugCameraSwitcher : MonoBehaviour
         if (_lockFollow && focusTarget != null)
             _anchorPos = focusTarget.position;
 
-        // 左键拖动平移（超过阈值才算拖动，否则视为"点击"留给选择系统）
-        if (allowPan)
+        // 左键拖动平移（超过阈值才算拖动，否则视为"点击"留给选择系统；选中单位时由 LeftDragPan 接管）
+        if (allowPan || _leftDragPan)
         {
             if (Input.GetMouseButtonDown(0))
             {

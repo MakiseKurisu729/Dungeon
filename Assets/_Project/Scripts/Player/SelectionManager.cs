@@ -10,6 +10,7 @@ public class SelectionManager : MonoBehaviour
 {
     public static SelectionManager instance;
 
+    [InspectorName("可点击层")]
     public LayerMask clickableLayers = ~0;
 
     readonly List<Selectable> _all = new List<Selectable>();
@@ -83,10 +84,17 @@ public class SelectionManager : MonoBehaviour
         }
 
         if (Input.GetMouseButtonDown(0)) { _downPos = Input.mousePosition; _moved = false; }
-        if (Input.GetMouseButton(0) && ((Vector2)Input.mousePosition - _downPos).magnitude > 8f)
+        bool targeting = SkillInputController.instance != null && SkillInputController.IsTargeting;
+        if (!targeting && Input.GetMouseButton(0) && ((Vector2)Input.mousePosition - _downPos).magnitude > 8f)
+        {
             _moved = true;
-        if (Input.GetMouseButtonUp(0) && !_moved && !(SkillInputController.instance != null && SkillInputController.IsTargeting))
-            HandleClick();
+            if (_cam != null) _cam.LeftDragPan = true;   // 左键拖动=平移视角，本次按下不再算点选
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (_cam != null) _cam.LeftDragPan = false;
+            if (!_moved && !targeting) HandleClick();
+        }
 
         // ★ 选定的敌人死亡 → 圈熄灭
         if (_enemySelected != null && _enemySelected.dead)

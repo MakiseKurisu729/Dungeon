@@ -898,3 +898,21 @@ UI 管理器（唯一咽喉）：所有面板的显示/隐藏只允许经过这�
 | ⚪ | PlayerStateMachine.cs 已无任何消费者（SwordSwing 摘除状态机后） | Combat/ | 删除（将来做脱战回鞘再建） |
 
 **合规确认（已达标项）**：动画时钟原则三执行器全部落实（SwordSwing/RangedCombat/MonsterBrain 均有 ReadAnimProgress + 代码时钟回退）✓；RequireComponent(Animator) 已清除 ✓；技能策略模式无 switch 残留 ✓；对象池（箭矢走 SimplePool）✓；UnitHealth Stats 空槽报错 ✓；无硬编码物体名查找 ✓。
+
+---
+
+## 附录 B · 2026-11-01 修复批注（M3 迷雾期，根因见 git commit）
+
+**新增资产**
+- `Art/Shaders/FogOfWarUnlit.shader`：Shader 名 `"Dungeon/FogOfWar"`——URP 最简 Unlit（顶点色直出 + SrcAlpha 混合 + ZWrite Off + Cull Off）。存在理由：URP Particles/Unlit 切透明需 _Surface/_Blend/_SrcBlend/_DstBlend/_ZWrite/关键字整组配对，运行时拼属性不可靠。
+
+**新增脚本（接线清单未覆盖的新系统）**
+- `System/FogOfWar.cs`（挂场景"Fog"物体）：LoL 式战争迷雾。Start 时 BuildMesh 生成 resolution×resolution 网格板（顶点色=揭开程度），Update 每 0.1s 对玩家单位 RevealAround（只减不增=永久揭开），材质首选 Dungeon/FogOfWar shader，找不到回退 Particles/Unlit（补全透明参数）。公开字段：mapSize/resolution/revealRadius/edgeSoftness/fogAlpha/revealSpeed。
+- `Units/Visibility.cs`（SkeletonSpawner 运行时 AddComponent 到骷髅根）：视野外/被遮挡 → 关 Renderer + Canvas + 冻结 UnitBrain。**公开只读属性 `bool IsHidden`**：本帧隐身状态，WorldHealthBar 读取后不再把隐身单位血条重新点亮（双系统抢 canvas.enabled 的根因修复）。
+- `Combat/ExplosionFx.cs`：两段式爆炸（核心闪现→碎片迸出落地消散）。碎片生成即 `Destroy(d, debrisMaxLife)` 引擎级自毁，不依赖本组件存活。
+
+**行为变更（对外可见）**
+- `Units/WorldHealthBar.LateUpdate`：visible 计算追加一条——单位带 Visibility 且 IsHidden 时强制隐藏血条（血条与模型严格同生同灭）。
+- `Combat/FireballProjectile.OnArrive`：fx 兜底 Destroy 3s→5s（覆盖碎片 4s 寿命），任意爆炸物体 ≤5s 必清。
+- `Combat/DamageNumber.Show`：Text 显式指定内置字体 LegacyRuntime.ttf（脚本 AddComponent<Text> 不会触发 Reset 赋字体，原因此字不渲染）。
+- `Player/SelectionManager` + `Debug/DebugCameraSwitcher`：选中单位后左键拖动>8px 进入视角平移（`DebugCameraSwitcher.LeftDragPan`，公开 set 属性，SelectionManager 注入），松开不作点选；快速单击仍是点选；技能瞄准中不抢左键。

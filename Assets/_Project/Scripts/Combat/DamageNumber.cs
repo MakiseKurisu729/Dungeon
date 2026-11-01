@@ -21,6 +21,7 @@ public class DamageNumber : MonoBehaviour
         var tgo = new GameObject("txt");
         tgo.transform.SetParent(go.transform, false);
         var text = tgo.AddComponent<Text>();
+        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");   // ★ 脚本创建的 Text 不会自动带字体（编辑器菜单创建才触发 Reset）
         text.rectTransform.sizeDelta = new Vector2(200f, 60f);
         text.text = content;
         text.fontSize = 40;
