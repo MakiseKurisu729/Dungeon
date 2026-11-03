@@ -1,0 +1,89 @@
+FND-00B-01R 启动与场景验收修正 — Unity 启动与 Play 日志
+=========================================================
+
+说明：
+- 本文件记录“补证”期间 Unity Console 的实际文本，由用户口述/复制提供，AI 只转录，不改写、不补全。
+- 本文件不覆盖原验收（提交 e08590889577792ae449e59329f8f74fd3f28f40）的任何记录。
+- 补证提交：待用户提交后回填（AI 不填写推测值）。
+
+---------------------------------------------------------
+【补证：Play 前】
+---------------------------------------------------------
+记录时刻：2026-11-03 15:47:44 +08:00（AI 记录时刻）
+Console 条目自带时间戳：[15:46:53]
+操作阶段：工程已打开、导入与编译自然完成、尚未进入 Play、Console 未清除
+补证提交：待回填
+对应截图：01_Console_编译检查.png
+  截图时间：2026-11-03 15:50:05
+  截图方式：由 AI 调用 Windows PrintWindow 抓取 Unity 编辑器窗口实际画面（2560×1368）。
+  说明：用户以对话图片形式提供同一画面，但对话附件未落盘为文件，故由 AI 直接抓取当前真实窗口；
+  抓取前窗口为最小化状态，AI 执行了一次窗口还原（ShowWindow），未改变工程、场景或 Console 内容。
+
+Unity 版本：2022.3.62f3c1（工程 ProjectSettings/ProjectVersion.txt）
+场景：Assets/Scenes/DungeonWorld.unity（打开工程后即为该场景，用户未切换）
+
+Console 实际条目（用户提供原文，共 1 条 Log，无 Warning、无 Error）：
+
+Couldn't find a readme
+UnityEngine.Debug:Log (object)
+ReadmeEditor:SelectReadme () (at Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs:90)
+ReadmeEditor:SelectReadmeAutomatically () (at Assets/TutorialInfo/Scripts/Editor/ReadmeEditor.cs:58)
+UnityEditor.EditorApplication:Internal_CallDelayFunctions ()
+
+记录要点（同时由 01_Console_编译检查.png 画面核对）：
+- 条目数：1
+- 级别：Log（白/灰），非 Warning、非 Error
+- Console 右上角计数：信息 1 ｜ 警告 0 ｜ 错误 0
+- 是否含阻塞性编译错误：未见（无 error CS，无红色错误行）
+- 场景：层级窗口根节点为 DungeonWorld，与 Assets/Scenes/DungeonWorld.unity 一致
+- 用户口述状态：打开成功，Console 中仅有上述 1 条
+
+---------------------------------------------------------
+【补证：Play 后】
+---------------------------------------------------------
+记录时刻：2026-11-03 15:51:25 +08:00（截图与日志提取同一时刻）
+Console 条目自带时间戳：[15:50:55] ×3，[15:50:56] ×1
+操作阶段：进入 Play 后仅观察，未移动、未攻击、未点击地面或其他对象；仍在 Play 中
+补证提交：待回填
+对应截图：02_Play_Console.png
+  截图方式：由 AI 调用 Windows PrintWindow 抓取 Unity 编辑器窗口实际画面（2560×1368）。
+  Console 右上角计数：信息 1 ｜ 警告 3 ｜ 错误 0
+  Game 视图可见：绿色地面；右上角 HUD“金币：0（升级费用…）／等级：1／击杀：0”；下有 4 个深色图标格
+
+Console 实际条目（1 条 Log + 3 条 Warning，无 Error）：
+
+[15:50:55] Failed to create agent because there is no valid NavMesh
+[15:50:55] Failed to create agent because there is no valid NavMesh
+[15:50:55] Failed to create agent because there is no valid NavMesh
+[15:50:56] 0 个身体部件已挂到 PlayerBody 层
+UnityEngine.Debug:Log (object)
+DebugCameraSwitcher:Start () (at Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs:102)
+
+原始日志出处：C:\Users\lll\AppData\Local\Unity\Editor\Editor.log
+  本次会话日志行 481–483（NavMesh 警告）、490–497（PlayerBody 日志与堆栈），
+  位于行 401 "Reloading assemblies for play mode." 之后，属本轮 Play。
+
+记录要点：
+- NavMesh 警告本次再次出现，共 3 条，原样记录。
+- 是否重复刷屏：截至 15:51:25（进入 Play 约 30 秒）未继续增加，仅 3 条。
+- 是否含阻塞性编译错误：无（错误计数 0，日志无 error CS、无 Exception）。
+- 本次 Play 的 Console 中不含 Play 前那条 Couldn't find a readme：
+  Play 前信息计数为 1（readme），Play 后信息计数仍为 1（PlayerBody 日志）。
+  该状态由 01_Console_编译检查.png 与 02_Play_Console.png 两张截图分别记录，
+  不影响 Play 前编译状态的取证。
+  清除动作的实际执行者与原因：用户于 2026-11-03 明确回复“不是我清理的”，
+  AI 未执行任何 Console 清除操作；因此清除来源未确认
+  （Unity 侧 Clear on Play 设置、或其他自动行为均未核实，此处不作推断）。
+- 是否出现 GetRemainingDistance 报错：本次未出现（用户未执行移动操作）。
+
+【Play 退出记录】
+退出时间：2026-11-03 15:5x（以用户回复“已退出”为准，精确秒数未记录）
+退出方式：用户手动退出 Play；未出现资产保存操作
+退出后工作区核对（AI 只读）：
+  命令：git status --porcelain -- Assets ProjectSettings Packages
+  输出：（空）
+  → 本次补证未改动任何 Unity 资产、场景、预制体或 .meta
+  命令：git status --porcelain
+  输出：仅 5 个新增未跟踪文件（本工单指定的证据文件），无修改项
+
+（本节结束，Play 尚未退出；退出后如需补充，只追加不覆盖）

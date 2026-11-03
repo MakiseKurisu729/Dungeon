@@ -1,0 +1,46 @@
+FND-00B-01R 启动与场景验收修正 — 前置确认记录
+=================================================
+
+检查时间：2026-11-03 15:44:25 +08:00（复核时间）
+检查执行者：AI（仅只读命令，未产生任何 Git 变更）
+
+命令：git rev-parse --abbrev-ref HEAD
+输出：
+docs/fnd-00-baseline
+
+命令：git rev-parse HEAD
+输出：
+afc70759441ed73f3ecfb0292b2b00a6de793307
+
+命令：git status --porcelain
+输出：
+（空，无任何输出）
+
+补充只读核对：
+命令：git log -3 --oneline
+输出：
+afc70759 docs: 添加FND-00B-01R修正工单
+25ebf775 docs(qa): FND-00B-01 启动与场景验收记录（第1项部分通过）
+e0859088 docs: 添加会话角色协议与FND-00B-01验收工单
+
+判定：
+- 工作区干净：是（git status --porcelain 无输出）
+- 已记录真实当前提交：是（完整 SHA 见上）
+- 分支：docs/fnd-00-baseline
+
+补充说明（客观过程记录，不含推断）：
+- 首次前置确认（本工单，同一工作目录）于 2026-11-03 约 15:40 执行，
+  当时 git status --porcelain 有输出，唯一一项为工单文件自身未被跟踪：
+      ?? "Docs/Handoff/TASK_FND-00B-01R_启动与场景验收修正.md"
+  当时 HEAD 为 25ebf7751515fd115800f9244427d57d38767260，
+  按本工单第 3 节停止条件停止，未进入 Unity。
+- 用户自行提交后重新检查，工作区干净，HEAD 变为
+  afc70759441ed73f3ecfb0292b2b00a6de793307。
+- 该提交（afc70759）同时包含本修正工单与本工单首轮生成的
+  REPORT_FND-00B-01R_启动与场景验收修正.md，共 2 个文件、245 行新增。
+- 前置确认阶段 AI 未执行任何提交、推送、暂存、恢复或工作区清理操作。
+
+待用户确认项：
+- Unity 版本是否为 2022.3.62f3c1（工程 ProjectSettings/ProjectVersion.txt 记录为
+  2022.3.62f3c1 (1623fc0bbb97)，与工单要求一致；实际打开版本仍以用户操作为准）。
+- 本次补证是否仍使用场景 Assets/Scenes/DungeonWorld.unity（文件存在；实际打开场景以用户操作为准）。
