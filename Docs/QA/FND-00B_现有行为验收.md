@@ -2,11 +2,11 @@
 
 > 任务包：`Docs/Tasks/FND-00B_现有行为验收.md`
 > 对应事实来源：`Docs/00_项目事实基线.md` 第 3.1 节
-> 测试日期：2026-11-03（第 1 项实测）；补证日期：2026-11-03（第 1 项证据补拍）
-> 执行人：用户（第 1～6 项 Unity 目视/操作）；FND-00B-04 第 7～9 项由执行者以 batchmode 自动断言执行（用户完成前置关停确认），人工目检 V04-1 待用户执行
-> 当前状态：**第 1 项通过；第 2、3、5、7 项失败；第 8 项部分通过；第 9 项通过；第 4、6、11、12 项未测试**（FND-00B-03 批量验收 2026-11-03 执行；FND-00B-04 自动验收 2026-11-03 执行；FND-00B-05 尚未执行）；另含 1 项目标差距登记（不计入测试汇总）
+> 测试日期：2026-11-03（第 1 项实测）；补证日期：2026-11-03（第 1 项证据补拍）；批末复审：2026-11-03
+> 执行人：用户（第 1～6 项 Unity 目视/操作）；FND-00B-04 第 7～9 项由执行者以 batchmode 自动断言执行（用户完成前置关停确认）；FND-00B-05 第 11～12 项由执行者以 batchmode 自动断言执行（用户完成前置关停确认）。人工目检 V04-1 已记录“未见遮罩”，V05-1 已记录“未能达成团灭”；表内未填细项标“待目检”
+> 当前状态：**第 1、2、9 项通过；第 3、5、7、12 项失败；第 8 项部分通过；第 4、6、11 项未测试**（第 2 项依据 FND-01 修复后人工验收在批末复审改判；第 11 项因 `OBSERVED_NO_ENTRY` 保持未测试并登记待实现差距）；另含 1 项目标差距登记（不计入测试汇总）
 
-**重要：** 本文件中所有"用户报告"字段仅转录 `Docs/00` 中的用户描述，**不构成本次验收结果**。未填写"实际结果"的条目结果一律为 `未测试`。FND-00B-04 第 7～9 项的实际结果来自可重复运行的 batchmode 自动断言（非用户口述），其人工目检 V04-1 单独记录、尚未执行。
+**重要：** 本文件中所有"用户报告"字段仅转录 `Docs/00` 中的用户描述，**不构成本次验收结果**。未填写"实际结果"的条目结果一律为 `未测试`。FND-00B-04 第 7～9 项、FND-00B-05 第 11～12 项的实际结果来自可重复运行的 batchmode 自动断言（非用户口述）；其中 FND-00B-04 的人工目检 V04-1、FND-00B-05 的人工目检 V05-1 单独记录。
 
 ---
 
@@ -40,10 +40,10 @@
 | 前置状态 | 验收提交：`bf21b78dd5e41c80697c333c4f891f10f3852405`；分支：`docs/fnd-00-baseline`；工作区干净：`是`；Unity：`2022.3.62f3c1`；场景中有 3 个可操控角色，起始位置约 `(0,0,0)`，各角色 x 相差个位数 |
 | 操作步骤 | 1. 依次选中三个角色；2. 对明确地面目标右键下发移动指令（用户口述“无响应，位置没变”） |
 | 预期结果 | 角色按指令移动到目标点，过程中镜头跟随正常 |
-| 实际结果 | 角色无响应，位置没有变化；Console 出现红色报错 `"GetRemainingDistance" can only be called on an active agent that has been placed on a NavMesh.`（`UnitBrain:get_ExecutingMove`，`Assets/_Project/Scripts/Units/UnitBrain.cs:53`；`CharacterBrain:Update`，`Assets/_Project/Scripts/Units/CharacterBrain.cs:54`）。路径表现、目标附近停步、移动过程中的镜头跟随均未观察到（因角色未移动）。只读核对：同一文本在 `Editor.log` 中由会前 0 处增至 2,783 处（2026-11-03 17:23:27 快照），唯一文本 1 种，多为连续重复 |
-| 结果 | `失败` |
-| 证据 | `Docs/QA/Evidence/FND-00B-03/验收口述记录.md`；`Docs/QA/Evidence/FND-00B-03/00_前置确认.txt`（含会前日志基线 0 处） |
-| 备注 | 用户报告：已经实现（`Docs/00`，不构成本次结果）。用户推测（逐字，未验证）：“没有烘培寻路，每帧检查的时候都报错”；本项不分析原因、不修复。会话未提供截图，异常以用户口述原文与只读日志统计为据 |
+| 实际结果 | 角色无响应，位置没有变化；Console 出现红色报错 `"GetRemainingDistance" can only be called on an active agent that has been placed on a NavMesh.`（`UnitBrain:get_ExecutingMove`，`Assets/_Project/Scripts/Units/UnitBrain.cs:53`；`CharacterBrain:Update`，`Assets/_Project/Scripts/Units/CharacterBrain.cs:54`）。路径表现、目标附近停步、移动过程中的镜头跟随均未观察到（因角色未移动）。只读核对：同一文本在 `Editor.log` 中由会前 0 处增至 2,783 处（2026-11-03 17:23:27 快照），唯一文本 1 种，多为连续重复。**批末复验：FND-01 修复后，自动化验证沿路径到达且新增导航异常 0；用户随后人工确认真实右键移动正常。** |
+| 结果 | `通过`（2026-11-03 批末复审改判；原失败记录保留） |
+| 证据 | 原实测：`Docs/QA/Evidence/FND-00B-03/验收口述记录.md`、`00_前置确认.txt`；复验：`Docs/Handoff/REPORT_FND-01.md` 第 4 节、`Docs/QA/Evidence/FND-01/自动化验证输出.txt`；人工通过结论见 `Docs/Handoff/CURRENT.md` |
+| 备注 | 改判仅覆盖 FND-01 后的移动核心行为，不回写原批次历史，也不顺带判定镜头跟随、普攻或动画通过。 |
 
 ---
 
@@ -58,7 +58,7 @@
 | 实际结果 | 选中角色后视角不能拖动；未选中状态下可以拖动 |
 | 结果 | `失败` |
 | 证据 | `Docs/QA/Evidence/FND-00B-03/验收口述记录.md` |
-| 备注 | 用户报告（`Docs/00`）：选中角色时无法左键拖动视角的问题再次出现（回归问题）。本项只测左键拖动，未用移动时的镜头跟随替代 |
+| 备注 | 用户报告（`Docs/00`）：选中角色时无法左键拖动视角的问题再次出现（回归问题）。本项只测左键拖动，未用移动时的镜头跟随替代。**批末复审：FND-01 不含镜头修复，且无新实测证据，保留 `失败`；不属于 NavMesh 连带复验项，后续独立复验。** |
 
 ---
 
@@ -73,7 +73,7 @@
 | 实际结果 | 因角色不能移动，很难在迷雾视野中看到敌人，无法选定敌人，未能点出普攻指令；未观察到接敌、出招、持续攻击或伤害/血条变化 |
 | 结果 | `未测试` |
 | 证据 | `Docs/QA/Evidence/FND-00B-03/验收口述记录.md` |
-| 备注 | 已尝试但被第 2 项状态阻塞，未实际执行普攻；未静默跳过，阻塞原因按用户口述原样记录。用户报告（`Docs/00`）：已经实现，不构成本次结果 |
+| 备注 | 已尝试但被第 2 项状态阻塞，未实际执行普攻；未静默跳过，阻塞原因按用户口述原样记录。用户报告（`Docs/00`）：已经实现，不构成本次结果。**批末复审：FND-01 仅解除移动阻塞，未取得普攻实测证据，保留 `未测试`，列入收口补验。** |
 
 ---
 
@@ -88,7 +88,7 @@
 | 实际结果 | 选中骑士按 `Q` 没有弹出技能指示器；未观察到任何技能释放。场景中存在的职业与可用技能清单、其他职业技能、骑士盾击均未确认或未实测 |
 | 结果 | `失败` |
 | 证据 | `Docs/QA/Evidence/FND-00B-03/验收口述记录.md` |
-| 备注 | 覆盖不完整：仅尝试骑士 `Q` 一项，其余技能与骑士盾击未实测；未确认 `Q` 对应哪个技能。用户报告（`Docs/00`）：骑士盾击已经实现，不构成本次结果 |
+| 备注 | 覆盖不完整：仅尝试骑士 `Q` 一项，其余技能与骑士盾击未实测；未确认 `Q` 对应哪个技能。用户报告（`Docs/00`）：骑士盾击已经实现，不构成本次结果。**批末复审：FND-01 不含技能修复，原操作未被移动阻塞，保留 `失败`；不属于 NavMesh 连带复验项。** |
 
 ---
 
@@ -103,7 +103,7 @@
 | 实际结果 | 本会话未汇总任何动画状态的播放情况；待机、移动、攻击、受击、死亡均未观察记录 |
 | 结果 | `未测试` |
 | 证据 | `Docs/QA/Evidence/FND-00B-03/验收口述记录.md` |
-| 备注 | 用户口述“同3”，即因不能移动未测试；未制造团灭。用户报告（`Docs/00`）：角色的大部分动作没有正常触发，需逐项列出具体状态，本次未取得 |
+| 备注 | 用户口述“同3”，即因不能移动未测试；未制造团灭。用户报告（`Docs/00`）：角色的大部分动作没有正常触发，需逐项列出具体状态，本次未取得。**批末复审：移动阻塞已解除，但没有任何动画状态的新观察，保留 `未测试`；属于 FND-01 后连带补验项，不得改判通过。** |
 
 ---
 
@@ -118,7 +118,7 @@
 | 实际结果 | `Chest.SceneCount`：`count=0`（run1/run2 一致），场景无宝箱实例；`Chest.Interactable`、`Chest.ProducesItem` 均为 `blocked`（无交互入口，无法开箱，产出不可断言）。只读数据：`chest_base.prefab`、`chest_gold.prefab` 资产存在，但不据此判通过 |
 | 结果 | `失败` |
 | 证据 | `Docs/QA/Evidence/FND-00B-04/04_Assertions.jsonl`（`Chest.SceneCount`、`Chest.Interactable`、`Chest.ProducesItem`）；`04_Automation_run1.log`、`04_Automation_run2.log`；`04_Summary_run1.json`、`04_Summary_run2.json` |
-| 备注 | 用户报告“有相应代码和预制体，但尚未做到场景中”；本次运行数据与“场景集成未完成”的描述一致。本项只记录，不修复 |
+| 备注 | 用户报告“有相应代码和预制体，但尚未做到场景中”；本次运行数据与“场景集成未完成”的描述一致。**批末复审登记为待实现差距：宝箱未装配；交互与产出仍待装配后复验。** 本项只记录，不修复 |
 
 ---
 
@@ -133,7 +133,7 @@
 | 实际结果 | `Fog.MaskState`：`fogCount=0`、`fogLikeRendererCount=0`（run1/run2 一致）→ 失败，场景无遮罩实例。`Fog.EnemyVisibility`：30m 处 `IsHidden=true`/`rendererEnabled=false`；4m 处 `IsHidden=false`/`rendererEnabled=true` → 通过（run1 参照 `Mage_Unit`，run2 参照 `Archer_Unit`，判定一致）。`Fog.VisionClearing`：`blocked`（无遮罩可采样）。夹具参考探针：初始 alpha 0.82/0.82；角色周围 0.049/0.047（<0.05）、范围外 0.82；移动 20m 后新位置 0.049/0.050、旧区域 0、范围外 0.82 → 通过（仅证明算法数据，不作为本项通过依据） |
 | 结果 | `部分通过`（敌人隐藏通过；遮罩未显示、视野清除表现无法由生产数据断言） |
 | 证据 | `Docs/QA/Evidence/FND-00B-04/04_Assertions.jsonl`（`Fog.MaskState`、`Fog.EnemyVisibility`、`Fog.VisionClearing`、`Fog.VisionClearing.fixtureProbe`）；`04_Automation_run1.log`、`04_Automation_run2.log`；`04_Summary_run1.json`、`04_Summary_run2.json` |
-| 备注 | 用户报告：能隐藏敌人，但角色周围视野范围未正确清除迷雾遮罩；**2026-11-03 FND-01 复验新差距：Play 中迷雾遮罩未显示**。本次自动数据确认：场景运行时无 `FogOfWar` 实例、无 fog 类 `MeshRenderer`；原因未分析、未修复。画面是否真实可见见 `Docs/QA/Evidence/FND-00B-04/04_人工目检.md`（V04-1，**待用户执行**） |
+| 备注 | 用户报告：能隐藏敌人，但角色周围视野范围未正确清除迷雾遮罩；**新登记差距：生产场景迷雾遮罩缺失**。自动数据确认运行时无 `FogOfWar` 实例、无 fog 类 `MeshRenderer`；原因未分析、未修复。V04-1 的记录状态为“未见遮罩，与 `fogCount=0` 一致”；表内未填细项标“待目检”，见 `Docs/QA/Evidence/FND-00B-04/04_人工目检.md`。 |
 
 ---
 
@@ -171,14 +171,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 待填写 |
-| 前置状态 | 待填写 |
-| 操作步骤 | 待填写 |
-| 预期结果 | 待目标设计明确 |
-| 实际结果 | 未执行 |
-| 结果 | `未测试` |
-| 证据 | 无 |
-| 备注 | 用户报告：尚未实现 |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；来源：batchmode 加载真实场景（内存夹具，未保存场景） |
+| 前置状态 | 分支：`docs/fnd-00-baseline`；HEAD：`739f5be705643ee74f4d2221265a518d56f2f57e`；前置工作区：干净；Unity：`2022.3.62f3c1`；主入口：`FND00B05_BatchAcceptance.Run`；连续运行 `run=1`、`run=2`；随机种子 20261104 / 20261105 |
+| 操作步骤 | 1. 运行时枚举场景内可辨认的传送入口/组件（`DungeonDoor`、类型名含 `Teleport`/`Portal`，含 inactive），并输出已加载类型清单；2. 无入口时输出 `OBSERVED_NO_ENTRY`，`TargetData` 与 `ReachesTarget` 明确 `blocked`；3. 另建内存夹具（`DungeonDoor` + `TransitionFader`）调用生产 `Enter()`，核对 3 名玩家落点；4. 同一入口连续运行 2 次 |
+| 预期结果 | 目标设计尚未明确；若存在入口，应能从源点经交互触发到达配置目标 |
+| 实际结果 | `Teleport.EntryCensus`：`count=0`、`dungeonDoorInstances=0`、`transitionFaderInstances=0`（run1/run2 一致）；已加载类型清单含 `DungeonDoor @ Assembly-CSharp`、`TransitionFader @ Assembly-CSharp`（说明类型/源码存在，不等于场景集成）。`Teleport.TargetData`、`Teleport.ReachesTarget`：两次均 `blocked`（无生产入口可读/可触发）。夹具探针 `Teleport.ReachesTarget.fixtureProbe`：调用生产 `Enter()` 后 3 名玩家落点与 `dungeonEntryPoint +` 生产偏移的误差均为 `0.000m`（容差 0.5m），移动距离 16.43～22.44m，过场完成、相机焦点已设置；该夹具仅证明实现机制，**不作为本项通过依据** |
+| 结果 | `未测试`（`OBSERVED_NO_ENTRY`：场景无入口且目标设计未明确，无法形成通过/失败判定） |
+| 证据 | `Docs/QA/Evidence/FND-00B-05/05_Assertions.jsonl`（`Teleport.EntryCensus`、`Teleport.TargetData`、`Teleport.ReachesTarget`、`Teleport.ReachesTarget.fixtureProbe`）；`05_Automation_run1.log`、`05_Automation_run2.log`；`05_Summary_run1.json`、`05_Summary_run2.json` |
+| 备注 | 用户报告"尚未实现"与运行期场景无入口一致。**批末复审登记为待实现差距：传送无场景入口；本项仍以 `未测试` 保留，不把差距登记写成通过或失败。** 本项不推断"代码不存在"（类型清单已单独输出），也不把夹具探针写成功能通过。目标设计仍待明确。 |
 
 ---
 
@@ -186,14 +186,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 待填写 |
-| 前置状态 | 队伍中所有角色可被击倒 |
-| 操作步骤 | 待填写（建议：让全部角色倒地，观察是否触发游戏结束流程） |
-| 预期结果 | 全员倒地后进入游戏结束流程 |
-| 实际结果 | 未执行 |
-| 结果 | `未测试` |
-| 证据 | 无 |
-| 备注 | 用户报告：所有角色可以全部倒地，但目前不会结束游戏；流程未完成。**2026-11-03 FND-01 复验新差距（用户报告）：角色移动正常，但长时间未遭遇任何怪物；原因未确认，“未生成或怪物无法移动”仅为待排查可能，不作为结论。只记录不修复，归入 FND-00B-05 待验；本备注不改变本项“未测试”状态** |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；来源：batchmode 加载真实场景（内存夹具，未保存场景） |
+| 前置状态 | 同第 11 项（HEAD `739f5be705643ee74f4d2221265a518d56f2f57e`）；场景 3 个玩家单位（`Knight_Unit`/`Archer_Unit`/`Mage_Unit`）均存活且带 `DownedRescue`；场景怪物 0、生成器 0；`GameStarted=false`、`UIManager.mainMenuPanel` 未接线 |
+| 操作步骤 | 1. 团灭夹具前输出初始怪物数、20s 固定窗口新增、怪物 ID/位置、生成器数量与状态；2. 逐只输出 `NavMeshAgent` 状态（无怪物则标未确认，并输出玩家 agent 参照）；3. 沿固定采样路线 + 18s 固定窗口记录遭遇事件数、最近距离、怪物位移；4. 用真实伤害入口 `UnitHealth.ApplyDamage` 令 3 名玩家全部倒地；5. 等待 8s 观察 `GameFlow` 团灭链与 UI；6. 夹具内仅补 `GameStarted=true` 隔离验证团灭链本身；连续运行 2 次 |
+| 预期结果 | 全员倒地后进入游戏结束流程，且仅触发一次 |
+| 实际结果 | **怪物前置数据（单独列示，不归因）**：`Monster.Population` 初始 0、20s 新增 0、最终 0、生成器 0（两次一致）；`Monster.NavMeshState` 怪物 0 → `未确认`（参照 3 名玩家 `agentEnabled=true`/`isOnNavMesh=true`/`pathPending=false`，NavMesh 三角顶点 2558）；`Monster.EncounterProbe` 遭遇事件 0、最近距离 `null`、怪物位移记录 0，路线采样 6/到达 4、移动 13.61m（两次一致）。**团灭链**：`Party.AllDown` 3 名玩家 hp 100→-10、`dead=true`、`isDown=true`、brain/agent 禁用，存活计数 3→0。`GameEnd.TriggerChain` 等待 8.000s 未触发（`risingEdges=0`、`IsWiped=false`、`timeScale=1`、`GameStarted=false`、HUD 消息为空）；`GameEnd.FinalState` 同上，无 GameOver 类 UI，输入未锁定。**夹具控制**（仅补 `GameStarted=true`）：0.0018s 触发，`IsWiped=true`、`timeScale=0`、消息"全队覆没！按 R 重来"显示于 HUD `messageText`，2s 内仅 1 次 |
+| 结果 | `失败`（产品路径：全员倒地后未进入游戏结束流程） |
+| 证据 | `Docs/QA/Evidence/FND-00B-05/05_Assertions.jsonl`（`Monster.Population`、`Monster.NavMeshState`、`Monster.EncounterProbe`、`Party.AllDown`、`GameEnd.TriggerChain`、`GameEnd.FinalState`、`GameEnd.TriggerChain.fixtureControl`）；`05_Automation_run1.log`、`05_Automation_run2.log`；`05_Summary_run1.json`、`05_Summary_run2.json` |
+| 备注 | 与用户报告"所有角色可以全部倒地，但目前不会结束游戏；流程未完成"一致。**新登记差距：怪物零生成/零遭遇（场景怪物 0、生成器 0、20s 新增 0），原因未确认；团灭产品链未触发。** 不把"未生成或怪物无法移动"写成原因结论。夹具控制只隔离验证团灭链本身，不作为本项通过依据。V05-1 记录状态为“因为没有生成敌人，角色没办法受伤，没办法测试团灭”；未填画面细项标“待目检”，见 `Docs/QA/Evidence/FND-00B-05/05_人工目检.md`。 |
 
 ---
 
@@ -202,7 +202,7 @@
 | # | 条目 | 结果 |
 |---|---|---|
 | 1 | 启动与场景 | `通过` |
-| 2 | 移动 | `失败` |
+| 2 | 移动 | `通过`（FND-01 后批末改判） |
 | 3 | 镜头 | `失败` |
 | 4 | 普攻 | `未测试` |
 | 5 | 技能 | `失败` |
@@ -212,11 +212,13 @@
 | 9 | 救援（现状） | `通过` |
 | 10 | 救援（目标） | `—（目标登记）` |
 | 11 | 传送 | `未测试` |
-| 12 | 团灭与游戏结束 | `未测试` |
+| 12 | 团灭与游戏结束 | `失败` |
 
 第 10 项为**目标差距登记**，不在本轮执行，不计入下列统计。
 
-现有行为验收共 **11 项**：通过 2 ｜ 部分通过 1 ｜ 失败 4 ｜ 未测试 4。目标差距登记 1 项，不计入通过率与未测试总数。
+现有行为验收共 **11 项**：通过 3 ｜ 部分通过 1 ｜ 失败 4 ｜ 未测试 3。目标差距登记 1 项，不计入通过率与未测试总数；宝箱、传送、怪物遭遇等待实现差距已登记，但不篡改对应 QA 结果。
 
-> 本汇总为 2026-11-03 实测结果：第 1 项经同日补证后为 `通过`（补证提交 `af07ddb1130bf23e82847c99183ef86c850f5cc0`）；第 2、3、5 项为 FND-00B-03 批量会话实测结果；第 4、6 项因移动失效被阻塞未测试；第 7～9 项为 FND-00B-04 batchmode 自动断言结果（HEAD `e7688025e7a00fbeb1f7c9f36950ce4e353963a5`，连续运行 2 次一致）；第 11、12 项尚未执行。AI 不得预填或推测结果。
-> 第 8 项的 `部分通过` = 敌人隐藏（`Fog.EnemyVisibility`）通过，但生产场景无 `FogOfWar` 实例（`Fog.MaskState` 失败、`Fog.VisionClearing` 阻塞）；画面可见性属人工目检 V04-1（`Docs/QA/Evidence/FND-00B-04/04_人工目检.md`，待用户执行），不以自动数据替代。
+> 本汇总为 2026-11-03 实测与批末复审结果：第 1 项经补证通过；第 2 项原实测失败，依据 FND-01 自动化证据及用户人工验收改判通过；第 3、5 项保持原失败；第 4、6 项保留未测试并等待补验；第 7～9 项采用 FND-00B-04 连续两次自动断言；第 11～12 项采用 FND-00B-05 连续两次、11/11 一致的自动断言。AI 不得预填或推测结果。
+> 第 8 项的 `部分通过` = 敌人隐藏通过，但生产遮罩缺失、视野清除阻塞；V04-1 已记录“未见遮罩”，未填细项标“待目检”（`Docs/QA/Evidence/FND-00B-04/04_人工目检.md`）。
+> 第 11 项的 `未测试` = 场景无传送入口，已登记待实现差距；夹具探针只证明实现机制。第 12 项的 `失败` = 全员倒地后产品路径未触发游戏结束；怪物零生成/零遭遇单独登记、不归因。V05-1 已记录“无法测试团灭”，未填画面细项标“待目检”（`Docs/QA/Evidence/FND-00B-05/05_人工目检.md`）。
+> **批末收口判断：暂不收口。** 第 8、11 项均已有行为结论或差距登记，不单独阻塞；第 4、6 项仍无实测结论，故 FND-00B 保持 `In Progress`，不得标记 `Done`。

@@ -1,0 +1,83 @@
+FND-00B-05 流程与未实现项观察批量验收 — 前置确认
+=================================================
+记录时间：2026-11-03 22:19:37（本地时间，UTC+8）
+执行角色：执行者（OpenCode + DeepSeek V4.1 Flash）
+工单：Docs/Handoff/TASK_FND-00B-05_流程与未实现项观察批量验收.md
+
+1. Git 原始输出
+----------------
+$ git rev-parse --abbrev-ref HEAD
+docs/fnd-00-baseline
+
+$ git rev-parse HEAD
+739f5be705643ee74f4d2221265a518d56f2f57e
+
+$ git status --porcelain
+（无输出，工作区干净）
+
+豁免条款："工单文件自身与 Docs/Handoff/、Docs/QA/ 下新增文件不计入工作区脏检查"。
+本次前置时工作区无任何脏项，豁免条款未实际使用。
+
+2. 环境
+-------
+Unity 版本：2022.3.62f3c1（ProjectSettings/ProjectVersion.txt 实查；
+            m_EditorVersionWithRevision: 2022.3.62f3c1 (1623fc0bbb97)）
+Unity 可执行文件：D:\unity\2022.3.62f3c1\Editor\Unity.exe（实查存在）
+目标场景：DungeonWorld
+场景路径：Assets/Scenes/DungeonWorld.unity
+NavMesh 资产：Assets/Scenes/DungeonWorld/NavMesh.asset（实查存在）
+
+3. 编辑器占用与关停确认
+------------------------
+确认前执行 Get-Process Unity：
+  Id 46544，MainWindowTitle = "Dungeon - DungeonWorld - Windows, Mac, Linux - Unity 2022.3.62f3c1 <DX11>"
+执行者于 2026-11-03 22:18 明确请求用户关闭编辑器并等待确认。
+用户回复："已关闭，可以开始"。
+用户确认后复核 Get-Process Unity：无 Unity 进程（UNITY_PROCESS: none）。
+确认前未写入任何测试资产，未调用 Unity。
+
+4. 本单允许写入的文件
+----------------------
+- Assets/_Project/Tests/FND00B/Editor/FND00B05_BatchAcceptance.cs 及其 .meta
+- Assets/_Project/Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs 及其 .meta
+- Assets/_Project/Tests/FND00B/Runtime/FND00B05_Evidence.cs 及其 .meta
+- Docs/QA/Evidence/FND-00B-05/ 下的证据
+- Docs/QA/FND-00B_现有行为验收.md（仅第 11～12 项、汇总与统计）
+- Docs/Handoff/REPORT_FND-00B-05_流程与未实现项观察批量验收.md
+
+不修改：生产代码、场景、预制体、Animator、ProjectSettings、Packages、导航数据；不保存场景；
+不修改 CURRENT.md；不执行 Git 变更操作（未 add / commit / push / 分支操作）。
+
+5. 只读静态核对（记录，不作为运行结论）
+---------------------------------------
+（1）场景 YAML 中以下脚本 GUID 的引用次数（Assets/Scenes/DungeonWorld.unity 实查）：
+    DungeonDoor       0c8860eaa1f7c9b49b27d0ab0edfeb9f → 0 处
+    TransitionFader   5dce597175eba0340bc05ebe925342f8 → 0 处
+    MainMenuPanel     4cd7dd49de4854440844a4600ca93be3 → 0 处
+    SkeletonSpawner   cdd7d17654a8d50478eb5c77851ac4d2 → 0 处
+    WaveSpawner       查无场景引用（与 FND-00B-04 一致）
+    Interactable      查无场景引用（FND-00B-04 已记录）
+    GameFlow / HUD / UIManager / SelectionManager / PauseManager /
+    DebugCameraSwitcher / ForestGenerator 各 1 处。
+    说明：预制体实例的组件不写回场景 YAML，本项只说明"场景自身未直挂"，
+    最终以运行时内存扫描为准。
+（2）UIManager 序列化引用实查：inventoryPanel / statsPanel / equipPanel /
+    escMenuPanel / mainMenuPanel 全部为 {fileID: 0}（场景中未接线）。
+    MainMenuPanel 是 GameFlow.GameStarted 的唯一生产写入者（MainMenuPanel.OnClose）；
+    场景既无 MainMenuPanel 实例，也无对应槽位引用。
+（3）场景 GameObject 名称清单中无 DungeonDoor / Portal / Teleport / Skeleton /
+    SkeletonSpawner / MainMenuPanel / GameOver 类对象。
+（4）场景内玩家单位为 Knight_Unit / Archer_Unit / Mage_Unit 预制体变体（3 个），
+    与 FND-00B-04 运行期扫描一致；场景无怪物实例。
+
+以上静态核对只用于定位测试对象；通过/失败一律以 batchmode 运行期的结构化断言为准。
+本记录不把"场景无实例"表述为"代码不存在"：DungeonDoor.cs、TransitionFader.cs、
+SkeletonSpawner.cs、MainMenuPanel.cs 源码与类型仍在工程中，运行时另行输出类型加载清单。
+
+6. 运行命令（两次，主入口唯一）
+-------------------------------
+"D:\unity\2022.3.62f3c1\Editor\Unity.exe" -batchmode -projectPath "D:\unity\Dungeon"
+  -executeMethod FND00B05_BatchAcceptance.Run
+  -logFile "D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-05\05_Automation_runN.log"
+环境变量 FND00B05_RUN=1 / 2 标记运行序号。
+随机种子：20261103 + run（测试代码调用 UnityEngine.Random.InitState 后记录）。

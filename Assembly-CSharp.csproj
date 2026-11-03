@@ -75,6 +75,7 @@
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SkillEffects.cs" />
     <Compile Include="Assets\_Project\Scripts\Core\EventBus.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B05_ProbeRunner.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\Team.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\BasePanel.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\BossBrain.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Assets\_Project\Scripts\Units\SkillSystem.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\TransitionFader.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SimplePool.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B05_Evidence.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
