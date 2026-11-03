@@ -1,0 +1,34 @@
+FND-00B-01 启动与场景验收 — 前置确认记录
+=========================================
+
+检查时间：2026-11-03 14:43:27 +08:00
+检查执行者：AI（只读命令，未产生任何 Git 变更）
+
+命令：git rev-parse --abbrev-ref HEAD
+输出：
+docs/fnd-00-baseline
+
+命令：git rev-parse HEAD
+输出：
+e08590889577792ae449e59329f8f74fd3f28f40
+
+命令：git status --porcelain
+输出：
+（空，无任何输出）
+
+判定：
+- 工作区干净：是（git status --porcelain 无输出）
+- 已记录真实当前提交：是（完整 SHA 见上）
+- 分支：docs/fnd-00-baseline
+
+补充说明（客观过程记录，不含推断）：
+- 首次前置确认（同一工作目录）时 git status --porcelain 有输出：
+    ` M AGENTS.md`
+    `?? Docs/Handoff/TASK_FND-00B-01_启动与场景验收.md`
+  当时 HEAD 为 bd325fe8ea2adac2012726b264793e70abe5b5a8，按工单第 3 节停止条件停止。
+- 用户自行提交后重新检查，工作区干净，HEAD 变为
+  e08590889577792ae449e59329f8f74fd3f28f40。
+- 前置确认阶段 AI 未执行任何提交、推送或工作区清理操作。
+
+待用户确认项：
+- Unity 版本是否为 2022.3.62f3c1（由用户确认，见报告）。
