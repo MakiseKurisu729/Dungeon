@@ -2,9 +2,9 @@
 
 > 任务包：`Docs/Tasks/FND-00B_现有行为验收.md`
 > 对应事实来源：`Docs/00_项目事实基线.md` 第 3.1 节
-> 测试日期：2026-11-03（第 1 项实测）
+> 测试日期：2026-11-03（第 1 项实测）；补证日期：2026-11-03（第 1 项证据补拍）
 > 执行人：用户（Unity 操作与判定）；AI 仅记录
-> 当前状态：**第 1 项“启动与场景”已实测为部分通过；其余 10 项仍为未测试**；另含 1 项目标差距登记（不计入测试汇总）
+> 当前状态：**第 1 项“启动与场景”已实测并通过（含补证）；其余 10 项仍为未测试**；另含 1 项目标差距登记（不计入测试汇总）
 
 **重要：** 本文件中所有"用户报告"字段仅转录 `Docs/00` 中的用户描述，**不构成本次验收结果**。任何条目在用户实际于 Unity 中操作并填写"实际结果"之前，结果一律为 `未测试`。
 
@@ -14,14 +14,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`（用户确认）；来源：`工程打开已有` |
-| 前置状态 | 验收提交：`e08590889577792ae449e59329f8f74fd3f28f40`；分支：`docs/fnd-00-baseline`；验收前工作区干净：`是`；Unity：`2022.3.62f3c1` |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；路径来源：用户确认 + AI 只读核对文件存在（**非截图证明**）；场景来源：`工程打开已有`。`03_测试场景.png` 与 `01_工程已打开.png` 为同一张截图，属复用图，不单独证明完整路径 |
+| 前置状态 | 原验收提交：`e08590889577792ae449e59329f8f74fd3f28f40`；补证提交：`af07ddb1130bf23e82847c99183ef86c850f5cc0`；分支：`docs/fnd-00-baseline`；补证前工作区干净：`是`；Unity：`2022.3.62f3c1` |
 | 操作步骤 | 1. 用 Unity `2022.3.62f3c1` 打开工程，等待导入与编译自然完成，未点修复建议、未改设置；2. 确认工程打开后即为 `DungeonWorld` 场景，未切换或保存场景；3. 进入 Play 模式，只观察能否进入与 Console 状态，未操作移动、攻击等玩法；观察后退出 Play，退出时无保存场景提示 |
 | 预期结果 | 工程可正常打开，可进入 Play 模式，无阻塞性编译错误 |
 | 实际结果 | 工程正常打开，进入编辑器界面；Play 前 Console 无红色错误行，Console 底部为一条 `Couldn't find a readme`（Log，来源 `ReadmeEditor`）；成功进入 Play，运行画面为绿色地面，右上角 HUD 显示“金币：0 / 等级：1 / 击杀：0”，场景中有 3 个角色与 1 个敌人，底部有 4 个深色图标格；Play 期间 Console 有 3 条黄色 `Failed to create agent because there is no valid NavMesh` 与 1 条 Log `0 个身体部件已挂到 PlayerBody 层`（`DebugCameraSwitcher.Start`，`Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs:102`）；无红色错误；退出 Play 无保存提示。另：退出本次 Play 之后，用户另行执行“选中角色 → 右键点击地面”时出现红色报错 `"GetRemainingDistance" can only be called on an active agent that has been placed on a NavMesh.`（`UnitBrain:get_ExecutingMove`，`Assets/_Project/Scripts/Units/UnitBrain.cs:53`；`CharacterBrain:Update`，`Assets/_Project/Scripts/Units/CharacterBrain.cs:54`），该操作属第 2 项“移动”，不计入本项结论 |
-| 结果 | `部分通过` |
-| 证据 | `Docs/QA/Evidence/FND-00B-01/00_前置确认.txt`；`Docs/QA/Evidence/FND-00B-01/01_工程已打开.png`；`Docs/QA/Evidence/FND-00B-01/02_Play_运行.png`；`Docs/QA/Evidence/FND-00B-01/03_测试场景.png`（与 `01_工程已打开.png` 为同一张截图） |
-| 备注 | 可运行构建：`不存在`；最近一次完整验收：`无书面记录；用户称今天做过测试但认为已不可靠、需重新验收`；信息来源：`用户报告`；缺失证据：`01_Console_编译检查.png`、`02_Play_Console.png` 未提供，Console 状态仅凭用户口述；用户口述推测：`自动寻路 NavMesh 烘焙可能需要重新烘焙`（仅为用户推测，未验证） |
+| 结果 | `通过` |
+| 证据 | 原验收：`Docs/QA/Evidence/FND-00B-01/00_前置确认.txt`；`01_工程已打开.png`；`02_Play_运行.png`；`03_测试场景.png`（与 `01_工程已打开.png` 为同一张截图，复用图）。补证（2026-11-03）：`00R_前置确认.txt`；`01_Console_编译检查.png`；`02_Play_Console.png`；`04_构建与最近验收.txt`；`Unity_启动与Play.log` |
+| 备注 | 可运行构建：`不存在`（AI 只读核对：全仓无 `*.exe`/`*.apk`、无构建输出目录，见 `04_构建与最近验收.txt`）；最近一次完整验收：`无书面记录；用户称今天做过测试但认为已不可靠、需重新验收`，具体时间与范围标为待用户确认；信息来源：`用户报告`。**补证记录（2026-11-03，补证提交 `af07ddb1130bf23e82847c99183ef86c850f5cc0`）：** Play 前 Console 计数 `信息 1｜警告 0｜错误 0`，仅 1 条 `Couldn't find a readme`（`ReadmeEditor.cs:90`）；进入 Play 后计数 `信息 1｜警告 3｜错误 0`，3 条 `Failed to create agent because there is no valid NavMesh`（`[15:50:55]`）原样复现，另有 1 条 `0 个身体部件已挂到 PlayerBody 层`（`[15:50:56]`，`DebugCameraSwitcher.cs:102`）；无阻塞性编译错误（无 `error CS`、无 Exception）；已成功进入 Play 并观察到 Game 视图与 HUD；退出 Play 未产生资产变更（`git status --porcelain -- Assets ProjectSettings Packages` 为空）。**原运行记录的异常予以保留，未删除、未据此宣称已修复。** 补证期间发现：Play 前那条 readme 在 Play 后不再出现（信息计数仍为 1），用户明确回复未手动清除，清除来源未确认，详见 `Unity_启动与Play.log`。用户口述推测：`自动寻路 NavMesh 烘焙可能需要重新烘焙`（仅为用户推测，未验证，本项不分析、不修复） |
 
 ---
 
@@ -194,7 +194,7 @@
 
 | # | 条目 | 结果 |
 |---|---|---|
-| 1 | 启动与场景 | `部分通过` |
+| 1 | 启动与场景 | `通过` |
 | 2 | 移动 | `未测试` |
 | 3 | 镜头 | `未测试` |
 | 4 | 普攻 | `未测试` |
@@ -209,6 +209,6 @@
 
 第 10 项为**目标差距登记**，不在本轮执行，不计入下列统计。
 
-现有行为验收共 **11 项**：通过 0 ｜ 部分通过 1 ｜ 失败 0 ｜ 未测试 10。目标差距登记 1 项，不计入通过率与未测试总数。
+现有行为验收共 **11 项**：通过 1 ｜ 部分通过 0 ｜ 失败 0 ｜ 未测试 10。目标差距登记 1 项，不计入通过率与未测试总数。
 
-> 本汇总第 1 行为 2026-11-03 实测结果（部分通过）；其余各项在用户完成实测前保持 `未测试`。AI 不得预填或推测结果。
+> 本汇总第 1 行为 2026-11-03 实测结果；其中“启动与场景”经同日补证后改为 `通过`（补证提交 `af07ddb1130bf23e82847c99183ef86c850f5cc0`）。其余各项在用户完成实测前保持 `未测试`。AI 不得预填或推测结果。
