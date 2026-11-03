@@ -1,0 +1,76 @@
+FND-01 自动化验证原始输出（隔离副本，场景与修复后真实场景 SHA256 完全一致）
+======================================================================
+
+运行方式：
+  Unity 2022.3.62f3c1 -batchmode -nographics
+  -projectPath <隔离副本> -executeMethod FND01PlayProbe.Run
+说明：隔离副本中的 Assets/Scenes/DungeonWorld.unity 与真实工程修复后文件
+      SHA256 = 7C44B9EBD5F68CFE702A852C4976078A0BC1AEE23CEAD397D3C2AFAB7A08816B，完全一致。
+
+一、修复前（EditMode 诊断）
+---------------------------
+[FND01] asset.load=OK
+[FND01] asset.sourceBounds.center=(0.00, 0.00, 0.00) size=(200.00, 0.00, 200.00)
+[FND01] asset.position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00)
+[FND01] scene.m_NavMeshData=NULL
+[FND01] NavMeshSurface count=0
+[FND01] ForestGround staticFlags=0 pos=(0.00, 0.00, 0.00) scale=(20.00, 1.00, 20.00)
+[FND01] layers: Tree=8 Obstacle=7 PlayerBody=6
+[FND01] NavMeshAgent count(scene)=3
+[FND01] Agent Knight_Unit pos=(-2.72, 0.00, 0.00) enabled=True typeID=0 radius=0.35
+[FND01] Agent Archer_Unit pos=(0.85, 0.00, 0.00) enabled=True typeID=0 radius=0.35
+[FND01] Agent Mage_Unit pos=(3.22, 0.00, 0.00) enabled=True typeID=0 radius=0.35
+[FND01] before tri.vertices=0 tri.indices=0
+[FND01] before sample camp=False
+[FND01] before sample north30=False
+[FND01] before sample south30=False
+[FND01] before sample east30=False
+[FND01] before sample west30=False
+[FND01] before sample northeast50=False
+[FND01] before sample southwest50=False
+[FND01] before path to north30 calc=False status=PathInvalid corners=0
+[FND01] before path to south30 calc=False status=PathInvalid corners=0
+[FND01] before path to east30 calc=False status=PathInvalid corners=0
+[FND01] before path to west30 calc=False status=PathInvalid corners=0
+[FND01] before path to northeast50 calc=False status=PathInvalid corners=0
+[FND01] before path to southwest50 calc=False status=PathInvalid corners=0
+
+二、恢复引用后（EditMode）
+-------------------------
+[FND01] link.existing asset=True
+[FND01] link.saved
+[FND01] afterLink tri.vertices=144 tri.indices=216
+[FND01] afterLink tri.bounds.min=(-99.33, 0.08, -99.33) max=(99.33, 0.08, 99.33) size=(198.67, 0.00, 198.67)
+[FND01] afterLink sample camp=True hit=(0.00, 0.08, 0.00) dist=0.08333334
+[FND01] afterLink sample north30=True hit=(0.00, 0.08, 30.00) dist=0.08333334
+[FND01] afterLink sample south30=True hit=(0.00, 0.08, -30.00) dist=0.08333334
+[FND01] afterLink sample east30=True hit=(30.00, 0.08, 0.00) dist=0.08333334
+[FND01] afterLink sample west30=True hit=(-30.00, 0.08, 0.00) dist=0.08333334
+[FND01] afterLink sample northeast50=True hit=(50.00, 0.08, 50.00) dist=0.08333334
+[FND01] afterLink sample southwest50=True hit=(-50.00, 0.08, -50.00) dist=0.08333334
+[FND01] afterLink path to north30 calc=True status=PathComplete corners=2 end=(0.00, 0.08, 30.00)
+[FND01] afterLink path to south30 calc=True status=PathComplete corners=2 end=(0.00, 0.08, -30.00)
+[FND01] afterLink path to east30 calc=True status=PathComplete corners=2 end=(30.00, 0.08, 0.00)
+[FND01] afterLink path to west30 calc=True status=PathComplete corners=2 end=(-30.00, 0.08, 0.00)
+[FND01] afterLink path to northeast50 calc=True status=PathComplete corners=2 end=(50.00, 0.08, 50.00)
+[FND01] afterLink path to southwest50 calc=True status=PathComplete corners=2 end=(-50.00, 0.08, -50.00)
+
+三、PlayMode 自动化（真实修复后场景，逐字节一致）
+-------------------------------------------------
+FND01 play probe start 2026-11-03 20:39:36
+scene=DungeonWorld batch=True
+agents=3
+  agent Mage_Unit pos=(3.22, 0.08, 0.00) isOnNavMesh=True enabled=True speed=4 stopping=0.3
+  agent Archer_Unit pos=(0.85, 0.08, 0.00) isOnNavMesh=True enabled=True speed=4 stopping=0.3
+  agent Knight_Unit pos=(-2.72, 0.08, 0.00) isOnNavMesh=True enabled=True speed=4 stopping=0.3
+brain=CharacterBrain CommandMove=True
+start=(-2.72, 0.08, 0.00) target=(0.00, 0.00, -30.00) isOnNavMesh=True
+elapsed=7.69 end=(-0.04, 0.08, -29.60) movedXZ=29.72 maxMovedXZ=29.72 arrived=True distToTargetXZ=0.40
+post isOnNavMesh=True hasPath=True pathPending=False remainingDistance=0.40 velocity=(0.27, 0.00, -3.01)
+GetRemainingDistanceErrors=0
+NoValidNavMeshErrors=0
+status=DONE
+
+说明：测试通过反射调用 CharacterBrain.CommandMove（与右键点击最终调用的同一方法），
+     未修改任何游戏代码；GetRemainingDistanceErrors / NoValidNavMeshErrors
+     由 Application.logMessageReceived 在本次 Play 内实时计数。

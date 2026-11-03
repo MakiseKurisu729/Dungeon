@@ -1,0 +1,66 @@
+﻿FND-01 NavMesh 诊断与修复 — 前置确认记录
+=========================================
+
+检查时间：2026-11-03 20:05 +08:00
+执行者：AI（只读 Git 命令 + 文件读取；未产生 Git 变更）
+
+一、Git 前置确认（原始输出）
+---------------------------
+命令：git rev-parse --abbrev-ref HEAD
+输出：
+docs/fnd-00-baseline
+
+命令：git rev-parse HEAD
+输出：
+1aa8fc0da2b4cf89cce5d83fef07a63bc9ecde20
+
+命令：git status --porcelain
+输出：
+（开工时为空，无任何输出；诊断记录与证据文件为本次新增的 ?? 项）
+
+二、豁免条款适用情况
+--------------------
+工单第 3 节豁免：本工单文件自身及 Docs/Handoff/、Docs/QA/ 下新增文件不计入脏检查。
+- 开工时实查：工作区完全干净（无任何条目）。
+- 本单新增：Docs/QA/Evidence/FND-01/、Docs/Handoff/REPORT_FND-01_*.md。
+- 未为使检查通过而执行任何 Git 写操作（无 add/restore/update-index/commit）。
+
+三、环境与场景
+--------------
+- Unity 版本：2022.3.62f3c1（D:\Unity\2022.3.62f3c1），与工单一致。
+- 当前打开场景：Assets/Scenes/DungeonWorld.unity。
+- 导航包：com.unity.ai.navigation 1.1.7 已在 Packages/manifest.json 中，未安装新包。
+- 工作区场景文件：Assets/Scenes/DungeonWorld.unity，大小 111342 字节（3693 行），mtime 2026-11-03 10:01:26。
+
+四、NavMesh* 两资产当前状态（只读）
+-----------------------------------
+文件：
+- Assets/Scenes/DungeonWorld/NavMesh.asset        14652 字节，mtime 2026-11-03 15:17:18
+- Assets/Scenes/DungeonWorld/NavMesh.asset.meta     197 字节，mtime 2026-11-03 15:17:18
+
+git status --porcelain -- <两文件>：（空）
+git diff -- <两文件>：（空）
+git diff --cached -- <两文件>：（空）
+
+git hash-object 与 HEAD blob 对比：
+- NavMesh.asset       工作区 7d81e5e1a0fe72b87e358f03bff74bddf7eb37dd
+                      HEAD   7d81e5e1a0fe72b87e358f03bff74bddf7eb37dd  → 一致
+- NavMesh.asset.meta  工作区 c4c123c9024692270ae7d286fd9b1fe9632f04cf
+                      HEAD   c4c123c9024692270ae7d286fd9b1fe9632f04cf  → 一致
+
+.meta 内容：
+  guid: fea05cc92de5b1d40b9a472821cb585a
+  NativeFormatImporter, mainObjectFileID: 23800000
+
+工作量与 HEAD 内容一致，当前不存在“内容相同仍显示 M”的异常状态。
+
+五、当前会话运行日志基线（只读，不改日志）
+------------------------------------------
+对象：C:\Users\lll\AppData\Local\Unity\Editor\Editor.log
+- “Failed to create agent because there is no valid NavMesh”：24 行
+- “GetRemainingDistance”：3764 处
+- 首次 GetRemainingDistance 堆栈：
+  UnitBrain:get_ExecutingMove() (UnitBrain.cs:53)
+  CharacterBrain:Update() (CharacterBrain.cs:54)
+
+判定：前置确认通过；现有工作区与 HEAD 一致，无既有非豁免脏项。
