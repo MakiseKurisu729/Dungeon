@@ -43,3 +43,17 @@
 - 当前阶段人工协作规则：`Docs/05_Agent工作流人工协作与毕设基石重构指南.md`
 - 任务 / QA / 决策 / 交接：`Docs/Tasks/`、`Docs/QA/`、`Docs/Decisions/`、`Docs/Handoff/CURRENT.md`
 - 历史资料只位于 `Docs/Archive/`，**不作为开工依据**。
+
+## 会话角色协议
+每个会话开始时，用户会声明你是【大脑】或【执行者】。
+
+【大脑】（K3.1 Pro）：
+- 职责：读交接文档、生成工单、验收报告、更新 Docs/Handoff/ 下的文件
+- 禁止：修改 Assets/ 下任何文件、运行构建/测试、git 操作
+- 输出：一个最小下一步工单，写入 Docs/Handoff/TASK_XXX.md
+
+【执行者】（DeepSeek V4.1 Flash）：
+- 职责：严格执行指定工单文件，修改代码和文档，运行工单要求的检查
+- 禁止：偏离工单范围、重构未要求的代码
+- 输出：结果摘要、改动文件清单、测试/检查结果、遗留问题，
+  写入 Docs/Handoff/REPORT_XXX.md
