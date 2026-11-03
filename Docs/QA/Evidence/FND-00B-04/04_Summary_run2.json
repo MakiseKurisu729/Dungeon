@@ -1,0 +1,16 @@
+{
+  "run": 2,
+  "task": "FND-00B-04",
+  "startedAt": "2026-11-03 21:59:47.458",
+  "finishedAt": "2026-11-03 21:59:52.665",
+  "unityVersion": "2022.3.62f3c1",
+  "scene": "Assets/Scenes/DungeonWorld.unity",
+  "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\FND-00B-04\\04_Assertions.jsonl",
+  "pass": 4,
+  "fail": 2,
+  "blocked": 3,
+  "infraFail": 0,
+  "fixtureProbePass": 1,
+  "fixtureProbeFail": 0,
+  "exitReason": "completed"
+}

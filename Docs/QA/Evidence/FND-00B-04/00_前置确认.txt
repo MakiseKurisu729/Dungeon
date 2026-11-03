@@ -1,0 +1,83 @@
+FND-00B-04 场景交互与救援批量验收 — 前置确认
+=================================================
+记录时间：2026-11-03 21:25:21（本地时间，UTC+8）
+执行角色：执行者（OpenCode + DeepSeek V4.1 Flash）
+工单：Docs/Handoff/TASK_FND-00B-04_场景交互与救援批量验收.md
+
+1. Git 原始输出
+----------------
+$ git rev-parse --abbrev-ref HEAD
+docs/fnd-00-baseline
+
+$ git rev-parse HEAD
+e7688025e7a00fbeb1f7c9f36950ce4e353963a5
+
+$ git status --porcelain
+（无输出，工作区干净）
+
+豁免条款："工单文件自身与 Docs/Handoff/、Docs/QA/ 下新增文件不计入工作区脏检查"。
+本次前置时工作区无任何脏项，豁免条款未实际使用。
+
+2. 环境
+-------
+Unity 版本：2022.3.62f3c1（ProjectSettings/ProjectVersion.txt 实查；
+            m_EditorVersionWithRevision: 2022.3.62f3c1 (1623fc0bbb97)）
+Unity 可执行文件：D:\unity\2022.3.62f3c1\Editor\Unity.exe（实查存在）
+目标场景：DungeonWorld
+场景路径：Assets/Scenes/DungeonWorld.unity
+NavMesh 资产：Assets/Scenes/DungeonWorld/NavMesh.asset（场景 m_NavMeshData 实查引用）
+
+3. 编辑器占用检查
+-----------------
+记录时执行：Get-Process Unity
+结果：无 Unity 进程（UNITY_PROCESS: none）
+用户确认：2026-11-03 已明确回复"已关闭，可以开始"（允许写入测试资产并 batchmode 连续运行 2 次）。
+
+4. 本单允许写入的文件
+---------------------
+- Assets/_Project/Tests/FND00B/Editor/ 下的测试脚本及其 .meta（Unity 首次导入生成）
+- Docs/QA/Evidence/FND-00B-04/ 下的证据
+- Docs/QA/FND-00B_现有行为验收.md（仅第 7～9 项、汇总与统计）
+- Docs/Handoff/REPORT_FND-00B-04_场景交互与救援批量验收.md
+
+不修改：生产代码、场景、预制体、Animator、ProjectSettings、Packages、导航数据；不保存场景；
+不执行 Git 变更操作。
+
+5. 只读静态核对（记录，不作为运行结论）
+---------------------------------------
+（1）Assets/Scenes/DungeonWorld.unity 的 YAML 中未出现以下脚本 GUID：
+    FogOfWar  eec7c57bdea411144ad9c38dcc9a0d3b → 0 处
+    Chest     7afbbf731cf09f4478d22ebd9c294352 → 0 处
+    Interactable 2f7c06b434ceff24ab2dac5d08de108e → 0 处
+    DownedRescue 320fed9a55133164dacf5c734d4d0756 → 0 处（仅 Knight_Unit.prefab:389）
+    说明：预制体实例的组件不写回场景 YAML，本项只说明"场景自身未直挂"，最终以运行时扫描为准。
+（2）场景内 m_Script 汇总（按 GUID 映射）：GameFlow、SelectionManager、PauseManager、UIManager、
+    InventoryUI、HUD、SkillBarUI、SkillIndicator、CursorManager、CombatFeedback、
+    DebugCameraSwitcher、ForestGenerator 各 1；无 SkeletonSpawner、无 WaveSpawner。
+（3）Knight_Unit.prefab 组件：CharacterBrain、DownedRescue、Inventory、PlayerCommandController、
+    Selectable、SkillSystem、SwordSwing、UnitAnimatorSpeed、UnitHealth、UnitMana。
+    DownedRescue 参数：rescueTime=3、rescueRange=2.5、reviveHp=1、riseDuration=1.2。
+（4）Archer_Unit.prefab：仅 RangedCombat + UnitHealth；Mage_Unit.prefab 未参与可行动单位验证。
+（5）chest_base.prefab 含 Chest + Inventory；场景中无宝箱实例。
+
+以上静态核对只用于定位测试对象；通过/失败一律以 batchmode 运行时的结构化断言为准。
+
+7. 静态核对更正（2026-11-03 21:58，首次运行后回查）
+---------------------------------------------------
+第 5 节（4）的表述不准确，更正为：
+- Archer_Unit.prefab、Mage_Unit.prefab 是 Knight_Unit.prefab 的**预制体变体**
+  （两文件内 m_SourcePrefab guid = 7a7ec5d3f1c7a1b43937a595bbf97898）。
+- 变体文件只列出自身覆盖的组件（Archer：UnitHealth + RangedCombat；Mage 另含法术组件），
+  Selectable、CharacterBrain、DownedRescue、Inventory、SkillSystem 等由基类 Knight_Unit 继承。
+- 首次有效运行（见 04_Assertions_preliminary_run1.jsonl）实测确认：场景 3 个玩家单位
+  运行时均带 DownedRescue，team=Player，rescueTime=3 / rescueRange=2.5 / reviveHp=1。
+- 本次更正不改变任何测试断言或场景状态；第 5 节的静态推测被运行时数据取代。
+
+
+6. 运行命令（两次，主入口唯一）
+-------------------------------
+（实际命令见每次运行的 04_Summary_runN.json 与 REPORT 第 2 节；下为模板）
+"D:\unity\2022.3.62f3c1\Editor\Unity.exe" -batchmode -projectPath "D:\unity\Dungeon"
+  -executeMethod FND00B04_BatchAcceptance.Run
+  -logFile "D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-04\04_Automation_runN.log"
+环境变量 FND00B04_RUN=1 / 2 标记运行序号。

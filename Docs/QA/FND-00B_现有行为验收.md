@@ -3,10 +3,10 @@
 > 任务包：`Docs/Tasks/FND-00B_现有行为验收.md`
 > 对应事实来源：`Docs/00_项目事实基线.md` 第 3.1 节
 > 测试日期：2026-11-03（第 1 项实测）；补证日期：2026-11-03（第 1 项证据补拍）
-> 执行人：用户（Unity 操作与判定）；AI 仅记录
-> 当前状态：**第 1 项通过；第 2、3、5 项失败；第 4、6 项因移动失效被阻塞记未测试；第 7～9、11、12 项未测试**（FND-00B-03 批量验收 2026-11-03 执行，FND-00B-04～05 尚未执行）；另含 1 项目标差距登记（不计入测试汇总）
+> 执行人：用户（第 1～6 项 Unity 目视/操作）；FND-00B-04 第 7～9 项由执行者以 batchmode 自动断言执行（用户完成前置关停确认），人工目检 V04-1 待用户执行
+> 当前状态：**第 1 项通过；第 2、3、5、7 项失败；第 8 项部分通过；第 9 项通过；第 4、6、11、12 项未测试**（FND-00B-03 批量验收 2026-11-03 执行；FND-00B-04 自动验收 2026-11-03 执行；FND-00B-05 尚未执行）；另含 1 项目标差距登记（不计入测试汇总）
 
-**重要：** 本文件中所有"用户报告"字段仅转录 `Docs/00` 中的用户描述，**不构成本次验收结果**。任何条目在用户实际于 Unity 中操作并填写"实际结果"之前，结果一律为 `未测试`。
+**重要：** 本文件中所有"用户报告"字段仅转录 `Docs/00` 中的用户描述，**不构成本次验收结果**。未填写"实际结果"的条目结果一律为 `未测试`。FND-00B-04 第 7～9 项的实际结果来自可重复运行的 batchmode 自动断言（非用户口述），其人工目检 V04-1 单独记录、尚未执行。
 
 ---
 
@@ -111,14 +111,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 待填写（需用户确认场景中是否已放置宝箱） |
-| 前置状态 | 待填写 |
-| 操作步骤 | 待填写（建议：角色靠近宝箱 → 交互 → 观察掉落/拾取） |
-| 预期结果 | 宝箱可交互并产出物品 |
-| 实际结果 | 未执行 |
-| 结果 | `未测试` |
-| 证据 | 无 |
-| 备注 | 用户报告：有相应代码和预制体，但尚未做到场景中；属代码与资产存在、场景集成未完成 |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；来源：batchmode 加载真实场景（内存夹具，未保存场景） |
+| 前置状态 | 分支：`docs/fnd-00-baseline`；HEAD：`e7688025e7a00fbeb1f7c9f36950ce4e353963a5`；前置工作区：干净；Unity：`2022.3.62f3c1`；主入口：`FND00B04_BatchAcceptance.Run`；连续运行 `run=1`、`run=2` |
+| 操作步骤 | 1. 加载 `DungeonWorld` 并进入 Play；2. 扫描场景内 `Chest` 实例（含 inactive），记录路径/位置/activeSelf/activeInHierarchy/交互组件状态；3. 实例数为 0 时对交互与产出输出明确的 blocked 记录，不静默跳过；4. 同一入口连续运行 2 次 |
+| 预期结果 | 场景存在至少 1 个宝箱实例；可通过真实交互入口触发开箱；产出物数量/背包状态符合现有预期 |
+| 实际结果 | `Chest.SceneCount`：`count=0`（run1/run2 一致），场景无宝箱实例；`Chest.Interactable`、`Chest.ProducesItem` 均为 `blocked`（无交互入口，无法开箱，产出不可断言）。只读数据：`chest_base.prefab`、`chest_gold.prefab` 资产存在，但不据此判通过 |
+| 结果 | `失败` |
+| 证据 | `Docs/QA/Evidence/FND-00B-04/04_Assertions.jsonl`（`Chest.SceneCount`、`Chest.Interactable`、`Chest.ProducesItem`）；`04_Automation_run1.log`、`04_Automation_run2.log`；`04_Summary_run1.json`、`04_Summary_run2.json` |
+| 备注 | 用户报告“有相应代码和预制体，但尚未做到场景中”；本次运行数据与“场景集成未完成”的描述一致。本项只记录，不修复 |
 
 ---
 
@@ -126,14 +126,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 待填写 |
-| 前置状态 | 待填写 |
-| 操作步骤 | 待填写（建议：移动角色穿过地图，观察已走过区域与角色周围视野） |
-| 预期结果 | 敌人被隐藏；角色周围视野范围内的迷雾遮罩被正确清除 |
-| 实际结果 | 未执行 |
-| 结果 | `未测试` |
-| 证据 | 无 |
-| 备注 | 用户报告：能隐藏敌人，但角色周围实际视野范围未正确清除迷雾遮罩，画面仍被迷雾覆盖；待复验。**2026-11-03 FND-01 复验新差距（用户报告）：Play 中迷雾遮罩未显示；原因未确认，只记录不修复，归入 FND-00B-04 待验。本备注不改变本项“未测试”状态** |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；来源：batchmode 加载真实场景（内存夹具，未保存场景） |
+| 前置状态 | 同第 7 项；场景内 3 个玩家单位（Knight 预制体变体）均存活；场景无怪物生成源（`SkeletonSpawner` 计数 0） |
+| 操作步骤 | 1. 扫描场景内 `FogOfWar` 实例（含 inactive）与名称含 fog 的 `MeshRenderer`，记录组件/网格/材质数据；2. 使用生产 `Visibility` 组件 + 内存夹具敌人，分别在 30m（视野外）与 4m（视野内）采样 `IsHidden` 与 `Renderer.enabled`；3. 生产遮罩缺失时对清除表现输出 blocked；4. 另建立内存 `FogOfWar` 夹具（96×96、revealRadius=10、fogAlpha=0.82、mapSize=210），采样角色移动前后的顶点 alpha（参考探针，不计入生产结论）；5. 连续运行 2 次 |
+| 预期结果 | Play 中存在启用的迷雾遮罩；视野外敌人隐藏、进入视野后显示；角色周围视野范围内遮罩被清除、范围外保持迷雾 |
+| 实际结果 | `Fog.MaskState`：`fogCount=0`、`fogLikeRendererCount=0`（run1/run2 一致）→ 失败，场景无遮罩实例。`Fog.EnemyVisibility`：30m 处 `IsHidden=true`/`rendererEnabled=false`；4m 处 `IsHidden=false`/`rendererEnabled=true` → 通过（run1 参照 `Mage_Unit`，run2 参照 `Archer_Unit`，判定一致）。`Fog.VisionClearing`：`blocked`（无遮罩可采样）。夹具参考探针：初始 alpha 0.82/0.82；角色周围 0.049/0.047（<0.05）、范围外 0.82；移动 20m 后新位置 0.049/0.050、旧区域 0、范围外 0.82 → 通过（仅证明算法数据，不作为本项通过依据） |
+| 结果 | `部分通过`（敌人隐藏通过；遮罩未显示、视野清除表现无法由生产数据断言） |
+| 证据 | `Docs/QA/Evidence/FND-00B-04/04_Assertions.jsonl`（`Fog.MaskState`、`Fog.EnemyVisibility`、`Fog.VisionClearing`、`Fog.VisionClearing.fixtureProbe`）；`04_Automation_run1.log`、`04_Automation_run2.log`；`04_Summary_run1.json`、`04_Summary_run2.json` |
+| 备注 | 用户报告：能隐藏敌人，但角色周围视野范围未正确清除迷雾遮罩；**2026-11-03 FND-01 复验新差距：Play 中迷雾遮罩未显示**。本次自动数据确认：场景运行时无 `FogOfWar` 实例、无 fog 类 `MeshRenderer`；原因未分析、未修复。画面是否真实可见见 `Docs/QA/Evidence/FND-00B-04/04_人工目检.md`（V04-1，**待用户执行**） |
 
 ---
 
@@ -141,14 +141,14 @@
 
 | 字段 | 内容 |
 |---|---|
-| 测试场景 | 待填写 |
-| 前置状态 | 场上有倒地角色，另有可行动角色 |
-| 操作步骤 | 待填写（建议：选中可行动角色 → 靠近倒地角色，观察是否自动触发救援） |
-| 预期结果 | 目标设计：见第 10 项；本项仅记录现状 |
-| 实际结果 | 未执行 |
-| 结果 | `未测试` |
-| 证据 | 无 |
-| 备注 | 用户报告：靠近倒地角色后会自动救援，救援本身可以完成；当前交互方式不符合目标 |
+| 测试场景 | 名称：`DungeonWorld`；路径：`Assets/Scenes/DungeonWorld.unity`；来源：batchmode 加载真实场景（内存夹具，未保存场景） |
+| 前置状态 | 同第 7 项；场景 3 个玩家单位（`Knight_Unit` 预制体变体：`Knight_Unit`/`Archer_Unit`/`Mage_Unit`）均带 `DownedRescue`+`Selectable`+`CharacterBrain`，team=Player；无怪物生成源 |
+| 操作步骤 | 1. 用真实伤害管线击倒场景内 `Knight_Unit`（hp 100 → -10；`dead=true`、`isDown=true`，AI/移动被禁用）；2. 实例化同一 `Knight_Unit` 预制体作为救援者（内存夹具），置于 6.32m 外；3. 通过 `SelectionManager.SingleSelect` 选中救援者（等价左键单选，**未使用点击目标流程**，未调用任何救援完成方法）；4. 通过 `NavMeshAgent.Warp` 靠近至 1.2m（`rescueRange=2.5`）；5. 观察自动触发与完成；连续运行 2 次 |
+| 预期结果 | 现状：选中可行动角色并靠近倒地角色后自动开始救援，并在限定时间内完成（本项不断言“悬停图标→点击指令”的目标需求） |
+| 实际结果 | `Rescue.Fixture`／`Rescue.AutoTrigger`／`Rescue.Completes` 两次运行一致：倒地 1、可行动 1；选中后自动触发延迟约 `0.00001s`、触发距离 `1.2m`；救援耗时 `2.997s`（rescueTime=3）完成；最终 `hp=1`、`dead=false`、`isDown=false`、`OnRevived` 1 次；事件链 `OnDeath → OnRevived`；brain/agent 恢复启用；未触发团灭（`IsWiped=false`、`timeScale=1`） |
+| 结果 | `通过` |
+| 证据 | `Docs/QA/Evidence/FND-00B-04/04_Assertions.jsonl`（`Rescue.Fixture`、`Rescue.AutoTrigger`、`Rescue.Completes`）；`04_Automation_run1.log`、`04_Automation_run2.log`；`04_Summary_run1.json`、`04_Summary_run2.json` |
+| 备注 | 只验当前自动救援；未断言第 10 项目标交互，未让全员倒地。用户报告“靠近后自动救援、救援可完成”与本次数据一致；当前交互方式不符合目标需求的结论仍以第 10 项登记为准 |
 
 ---
 
@@ -207,15 +207,16 @@
 | 4 | 普攻 | `未测试` |
 | 5 | 技能 | `失败` |
 | 6 | 动画表现 | `未测试` |
-| 7 | 宝箱 | `未测试` |
-| 8 | 迷雾 | `未测试` |
-| 9 | 救援（现状） | `未测试` |
+| 7 | 宝箱 | `失败` |
+| 8 | 迷雾 | `部分通过` |
+| 9 | 救援（现状） | `通过` |
 | 10 | 救援（目标） | `—（目标登记）` |
 | 11 | 传送 | `未测试` |
 | 12 | 团灭与游戏结束 | `未测试` |
 
 第 10 项为**目标差距登记**，不在本轮执行，不计入下列统计。
 
-现有行为验收共 **11 项**：通过 1 ｜ 部分通过 0 ｜ 失败 3 ｜ 未测试 7。目标差距登记 1 项，不计入通过率与未测试总数。
+现有行为验收共 **11 项**：通过 2 ｜ 部分通过 1 ｜ 失败 4 ｜ 未测试 4。目标差距登记 1 项，不计入通过率与未测试总数。
 
-> 本汇总为 2026-11-03 实测结果：第 1 项经同日补证后为 `通过`（补证提交 `af07ddb1130bf23e82847c99183ef86c850f5cc0`）；第 2、3、5 项为 FND-00B-03 批量会话实测结果；第 4、6 项因移动失效被阻塞未测试；第 7～9、11、12 项尚未执行。AI 不得预填或推测结果。
+> 本汇总为 2026-11-03 实测结果：第 1 项经同日补证后为 `通过`（补证提交 `af07ddb1130bf23e82847c99183ef86c850f5cc0`）；第 2、3、5 项为 FND-00B-03 批量会话实测结果；第 4、6 项因移动失效被阻塞未测试；第 7～9 项为 FND-00B-04 batchmode 自动断言结果（HEAD `e7688025e7a00fbeb1f7c9f36950ce4e353963a5`，连续运行 2 次一致）；第 11、12 项尚未执行。AI 不得预填或推测结果。
+> 第 8 项的 `部分通过` = 敌人隐藏（`Fog.EnemyVisibility`）通过，但生产场景无 `FogOfWar` 实例（`Fog.MaskState` 失败、`Fog.VisionClearing` 阻塞）；画面可见性属人工目检 V04-1（`Docs/QA/Evidence/FND-00B-04/04_人工目检.md`，待用户执行），不以自动数据替代。

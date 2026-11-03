@@ -67,6 +67,7 @@
     <Compile Include="Assets\_Project\Scripts\Player\SkillInputController.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\CursorManager.cs" />
     <Compile Include="Assets\_Project\Scripts\System\ForestGenerator.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B04_ProbeRunner.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\SelectionManager.cs" />
     <Compile Include="Assets\_Project\Scripts\System\DungeonDoor.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\MainMenuPanel.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Assets\_Project\Scripts\Combat\ExplosionFx.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\UnitMana.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\DownedRescue.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B04_Evidence.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\WeaponData.cs" />
     <Compile Include="Assets\_Project\Scripts\Framework\Cooldown.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\CombatFeedback.cs" />
