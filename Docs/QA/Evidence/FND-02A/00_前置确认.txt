@@ -1,0 +1,81 @@
+FND-02A 前置确认（阶段 1 只读结果 + 阶段 2 开工前环境核实）
+生成时间：2026-11-04（执行者【执行者】/ opencode-go/deepseek-v4.1-flash）
+本文件只记录只读命令的原始输出与用户裁决，不包含任何推测。
+
+====================================================================
+一、仓库状态（阶段 1 记录，命令原样）
+====================================================================
+命令：git rev-parse --abbrev-ref HEAD
+docs/fnd-00-baseline
+
+命令：git rev-parse HEAD
+85a14c854c43a6170b9d929a86771c1e8d5bf563
+（提交时间 2026-11-04 15:06:41 +0800；标题 docs(plan): FND-02补架构依据两栏与结构债清单SD-01~04）
+
+命令：git status --porcelain -uall
+ M Docs/Handoff/CURRENT.md
+?? Docs/Handoff/PROPOSAL_FND-02A.md
+?? "Docs/Handoff/TASK_FND-02A_MVP\344\272\247\345\223\201\345\220\257\345\212\250\344\270\216\345\233\272\345\256\232\351\201\255\351\201\207\350\243\205\351\205\215.md"
+
+分类：
+- Docs/Handoff/CURRENT.md（M）：【大脑】写入的状态更新；用户裁决 3 明确豁免，执行者不修改。
+- Docs/Handoff/PROPOSAL_FND-02A.md（??）：本单提案，属本单 Docs/Handoff 新增。
+- Docs/Handoff/TASK_FND-02A_...md（??）：工单自身，豁免。
+- Assets/、Packages/、ProjectSettings/、Assembly-CSharp*.csproj：全部干净（无旧测试资产、无旧 .csproj 改动混入）。
+
+====================================================================
+二、阶段 1 影响面确认（用户已整体批准）
+====================================================================
+1. 唯一自动开局所有者：GameFlow.Start()。核查结论：
+   - 现状 0 个产品写入者把 GameStarted 置 true；GameFlow.Start() 置 false（GameFlow.cs:18-21）。
+   - MainMenuPanel.OnClose() 会置 true，但 DungeonWorld.unity 中 UIManager.mainMenuPanel = {fileID: 0}（DungeonWorld.unity:1632），
+     且场景/预制体无 MainMenuPanel 实例（GUID 4cd7dd49de4854440844a4600ca93be3 在 *.unity 中 0 命中）；Playground.unity:616 同为 0。
+   - 无 SendMessage/BroadcastMessage/Invoke("...") 字符串派发；产品代码无 RuntimeInitializeOnLoadMethod 隐藏自启。
+2. 固定遭遇：Assets/_Project/Prefabs/Skeleton_Warrior.prefab，GUID 18dec5e6af31178468b146e0440bd081。
+   预制体根（FBX 472347efbbbba17498f0cac6230b1f0d 的 919132149155446097）自带
+   MonsterBrain / CharacterController / NavMeshAgent / UnitHealth / UnitAnimatorSpeed，子对象含 EnemyRing、UnitHealthBar、模型与武器。
+   数值资产 SkeletonWarrior.asset（520f29cc9754e2f40b32f1d017f3d3ed）：hp60 / damage14 / attackRange1.8 / aggro10 / moveSpeed2.2；
+   UnitHealth.Awake 会用 stats 覆盖预制体序列化的 maxHp/team，运行时 hp=60、team=Monster。
+3. 坐标否决依据（候选 (-2.72, 0.08333, 7) 不可用）：
+   - Archer_Unit 实例在 (0.85,0,0)（stats attackRange 10 / aggroRange 10 / damage 12 / attackSpeed 3）。
+   - 候选点到 Archer 距离 7.86m <= 10，开局即由 CharacterBrain.Update → UnitBrain.AttackLoop → RangedCombat.AutoAttack 自动射击，
+     约 2s 内击杀 hp60 的骷髅（无需任何玩家输入），Encounter.SceneCensus / FixedIdentity / RealApproach 无法成立。
+4. 用户裁决 1：固定遭遇改为 (-2.72, 0, -12)，旋转 (0,0,0)。
+   依据：到 Knight/Archer/Mage 距离 12.00 / 12.51 / 13.29，均 > 玩家最大 aggro/射程 10（最小余量 2.0m）；
+   ForestGen（campCenter=ForestGround 原点、campClearRadius 12、pathDirection 180°即 -Z、pathHalfWidth 5、pathLength 100）的
+   InPath 排除散布，(-2.72,-12) 的 along=12∈[0,100]、perp=2.72<5，故该点不会生成树/石/灌木（无运行时 NavMeshObstacle 挖洞）。
+5. 用户裁决 2：GameFlow.Start() 仅在场景存在 team == Team.Player 的 UnitHealth 时自动开局
+   （GameStarted = true; Time.timeScale = 1f;），明确不使用场景名判断；MainMenuPanel.cs 不改。
+   目的：Playground.unity（UnitHealth 数量 0）不会被判定为团灭。
+6. 用户裁决 3：CURRENT.md 脏项豁免；新测试资产导致的 Assembly-CSharp.csproj / Assembly-CSharp-Editor.csproj 修改随测纳入；
+   阶段 1 影响面清单整体批准。
+7. 用户裁决 5：GameFlow 自动开局后，历史 FND00B 04/05/06 重跑时 GameStarted 初值将与基线期不同，
+   在 REPORT 中记为预期演进，不判回归失败；不修改旧 FND-00B 测试与旧 QA 证据。
+
+====================================================================
+三、阶段 2 开工前环境核实（本轮实际执行）
+====================================================================
+命令：Get-Process Unity -ErrorAction SilentlyContinue | Select-Object Id,ProcessName,StartTime,Path
+输出：（空 —— 无 Unity / Unity.exe 进程）
+
+命令：Test-Path Temp/UnityLockfile
+False
+
+结论：用户所述"已关闭 Unity"与实际一致，无 Unity.exe 残留、无项目锁文件占用；Unity Hub 进程与项目无关。
+（说明：阶段 1 记录时曾观察到 Unity.exe PID 14720 于 14:56 启动，本阶段开始前已退出。）
+
+Unity 版本（ProjectSettings/ProjectVersion.txt）：2022.3.62f3c1 (1623fc0bbb97)
+Unity 可执行文件：D:\unity\2022.3.62f3c1\Editor\Unity.exe
+
+====================================================================
+四、本单授权边界（最终以用户裁决为准）
+====================================================================
+允许修改：
+- Assets/_Project/Scripts/Core/GameFlow.cs（仅 Start 的产品自动开局最小接线）
+- Assets/Scenes/DungeonWorld.unity（仅经 Unity 编辑器 API 新增 1 个 Skeleton_Warrior 实例，位置 (-2.72,0,-12)、旋转 (0,0,0)）
+新增：
+- Assets/_Project/Tests/FND02A/**（测试脚本与自动 .meta）
+- Docs/QA/Evidence/FND-02A/**、Docs/Handoff/REPORT_FND-02A.md
+禁止：
+- ProjectSettings、Packages、导航烘焙数据、Animator、Skeleton_Warrior.prefab、旧 FND00B 测试、旧 QA 证据、CURRENT.md
+- 任何 git 写操作（add/commit/checkout/reset/restore/clean）
