@@ -1,0 +1,56 @@
+FND-00B-06 前置确认（普攻与动画补验）
+记录时间：2026-11-04（本文件由执行者写入；未执行任何 Git 写操作）
+
+一、仓库状态
+$ git rev-parse --abbrev-ref HEAD
+docs/fnd-00-baseline
+
+$ git rev-parse HEAD
+fa6aaf78f4f7ed0ba9e929d24094aa7f1ff74616
+
+$ git status --porcelain
+(无输出；工作区干净)
+
+豁免后判定：工作区干净，未触发工单 §2 豁免条款；本次新增的测试脚本与 Docs 证据均为本单计划产物，会在运行后重新列出。
+
+二、环境
+Unity 版本：2022.3.62f3c1（ProjectSettings/ProjectVersion.txt: m_EditorVersion: 2022.3.62f3c1）
+Unity 可执行文件：D:\unity\2022.3.62f3c1\Editor\Unity.exe（存在）
+工程路径：D:\unity\Dungeon
+场景：Assets/Scenes/DungeonWorld.unity
+
+三、Unity 编辑器安全
+用户已明确回复“编辑器已关闭，可以开始”。
+执行前检查：未检测到 Unity 进程；Temp\UnityLockfile 不存在。
+未使用隔离副本；不保存场景、不重新烘焙、不构建、不升级 Unity、不安装包。
+
+四、唯一主入口
+FND00B06_BatchAcceptance.Run（Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs）
+命令行（run1 / run2 仅日志与 FND00B06_RUN 不同）：
+"D:\unity\2022.3.62f3c1\Editor\Unity.exe" -batchmode -projectPath D:\unity\Dungeon -executeMethod FND00B06_BatchAcceptance.Run -logFile D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-06\06_Automation_run1.log
+"D:\unity\2022.3.62f3c1\Editor\Unity.exe" -batchmode -projectPath D:\unity\Dungeon -executeMethod FND00B06_BatchAcceptance.Run -logFile D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-06\06_Automation_run2.log
+
+五、FND-01 后玩家 Agent 导航实测（本单运行期实测，非抄录旧文档）
+说明：本数据由本单运行 1 的 Attack.Fixture 采样，run1 结束后追加于本文件末尾；同一数据亦写入 06_Assertions.jsonl。
+（见文件末尾“六、运行期实测追加”）
+
+六、运行期实测追加（run1 结束后写入）
+取样时间：2026-11-04 14:27:28 ~ 14:27:44（run1，seed=20261105）
+场景：Assets/Scenes/DungeonWorld.unity；场景内玩家单位 3 个，场景怪物 0 个。
+玩家 Agent 导航状态（Attack.Fixture data.playerScan）：
+  Knight_Unit  position=(-2.72, 0.08333, 0)  agentPresent=True agentEnabled=True agentOnNavMesh=True hasSwordSwing=True
+  Archer_Unit  position=(0.85, 0.08333, 0)   agentPresent=True agentEnabled=True agentOnNavMesh=True hasSwordSwing=False
+  Mage_Unit    position=(3.22, 0.08333, 0)   agentPresent=True agentEnabled=True agentOnNavMesh=True hasSwordSwing=False
+所选攻击玩家：Knight_Unit；agentOk=True；reason=ok。
+结论：FND-01 之后，场景内 3 个玩家单位的 NavMeshAgent 均处于启用且在 NavMesh 上（isOnNavMesh=True）。
+
+七、两次正式运行
+run1：FND00B06_RUN=1，2026-11-04 14:27:28.219 ~ 14:27:43.964，exitCode=2（0=全通过；2=有产品失败/阻塞）
+run2：FND00B06_RUN=2，2026-11-04 14:28:23.239 ~ 14:28:38.977，exitCode=2
+两次断言集合完全一致（14 条，pass/fail/status 相同）：pass=11，fail=1，blocked=0，infra=0，observed=2。
+
+八、运行期产物与工作区（运行后）
+新增（未跟踪）：3 个测试脚本 + 3 个 .meta（Unity 首次导入自动生成）、Docs/QA/Evidence/FND-00B-06/ 全部文件。
+Unity 自动重生成：Assembly-CSharp.csproj、Assembly-CSharp-Editor.csproj 各新增 Compile 行（非人工编辑，见报告）。
+未修改：生产代码、场景、预制体、Animator 控制器、ProjectSettings、包依赖、CURRENT.md。
+说明：首次尝试因 batchmode 进程被外部提前终止而留下 Temp\UnityLockfile 陈旧锁；确认无 Unity 进程后删除该临时锁文件后继续（仅 Temp 下临时文件，非仓库文件）。
