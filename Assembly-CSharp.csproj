@@ -70,6 +70,7 @@
     <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B04_ProbeRunner.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\SelectionManager.cs" />
     <Compile Include="Assets\_Project\Scripts\System\DungeonDoor.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B06_ProbeRunner.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\MainMenuPanel.cs" />
     <Compile Include="Assets\_Project\Scripts\System\Interactable.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Assets\_Project\Scripts\Combat\Projectile.cs" />
     <Compile Include="Assets\_Project\Scripts\Player\Selectable.cs" />
     <Compile Include="Assets\_Project\Scripts\Combat\SkillEffectFireball.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Runtime\FND00B06_Evidence.cs" />
     <Compile Include="Assets\_Project\Scripts\UI\SkillBarUI.cs" />
     <Compile Include="Assets\_Project\Scripts\Units\WorldHealthBar.cs" />
     <Compile Include="Assets\_Project\Scripts\Items\ItemData.cs" />

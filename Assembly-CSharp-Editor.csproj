@@ -67,6 +67,7 @@
     <Compile Include="Assets\_Project\Tests\FND00B\Editor\FND00B04_BatchAcceptance.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\_Project\Tests\FND00B\Editor\FND00B05_BatchAcceptance.cs" />
+    <Compile Include="Assets\_Project\Tests\FND00B\Editor\FND00B06_BatchAcceptance.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
