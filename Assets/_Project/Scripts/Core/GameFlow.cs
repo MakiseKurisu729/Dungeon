@@ -18,6 +18,23 @@ public class GameFlow : MonoBehaviour
     void Start()
     {
         GameStarted = false;
+
+        // ★ 产品自动开局：本场景存在可操作队伍时直接进入局内（无主菜单步骤）。
+        // 只有存在 team==Player 的 UnitHealth 才开局，避免无队伍场景（如 Playground）被误判团灭。
+        if (HasPlayerTeam())
+        {
+            GameStarted = true;
+            Time.timeScale = 1f;
+        }
+    }
+
+    static bool HasPlayerTeam()
+    {
+        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+        {
+            if (h != null && h.team == Team.Player) return true;
+        }
+        return false;
     }
 
     void Update()
