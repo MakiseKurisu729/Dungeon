@@ -1,0 +1,36 @@
+FND-02B 前置确认（阶段 2 开工前）
+生成时间: 2026-11-04 18:07:07 +08:00
+工作目录: D:\unity\Dungeon
+分支: docs/fnd-00-baseline
+完整 HEAD: c7b2c79bf9c06a647b40ca48da1d826f5a8eee6f
+
+[Unity 进程检查] Get-Process Unity
+NO_UNITY_PROCESS
+
+[Temp/UnityLockfile 存在性]
+False
+
+[git status --porcelain -uall 原始输出]
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/Scenes/DungeonWorld.unity
+ M Assets/_Project/Scripts/Core/GameFlow.cs
+ M Docs/Handoff/CURRENT.md
+?? Assets/_Project/Tests/FND02A.meta
+?? Assets/_Project/Tests/FND02A/Editor.meta
+?? Assets/_Project/Tests/FND02A/Editor/FND02A_BatchAcceptance.cs
+?? Assets/_Project/Tests/FND02A/Editor/FND02A_BatchAcceptance.cs.meta
+?? Assets/_Project/Tests/FND02A/Runtime.meta
+?? Assets/_Project/Tests/FND02A/Runtime/FND02A_Evidence.cs
+?? Assets/_Project/Tests/FND02A/Runtime/FND02A_Evidence.cs.meta
+?? Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs
+?? Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs.meta
+?? Docs/Handoff/PROPOSAL_FND-02A.md
+?? Docs/Handoff/PROPOSAL_FND-02B.md
+?? Docs/Handoff/REPORT_FND-02A.md
+?? "Docs/Handoff/TASK_FND-02A_MVP\344\272\247\345\223\201\345\220\257\345\212\250\344\270\216\345\233\272\345\256\232\351\201\207\350\243\205\351\205\215.md"
+?? "Docs/Handoff/TASK_FND-02B_\347\216\251\345\256\266\345\212\250\347\224\273\346\234\272\346\225\264\345\244\207\344\270\216\346\224\273\345\207\273\346\227\266\351\222\237\345\257\271\351\275\220.md"
+
+[说明]
+- 以上 git status 为执行者开工前工作区基线；FND-02A 尚未提交的改动与 Docs/Handoff/ 文档均在此列出。
+- 本文件由执行者生成，仅记录事实，未修改任何生产资产。
