@@ -5,7 +5,6 @@
       "models": {
         "deepseek-v4.1-flash": {
           "body": {
-            "thinking": { "type": "disabled" },
             "temperature": 0
           }
         }
@@ -15,7 +14,6 @@
       "models": {
         "deepseek-v4.1-flash": {
           "body": {
-            "thinking": { "type": "disabled" },
             "temperature": 0
           }
         }
