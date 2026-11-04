@@ -25,6 +25,14 @@ public class RangedCombat : MonoBehaviour, ICharacterCombat
     public float attackLen = 1.0f;
     [InspectorName("释放帧比例")]
     [Range(0f, 1f)] public float releasePoint = 0.45f;
+
+    [Header("动画释放窗口（按释放状态 normalizedTime）")]
+    [InspectorName("发射窗口起")]
+    [Tooltip("释放状态 normalizedTime 的发射窗口起点（0~1）；留空前摇状态名时退回旧 releasePoint 逻辑")]
+    [Range(0f, 1f)] public float releaseWindowStart = 0.2f;
+    [InspectorName("发射窗口止")]
+    [Tooltip("释放状态 normalizedTime 的发射窗口终点（0~1）")]
+    [Range(0f, 1f)] public float releaseWindowEnd = 0.6f;
     [InspectorName("伤害")]
     public float damage = 12f;
     [InspectorName("锋利度")]
@@ -38,6 +46,7 @@ public class RangedCombat : MonoBehaviour, ICharacterCombat
     float _timer = -1f;
     float _curLen;
     bool _fired;
+    bool _sawAttackAnim;
     Transform _target;
 
     float SpeedMult { get { return stats != null && stats.attackSpeed > 0f ? stats.attackSpeed : 1f; } }
@@ -50,10 +59,13 @@ public class RangedCombat : MonoBehaviour, ICharacterCombat
     public void AutoAttack(Transform target)
     {
         if (_timer >= 0f || target == null) return;
+        // 上一段攻击动画尚未回落时不抢起手，避免用旧释放进度提前发射
+        if (IsAttackAnimPlaying()) return;
         _target = target;
         _curLen = attackLen / SpeedMult;
         _timer = 0f;
         _fired = false;
+        _sawAttackAnim = false;
         if (_animator != null)
         {
             _animator.ResetTrigger("Interrupt");
@@ -86,26 +98,100 @@ public class RangedCombat : MonoBehaviour, ICharacterCombat
         if (_timer < 0f) return;
         _timer += Time.deltaTime;
 
-        float t01 = ReadAnimProgress();
-        if (t01 < 0f) t01 = _timer / _curLen;
+        bool animPlaying;
+        bool inRelease;
+        float t01 = ReadAnimProgress(out animPlaying, out inRelease);
 
-        if (!_fired && t01 >= releasePoint)
+        // 动画读取失败（无 Animator/不在攻击状态）：回退代码时钟
+        if (!animPlaying) t01 = _timer / _curLen;
+
+        if (!_fired)
         {
-            _fired = true;
-            Fire();
+            bool inWindow;
+            if (animPlaying)
+                inWindow = inRelease && t01 >= releaseWindowStart && t01 <= releaseWindowEnd;
+            else
+                inWindow = t01 >= releaseWindowStart && t01 <= releaseWindowEnd;
+
+            if (inWindow)
+            {
+                _fired = true;
+                Fire();
+            }
         }
-        if (_timer >= _curLen) _timer = -1f;
+
+        // 动画仍在攻击状态时延长代码计时（动画周期可能长于 attackLen/SpeedMult）；动画结束即收招
+        if (animPlaying)
+        {
+            _sawAttackAnim = true;
+            if (_timer > MaxAttackSeconds) _timer = -1f;
+        }
+        else if (_sawAttackAnim)
+        {
+            _timer = -1f;
+            _sawAttackAnim = false;
+        }
+        else if (_timer >= _curLen) _timer = -1f;
     }
 
-    float ReadAnimProgress()
+    // 攻击动画兜底上限：正常由动画状态驱动收招，此值只防动画卡死导致 _timer 永不结束
+    const float MaxAttackSeconds = 10f;
+
+    bool TwoStateMode
     {
+        get { return !string.IsNullOrEmpty(drawStateName) && !string.IsNullOrEmpty(releaseStateName); }
+    }
+
+    /// <summary>
+    /// 读取攻击动画：animPlaying=处于攻击动画（前摇或释放）；inRelease=处于释放状态；
+    /// 返回释放状态的 normalizedTime（前摇返回 -1）。
+    /// 旧配置（前摇状态名为空，例如骷髅弓手 Shoot 单状态）沿用 releasePoint 比例映射。
+    /// </summary>
+    float ReadAnimProgress(out bool animPlaying, out bool inRelease)
+    {
+        animPlaying = false;
+        inRelease = false;
         if (_animator == null) return -1f;
+
         var st = _animator.GetCurrentAnimatorStateInfo(0);
+        if (TwoStateMode)
+        {
+            if (st.IsName(releaseStateName))
+            {
+                animPlaying = true;
+                inRelease = true;
+                return st.normalizedTime % 1f;
+            }
+            if (st.IsName(drawStateName))
+            {
+                animPlaying = true;
+                return -1f;
+            }
+            return -1f;
+        }
+
+        // 旧配置：单状态映射到 releasePoint 之后
         if (!string.IsNullOrEmpty(releaseStateName) && st.IsName(releaseStateName))
+        {
+            animPlaying = true;
+            inRelease = true;
             return releasePoint + (1f - releasePoint) * (st.normalizedTime % 1f);
+        }
         if (!string.IsNullOrEmpty(drawStateName) && st.IsName(drawStateName))
+        {
+            animPlaying = true;
             return releasePoint * Mathf.Clamp01(st.normalizedTime % 1f);
+        }
         return -1f;
+    }
+
+    bool IsAttackAnimPlaying()
+    {
+        if (_animator == null) return false;
+        var st = _animator.GetCurrentAnimatorStateInfo(0);
+        if (!string.IsNullOrEmpty(drawStateName) && st.IsName(drawStateName)) return true;
+        if (!string.IsNullOrEmpty(releaseStateName) && st.IsName(releaseStateName)) return true;
+        return false;
     }
 
     void Fire()

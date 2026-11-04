@@ -14,8 +14,28 @@ public class CharacterBrain : UnitBrain
     Transform _orderedTarget;
     Interactable _pendingInteract;
     bool _moving;
+    UnitHealth _health;
 
     protected override Team MyTeam { get { return Team.Player; } }
+
+    protected override void Start()
+    {
+        base.Start();
+        _health = GetComponent<UnitHealth>();
+        if (_health != null) _health.OnHit += OnDamaged;
+    }
+
+    void OnDestroy()
+    {
+        if (_health != null) _health.OnHit -= OnDamaged;
+    }
+
+    // 受击反馈：统一伤害入口（UnitHealth.ApplyDamage/TakeHit）触发动画器 Hit → Hit_A
+    void OnDamaged(DamageInfo info)
+    {
+        Animator a = unitAnimator != null ? unitAnimator : GetComponentInChildren<Animator>();
+        if (a != null) a.SetTrigger("Hit");
+    }
 
     public void CommandAttack(Transform t)
     {
