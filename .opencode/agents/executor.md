@@ -1,7 +1,6 @@
 ---
 description: 【执行者】严格按指定 Docs/Handoff/TASK_XXX.md 工单执行本地任务并写 REPORT
 mode: subagent
-model:
 permissions:
   - action: edit
     resource: "*"
