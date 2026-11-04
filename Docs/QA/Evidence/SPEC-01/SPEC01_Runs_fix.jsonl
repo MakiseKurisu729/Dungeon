@@ -1,0 +1,3 @@
+{"mode":"red","run":0,"pass":7,"fail":1,"blocked":0,"infraFail":0,"observed":0,"summary":"D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\SPEC01_Red_fix_Summary.json","exitReason":"completed","finishedAt":"2026-11-05 01:49:42.994"}
+{"mode":"green","run":1,"pass":8,"fail":0,"blocked":0,"infraFail":0,"observed":0,"summary":"D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\SPEC01_Green_fix_run1_Summary.json","exitReason":"completed","finishedAt":"2026-11-05 01:51:30.360"}
+{"mode":"green","run":2,"pass":8,"fail":0,"blocked":0,"infraFail":0,"observed":0,"summary":"D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\SPEC01_Green_fix_run2_Summary.json","exitReason":"completed","finishedAt":"2026-11-05 01:52:40.552"}

@@ -1,0 +1,128 @@
+SPEC-01 阶段 0 前置确认
+生成时间: 2026-11-05 00:27:27
+
+== 1. Unity 关闭自证 ==
+PASS: Get-Process Unity -> 无进程
+Temp/UnityLockfile 存在: False
+
+== 2. 仓库状态 ==
+branch: docs/fnd-00-baseline
+HEAD: de92f096d674fab373ba0f32cbff160380500e52
+git status --porcelain -uall:
+   M AGENTS.md
+   M Assembly-CSharp-Editor.csproj
+   M Assembly-CSharp.csproj
+   M Assets/_Project/Art/Animations/OC_Archer.overrideController
+   M Assets/_Project/Art/Animations/OC_Knight.overrideController
+   M Assets/_Project/Art/Animations/OC_Mage.overrideController
+   M Assets/_Project/Art/Animations/PlayerBase.controller
+   M Assets/_Project/Prefabs/Archer_Unit.prefab
+   M Assets/_Project/Prefabs/Knight_Unit.prefab
+   M Assets/_Project/Prefabs/Mage_Unit.prefab
+   M Assets/_Project/Scripts/Combat/CombatFeedback.cs
+   M Assets/_Project/Scripts/Combat/DamageNumber.cs
+   M Assets/_Project/Scripts/Combat/RangedCombat.cs
+   M Assets/_Project/Scripts/Combat/SwordSwing.cs
+   M Assets/_Project/Scripts/Units/CharacterBrain.cs
+   M Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs
+   M Docs/Handoff/CURRENT.md
+  ?? Assets/_Project/Tests/FND02B.meta
+  ?? Assets/_Project/Tests/FND02B/Editor.meta
+  ?? Assets/_Project/Tests/FND02B/Editor/FND02B_BatchAcceptance.cs
+  ?? Assets/_Project/Tests/FND02B/Editor/FND02B_BatchAcceptance.cs.meta
+  ?? Assets/_Project/Tests/FND02B/Runtime.meta
+  ?? Assets/_Project/Tests/FND02B/Runtime/FND02B_Evidence.cs
+  ?? Assets/_Project/Tests/FND02B/Runtime/FND02B_Evidence.cs.meta
+  ?? Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs
+  ?? Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs.meta
+  ?? Docs/Handoff/PROPOSAL_FND-02B.md
+  ?? Docs/Handoff/REPORT_FND-02B.md
+  ?? "Docs/Handoff/TASK_FND-02B_\347\216\251\345\256\266\345\212\250\347\224\273\346\234\272\346\225\264\345\244\207\344\270\216\346\224\273\345\207\273\346\227\266\351\222\237\345\257\271\351\275\220.md"
+  ?? "Docs/Handoff/TASK_SPEC-01_\345\212\250\347\224\273\346\234\272\345\215\225\346\256\265\346\224\273\345\207\273\344\270\216\351\243\230\345\255\227\347\263\273\347\273\237.md"
+  ?? "Docs/QA/Evidence/FND-02B/00_\345\211\215\347\275\256\347\241\256\350\256\244.txt"
+  ?? Docs/QA/Evidence/FND-02B/02B_Assertions.jsonl
+  ?? Docs/QA/Evidence/FND-02B/02B_Automation_run1.log
+  ?? Docs/QA/Evidence/FND-02B/02B_Automation_run2.log
+  ?? Docs/QA/Evidence/FND-02B/02B_Automation_run3.log
+  ?? Docs/QA/Evidence/FND-02B/02B_ExitCode_run1.txt
+  ?? Docs/QA/Evidence/FND-02B/02B_ExitCode_run2.txt
+  ?? Docs/QA/Evidence/FND-02B/02B_ExitCode_run3.txt
+  ?? Docs/QA/Evidence/FND-02B/02B_Red_Assertions.jsonl
+  ?? Docs/QA/Evidence/FND-02B/02B_Red_Automation.log
+  ?? Docs/QA/Evidence/FND-02B/02B_Red_ExitCode.txt
+  ?? Docs/QA/Evidence/FND-02B/02B_Red_Summary.json
+  ?? Docs/QA/Evidence/FND-02B/02B_Summary_run1.json
+  ?? Docs/QA/Evidence/FND-02B/02B_Summary_run2.json
+  ?? Docs/QA/Evidence/FND-02B/02B_Summary_run3.json
+  ?? "Docs/QA/Evidence/FND-02B/02B_\344\272\272\345\267\245\347\233\256\346\243\200.md"
+
+== 3. B1 反向裁决核验（只读） ==
+-- 3.1 PlayerBase.controller 触发器/参数（只读） --
+  L371: - m_Name: SpeedZ
+  L377: - m_Name: SpeedX
+  L383: - m_Name: Grounded
+  L389: - m_Name: AttackSpeed
+  L395: - m_Name: AttackRange
+  L401: - m_Name: Skill
+  L413: - m_Name: Interrupt
+  L437: - m_Name: Hit
+  L449: - m_Name: AttackMelee
+  'Attack' 触发器参数存在: False
+-- 3.2 弓/法预制体 RangedCombat.attackTrigger（只读） --
+  Assets\_Project\Prefabs\Archer_Unit.prefab L392: attackTrigger: AttackRange
+  Assets\_Project\Prefabs\Archer_Unit.prefab L393: drawStateName: Attack_Draw
+  Assets\_Project\Prefabs\Archer_Unit.prefab L394: releaseStateName: Attack_Release
+  Assets\_Project\Prefabs\Mage_Unit.prefab L323: attackTrigger: AttackRange
+  Assets\_Project\Prefabs\Mage_Unit.prefab L324: drawStateName: Attack_Draw
+  Assets\_Project\Prefabs\Mage_Unit.prefab L325: releaseStateName: Attack_Release
+-- 3.3 RangedCombat.cs 读取字段、无 SetTrigger 硬编码（只读） --
+  L16: public string attackTrigger = "Attack";
+  L71: _animator.ResetTrigger("Interrupt");
+  L72: _animator.SetTrigger(attackTrigger);
+  L82: _animator.ResetTrigger(attackTrigger);
+  L83: _animator.SetTrigger("Interrupt");
+  说明: 唯一 "Attack" 字面量是 attackTrigger 字段的序列化默认值（L16）；所有运行时调用点均使用 attackTrigger 字段，弓/法预制体已覆盖为 AttackRange。
+-- 3.4 骑士 SwordSwing 序列化块（只读） --
+  L197: attackLen: 1
+  L198: activeStart: 0.35
+  L199: activeEnd: 0.55
+  L200: attackStateName: AttackMelee
+  L201: drawStateName: Attack_Draw
+  L202: releaseStateName: Attack_Release
+  L208: skillActiveStart: 0.5
+  L209: skillActiveEnd: 0.7
+-- 3.5 控制器 AttackMelee 状态与过渡（只读） --
+  L238: m_Name: AttackMelee
+  L239: m_Speed: 1
+  L344: m_Conditions:
+  L345: - m_ConditionMode: 1
+  L346: m_ConditionEvent: AttackMelee
+  L347: m_EventTreshold: 0
+  L348: m_DstStateMachine: {fileID: 0}
+  L349: m_DstState: {fileID: -4295610436324702674}
+  L350: m_Solo: 0
+  L351: m_Mute: 0
+  L352: m_IsExit: 0
+  L353: serializedVersion: 3
+  L354: m_TransitionDuration: 0.25
+  L355: m_TransitionOffset: 0
+  L356: m_ExitTime: 0.73214287
+  L357: m_HasExitTime: 0
+  L358: m_HasFixedDuration: 1
+  L110: m_Conditions: []
+  L111: m_DstStateMachine: {fileID: 0}
+  L112: m_DstState: {fileID: 4538305570025381470}
+  L113: m_Solo: 0
+  L114: m_Mute: 0
+  L115: m_IsExit: 0
+  L116: serializedVersion: 3
+  L117: m_TransitionDuration: 0.1
+  L118: m_TransitionOffset: 0
+  L119: m_ExitTime: 0.75
+  L120: m_HasExitTime: 1
+  L121: m_HasFixedDuration: 1
+
+== 4. 结论 ==
+Unity 已关闭：是；无 Temp/UnityLockfile：是；控制器参数为 AttackRange 且无 Attack 触发器：是；
+Archer_Unit/Mage_Unit 的 attackTrigger 序列化值均为 AttackRange：是；RangedCombat.cs 运行时只读 attackTrigger 字段：是。
+前置闸门 PASS，进入 red。

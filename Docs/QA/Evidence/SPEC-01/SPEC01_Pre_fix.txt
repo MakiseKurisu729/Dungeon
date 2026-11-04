@@ -1,0 +1,40 @@
+SPEC-01.1 前置检查记录（Unity 进程清理 / batchmode 前置闸门）
+采集人：【执行者】DeepSeek V4.1 Flash
+采集时间：2026-11-05 01:39:06（首次）～ 01:43:37（清理后复查）
+所有者授权：已明确授权结束僵尸进程（PID 47052）
+
+[结论]
+结束前：存在 1 个 Unity.exe（PID 47052）。该进程为 Unity Hub 打开的交互式编辑器，
+        其 %LOCALAPPDATA%\Unity\Editor\Editor.log 末尾已出现完整 Application.Shutdown.* 序列
+        （含 CleanupCacheServer / DevConnections），最后写入 01:35:02，
+        但进程在关闭流程后残留（CPU 416.5s→417s 几乎不再增长，Responding=True，无主窗口标题）。
+        仓库内 Temp/ 目录不存在，UnityLockfile 不存在 → 未占用工程锁，属关闭后的僵尸残留。
+处置：Stop-Process -Id 47052 -Force（仅此 PID，未触碰其它进程）。
+结束后：Get-Process Unity 返回空；Temp/UnityLockfile 不存在 → 前置闸门通过。
+
+[结束前快照] 2026-11-05 01:39:06
+pid=47052
+created=2026-11-05 01:15:44
+exe=D:\unity\2022.3.62f3c1\Editor\Unity.exe
+cmd=D:\unity\2022.3.62f3c1\Editor\Unity.exe -projectpath D:\unity\Dungeon -useHub -hubIPC -cloudEnvironment production -licensingIpc LicenseClient-lll -hubSessionId 4fd876c0-d58c-11f1-873b-072aeea03741 -accessToken <redacted>
+responding=True
+cpuSeconds=416.515625
+mainWindowTitle=<empty>
+workingSetMB=1585
+Temp 目录：不存在
+Temp\UnityLockfile：不存在
+UnityCrashHandler64：PID 32556（随该实例启动）
+
+[处置]
+01:40 前后执行：Stop-Process -Id 47052 -Force
+（仅此一个 PID；未对其余 Unity Hub / Licensing 进程做任何操作）
+
+[结束后快照] 2026-11-05 01:43:37（清理后 5s 复查 + 独立复查）
+Get-Process Unity → 空（计数 0）
+Temp\UnityLockfile → False
+其它 Unity.exe → 无（未出现第二个 Unity 进程）
+
+[后续执行环境]
+Unity 版本：D:\unity\2022.3.62f3c1\Editor\Unity.exe（与 SPEC-01 原证据一致）
+运行方式：-batchmode -projectPath D:\unity\Dungeon -executeMethod SPEC01_BatchAcceptance.Run
+证据命名：SPEC01_EVIDENCE_TAG=fix（本单新增，文件名带 _fix，不覆盖 SPEC-01 原始证据）
