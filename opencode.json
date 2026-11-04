@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "opencode": {
+      "models": {
+        "deepseek-v4.1-flash": {
+          "body": {
+            "thinking": { "type": "disabled" },
+            "temperature": 0
+          }
+        }
+      }
+    },
+    "opencode-go": {
+      "models": {
+        "deepseek-v4.1-flash": {
+          "body": {
+            "thinking": { "type": "disabled" },
+            "temperature": 0
+          }
+        }
+      }
+    }
+  }
+}
