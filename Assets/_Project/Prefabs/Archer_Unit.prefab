@@ -119,17 +119,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d5377fb84a2d8954eb77134e88d25681,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5377fb84a2d8954eb77134e88d25681,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5377fb84a2d8954eb77134e88d25681,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d5377fb84a2d8954eb77134e88d25681,
         type: 3}
@@ -389,11 +389,13 @@ MonoBehaviour:
     type: 3}
   stats: {fileID: 11400000, guid: 1f71b2743eaa84f478f4fd8d7a79dd61, type: 2}
   health: {fileID: 3115980840161977087}
-  attackTrigger: Attack
+  attackTrigger: AttackRange
   drawStateName: Attack_Draw
   releaseStateName: Attack_Release
   attackLen: 2.666
   releasePoint: 0.5
+  releaseWindowStart: 0.2
+  releaseWindowEnd: 0.6
   damage: 12
   sharpness: 8
   flightDuration: 0.7

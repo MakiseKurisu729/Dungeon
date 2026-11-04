@@ -197,9 +197,11 @@ MonoBehaviour:
   attackLen: 1
   activeStart: 0.35
   activeEnd: 0.55
-  attackStateName: Attack
+  attackStateName: AttackMelee
+  drawStateName: Attack_Draw
+  releaseStateName: Attack_Release
   skillStateName: Skill
-  attackLayer: 1
+  attackLayer: 0
   bladeLength: 0.85
   hitRadius: 0.25
   skillLen: 1.3
@@ -262,8 +264,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  stanceLayer: 1
-  stanceBlendSpeed: 8
 --- !u!114 &3667470874929338347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,8 +297,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  stanceLayer: 1
-  stanceBlendSpeed: 8
 --- !u!114 &7770671265982002315
 MonoBehaviour:
   m_ObjectHideFlags: 0
