@@ -37,17 +37,31 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
     [Header("攻击动画")]
     [InspectorName("攻击时长")]
     public float attackLen = 0.8f;
+    [InspectorName("攻击触发器名")]
+    [Tooltip("出招时写入 Animator 的 Trigger；近战单段用 AttackMelee（与状态名一致）")]
+    public string attackTrigger = "AttackMelee";
     [InspectorName("判定窗口起")]
     [Range(0f, 1f)] public float activeStart = 0.35f;
     [InspectorName("判定窗口止")]
     [Range(0f, 1f)] public float activeEnd = 0.55f;
 
-    [Header("动画状态名（UpperBody 层）")]
-    [InspectorName("攻击状态名")]
+    [Header("动画状态名（单层动画 layer 0）")]
+    [InspectorName("攻击状态名（旧配置）")]
+    [Tooltip("旧配置的攻击状态名；新控制器以“前摇/释放状态名”为准")]
     public string attackStateName = "Attack_Draw";
+    [InspectorName("命中状态名")]
+    [Tooltip("命中窗口按此状态的 normalizedTime 判定；近战单段 AttackMelee（状态名＝触发器名，不复用两段式 releaseStateName）")]
+    public string hitStateName = "AttackMelee";
+    [InspectorName("前摇状态名")]
+    [Tooltip("攻击前摇状态名：只播放动画，不结算命中")]
+    public string drawStateName = "Attack_Draw";
+    [InspectorName("释放状态名")]
+    [Tooltip("攻击释放状态名：命中窗口按此状态的 normalizedTime 判定")]
+    public string releaseStateName = "Attack_Release";
     [InspectorName("技能状态名")]
     public string skillStateName = "Skill";
     [InspectorName("攻击动画层")]
+    [Tooltip("攻击动画所在层；越界时运行时收敛到合法层")]
     public int attackLayer = 0;
 
     [Header("命中")]
@@ -84,6 +98,10 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
     bool _isSkill;
     float _sharpness, _radiusMult = 1f;
     Transform _target;               // ★ 单体模式：发起攻击时锁定的目标
+    bool _sawAttackAnim;             // 本次攻击是否已进入过攻击动画（用于动画结束收招）
+
+    // 攻击动画兜底上限：正常由动画状态驱动收招，此值只防动画卡死导致 _timer 永不结束
+    const float MaxAttackSeconds = 10f;
 
     Vector3 _prevHilt, _prevTip;
     readonly HashSet<int> _hitIds = new HashSet<int>();
@@ -134,8 +152,9 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
         if (_timer < 0f) return;
         _timer += Time.deltaTime;
 
-        float t01 = ReadAnimProgress();
-        if (t01 < 0f) t01 = _timer / _curLen;      // 回退代码时钟
+        bool animPlaying;
+        float t01 = ReadAnimProgress(out animPlaying);
+        if (!animPlaying) t01 = _timer / _curLen;      // 动画读取失败：回退代码时钟
 
         float wS = _isSkill ? skillActiveStart : activeStart;
         float wE = _isSkill ? skillActiveEnd : activeEnd;
@@ -147,17 +166,77 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
             _hiltPts.Add(sword.position);
         }
 
-        if (_timer >= _curLen) _timer = -1f;
+        // 动画仍在攻击状态时延长代码计时（动画可能长于 attackLen/SpeedMult）；动画结束即收招
+        if (animPlaying)
+        {
+            _sawAttackAnim = true;
+            if (_timer > MaxAttackSeconds) _timer = -1f;
+        }
+        else if (_sawAttackAnim)
+        {
+            _timer = -1f;
+            _sawAttackAnim = false;
+        }
+        else if (_timer >= _curLen) _timer = -1f;
         UpdateDebug();
     }
 
-    float ReadAnimProgress()
+    int AnimLayer
     {
-        if (_animator == null || attackLayer >= _animator.layerCount) return -1f;
-        var st = _animator.GetCurrentAnimatorStateInfo(attackLayer);
-        if (st.IsName(attackStateName) || st.IsName(skillStateName))
+        get
+        {
+            if (_animator == null) return 0;
+            return Mathf.Clamp(attackLayer, 0, Mathf.Max(0, _animator.layerCount - 1));
+        }
+    }
+
+    /// <summary>
+    /// 读取攻击动画进度：返回命中窗口状态的 normalizedTime；
+    /// playing=是否仍处于攻击/技能动画（前摇也算，用于延长代码计时）；返回 -1 表示尚未进入释放状态。
+    /// </summary>
+    float ReadAnimProgress(out bool playing)
+    {
+        playing = false;
+        if (_animator == null) return -1f;
+        var st = _animator.GetCurrentAnimatorStateInfo(AnimLayer);
+        if (!string.IsNullOrEmpty(skillStateName) && st.IsName(skillStateName))
+        {
+            playing = true;
             return st.normalizedTime % 1f;
+        }
+        // 单段近战：状态名＝触发器名（AttackMelee），命中窗口直接读该状态
+        if (!string.IsNullOrEmpty(hitStateName) && st.IsName(hitStateName))
+        {
+            playing = true;
+            return st.normalizedTime % 1f;
+        }
+        if (!string.IsNullOrEmpty(releaseStateName) && st.IsName(releaseStateName))
+        {
+            playing = true;
+            return st.normalizedTime % 1f;
+        }
+        // 兼容旧配置：attackStateName 既非前摇名又命中当前状态时，按释放状态处理
+        if (!string.IsNullOrEmpty(attackStateName) && attackStateName != drawStateName &&
+            st.IsName(attackStateName))
+        {
+            playing = true;
+            return st.normalizedTime % 1f;
+        }
+        if (!string.IsNullOrEmpty(drawStateName) && st.IsName(drawStateName))
+            playing = true;      // 前摇：只延长计时，不结算命中
         return -1f;
+    }
+
+    bool IsAttackAnimPlaying()
+    {
+        if (_animator == null) return false;
+        var st = _animator.GetCurrentAnimatorStateInfo(AnimLayer);
+        if (!string.IsNullOrEmpty(drawStateName) && st.IsName(drawStateName)) return true;
+        if (!string.IsNullOrEmpty(hitStateName) && st.IsName(hitStateName)) return true;
+        if (!string.IsNullOrEmpty(releaseStateName) && st.IsName(releaseStateName)) return true;
+        if (!string.IsNullOrEmpty(skillStateName) && st.IsName(skillStateName)) return true;
+        if (!string.IsNullOrEmpty(attackStateName) && st.IsName(attackStateName)) return true;
+        return false;
     }
 
     // 单体：锁定大脑/玩家指定的目标；扫掠：窗口内群体（原逻辑）
@@ -169,7 +248,7 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
         _timer = -1f;
         if (_animator != null)
         {
-            _animator.ResetTrigger("Attack");
+            _animator.ResetTrigger(attackTrigger);
             _animator.ResetTrigger("Skill");
             _animator.SetTrigger("Interrupt");
         }
@@ -187,6 +266,8 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
     void DoAttack(bool skill, Transform target)
     {
         if (_timer >= 0f) return;
+        // 上一段攻击动画尚未回落时不抢起手，避免用旧释放进度提前结算
+        if (!skill && IsAttackAnimPlaying()) return;
         _isSkill = skill;
         _target = target;
         _sharpness = (weapon != null ? weapon.sharpness : 8f) + (skill ? 5f : 0f);
@@ -196,8 +277,8 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
         if (_animator != null)
         {
             _animator.ResetTrigger("Interrupt");
-            _animator.ResetTrigger("Attack");
-            _animator.SetTrigger(skill ? "Skill" : "Attack");
+            _animator.ResetTrigger(attackTrigger);
+            _animator.SetTrigger(skill ? "Skill" : attackTrigger);
         }
 
         _prevHilt = sword.position;
@@ -206,6 +287,7 @@ public class SwordSwing : MonoBehaviour, ICharacterCombat
         _tipPts.Clear();
         _hiltPts.Clear();
         _trailLife = trailPersistTime + _curLen;
+        _sawAttackAnim = false;
         _timer = 0f;
     }
 

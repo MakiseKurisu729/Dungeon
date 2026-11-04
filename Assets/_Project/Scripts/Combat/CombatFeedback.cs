@@ -29,6 +29,8 @@ public class CombatFeedback : MonoBehaviour
     {
         float t = 0f;
         while (t < damageNumberDelay) { t += Time.deltaTime; yield return null; }
-        DamageNumber.Show(info.hitPos, info.finalAmount.ToString("F0"), Color.yellow);
+        // 出生点取敌人本体位置（DamageNumber 内部再抬到胸口高度）；无目标时退回命中点
+        Vector3 world = info.target != null ? info.target.transform.position : info.hitPos;
+        DamageNumber.Show(world, info.finalAmount, info.element);
     }
 }
