@@ -1,6 +1,6 @@
 # CURRENT — 当前交接入口
 
-> 最后更新：2026-11-04（FND-02B 已完成实施与自动化验收：red 1/6 fail 有效 → green run1~run3 连续 7/7 通过；**未 Done**，待 V02B-1/2/3 人工目检 + 外部顾问复核 +【大脑】终审）
+> 最后更新：2026-11-05（**SPEC-01 已收口 `Done`**：目检 3/3 全过、外部顾问复核两份 REPORT 通过、【大脑】终审通过；返工子单 SPEC-01.1 一并闭合。FND-02B 仍 `In Review`，待 V02B-1/2/3 人工目检 + 外部顾问复核 + 终审）
 > 新会话从这里开始，不要复制设计文档或聊天记录到这里。
 
 ## 基线
@@ -33,6 +33,8 @@
   - **FND-02A MVP 产品启动与固定遭遇装配 — `Done`**（2026-11-04 终审收口：自动断言连续 2 次 7/7 通过、V02A-1 人工目检通过、外部顾问复核通过；工单 `Docs/Handoff/TASK_FND-02A_MVP产品启动与固定遭遇装配.md`，报告 `Docs/Handoff/REPORT_FND-02A.md`）。
   - **FND-02B 玩家动画机整备与攻击时钟对齐 — `In Review`**（提案 `Docs/Handoff/PROPOSAL_FND-02B.md` `Approved`；正式工单 `Docs/Handoff/TASK_FND-02B_玩家动画机整备与攻击时钟对齐.md`，高风险。阶段 1 三项已批准；阶段 2 已执行：red 有效、green run1~run3 全 7/7 通过，报告 `Docs/Handoff/REPORT_FND-02B.md`。**OC 换 Clip 未执行**：缺"角色→Clip/GUID"映射，信息不足，待用户补映射后单独派单。未 Done，待 V02B-1/2/3 人工目检 + 外部顾问复核 +【大脑】终审）。
   - MVP：走图 → 遇怪 → 普攻战斗 → 宝箱 → 团灭结束 → `R` 重来；不做大爆炸重写。
+   - **SPEC-01 动画机单段攻击与飘字系统 — `Done`**（所有者定案→工单 `Docs/Handoff/TASK_SPEC-01_动画机单段攻击与飘字系统.md`，高风险。开工前置：所有者手动完成基座/OC 资产改动；决策三"资产管辖权归所有者、执行者资产只读"新规已入工单，待下次文档批次写入 AGENTS.md「Do not」与事实基线 §8）。2026-11-05 **终审通过**：`S01-1`/`S01-2`/`S01-3` 目检全过、外部顾问复核 `REPORT_SPEC-01`＋`REPORT_SPEC-01.1` 全过；断言链完整（SPEC-01 red 3 fail → green 7/7×3；SPEC-01.1 red 仅 `UI.SpawnAnchor` fail → green 8/8×2）；`S01-2` 出生点由返工子单 SPEC-01.1 闭合；飘字样式定稿**恶意不息版**，原神草案作废。
+  - **SPEC-01.1 飘字出生点修复 — `Done`**（`S01-2` 目检未过返工，中风险；工单 `Docs/Handoff/TASK_SPEC-01.1_飘字出生点修复.md`；根因＝实例 `anchorMin/Max=(0,0)` 与画布中心系 local 坐标错配，系统性左下偏移半屏；修复＝`DamageNumber.cs:259` 一处锚点改 `(0.5,0.5)`，生产 diff +3 行；red 仅 `UI.SpawnAnchor` product_fail（实测偏移恰 400px＝半屏）→ green×2 均 8/8 pass、距离≈0；报告 `Docs/Handoff/REPORT_SPEC-01.1.md`。2026-11-05 **终审通过并闭合**（`S01.1-1` 目检通过、外部顾问复核通过），作为 SPEC-01 返工子单一并收口）。
   - 前三草案：FND-02A 产品启动与固定遭遇（`Done`） → FND-02B 普攻/伤害/基础动画（`Ready`） → FND-02C 宝箱装配与真实交互；后续另派团灭重来与总验收。
   - 2026-11-04 修订：A～C 草案均补“架构依据／类型”；§4.3 新增 SD-01～SD-04 结构债清单，按依赖排序并回链工单（SD-01 已随 FND-02A 解除）。
   - 生产改动前置：FND-00B 已收口，仍须逐单授权。
