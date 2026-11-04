@@ -5,7 +5,7 @@
 
 ## 1. 当前阶段
 
-- 当前任务：**FND-00B** — 现有行为验收（状态 `Ready`，任务包见 `Docs/Tasks/FND-00B_现有行为验收.md`）。
+- 当前任务：**FND-00B** — 现有行为验收（状态 `Ready`，任务包见 `Docs/Handoff/TASK_FND-00B_现有行为验收.md`）。
 - 本阶段只进行 Unity 实际行为复验和文档记录：**不修 Bug、不改代码、不新增玩法、不开始 Unity 6.3 迁移**。
 
 ## 2. 开工必读（按顺序）
@@ -70,7 +70,7 @@ TASK 文件必须包含执行者完成任务所需的全部信息（背景、约
 - 通用 AI 协作规则：`Docs/03_AI协作与项目交接文档.md`
 - 资产与工具清单：`Docs/04_可复用资产与编辑器工具设计清单.md`
 - 当前阶段人工协作规则：`Docs/05_Agent工作流人工协作与毕设基石重构指南.md`
-- 任务 / QA / 决策 / 交接：`Docs/Tasks/`、`Docs/QA/`、`Docs/Decisions/`、`Docs/Handoff/CURRENT.md`
+- 任务 / QA / 决策 / 交接：`Docs/Handoff/TASK_*.md`（模板 `TASK_TEMPLATE.md`）、`Docs/QA/`、`Docs/Decisions/`、`Docs/Handoff/CURRENT.md`
 - 工作流细则（REPORT 格式、提交规范）：`Docs/Handoff/workflow-rules.md`；重构期闸门：事实基线 §8
 - 话术 Skill：`.opencode/skills/`（brain-handoff / executor-dispatch / acceptance-loop）；执行者子代理：`.opencode/agents/executor.md`
 - 历史资料只位于 `Docs/Archive/`，**不作为开工依据**。
