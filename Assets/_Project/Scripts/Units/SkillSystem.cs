@@ -26,6 +26,12 @@ public class SkillSystem : MonoBehaviour
     public float CdRemaining(int i) { return i < _cds.Length ? _cds[i].Remaining : 0f; }
     public float CdTotal(int i) { var s = GetSkill(i); return s != null ? s.cooldown.duration : 1f; }
 
+    /// <summary>清空四槽冷却（调试重置用；不改技能数据，空槽保持空）。</summary>
+    public void ResetCooldowns()
+    {
+        for (int i = 0; i < _cds.Length; i++) _cds[i] = default(Cooldown);
+    }
+
     /// <summary>施放：验蓝验冷却 → 效果链。target 仅需要目标的技能用。</summary>
     public bool Cast(int index, Transform target)
     {

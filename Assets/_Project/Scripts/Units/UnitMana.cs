@@ -17,6 +17,9 @@ public class UnitMana : MonoBehaviour
             current = Mathf.Min(max, current + regenPerSec * Time.deltaTime);
     }
 
+    /// <summary>回满蓝（调试重置用；不回改上限与回复速率）。</summary>
+    public void Refill() { current = max; }
+
     public bool Consume(float v)
     {
         if (current < v) return false;

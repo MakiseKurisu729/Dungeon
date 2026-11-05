@@ -20,9 +20,12 @@
 
 ## 当前 feature
 
-- **无进行中 feature。**
-- **下一步**：`SKILL-TOOLS-01` — 调试键位（F5 生成骷髅 / F9 重载 Play / F10 重置玩家）+ SPEC01 动态遭遇基线。状态 `Ready`。
-- **再下一步**：`SKILL-ANIM-01` — 瞄准态攻击指针 + 点击反馈（SPEC01 12/12）。
+- **`SKILL-TOOLS-01` — 调试键位 + SPEC01 动态遭遇基线 — 目检通过，待提交**
+  - 自动部分：SPEC01 10/10 ×3、exit 0；`Regression.FND02A` 已改为场景实际位置 + 相对接近（敌人现在 `z=15.8`）。
+  - **所有者 2026-11-05 口述目检通过**：F5 补怪 / F9 重载 Play / F10 重置玩家（未记录细项）。
+  - 报告：`Docs/Handoff/REPORT_SKILL-TOOLS-01.md`；证据：`Docs/QA/Evidence/SKILL-TOOLS-01/`。
+  - 待办：GitHub Desktop 提交本批次 → 所有者标 `Done`。
+- **下一步**：`SKILL-ANIM-01` — 瞄准态攻击指针 + 点击反馈（SPEC01 12/12）。
 - **再下一步**：`SKILL-ANIM-02` — Q/W/E/R 子状态机 + 远程 `AttackRange` 子状态机（高风险，资产由所有者改，ADR-0003 已记录）。
 
 ## 阶段与已知事实
@@ -44,5 +47,5 @@
 
 ## 下一会话第一件事
 
-1. 提交文档批次（标题/正文由大脑给）。
-2. 派 `SKILL-TOOLS-01`；完成后跑 `SKILL-ANIM-01`。
+1. 所有者目检 `SKILL-TOOLS-01` 的 F5/F9/F10；通过后提交代码/测试批次并标 `Done`。
+2. 派 `SKILL-ANIM-01`（瞄准指针 + 点击反馈）；随后是 `SKILL-ANIM-02`（QWER 子状态机）。

@@ -32,10 +32,9 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     public const string FinishedKey = "SPEC01.Finished";
     public const string ExitCodeKey = "SPEC01.ExitCode";
 
-    public static readonly Vector3 EnemyPos = new Vector3(-2.72f, 0f, -12f);
-    const float ApproachDestZ = -5f;
-    const float PosTolXZ = 0.05f;
-    const float PosTolY = 0.10f;
+    // 场景敌人的实际位置即基线（不再写死坐标）：接近点 = 敌人实际位置 + 朝骑士方向的长(起点距离 - 5m)。
+    const float ApproachGain = 5f;
+    const float ApproachMinStandOff = 2f;
 
     const string Locomotion = "Locomotion";
     const string AttackMelee = "AttackMelee";
@@ -78,6 +77,9 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     float _approachMaxStep;
     string _approachPathStatus = "none";
     int _approachCorners;
+    Vector3 _approachDest;
+    float _approachPlanStandOff = -1f;
+    int _enemyCount;
 
     SPEC01_Observer _observer;
     readonly List<PlayerProbe> _players = new List<PlayerProbe>();
@@ -424,7 +426,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     }
 
     // ============================================================
-    // 2. Regression.FND02A（不变）
+    // 2. Regression.FND02A（场景实际位置基线 + 相对接近）
     // ============================================================
     IEnumerator AssertRegressionFND02A()
     {
@@ -432,6 +434,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         _enemy = FindRealEnemy();
         _enemyFound = _enemy != null;
         _enemySourceGuid = GetEnemySourceGuid();
+        _enemyCount = CountSceneEnemies();
 
         if (_enemy != null)
         {
@@ -445,12 +448,22 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight != null && knight.brain != null && knight.brain.agent != null && _enemy != null)
         {
-            Vector3 dest = new Vector3(EnemyPos.x, knight.tx.position.y, ApproachDestZ);
+            // 基线全部来自场景实际位置：起点 = 骑士当前站位，终点 = 朝敌人方向缩短 ApproachGain 米。
+            Vector3 start = knight.tx.position;
+            Vector3 enemyPos = _enemyStartPos;
+            Vector3 away = start - enemyPos;
+            away.y = 0f;
+            Vector3 dir = away.sqrMagnitude > 0.0001f ? away.normalized : Vector3.back;
+
+            _approachStartDist = XZ(start, enemyPos);
+            float gain = Mathf.Min(ApproachGain, Mathf.Max(0.5f, _approachStartDist - ApproachMinStandOff));
+            _approachPlanStandOff = Mathf.Max(ApproachMinStandOff, _approachStartDist - gain);
+
+            Vector3 dest = enemyPos + dir * _approachPlanStandOff;
+            dest.y = start.y;
             NavMeshHit destHit;
             if (NavMesh.SamplePosition(dest, out destHit, 2.0f, NavMesh.AllAreas)) dest = destHit.position;
-
-            Vector3 start = knight.tx.position;
-            _approachStartDist = XZ(start, EnemyPos);
+            _approachDest = dest;
 
             NavMeshPath path = new NavMeshPath();
             bool pathOk = NavMesh.CalculatePath(start, dest, NavMesh.AllAreas, path);
@@ -487,9 +500,15 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                 {
                     yield return null;
                     settle += Time.deltaTime;
+                    // 停稳阶段的位移也计入行程，避免 end 距离在 settle 后继续缩短而 traveled 少记
+                    Vector3 pos = knight.tx.position;
+                    float step = Vector3.Distance(prev, pos);
+                    if (step > _approachMaxStep) _approachMaxStep = step;
+                    _approachTraveled += step;
+                    prev = pos;
                 }
             }
-            _approachEndDist = XZ(knight.tx.position, EnemyPos);
+            _approachEndDist = XZ(knight.tx.position, enemyPos);
         }
 
         // 回到出生点并冻结真实敌人，隔离后续战斗夹具
@@ -1383,33 +1402,38 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     {
         int errors = _observer != null ? _observer.ErrorCount : -1;
         var errList = _observer != null ? _observer.ErrorList() : new List<object>();
-        bool posOk = _enemyFound &&
-                     Mathf.Abs(_enemyStartPos.x - EnemyPos.x) <= PosTolXZ &&
-                     Mathf.Abs(_enemyStartPos.y - EnemyPos.y) <= PosTolY &&
-                     Mathf.Abs(_enemyStartPos.z - EnemyPos.z) <= PosTolXZ;
+        // 位置基线 = 场景实际位置（动态）：不再与写死坐标比较，只要求确实读到了场景敌人。
+        bool posOk = _enemyFound && _approachStartDist > 0f;
         bool guidOk = _enemySourceGuid == EnemyPrefabGuid;
+        float plannedGain = _approachStartDist - _approachPlanStandOff;
         bool approachOk = _approachArrived &&
-                          _approachStartDist >= 11.8f &&
-                          _approachEndDist <= 7.35f && _approachEndDist >= 6.6f &&
-                          _approachTraveled >= 4.0f && _approachMaxStep <= 0.6f &&
+                          _approachPlanStandOff >= ApproachMinStandOff - 0.01f &&
+                          _approachEndDist >= ApproachMinStandOff - 0.5f &&
+                          _approachEndDist <= _approachStartDist - Mathf.Max(0.5f, plannedGain * 0.5f) &&
+                          _approachTraveled >= Mathf.Max(0.5f, _approachStartDist - _approachEndDist - 0.5f) &&
+                          _approachMaxStep <= 0.6f &&
                           _approachPathStatus == "PathComplete" && _approachCorners > 1;
         bool pass = _gameStarted && _enemyFound && posOk && guidOk && _navOk && approachOk && errors == 0;
 
         _ev.Record("Regression.FND02A", "Regression.FND02A",
-            "FND-02A 自动开局、固定遭遇、真实移动接近、零新增 Console 错误/异常继续通过",
-            "gameStarted=" + _gameStarted + "; enemyFound=" + _enemyFound + "; posOk=" + posOk +
-            "; guidOk=" + guidOk + "; navOk=" + _navOk + "; approachOk=" + approachOk +
+            "FND-02A 自动开局、场景实际遭遇位置为基线、真实寻路相对接近、零新增 Console 错误/异常继续通过",
+            "gameStarted=" + _gameStarted + "; enemyFound=" + _enemyFound + "; enemyCount=" + _enemyCount +
+            "; posOk=" + posOk + "; guidOk=" + guidOk + "; navOk=" + _navOk + "; approachOk=" + approachOk +
             "; consoleErrors=" + errors,
             pass, pass ? "pass" : "product_fail", "production",
             Dict("gameStarted", _gameStarted,
                  "enemyFound", _enemyFound,
+                 "enemyCount", _enemyCount,
                  "enemyName", _enemy != null ? _enemy.name : "none",
                  "enemyStartPosition", V3(_enemyStartPos),
-                 "expectedPosition", V3(EnemyPos),
+                 "positionBaseline", "scene-actual（动态读取场景敌人位置，不再写死坐标）",
                  "enemySourceGuid", _enemySourceGuid,
                  "expectedPrefabGuid", EnemyPrefabGuid,
                  "navMeshOk", _navOk,
                  "approachArrived", _approachArrived,
+                 "approachGainTarget", ApproachGain,
+                 "approachPlannedStandOff", _approachPlanStandOff,
+                 "approachDestination", V3(_approachDest),
                  "approachStartDistance", _approachStartDist,
                  "approachEndDistance", _approachEndDist,
                  "approachTraveled", _approachTraveled,
@@ -1462,7 +1486,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                 Dict("mode", _mode,
                      "head", GetHead(),
                      "enemySourceGuid", _enemySourceGuid,
-                     "enemyPosition", V3(EnemyPos),
+                     "enemyPosition", V3(_enemyStartPos),
                      "fixtureNote", "SPEC01_Target_Combat / SPEC01_Target_UI 为运行期内存 UnitHealth，结束前销毁；不写入场景",
                      "testWroteGameStarted", false));
         }
@@ -1552,6 +1576,18 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             if (h.name.StartsWith("Skeleton_Warrior", StringComparison.Ordinal)) return h;
         }
         return null;
+    }
+
+    /// <summary>场景里 Skeleton_Warrior 数量（诊断字段：遭遇应恰 1 只）。</summary>
+    static int CountSceneEnemies()
+    {
+        int n = 0;
+        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (h == null || h.team != Team.Monster) continue;
+            if (h.name.StartsWith("Skeleton_Warrior", StringComparison.Ordinal)) n++;
+        }
+        return n;
     }
 
     static void Select(PlayerProbe p)
