@@ -1,0 +1,44 @@
+﻿# RESCUE-01 回归：SPEC01（green，编辑器内菜单 Tools/QA/In-Editor/SPEC01 (green)）
+执行时间：2026-11-05 20:55:37 ~ 20:56:20（editor_run15）
+退出码：0
+
+## SPEC-01/editor_run15/SPEC01_ExitCode_run1.txt
+0
+
+## SPEC-01/editor_run15/SPEC01_Summary_run1.json（前 20 行）
+{
+  "task": "SPEC-01",
+  "mode": "green",
+  "run": 1,
+  "startedAt": "2026-11-05 20:55:37.991",
+  "finishedAt": "2026-11-05 20:56:19.972",
+  "unityVersion": "2022.3.62f3c1",
+  "scene": "Assets/Scenes/DungeonWorld.unity",
+  "randomSeed": 20261106,
+  "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\editor_run15\\SPEC01_Assertions.jsonl",
+  "assertionLinesInFile": "12",
+  "pass": 12,
+  "fail": 0,
+  "blocked": 0,
+  "infraFail": 0,
+  "observed": 0,
+  "mode": "green",
+  "head": "9e0b75154a82e3fb440753ad2b677c530365ceab",
+  "enemySourceGuid": "18dec5e6af31178468b146e0440bd081",
+  "enemyPosition": {"x":-2.72,"y":0.0833334,"z":15.8},
+
+## 断言逐条
+总断言数=12
+  [PASS] Locomotion.AllPlayersMoveParam
+  [PASS] Attack.DualPathUnified
+  [PASS] Clock.MeleeNormalizedWindow
+  [PASS] Clock.RangedOneShotPerCycle
+  [PASS] Animation.PostCombatAndHit
+  [PASS] UI.DamageNumberScale
+  [PASS] UI.SpawnAnchor
+  [PASS] Skill.CastSmoke
+  [PASS] Skill.InputWired
+  [PASS] Skill.CursorHover
+  [PASS] Skill.TargetPick
+  [PASS] Regression.FND02A
+PASS=12 FAIL=0

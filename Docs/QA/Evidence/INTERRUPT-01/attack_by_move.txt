@@ -1,0 +1,91 @@
+INTERRUPT-01 / attack_by_move.txt (AC-1 / R-1 / Interrupt.AttackByMove)  —  FINAL CODE
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+code under test (final): CharacterBrain.OnCommandMove -> if (!InSkillAnim()) { CancelAttack(); if (current|next is AttackMelee/Interact) SetTrigger(Interrupt); }
+unit = Knight_Unit | target = INTERRUPT01_Target (MonsterBrain disabled, HP healed before every run)
+attackLen=1 hitWindow(normalized)=0.35-0.55
+runs 1-3 = AC literal window: CommandMove at MeleeCombat._timer >= 0.05s (i.e. within 0.10s of the attack order; the Animator is still crossfading INTO AttackMelee here)
+runs 4-5 = control: CommandMove only after AttackMelee is already the current state (timer >= 0.25s, swing in progress)
+
+RUN #1  mode=AC-WINDOW (move at attack+0.05s, entry crossfade)  targetHp0=60.0
+    [MOVE] CommandMove at attack timer=0.054s norm=37.632 stateBefore=Locomotion nextBefore=AttackMelee inTransition=True
+    [MOVE] after: timer=-1
+    [MOVE +0.007s] cur=Locomotion next=AttackMelee norm=37.64 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.007s
+    [CP +0.05s] cur=Locomotion next=AttackMelee norm=37.68
+    [CP +0.10s] cur=Locomotion next=AttackMelee norm=37.73
+    [CP +0.15s] cur=Locomotion next=AttackMelee norm=37.77
+    [MOVE +0.200s] cur=AttackMelee next=- norm=0.24 timer=-1
+    [MOVE +0.205s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [CP +0.20s] cur=AttackMelee next=Locomotion norm=0.24
+    [CP +0.30s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.307s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion settled (current, no transition) at +0.307s
+    [CP +0.50s] cur=Locomotion next=- norm=0.28
+    [RESULT] moveAtTimer=0.054s normAtMove=37.632 latSettled=0.307s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=BOUNDARY (no damage, but loco settles at 0.307s > 0.15s: pending entry crossfade cannot be cancelled from code)
+
+RUN #2  mode=AC-WINDOW (move at attack+0.05s, entry crossfade)  targetHp0=60.0
+    [MOVE] CommandMove at attack timer=0.053s norm=0.815 stateBefore=Locomotion nextBefore=AttackMelee inTransition=True
+    [MOVE] after: timer=-1
+    [MOVE +0.004s] cur=Locomotion next=AttackMelee norm=0.82 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s
+    [CP +0.05s] cur=Locomotion next=AttackMelee norm=0.86
+    [CP +0.10s] cur=Locomotion next=AttackMelee norm=0.91
+    [CP +0.15s] cur=Locomotion next=AttackMelee norm=0.96
+    [MOVE +0.200s] cur=AttackMelee next=- norm=0.24 timer=-1
+    [CP +0.20s] cur=AttackMelee next=- norm=0.24
+    [MOVE +0.204s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [CP +0.30s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.306s] cur=Locomotion next=- norm=0.09 timer=-1
+    [ASSERT] Locomotion settled (current, no transition) at +0.306s
+    [CP +0.50s] cur=Locomotion next=- norm=0.28
+    [RESULT] moveAtTimer=0.053s normAtMove=0.815 latSettled=0.306s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=BOUNDARY (no damage, but loco settles at 0.306s > 0.15s: pending entry crossfade cannot be cancelled from code)
+
+RUN #3  mode=AC-WINDOW (move at attack+0.05s, entry crossfade)  targetHp0=60.0
+    [MOVE] CommandMove at attack timer=0.052s norm=0.810 stateBefore=Locomotion nextBefore=AttackMelee inTransition=True
+    [MOVE] after: timer=-1
+    [MOVE +0.004s] cur=Locomotion next=AttackMelee norm=0.82 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s
+    [CP +0.05s] cur=Locomotion next=AttackMelee norm=0.86
+    [CP +0.10s] cur=Locomotion next=AttackMelee norm=0.91
+    [CP +0.15s] cur=Locomotion next=AttackMelee norm=0.95
+    [MOVE +0.200s] cur=AttackMelee next=- norm=0.24 timer=-1
+    [CP +0.20s] cur=AttackMelee next=- norm=0.24
+    [MOVE +0.205s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [CP +0.30s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.305s] cur=Locomotion next=- norm=0.09 timer=-1
+    [ASSERT] Locomotion settled (current, no transition) at +0.305s
+    [CP +0.50s] cur=Locomotion next=- norm=0.28
+    [RESULT] moveAtTimer=0.052s normAtMove=0.810 latSettled=0.305s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=BOUNDARY (no damage, but loco settles at 0.305s > 0.15s: pending entry crossfade cannot be cancelled from code)
+
+RUN #4  mode=CONTROL (move after AttackMelee is current)  targetHp0=60.0
+    [MOVE] CommandMove at attack timer=0.252s norm=0.237 stateBefore=AttackMelee nextBefore=- inTransition=False
+    [MOVE] after: timer=-1
+    [MOVE +0.004s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.29
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.34
+    [MOVE +0.108s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion settled (current, no transition) at +0.108s
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.20s] cur=Locomotion next=- norm=0.19
+    [CP +0.30s] cur=Locomotion next=- norm=0.28
+    [CP +0.50s] cur=Locomotion next=- norm=0.47
+    [RESULT] moveAtTimer=0.252s normAtMove=0.237 latSettled=0.108s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+RUN #5  mode=CONTROL (move after AttackMelee is current)  targetHp0=60.0
+    [MOVE] CommandMove at attack timer=0.250s norm=0.235 stateBefore=AttackMelee nextBefore=- inTransition=False
+    [MOVE] after: timer=-1
+    [MOVE +0.004s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.28
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.104s] cur=Locomotion next=- norm=0.09 timer=-1
+    [ASSERT] Locomotion settled (current, no transition) at +0.104s
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.20s] cur=Locomotion next=- norm=0.19
+    [CP +0.30s] cur=Locomotion next=- norm=0.28
+    [CP +0.50s] cur=Locomotion next=- norm=0.47
+    [RESULT] moveAtTimer=0.250s normAtMove=0.235 latSettled=0.104s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+
+done: 5 runs (3 AC-window + 2 control); knight brain disabled + agent stopped after probe

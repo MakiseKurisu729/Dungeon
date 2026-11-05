@@ -14,11 +14,13 @@
 
 ## 未提交批次
 
-- **测试基础设施（代码）**：`Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs`（新增，含 `.meta`）、6 个既有测试 `.cs`（launcher 钩子 + 证据子目录）、`Docs/QA/Evidence/TEST-MCP-01/`、三套 `editor_runN/`、`REPORT_TEST-MCP-01.md`。
-- **Phase A（资产）**：`Assets/_Project/Art/Animations/PlayerBase.controller`（+461 −1）、`Docs/QA/Evidence/SKILL-ANIM-02/phaseA/`。
-- **本轮文档**：`AGENTS.md`、`Docs/Handoff/workflow-rules.md`、`CURRENT.md`、`TASK_WF-05.md`、`REPORT_WF-05.md`、`Docs/QA/Evidence/WF-05/`、`TASK_TEST-MCP-01.md`、`TASK_SKILL-ANIM-02.md`。
+- **第二轮（代码/资产/文档，待一次性提交）**：
+  - 代码：`CharacterBrain.cs`、`DownedRescue.cs`、`CursorManager.cs`、`SelectionManager.cs`、`MeleeCombat.cs`、`RangedCombat.cs`、`DebugCameraSwitcher.cs`、`QA_InEditorMenu.cs`（`runInBackground` 用完还原）。
+  - 资产：`PlayerBase.controller`（布局 + 2 条 `Interrupt` 过渡）、`Knight_Unit.prefab`（+`Interactable`，所有者批准）、`DungeonWorld.unity`（`interactCursor` 指定，所有者批准）。
+  - 文档/证据：`AGENTS.md` §3.3 例外通道、`workflow-rules.md` §5.3 审批流程、`TASK_{DOWNED,INTERRUPT,RESCUE}-01.md`、5 份 REPORT、`Docs/Learning/RESCUE-01_讲稿.md`、`Docs/QA/Evidence/{CAM-01,ANIM-LAYOUT-01,DOWNED-01,INTERRUPT-01,RESCUE-01,SPEC-01/editor_run9..15}`。
 - 两个 `Assembly-CSharp*.csproj` 是 Unity 自动生成，**永不提交**。
-- 提交建议分三组：①测试基础设施代码 ②Phase A 控制器 ③文档（规则+任务+报告+证据）。
+- `ProjectSettings/ProjectSettings.asset` 已还原为 `runInBackground: 0`，不在本批次内。
+- 已提交：`9e0b7515`（TEST-MCP-01 + Phase A + WF-05 规则）。
 
 ## 当前 feature
 
@@ -36,7 +38,14 @@
   - 新增 `Tools/QA/In-Editor/{SPEC01 (green), FND00B06, DIAG}`，跑完不退出编辑器；证据写各自 `editor_runN/`，canonical 未变；三个 launcher 的 `catch` 也已加钩子（异常不再杀 Unity）。
   - 编辑器内入口已设 `Application.runInBackground = true`（不改 `ProjectSettings`）：失焦也能跑完，实测全程 Unity 非前台仍 12/12。
   - 编辑器内 vs batch：SPEC01 12/0/exit0、FND00B06 12/0/observed2/exit0、DIAG 6/1/exit2（与 batch 基线逐项一致）。
-- **`SKILL-ANIM-02` — Q/W/E/R 子状态机与攻击打断 — `InProgress`（高风险；Phase A 已完成）**
+- **`CAM-01` — 选中后可拖视角 — `Review`（`SelectionManager.cs:94` 改为常开平移，8px 阈值区分点击/拖动；SPEC01 12/0）**
+- **`ANIM-LAYOUT-01` — 动画机节点布局整理 — `Review`（18 个节点坐标重排；diff 仅 `m_Position`/`m_AnyStatePosition`）**
+- **`DOWNED-01` — 倒地不播动作 — `Review`（根因：致死那一击的 `Hit` 触发器在 64ms 后抢走 `Downed`；修法 `OnDowned` 里先 `ResetTrigger("Hit")`；3 次复现 + Archer/Mage 通过）**
+- **`INTERRUPT-01` — 移动打断普攻/交互、技能免疫 — `Review`（新增 `AttackMelee/Interact → Locomotion` 的 `Interrupt` 过渡；`CancelAttack` 与 `RangedCombat` 的无条件触发器删除；AC-1 入场淡入窗口最坏 0.30s 待裁决）**
+- **`RESCUE-01` — 救援指令化 — `Review`（hover 救援图标 → 点击下令 → 走进范围 → 循环读条 → 受击/移动打断且需重新下令；AC-1~8 全过；资产改动经所有者批准）**
+  - 讲稿：`Docs/Learning/RESCUE-01_讲稿.md`（AI 初稿，待所有者改写）。
+  - 未决：`interactCursor` 观感、倒地者仍可被选中（R-8 要求保持）、同帧打断动画尾 0.208s。
+- **`SKILL-ANIM-02` — Q/W/E/R 子状态机与攻击打断 — `InProgress`（Phase A 已完成，Phase B 未开）**
   - Spec：`Docs/Handoff/TASK_SKILL-ANIM-02.md`（四条决策已并入）。
   - Phase A 已完成：`PlayerBase.controller` 新增 `Q/W/E/R` Trigger + `SkillSpeed`(Float,默认1)、四个子状态机（`Q_1/W_1/E_1/R_1`，占位 Clip=`Bash`/`Skill`）、`AnyState→Hit_A/Q/W/E/R`（`If`、`HasExitTime=0`、`Source`、`Ordered`、`CanSelf=0`、0.05s）；`Bash`/`Skill` 保留，`AttackRange` 未动。
   - 定点验证：未按 Q 时三角色常驻 `Locomotion`；`Knight.SetTrigger("Q")` → 0.058s 进 `Q_1`，1.172s 回 `Locomotion`；SPEC01 编辑器内仍 12/0。
@@ -64,7 +73,10 @@
 
 ## 下一会话第一件事
 
-1. 所有者对 `WF-05` / `TEST-MCP-01` 目检（Unity 里点一次 `Tools/QA/In-Editor/SPEC01 (green)`，确认跑完停在 Edit 模式）。
+1. 所有者在 Unity 里目检本轮：`Tools/QA/In-Editor/SPEC01 (green)` 跑一次、拖视角、倒地/救援走一遍、看 `interactCursor` 图标观感。
 2. 所有者回复 **“批准 Phase B”** → 执行者改 `SkillSystem`/`SkillEffectBase`/`SkillEffects`/`SkillEffectFireball`/`MeleeCombat`/`UnitStats` + 测试，用 `Tools/QA/In-Editor/*` 跑 SPEC01 ×3 + FND00B06。
 3. 所有者拖 `OC_Knight/Archer/Mage` 的 Q/W Clip（`Q_1`/`W_1`），拖完再补一次目检。
-4. 待定：`REPORT_TEST-MCP-01` §7 第 5/6 条（`runInBackground=0` + 编辑器失焦会冻结 Play；Play 中域重载丢 runner）建议另立小单。
+4. 待裁决：
+   - `INTERRUPT-01` AC-1 入场淡入窗口最坏 0.30s（是否放宽 AC 到 0.35s，或改既有 `Locomotion→AttackMelee` 的 `InterruptionSource`）。
+   - `MonsterBrain.cs:112` 有与 `RangedCombat` 同类的无条件 `Interrupt`（怪物控制器用），本轮未在授权内。
+   - `REPORT_TEST-MCP-01` §7 第 5/6 条（Play 中域重载丢 runner）建议另立小单。

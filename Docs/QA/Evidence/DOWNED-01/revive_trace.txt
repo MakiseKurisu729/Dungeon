@@ -1,0 +1,48 @@
+=== DOWNED-01 / AC-3 证据：Revive → Rise → Locomotion 链路（原始行）===
+注入方式：el>=1.5s 时反射调用 DownedRescue.Revive()（与 RescueRoutine 完成时同一方法）
+
+----- runA Knight #1 source=_run1.txt -----
+STATE_CHANGE @elapsed=0.0347 -> Locomotion normT=8.090 clips=[Idle_A:w=1.00]
+STATE_CHANGE @elapsed=0.0461 -> Downed normT=0.417 clips=[Death_A:w=1.00]
+REVIVE_CALL @elapsed=1.5005 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+STATE_CHANGE @elapsed=1.6140 -> Rise normT=0.044 clips=[Lie_StandUp:w=1.00]
+STATE_CHANGE @elapsed=3.7964 -> Locomotion normT=0.189 clips=[Idle_A:w=1.00]
+END_CYCLE frames=759 elapsed=5.004 finalState=Locomotion
+
+----- runB Knight #2 source=_run2.txt -----
+STATE_CHANGE @elapsed=0.0145 -> Locomotion normT=27.611 clips=[Idle_A:w=1.00]
+STATE_CHANGE @elapsed=0.1166 -> Downed normT=0.135 clips=[Death_A:w=1.00]
+REVIVE_CALL @elapsed=1.5019 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+STATE_CHANGE @elapsed=1.6156 -> Rise normT=0.045 clips=[Lie_StandUp:w=1.00]
+STATE_CHANGE @elapsed=3.7935 -> Locomotion normT=0.189 clips=[Idle_A:w=1.00]
+END_CYCLE frames=825 elapsed=5.006 finalState=Locomotion
+
+----- runC Knight #3 source=_run3.txt -----
+STATE_CHANGE @elapsed=0.0122 -> Locomotion normT=6.002 clips=[Idle_A:w=1.00]
+STATE_CHANGE @elapsed=0.1105 -> Downed normT=0.129 clips=[Death_A:w=1.00]
+REVIVE_CALL @elapsed=1.5027 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+STATE_CHANGE @elapsed=1.6129 -> Rise normT=0.044 clips=[Lie_StandUp:w=1.00]
+STATE_CHANGE @elapsed=3.7946 -> Locomotion normT=0.188 clips=[Idle_A:w=1.00]
+END_CYCLE frames=789 elapsed=5.001 finalState=Locomotion
+
+----- runD Archer #1 source=_run4_archer.txt -----
+STATE_CHANGE @elapsed=0.0097 -> Locomotion normT=58.856 clips=[Idle_A:w=1.00]
+STATE_CHANGE @elapsed=0.0201 -> Downed normT=0.417 clips=[Death_A:w=1.00]
+REVIVE_CALL @elapsed=1.5041 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+STATE_CHANGE @elapsed=1.6138 -> Rise normT=0.043 clips=[Lie_StandUp:w=1.00]
+STATE_CHANGE @elapsed=3.7969 -> Locomotion normT=0.189 clips=[Idle_A:w=1.00]
+END_CYCLE frames=764 elapsed=5.007 finalState=Locomotion
+
+----- runE Mage #1 source=_run5_mage.txt -----
+STATE_CHANGE @elapsed=0.0152 -> Locomotion normT=74.138 clips=[Idle_A:w=1.00]
+STATE_CHANGE @elapsed=0.1136 -> Downed normT=0.131 clips=[Death_A:w=1.00]
+REVIVE_CALL @elapsed=1.5041 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+STATE_CHANGE @elapsed=1.6153 -> Rise normT=0.043 clips=[Lie_StandUp:w=1.00]
+STATE_CHANGE @elapsed=3.8005 -> Locomotion normT=0.192 clips=[Idle_A:w=1.00]
+END_CYCLE frames=755 elapsed=5.005 finalState=Locomotion
+

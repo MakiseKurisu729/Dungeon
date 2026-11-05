@@ -126,10 +126,27 @@ public class CursorManager : MonoBehaviour
                 inter = h.collider.GetComponentInParent<Interactable>();
         }
 
+        // 救援优先：悬停倒地队友、且当前主选中是活着的玩家 → 交互图标。
+        // 倒地单位身上仍挂着 Selectable，不先判这里就会被下面的 selectable 分支判成“选中”。
+        if (inter != null && PrimaryCanRescue())
+        {
+            var downed = inter.GetComponent<DownedRescue>();
+            if (downed != null && downed.IsDown) return Hover.Interact;
+        }
+
         if (inter != null && selectable == null) return Hover.Interact;
         if (selectable != null) return Hover.Select;
         if (enemy != null) return Hover.Attack;
         return Hover.Pointer;
+    }
+
+    /// <summary>当前主选中是“能救人的活着的玩家单位”（倒地者 dead=true，救不了自己）。</summary>
+    static bool PrimaryCanRescue()
+    {
+        var sm = SelectionManager.instance;
+        if (sm == null || sm.Primary == null) return false;
+        var h = sm.Primary.GetComponentInParent<UnitHealth>();
+        return h != null && !h.dead && h.team == Team.Player;
     }
 
     void SetHover(Hover h) { _hover = h; }

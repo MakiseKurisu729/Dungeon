@@ -1,0 +1,26 @@
+# AC-2 Rescue.CommandIssued
+# 2026-11-05 20:57:09.708  Archer.IsDown=True  代码版本=最终实现
+# 判定链：SelectionManager.HandleClick(Ray)（与真实左键同一方法，只为可测性拆出 Ray 重载）
+
+=== caseA：选中活着的 Knight，点击倒地 Archer（应下达指令，且不把倒地者当作选中目标）===
+点击前: Primary=Knight_Unit selected=[Knight_Unit] archer.CurrentRescuer=null IsChanneling=False _routine=null
+点击1次后: Primary=Knight_Unit selected=[Knight_Unit] archer.CurrentRescuer=Knight_Unit IsChanneling=False _routine=running
+  -> 选中单位数 1->1 | 指令对象=Knight_Unit
+  -> 选中集合里只有 1 个活着的玩家 = CommandRescue 被调用 1 次（TryCommandRescue 按 _selected 逐个下达）
+  -> brain._pendingInteract=False（已被 CancelPendingInteract 撤销：读条动画由 DownedRescue 自己循环推送，不再靠“到位补播一次”）
+
+=== caseA2：同帧重复点击（幂等，不叠加协程）===
+点击2次后: Primary=Knight_Unit selected=[Knight_Unit] archer.CurrentRescuer=Knight_Unit IsChanneling=False _routine=running
+  -> 协程对象被替换（旧协程 StopCoroutine）: reusedSameCoroutine=False；不会两条同时读条
+  移动指令取消后: Primary=Knight_Unit selected=[Knight_Unit] archer.CurrentRescuer=null IsChanneling=False _routine=null
+
+=== caseB：选中活着的 Knight，点击怪物 => 攻击分支，不是救援 ===
+  _enemySelected=RESCUE01_MonsterFixture2  archer.CurrentRescuer=null  -> SelectEnemy + CommandAttack，无救援指令
+
+=== caseC：未选中任何人，点击活着的 Mage => 普通选中，不下救援指令 ===
+  Primary=Mage_Unit selected=[Mage_Unit] archer.CurrentRescuer=null IsChanneling=False _routine=null
+
+=== caseD：选中倒地的 Archer 自己，点自己 => issued=0，走原 Select 分支（倒地者不能当救援者，R-8 现状保持）===
+  Primary=Archer_Unit selected=[Archer_Unit] archer.CurrentRescuer=null IsChanneling=False _routine=null
+
+RESULT: 指令由点击下达且只对活着的选中单位生效；倒地者不被选中；点怪仍攻击；无选中时点击是普通选中；倒地者不能自救。

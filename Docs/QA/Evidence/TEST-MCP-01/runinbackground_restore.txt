@@ -1,0 +1,67 @@
+TEST-MCP-01 / AC-10 追加：runInBackground 写穿 PlayerSettings 的收尾还原
+时间：2026-11-05 19:12 ~ 19:26（模式 B｜MCP 常开编辑器，实例 Dungeon@4f5c34c82f31646e，Unity 2022.3.62f3c1）
+唯一改动文件：Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs（+41 / -2，git diff --stat）
+
+=== 1. 基线（动手前） ===
+git diff --stat -- ProjectSettings/ProjectSettings.asset
+  ProjectSettings/ProjectSettings.asset | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+git diff -- ProjectSettings/ProjectSettings.asset
+  -  runInBackground: 0
+  +  runInBackground: 1
+sha256(ProjectSettings/ProjectSettings.asset) = 12ADC38B4BDF96D6863EF9C7372E8F1A80F59A65F5D8808354AF64184D4859D9
+结论：进本任务时该文件**已被污染**（PlayerSettings.runInBackground 0→1）。
+来源：修复前的 `QA_InEditorMenu.Run` 里裸赋值 `Application.runInBackground = true`，此前 editor_run9 / editor_run10 两次试跑各写穿一次。
+未按指令做 git checkout，原样保留。
+
+=== 2. 改动（QA_InEditorMenu.cs） ===
+- 新增 SessionState 键：
+  SessionRunInBackgroundKey      = "QA.PrevRunInBackground"         // 记原值，不硬编码 false
+  SessionRunInBackgroundArmedKey = "QA.PrevRunInBackground.Armed"   // 幂等标记：只回滚一次，且确认原值真的记过
+- ApplyRunInBackground()：先读 Application.runInBackground 存 SessionState，再置 true（:227-233）。
+- RestoreRunInBackground()：仅当原值为 false 时置回 false（不关掉用户自己打开的设置），随后擦除两键（:239-248）。
+  幂等原因：`Run` 的 catch 与 `TryFinish` 的 finally 都会调它；若无 Armed 标记，"原值为 true"时第一次擦键、第二次会读到默认 false 而误关用户设置。
+- 调用点：`Run` 分派前 ApplyRunInBackground()（:96）；`Run` 的 catch 兜底 RestoreRunInBackground()（:125）；`TryFinish` 的 finally 里 ResetFlags() 之后 RestoreRunInBackground()（写 InEditorResult.txt 与 token 之后）。
+- 异常路径覆盖：launcher 抛异常 → catch 兜底；正常收尾 → TryFinish finally。两条路都走同一幂等函数，无遗漏。
+- 其余（断言/阈值/夹具/环境变量清理/菜单路径）零改动。
+
+=== 3. 编译门 ===
+refresh_unity(mode=force, scope=scripts, compile=request) → recovered_from_disconnect=true，编辑器 ready。
+editor/state：is_compiling=false、is_domain_reload_pending=false（last_domain_reload_after 已推进）。
+read_console(filter_text="error CS", types=error) = 0 条。
+
+=== 4. 实跑一次 ===
+execute_menu_item("Tools/QA/In-Editor/SPEC01 (green)") → 新证据目录 Docs/QA/Evidence/SPEC-01/editor_run11/
+  SPEC01_Summary_run1.json : pass=12 fail=0 blocked=0 infraFail=0
+  SPEC01_ExitCode_run1.txt : 0
+  InEditorResult.txt       : task=SPEC01 / code=0 / finishedAt=2026-11-05 19:23:52.023 / evidenceSubdir=editor_run11
+                             envAfter 7 键全 <null>
+  console: [QA][INEDITOR] done task=SPEC01 code=0
+收尾态 editor/state：is_playing=false、is_paused=false、is_changing=false；Unity 未退出、未关。
+
+=== 5. 跑完复查 ===
+sha256(ProjectSettings/ProjectSettings.asset) = 12ADC38B4BDF96D6863EF9C7372E8F1A80F59A65F5D8808354AF64184D4859D9
+→ 与跑前**完全一致**：本次跑没有新增任何写入（也没有把 1 回写成 0，见下）。
+git diff -- ProjectSettings/ProjectSettings.asset（跑后）
+  -  runInBackground: 0
+  +  runInBackground: 1
+  （与基线同一处差异，非本次跑产生）
+
+=== 6. 为什么跑后差异仍在（不是还原失效） ===
+Editor.log 三次 start 行：
+  ... subdir=editor_run9;  runInBackground=True ...
+  ... subdir=editor_run10; runInBackground=True ...
+  ... subdir=editor_run11; runInBackground=True ...
+即本次跑开始前 `Application.runInBackground` 已经是 True（被前两次旧代码写穿后的工程值），
+RestoreRunInBackground 走的是"原值为 true → 不回写"分支，按设计不动用户设置；因此文件不可能被改成 0。
+本次跑能证明的：**修复后不再产生新的写穿（跑前跑后字节级一致）**。
+
+=== 7. 未取证项（需所有者决定） ===
+"原值为 false → 收尾置回 false"这条分支本次**未被命中**，故其运行期效果仍未实跑取证（代码路径静态可见 + 编译通过，但不算 green）。
+要取证必须先把工程值还原成 0（当前为 1），再跑一次（预期落 editor_run12）：
+预期 start 行 runInBackground=False、跑中 Play 帧循环照常推进、跑完文件字节与 HEAD 版本一致（diff 为空）。
+按指令未自行 git checkout、未自行改 ProjectSettings.asset；等所有者选择还原方式（GitHub Desktop 单文件还原，或授权一次 Player Settings 写）后再补这一跑。
+
+=== 8. 日志体检 ===
+read_console(filter_text="runInBackground", types=[error,warning]) = 0 条。
+MCP 调用披露：refresh_unity ×1、execute_menu_item ×1、read_console / editor/state 只读若干；无 manage_scene / manage_asset / manage_components / execute_code 等写工具，无资产写入，无 git 写操作。

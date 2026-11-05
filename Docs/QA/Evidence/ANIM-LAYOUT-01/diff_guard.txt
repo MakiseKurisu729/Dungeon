@@ -1,0 +1,34 @@
+ANIM-LAYOUT-01 diff guard
+target: Assets/_Project/Art/Animations/PlayerBase.controller
+base  : 9e0b75154a82e3fb440753ad2b677c530365ceab (working tree)
+
+cmd> git diff --stat -- Assets/_Project/Art/Animations/PlayerBase.controller
+ .../_Project/Art/Animations/PlayerBase.controller  | 38 +++++++++++-----------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
+(warning: in the working copy of 'Assets/_Project/Art/Animations/PlayerBase.controller', LF will be replaced by CRLF the next time Git touches it -- pre-existing repo line-ending notice, not a content change)
+
+--- mechanical classification of every changed line (headers excluded) ---
+added=19 removed=19
+changed serialized keys = m_AnyStatePosition, m_Position
+non_position_lines=0
+expected = 18 nodes (10 root states + 4 sub-state machines + 4 inner states) + 1 Any State node coordinate
+
+--- guard greps (expect 0 hits) ---
+cmd> <diff> | Select-String -Pattern 'm_Conditions|m_TransitionDuration|m_SpeedParameter|m_Name'
+guard_hits=0
+
+cmd> <diff> | Where-Object { $_ -notmatch 'm_Position|m_AnyStatePosition' }
+non_position_lines=0
+
+--- explanation of the 19th changed line ---
+m_AnyStatePosition line 108/109 of the raw diff:
+-  m_AnyStatePosition: {x: 660, y: 410, z: 0}
++  m_AnyStatePosition: {x: 670, y: 460, z: 0}
+This is a canvas coordinate of the built-in "Any State" node. Unity's state-machine layout nudged it
+when Skill was placed at (620,400), which overlapped the old Any State node. No transition logic,
+condition, parameter or clip is affected. Reported to the owner in REPORT_ANIM-LAYOUT-01.md as a
+visual-only side effect.
+
+--- full raw diff ---
+see controller_diff_raw.txt in this directory (112 lines, produced with
+  cmd /c "git diff -- Assets/_Project/Art/Animations/PlayerBase.controller > ...")

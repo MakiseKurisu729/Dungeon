@@ -1,0 +1,28 @@
+# AC-4 Rescue.ChannelLoop  (2026-11-05 20:57:35.363)  代码版本=最终实现
+# 条件：经真实点击链 SelectionManager.HandleClick(Ray) 下达指令 -> 从 6m 走进 rescueRange -> 读条 3s（3 次）
+# 断言：进入范围到 IsChanneling=true <= 0.3s；3s 读条内 Interact 状态进入次数 >= 2（动画循环）
+[AC-4 iter1] t=53.54 点击下令 CurrentRescuer=Knight_Unit 起始距离=6.00 选中=Knight_Unit
+        t=54.66 进入 rescueRange dist=2.49
+        t=54.66 channelStart 距进入范围=0.000s
+        t=54.77 Interact 进入 #1 nz=0.08
+        t=55.92 Interact 进入 #2 nz=0.08
+        t=57.08 Interact 进入 #3 nz=0.08
+[AC-4 iter1] 读条完成 | 进入范围->读条=0.000s (阈值<=0.3) | 读条时长=3.00s | Interact 进入次数=3 (阈值>=2) | archer.IsDown=False
+        => PASS
+[AC-4 iter2] t=59.27 点击下令 CurrentRescuer=Knight_Unit 起始距离=6.00 选中=Knight_Unit
+        t=60.40 进入 rescueRange dist=2.50
+        t=60.40 channelStart 距进入范围=0.000s
+        t=60.50 Interact 进入 #1 nz=0.08
+        t=61.65 Interact 进入 #2 nz=0.08
+        t=62.81 Interact 进入 #3 nz=0.08
+[AC-4 iter2] 读条完成 | 进入范围->读条=0.000s (阈值<=0.3) | 读条时长=3.00s | Interact 进入次数=3 (阈值>=2) | archer.IsDown=False
+        => PASS
+[AC-4 iter3] t=65.00 点击下令 CurrentRescuer=Knight_Unit 起始距离=6.00 选中=Knight_Unit
+        t=66.13 进入 rescueRange dist=2.50
+        t=66.13 channelStart 距进入范围=0.000s
+        t=66.23 Interact 进入 #1 nz=0.08
+        t=67.39 Interact 进入 #2 nz=0.08
+        t=68.55 Interact 进入 #3 nz=0.08
+[AC-4 iter3] 读条完成 | 进入范围->读条=0.000s (阈值<=0.3) | 读条时长=3.00s | Interact 进入次数=3 (阈值>=2) | archer.IsDown=False
+        => PASS
+DONE AC-3 3 runs; AC-4 3 runs

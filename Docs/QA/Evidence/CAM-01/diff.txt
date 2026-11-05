@@ -1,0 +1,26 @@
+diff --git a/Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs b/Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+index 5f2e1b7c..94129f0e 100644
+--- a/Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
++++ b/Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+@@ -30,7 +30,7 @@ public class DebugCameraSwitcher : MonoBehaviour
+     [Tooltip("拖动平移灵敏度")]
+     public float panScale = 0.05f;
+     [InspectorName("允许平移")]
+-       [Tooltip("允许左键拖动平移——第3步选择系统接入后会改为「有选择时自动禁用」")]
++    [Tooltip("允许左键拖动平移（与选中状态无关，点击/拖动由 8px 阈值区分）")]
+     public bool allowPan = true;
+     [InspectorName("焦点目标")]
+     [Tooltip("空格回中 / Y 锁定跟随的目标（暂时拖骑士，之后由选择系统设置）")]
+diff --git a/Assets/_Project/Scripts/Player/SelectionManager.cs b/Assets/_Project/Scripts/Player/SelectionManager.cs
+index 5b92a583..91f9e32c 100644
+--- a/Assets/_Project/Scripts/Player/SelectionManager.cs
++++ b/Assets/_Project/Scripts/Player/SelectionManager.cs
+@@ -91,7 +91,7 @@ public class SelectionManager : MonoBehaviour
+ 
+         if (_cam != null)
+         {
+-            _cam.allowPan = _selected.Count == 0;
++            _cam.allowPan = true;   // 左键拖动平移常开；点击/拖动由 8px 阈值区分
+             if (Primary != null) _cam.SetFocus(Primary.transform);
+         }
+     }

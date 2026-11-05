@@ -56,13 +56,49 @@ public class CharacterBrain : UnitBrain
         _pendingInteract = it;
     }
 
+    /// <summary>撤销“走到交互物落点后自动补播一次 Interact”的待办。
+    /// 读条动画由 DownedRescue 自己循环推送；不撤的话，救援者跑到落点会再补一次 Interact，
+    /// 若此时救援已被打断，就会在打断后白播一轮交互动作（违反 R-5“打断即停”）。</summary>
+    public void CancelPendingInteract() { _pendingInteract = null; }
+
     protected override void OnCommandMove(Vector3 point)
     {
-        // 指令打断：收招再移动
-        var c = combat as ICharacterCombat;
-        if (c != null) c.CancelAttack();
+        // 指令打断：普攻/交互让位给移动；技能进行中整体跳过（动画不切、计时不停、伤害照常结算）
+        if (!InSkillAnim())
+        {
+            var c = combat as ICharacterCombat;
+            if (c != null) c.CancelAttack();
+            // 只有可被移动打断的状态才发 Interrupt；技能状态不发，避免残留触发器误伤下一次普攻
+            // 入场过渡中（current 还是 Locomotion、next 已是 AttackMelee/Interact）也算“正在出招”，
+            // 否则按下移动后这一刀还会在移动中补播出来
+            if (unitAnimator != null)
+            {
+                var st = unitAnimator.GetCurrentAnimatorStateInfo(0);
+                var nx = unitAnimator.IsInTransition(0)
+                    ? unitAnimator.GetNextAnimatorStateInfo(0) : default(AnimatorStateInfo);
+                bool breaking = st.IsName("AttackMelee") || st.IsName("Interact")
+                             || nx.IsName("AttackMelee") || nx.IsName("Interact");
+                if (breaking) unitAnimator.SetTrigger("Interrupt");
+            }
+        }
         _pendingInteract = null;
+        // 真正下达移动指令 = 放弃当前救援（受击位移不经过这里）；DownedRescue 自己负责 2s 冷却。
+        DownedRescue.NotifyMoveCommand(gameObject);
         base.OnCommandMove(point);
+    }
+
+    /// <summary>技能动画进行中（含入场过渡）：Skill/Bash 与 Q/W/E/R 子状态。移动指令不打断技能。</summary>
+    bool InSkillAnim()
+    {
+        if (unitAnimator == null) return false;
+        if (IsSkillState(unitAnimator.GetCurrentAnimatorStateInfo(0))) return true;
+        return unitAnimator.IsInTransition(0) && IsSkillState(unitAnimator.GetNextAnimatorStateInfo(0));
+    }
+
+    static bool IsSkillState(AnimatorStateInfo st)
+    {
+        return st.IsName("Skill") || st.IsName("Bash")
+            || st.IsName("Q_1") || st.IsName("W_1") || st.IsName("E_1") || st.IsName("R_1");
     }
 
     void Update()

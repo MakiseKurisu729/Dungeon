@@ -91,14 +91,21 @@ public class SelectionManager : MonoBehaviour
 
         if (_cam != null)
         {
-            _cam.allowPan = _selected.Count == 0;
+            _cam.allowPan = true;   // 左键拖动平移常开；点击/拖动由 8px 阈值区分
             if (Primary != null) _cam.SetFocus(Primary.transform);
         }
     }
 
     void HandleClick()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Camera cam = Camera.main;
+        if (cam == null) return;
+        HandleClick(cam.ScreenPointToRay(Input.mousePosition));
+    }
+
+    /// <summary>点击判定主体（拆出 Ray 重载：真实输入与测试共用同一条判定链，行为不变）。</summary>
+    void HandleClick(Ray ray)
+    {
         RaycastHit[] hits = Physics.RaycastAll(ray, 300f, clickableLayers);
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
@@ -122,6 +129,10 @@ public class SelectionManager : MonoBehaviour
         }
 
         bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+
+        // ★ 救援优先：点倒地队友且当前有活着的玩家选中 → 下达救援指令，不把倒地者当作选中目标。
+        // 必须排在 sel != null 之前：倒地者身上仍挂着 Selectable，否则永远只会被“选中”。
+        if (!ctrl && TryCommandRescue(inter)) return;
 
         if (sel != null)
         {
@@ -151,6 +162,27 @@ public class SelectionManager : MonoBehaviour
             SingleSelect(null);
             SelectEnemy(null);
         }
+    }
+
+    /// <summary>点中的是倒地队友、且当前选中里有活着的玩家 → 对每个选中玩家下达救援指令。
+    /// 返回 true = 已下达（调用方不再走选中/攻击分支）。</summary>
+    bool TryCommandRescue(Interactable inter)
+    {
+        if (inter == null) return false;
+        var target = inter.GetComponent<DownedRescue>();
+        if (target == null) target = inter.GetComponentInParent<DownedRescue>();
+        if (target == null || !target.IsDown) return false;
+
+        int issued = 0;
+        foreach (var s in _selected)
+        {
+            if (s == null) continue;
+            var h = s.GetComponentInParent<UnitHealth>();
+            if (h == null || h.dead || h.team != Team.Player) continue;   // 倒地者 dead=true，救不了自己
+            target.CommandRescue(h);
+            issued++;
+        }
+        return issued > 0;
     }
 
     void SingleSelect(Selectable s)

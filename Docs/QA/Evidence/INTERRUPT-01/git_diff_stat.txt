@@ -1,0 +1,41 @@
+﻿INTERRUPT-01 / git_diff_stat.txt
+captured: 2026-11-05 20:06:37 (read-only: git status / git diff --stat)
+
+=== git status --porcelain ===
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Art/Animations/PlayerBase.controller
+ M Assets/_Project/Scripts/Combat/MeleeCombat.cs
+ M Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+ M Assets/_Project/Scripts/Player/SelectionManager.cs
+ M Assets/_Project/Scripts/Units/CharacterBrain.cs
+ M Assets/_Project/Scripts/Units/DownedRescue.cs
+ M Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+ M Docs/Handoff/REPORT_TEST-MCP-01.md
+ M ProjectSettings/ProjectSettings.asset
+?? Docs/Handoff/REPORT_ANIM-LAYOUT-01.md
+?? Docs/Handoff/REPORT_CAM-01.md
+?? Docs/Handoff/REPORT_DOWNED-01.md
+?? Docs/Handoff/TASK_DOWNED-01.md
+?? Docs/Handoff/TASK_INTERRUPT-01.md
+?? Docs/QA/Evidence/ANIM-LAYOUT-01/
+?? Docs/QA/Evidence/CAM-01/
+?? Docs/QA/Evidence/DOWNED-01/
+?? Docs/QA/Evidence/INTERRUPT-01/
+?? Docs/QA/Evidence/SPEC-01/editor_run10/
+?? Docs/QA/Evidence/SPEC-01/editor_run11/
+?? Docs/QA/Evidence/SPEC-01/editor_run12/
+?? Docs/QA/Evidence/SPEC-01/editor_run13/
+?? Docs/QA/Evidence/SPEC-01/editor_run9/
+?? Docs/QA/Evidence/TEST-MCP-01/runinbackground_restore.txt
+
+=== git diff --stat (INTERRUPT-01 files only) ===
+ .../_Project/Art/Animations/PlayerBase.controller  | 90 +++++++++++++++++-----
+ Assets/_Project/Scripts/Combat/MeleeCombat.cs      |  1 -
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    | 35 ++++++++-
+ 3 files changed, 103 insertions(+), 23 deletions(-)
+
+=== note ===
+Only these 3 files were touched by INTERRUPT-01.
+PlayerBase.controller already carried ANIM-LAYOUT-01 batch changes before this task; the ~19/19 pre-existing part is not mine.
+Other M entries (csproj, DebugCameraSwitcher, SelectionManager, DownedRescue, QA_InEditorMenu, ProjectSettings, REPORT_TEST-MCP-01) existed before this task started (initial git status was captured before any edit).

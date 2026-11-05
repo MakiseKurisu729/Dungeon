@@ -1,0 +1,9 @@
+# AC-3 Rescue.NoAutoStart  (2026-11-05 20:57:35.361)  代码版本=最终实现
+# 条件：选中活着的 Knight，把救援者放进倒地 Archer 的 rescueRange 内（1.8m < 2.5m），全程不点击，持续 3s（3 次）
+# 断言：IsChanneling 始终 false；Animator 不得进入 Interact；archer.CurrentRescuer 始终 null
+[AC-3 iter1] 3.0s 窗口 | 距离 1.80~1.80m (rescueRange=2.5) | IsChanneling 曾 true=False | Animator 曾进入 Interact=False | archer.IsDown=True | archer.CurrentRescuer=null | 当前状态=Locomotion
+        => PASS 未点击即不读条
+[AC-3 iter2] 3.0s 窗口 | 距离 1.80~1.80m (rescueRange=2.5) | IsChanneling 曾 true=False | Animator 曾进入 Interact=False | archer.IsDown=True | archer.CurrentRescuer=null | 当前状态=Locomotion
+        => PASS 未点击即不读条
+[AC-3 iter3] 3.0s 窗口 | 距离 1.80~1.80m (rescueRange=2.5) | IsChanneling 曾 true=False | Animator 曾进入 Interact=False | archer.IsDown=True | archer.CurrentRescuer=null | 当前状态=Locomotion
+        => PASS 未点击即不读条

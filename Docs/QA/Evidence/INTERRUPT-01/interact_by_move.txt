@@ -1,0 +1,48 @@
+INTERRUPT-01 / interact_by_move.txt (AC-2 / R-2 / Interrupt.InteractByMove)  —  FINAL CODE
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+code under test (final): CharacterBrain.OnCommandMove -> if (!InSkillAnim()) { CancelAttack(); if (current|next is AttackMelee/Interact) SetTrigger(Interrupt); }
+note: DungeonWorld has 0 Interactable/Chest instances in Play (verified at runtime), so the Interact state is entered with Animator.SetTrigger(Interact);
+      the interrupt itself still goes through the real CharacterBrain.CommandMove -> OnCommandMove path. CharacterBrain.Update is disabled to remove auto-attack noise.
+assert: CommandMove while Interact is current -> Locomotion current within 0.15s; no Interact after the switch
+
+RUN #1  stateBefore=Locomotion
+    [t0] Interact fully current at norm=0.080
+    [MOVE] CommandMove at Interact norm=0.095 stateBefore=Interact nextBefore=-
+    [MOVE +0.007s] cur=Interact next=Locomotion norm=0.099
+    [CP +0.05s] cur=Interact next=Locomotion norm=0.134
+    [CP +0.10s] cur=Interact next=Locomotion norm=0.174
+    [MOVE +0.106s] cur=Locomotion next=- norm=0.095
+    [ASSERT] Locomotion settled at +0.106s
+    [CP +0.15s] cur=Locomotion next=- norm=0.140
+    [CP +0.25s] cur=Locomotion next=- norm=0.233
+    [CP +0.50s] cur=Locomotion next=- norm=0.466
+    [RESULT] latSettled=0.106s | verdict=PASS
+
+RUN #2  stateBefore=Locomotion
+    [t0] Interact fully current at norm=0.078
+    [MOVE] CommandMove at Interact norm=0.097 stateBefore=Interact nextBefore=-
+    [MOVE +0.004s] cur=Interact next=Locomotion norm=0.099
+    [CP +0.05s] cur=Interact next=Locomotion norm=0.136
+    [CP +0.10s] cur=Interact next=Locomotion norm=0.174
+    [MOVE +0.107s] cur=Locomotion next=- norm=0.096
+    [ASSERT] Locomotion settled at +0.107s
+    [CP +0.15s] cur=Locomotion next=- norm=0.140
+    [CP +0.25s] cur=Locomotion next=- norm=0.234
+    [CP +0.50s] cur=Locomotion next=- norm=0.468
+    [RESULT] latSettled=0.107s | verdict=PASS
+
+RUN #3  stateBefore=Locomotion
+    [t0] Interact fully current at norm=0.080
+    [MOVE] CommandMove at Interact norm=0.095 stateBefore=Interact nextBefore=-
+    [MOVE +0.004s] cur=Interact next=Locomotion norm=0.098
+    [CP +0.05s] cur=Interact next=Locomotion norm=0.134
+    [CP +0.10s] cur=Interact next=Locomotion norm=0.173
+    [MOVE +0.107s] cur=Locomotion next=- norm=0.096
+    [ASSERT] Locomotion settled at +0.107s
+    [CP +0.15s] cur=Locomotion next=- norm=0.137
+    [CP +0.25s] cur=Locomotion next=- norm=0.231
+    [CP +0.50s] cur=Locomotion next=- norm=0.465
+    [RESULT] latSettled=0.107s | verdict=PASS
+
+
+done: 3 runs

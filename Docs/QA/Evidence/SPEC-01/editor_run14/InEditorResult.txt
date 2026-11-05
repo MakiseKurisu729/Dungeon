@@ -1,0 +1,7 @@
+task=SPEC01
+code=0
+finishedAt=2026-11-05 20:18:25.790
+unityVersion=2022.3.62f3c1
+scenario=in-editor
+evidenceSubdir=editor_run14
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}

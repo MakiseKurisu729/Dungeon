@@ -1,0 +1,27 @@
+# AC-5 Rescue.InterruptByHit  (2026-11-05 20:53:41.947)
+# 读条中给救援者 ApplyDamage(1) -> 期望 0.2s 内 IsChanneling=false、Interact 退出，2s 内不自动重开、不残留 Interact 回放
+# 每轮 2s 窗口结束后再点一次，验证“必须重新下令”能重新开始（指令不丢）
+[AC-5 iter1] t=11.18 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=11.20 channelStart -> 同帧 ApplyDamage(1) 命中救援者 (hp=99)
+        t=11.40 掉读条 +0.020s | 状态=Locomotion | +0.200s 状态=Hit_A | 距离=1.61 | 提示=救援被打断，请重新下达救援指令
+[AC-5 iter1] 打断后 2.0s 窗口 | 掉读条延迟=0.020s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=1.10 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+        冷却到期后重新点击下令 t=13.80 CurrentRescuer=Knight_Unit
+        重新下令 -> IsChanneling=true，延迟 0.005s（指令跨冷却重放成功）
+        重新下令的读条结果 IsDown=False t=16.81
+[AC-5 iter2] t=16.81 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=16.81 channelStart -> 同帧 ApplyDamage(1) 命中救援者 (hp=98)
+        t=17.02 掉读条 +0.006s | 状态=Interact | +0.200s 状态=Hit_A | 距离=1.63 | 提示=救援被打断，请重新下达救援指令
+[AC-5 iter2] 打断后 2.0s 窗口 | 掉读条延迟=0.006s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=1.10 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+        冷却到期后重新点击下令 t=19.42 CurrentRescuer=Knight_Unit
+        重新下令 -> IsChanneling=true，延迟 0.007s（指令跨冷却重放成功）
+        重新下令的读条结果 IsDown=False t=22.42
+[AC-5 iter3] t=22.42 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=22.43 channelStart -> 同帧 ApplyDamage(1) 命中救援者 (hp=97)
+        t=22.63 掉读条 +0.005s | 状态=Interact | +0.200s 状态=Hit_A | 距离=1.63 | 提示=救援被打断，请重新下达救援指令
+[AC-5 iter3] 打断后 2.0s 窗口 | 掉读条延迟=0.005s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=1.10 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+        冷却到期后重新点击下令 t=25.03 CurrentRescuer=Knight_Unit
+        重新下令 -> IsChanneling=true，延迟 0.005s（指令跨冷却重放成功）
+        重新下令的读条结果 IsDown=False t=28.03

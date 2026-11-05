@@ -1,0 +1,46 @@
+=== D-5 OnDowned 执行取证（修复后 cycle6，Knight_Unit）===
+OnHit subscribers:
+   CharacterBrain.OnDamaged
+OnDeath subscribers:
+   DownedRescue.OnDowned
+OnRevived subscribers:
+   (none)
+
+-- 致死一击后同步读取（ApplyDamage 返回后立刻，t=143.611）--
+PRE  hp=1 dead=False IsDown=False AllDowned=0 GameData.message=队友救起来了！
+POST hp=-9998 dead=True IsDown=True AllDowned=1 GameData.message=Knight_Unit 倒下了！选中队友点击他进行救援
+animator state right after kill (同一帧，尚未过渡): IsName(Downed)=False animator.enabled=True
+
+-- 结论 --
+OnDeath 只挂了 DownedRescue.OnDowned 一个订阅者，且 OnDowned 同步执行：IsDown=True / AllDowned+1 / GameData.message 变为「Knight_Unit 倒下了！选中队友点击他进行救援」，
+说明 DownedRescue.OnDowned() 确实执行；倒地动作缺失不是「逻辑没触发」。
+
+-- 触发器来源（关键）：Hit 触发器由 CharacterBrain.OnDamaged 在 OnHit 中 SetTrigger，先于 OnDeath 执行 --
+UnitHealth.ApplyDamageInfo 顺序：OnHit?.Invoke(info) → hp<=0 → dead=true → OnDeath?.Invoke()
+因此致死一击会同时排入 Hit（先）与 Die（后）；AnyState 顺序为 Die(0) → Hit_A(1)，Die 先消费并进入 Downed，
+但残留的 Hit 触发器在 ~0.06s 后被 AnyState→Hit_A（interruptionSource=Source）消费，把 Downed 抢走 → 站着不动的现象。
+
+=== 附：修复前（red）原始行为，证明「进了 Downed 但被 AnyState→Hit_A 抢走」===
+文件 before_fix_red_run.txt（同一次击杀的逐帧采样，未做任何修改）摘录：
+  L3: animator.gameObject=Knight enabled=True ctrl=OC_Knight
+  L4: PARAMETERS: SpeedZ(Float) SpeedX(Float) Grounded(Bool) AttackSpeed(Float) AttackRange(Trigger) Skill(Trigger) Bash(Trigger) Interrupt(Trigger) Interact(Trigger) Die(Trigger) Revive(Trigger) Hit(Trigger) Jump(Trigger) AttackMelee(Trigger) Q(Trigger) W(Trigger) E(Trigger) R(Trigger) SkillSpeed(Float)
+  L5: frame | t | isDowned | normT | hash | clips | IsDown | dead | AllDowned | animEnabled | agentEnabled | brainEnabled
+  L14: 7 | 74.669 | False | 58.289 | -2089788878 | [Idle_A:w=0.39] | True | True | 1 | True | False | False
+  L15: 8 | 74.676 | False | 58.295 | -2089788878 | [Idle_A:w=0.33] | True | True | 1 | True | False | False
+  L23: 16 | 74.731 | True | 0.152 | -660779543 | [Death_A:w=0.73] | True | True | 1 | True | False | False
+  L24: 17 | 74.736 | True | 0.160 | -660779543 | [Death_A:w=0.60] | True | True | 1 | True | False | False
+  L42: 35 | 74.851 | False | 0.202 | -2020627443 | [Hit_A:w=1.00] | True | True | 1 | True | False | False
+  L144: 137 | 75.485 | False | 0.329 | -2089788878 | [Idle_A:w=1.00] | True | True | 1 | True | False | False
+
+=== 附：A/B 对照（修复前手动清 Hit 触发器，验证根因）===
+文件 before_fix_ab_reset_hit.txt 摘录（击杀后同帧 ResetTrigger(Hit) → Downed 不再被抢）：
+  L3: KILL_DONE t=25.571 IsDown=True -> ResetTrigger(Hit)
+  L4: 1 | 25.581 | Downed=False | normT=13.315 | [Idle_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  L5: 2 | 25.590 | Downed=True | normT=0.417 | [Death_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  L6: 3 | 25.610 | Downed=True | normT=0.428 | [Death_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  L7: 4 | 25.617 | Downed=True | normT=0.453 | [Death_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  L8: 5 | 25.624 | Downed=True | normT=0.463 | [Death_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  L9: 6 | 25.632 | Downed=True | normT=0.472 | [Death_A:w=1.00] | IsDown=True dead=True AllDowned=1 animEnabled=True agentEnabled=False brainEnabled=False
+  ...(共 120 帧；第 1 帧尚未完成过渡 IsName(Downed)=False，第 2~120 帧全部 Downed / Death_A:w=1.00，无 Hit_A)
+
+=== 附：SPEC01（修复后）= Docs/QA/Evidence/SPEC-01/editor_run12，pass=12 fail=0 exitCode=0 ===

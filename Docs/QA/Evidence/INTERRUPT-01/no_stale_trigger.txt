@@ -1,0 +1,34 @@
+INTERRUPT-01 / no_stale_trigger.txt (AC-4 / R-4 / Interrupt.NoStaleTrigger)
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+sequence per run: cast 跳劈 -> CommandMove while Skill -> wait natural skill end -> immediately CommandAttack -> watch the whole swing
+assert: the attack plays >= 0.40s (not cut short by a stale 'Interrupt' trigger) and settles exactly one normal hit
+unit = Knight_Unit | target = INTERRUPT01_Target (MonsterBrain disabled, HP reset each run to 60)
+
+RUN #1  targetHp0=60.0 castOk=True
+    [SKILL] Skill fully current
+    [SKILL+MOVE] CommandMove during Skill at +0.105s; state=Skill timer=0.1674985
+    [SKILL END] back in Locomotion at +1.184s; targetHp=30.0 (skill damage settled=True)
+    [ORDER] CommandAttack issued immediately after skill end; state=Locomotion
+    [ATTACK] AttackMelee current at order+0.257s; timer=0.2520888
+    [ATK +0.005s] cur=AttackMelee next=- norm=0.240 timer=0.2561946
+    [ATK +0.551s] cur=AttackMelee next=Locomotion norm=0.753 timer=0.8026841
+    [ATK +0.649s] cur=Locomotion next=- norm=0.095 timer=0.9011804
+    [ATTACK END] left AttackMelee at attack+0.649s -> Locomotion
+    [ATK +0.654s] cur=Locomotion next=AttackMelee norm=0.099 timer=0
+    [RESULT] attackDuration=0.649s (need >= 0.400) | attackDmg=15.0 (one normal hit = 15) | hp: 60.0 -> 15.0 | verdict=PASS
+
+RUN #2  targetHp0=60.0 castOk=True
+    [SKILL] Skill fully current
+    [SKILL+MOVE] CommandMove during Skill at +0.102s; state=Skill timer=0.1579639
+    [SKILL END] back in Locomotion at +1.183s; targetHp=30.0 (skill damage settled=True)
+    [ORDER] CommandAttack issued immediately after skill end; state=Locomotion
+    [ATTACK] AttackMelee current at order+0.256s; timer=0.2514163
+    [ATK +0.005s] cur=AttackMelee next=- norm=0.240 timer=0.2556892
+    [ATK +0.550s] cur=AttackMelee next=Locomotion norm=0.751 timer=0.8008795
+    [ATK +0.649s] cur=Locomotion next=- norm=0.095 timer=0.9008545
+    [ATTACK END] left AttackMelee at attack+0.649s -> Locomotion
+    [ATK +0.653s] cur=Locomotion next=AttackMelee norm=0.098 timer=0
+    [RESULT] attackDuration=0.649s (need >= 0.400) | attackDmg=15.0 (one normal hit = 15) | hp: 60.0 -> 15.0 | verdict=PASS
+
+
+done: 2 runs

@@ -1,0 +1,19 @@
+# AC-6 Rescue.InterruptByMove  (2026-11-05 20:53:41.947)
+# 读条稳定 0.4s 后给救援者 CommandMove(远处) -> 期望 0.2s 内 IsChanneling=false、Interact 退出，2s 内不自动重开
+# （同帧“刚下令就移动”的压力场景见 _probe_timeline.txt：读条 0.005s 停，动画因入场+退场两条 0.1s 过渡串联在 0.208s 才切出）
+[AC-6 iter1] t=28.04 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=28.44 读条已稳定 0.40s -> CommandMove(远处) 距离=1.25
+        t=28.65 掉读条 +0.006s | 状态=Interact | +0.200s 状态=Locomotion | 距离=1.01 | 提示=救援被打断，请重新下达救援指令
+[AC-6 iter1] 打断后 2.0s 窗口 | 掉读条延迟=0.006s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=6.00 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+[AC-6 iter2] t=31.25 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=31.66 读条已稳定 0.40s -> CommandMove(远处) 距离=1.25
+        t=31.86 掉读条 +0.005s | 状态=Interact | +0.200s 状态=Locomotion | 距离=1.00 | 提示=救援被打断，请重新下达救援指令
+[AC-6 iter2] 打断后 2.0s 窗口 | 掉读条延迟=0.005s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=6.00 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+[AC-6 iter3] t=34.47 IsDown=True 点击下令 CurrentRescuer=Knight_Unit 距离=1.80
+        t=34.88 读条已稳定 0.40s -> CommandMove(远处) 距离=1.25
+        t=35.08 掉读条 +0.006s | 状态=Interact | +0.200s 状态=Locomotion | 距离=1.01 | 提示=救援被打断，请重新下达救援指令
+[AC-6 iter3] 打断后 2.0s 窗口 | 掉读条延迟=0.006s (<=0.2) | 2s 内重新 IsChanneling=False | 2s 内 Interact 进入次数=0 | 距离=6.00 | archer.IsDown=True | 提示=救援被打断，请重新下达救援指令
+        => PASS
+DONE AC-5 3 runs; AC-6 3 runs

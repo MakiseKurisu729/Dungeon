@@ -1,0 +1,8 @@
+t=80.31 点击下令 CurrentRescuer=Knight_Unit IsDown=True 距离=1.80
+t=80.64 读条开始 IsChanneling=true
+t=83.31 读条完成 -> Revive 触发 | 读条时长=2.67s | IsDown=False dead=False hp=1 | Channeling=False
+  +0.005s Archer 动画=Downed | brain.enabled=False | hp=1 | knight=Interact | knightChannel=False
+  +0.102s Archer 动画=Rise | brain.enabled=False | hp=1 | knight=Interact | knightChannel=False
+  +2.284s Archer 动画=Locomotion | brain.enabled=True | hp=1 | knight=Locomotion | knightChannel=False
+  +2.600s 结束：IsDown=False dead=False hp=1/80 brain.enabled=True agent.enabled=True knight=Locomotion 提示=队友救起来了！
+RESULT: IsDown=false? True ; dead=false? True ; hp==1? True ; 起身后 brain 恢复? True

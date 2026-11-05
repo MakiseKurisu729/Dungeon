@@ -1,0 +1,47 @@
+=== D-4 controller clip mapping (loaded from AssetDatabase, read-only) ===
+controller=PlayerBase layers=1
+layer0=Base Layer defaultState=Locomotion
+
+-- STATES (name | motion type | motion name | instanceID | length | transitions) --
+Locomotion | BlendTree | Blend Tree | - | - | 6
+Hit_A | AnimationClip | Hit_A | 33048 | 0.667 | 1
+Interact | AnimationClip | Interact | 33052 | 1.300 | 1
+Rise | AnimationClip | Lie_StandUp | 33056 | 2.333 | 1
+Downed | AnimationClip | Death_A | 33046 | 0.800 | 1
+Attack_Release | AnimationClip | Ranged_Bow_Release | 33116 | 1.333 | 1
+Attack_Draw | AnimationClip | Ranged_Bow_Draw | 33120 | 1.333 | 1
+Bash | AnimationClip | Melee_Block_Attack | 33060 | 1.067 | 1
+Skill | AnimationClip | Melee_1H_Attack_Jump_Chop | 33058 | 1.333 | 1
+AttackMelee | AnimationClip | Chop | 33064 | 4.333 | 1
+
+-- ANYSTATE TRANSITIONS (order matters; first match wins) --
+0 -> Downed cond=[mode=If param=Die thr=0] hasExitTime=False duration=0.1 interruptionSource=None canTransitionToSelf=False
+1 -> Hit_A cond=[mode=If param=Hit thr=0] hasExitTime=False duration=0.05 interruptionSource=Source canTransitionToSelf=False
+2 -> <stateMachine:Q> cond=[mode=If param=Q thr=0] hasExitTime=False duration=0.05 interruptionSource=Source canTransitionToSelf=False
+3 -> <stateMachine:W> cond=[mode=If param=W thr=0] hasExitTime=False duration=0.05 interruptionSource=Source canTransitionToSelf=False
+4 -> <stateMachine:E> cond=[mode=If param=E thr=0] hasExitTime=False duration=0.05 interruptionSource=Source canTransitionToSelf=False
+5 -> <stateMachine:R> cond=[mode=If param=R thr=0] hasExitTime=False duration=0.05 interruptionSource=Source canTransitionToSelf=False
+
+-- Downed state detail --
+Downed.motion=Death_A assetPath=Assets/_Project/Art/kaykit-character-animations/KayKit_Character_Animations_1.1/Animations/fbx/Rig_Medium/Rig_Medium_General.fbx loop=False length=0.800 wrap=Default
+  Downed -> Rise cond=[mode=If param=Revive thr=0] hasExitTime=False interruptionSource=None
+
+-- Downed/Hit_A/Interact/Rise clip identity (same guid = same FBX Rig_Medium_General.fbx, different local fileID) --
+Downed -> clip='Death_A' instanceID=33046 assetPath=Assets/_Project/Art/kaykit-character-animations/KayKit_Character_Animations_1.1/Animations/fbx/Rig_Medium/Rig_Medium_General.fbx
+Hit_A -> clip='Hit_A' instanceID=33048 assetPath=Assets/_Project/Art/kaykit-character-animations/KayKit_Character_Animations_1.1/Animations/fbx/Rig_Medium/Rig_Medium_General.fbx
+Interact -> clip='Interact' instanceID=33052 assetPath=Assets/_Project/Art/kaykit-character-animations/KayKit_Character_Animations_1.1/Animations/fbx/Rig_Medium/Rig_Medium_General.fbx
+Rise -> clip='Lie_StandUp' instanceID=33056 assetPath=Assets/_Project/Art/kaykit-character-animations/KayKit_Character_Animations_1.1/Animations/fbx/Rig_Medium/Rig_Medium_Simulation.fbx
+
+-- OC_Knight override pairs (original -> override) --
+OC_Knight base=PlayerBase
+Death_A -> Death_A | origInstanceID=33046 ovrInstanceID=33046
+Hit_A -> Hit_A | origInstanceID=33048 ovrInstanceID=33048
+Idle_A -> Idle_A | origInstanceID=33050 ovrInstanceID=33050
+Interact -> Interact | origInstanceID=33052 ovrInstanceID=33054
+Lie_StandUp -> Lie_StandUp | origInstanceID=33056 ovrInstanceID=33056
+Melee_1H_Attack_Jump_Chop -> Melee_1H_Attack_Jump_Chop | origInstanceID=33058 ovrInstanceID=33058
+Melee_Block_Attack -> Melee_Block_Attack | origInstanceID=33060 ovrInstanceID=33060
+Running_A -> Running_A | origInstanceID=33062 ovrInstanceID=33062
+Chop -> Melee_1H_Attack_Chop | origInstanceID=33064 ovrInstanceID=33066
+Ranged_Bow_Release -> null | origInstanceID=33116 ovrInstanceID=-
+Ranged_Bow_Draw -> null | origInstanceID=33120 ovrInstanceID=-

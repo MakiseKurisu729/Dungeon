@@ -1,0 +1,55 @@
+INTERRUPT-01 / attack_by_move.txt (AC-1 / R-1 / Interrupt.AttackByMove)
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+unit = Knight_Unit | target = Skeleton_Warrior maxHp=60 | attackLen=1 activeWindow=0.35-0.55
+assert: CommandMove at AttackMelee+0.10s -> Locomotion within 0.15s, and target HP unchanged
+
+RUN #1  dist=1.40 targetHp0=60.0
+    [t0] AttackMelee entered; timer=0.2537319
+    [ATK +0.006s] cur=AttackMelee next=- norm=0.24 timer=0.2591368
+    [MOVE] CommandMove at AttackMelee+0.104s; stateBefore=AttackMelee nextBefore=- timerBefore=0.3583474
+    [MOVE] after CancelAttack timer=-1
+    [MOVE +0.005s] cur=AttackMelee next=Locomotion norm=0.34 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.005s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.38
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.43
+    [MOVE +0.111s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion fully current at +0.111s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.13
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.46
+    [RESULT] latencyFirstLocomotion=0.005s latencyFullyCurrent=0.111s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+RUN #2  dist=1.40 targetHp0=60.0
+    [t0] AttackMelee entered; timer=0.2549588
+    [ATK +0.004s] cur=AttackMelee next=- norm=0.24 timer=0.2593158
+    [MOVE] CommandMove at AttackMelee+0.104s; stateBefore=AttackMelee nextBefore=- timerBefore=0.3585486
+    [MOVE] after CancelAttack timer=-1
+    [MOVE +0.005s] cur=AttackMelee next=Locomotion norm=0.34 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.005s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.39
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.43
+    [MOVE +0.109s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion fully current at +0.109s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.47
+    [RESULT] latencyFirstLocomotion=0.005s latencyFullyCurrent=0.109s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+RUN #3  dist=1.40 targetHp0=60.0
+    [t0] AttackMelee entered; timer=0.2531194
+    [ATK +0.006s] cur=AttackMelee next=- norm=0.24 timer=0.25858
+    [MOVE] CommandMove at AttackMelee+0.105s; stateBefore=AttackMelee nextBefore=- timerBefore=0.3573749
+    [MOVE] after CancelAttack timer=-1
+    [MOVE +0.005s] cur=AttackMelee next=Locomotion norm=0.34 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.005s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.39
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.43
+    [MOVE +0.107s] cur=Locomotion next=- norm=0.09 timer=-1
+    [ASSERT] Locomotion fully current at +0.107s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.46
+    [RESULT] latencyFirstLocomotion=0.005s latencyFullyCurrent=0.107s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+
+done: 3 runs

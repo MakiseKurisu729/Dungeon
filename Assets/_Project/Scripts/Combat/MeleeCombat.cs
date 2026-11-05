@@ -250,7 +250,6 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         {
             _animator.ResetTrigger(attackTrigger);
             _animator.ResetTrigger("Skill");
-            _animator.SetTrigger("Interrupt");
         }
     }
 

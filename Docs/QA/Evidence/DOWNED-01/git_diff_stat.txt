@@ -1,0 +1,25 @@
+ Assembly-CSharp-Editor.csproj                      | 444 +++++++++++----------
+ Assembly-CSharp.csproj                             | 437 ++++++++++----------
+ .../_Project/Art/Animations/PlayerBase.controller  |  38 +-
+ .../_Project/Scripts/Debug/DebugCameraSwitcher.cs  |   2 +-
+ Assets/_Project/Scripts/Player/SelectionManager.cs |   2 +-
+ Assets/_Project/Scripts/Units/DownedRescue.cs      |   4 +-
+ Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs |  43 +-
+ Docs/Handoff/REPORT_TEST-MCP-01.md                 |   4 +-
+ ProjectSettings/ProjectSettings.asset              |   2 +-
+ 9 files changed, 525 insertions(+), 451 deletions(-)
+diff --git a/Assets/_Project/Scripts/Units/DownedRescue.cs b/Assets/_Project/Scripts/Units/DownedRescue.cs
+index f6331d9d..b8a539e8 100644
+--- a/Assets/_Project/Scripts/Units/DownedRescue.cs
++++ b/Assets/_Project/Scripts/Units/DownedRescue.cs
+@@ -52,7 +52,9 @@ public class DownedRescue : MonoBehaviour
+         if (agent != null) { if (agent.hasPath) agent.ResetPath(); agent.enabled = false; }
+         var sel = GetComponentInChildren<Selectable>();
+         if (sel != null) sel.SetSelected(false);
+-        if (animator != null) animator.SetTrigger(dieTrigger);
++        // 致死一击会先排入 Hit 触发器（CharacterBrain.OnDamaged）；不先清掉，AnyState→Hit_A 会在 Downed 之后
++        // 把倒地动作抢走，导致站着不动却已倒地。
++        if (animator != null) { animator.ResetTrigger("Hit"); animator.SetTrigger(dieTrigger); }
+         GameData.SetMessage($"{gameObject.name} 倒下了！选中队友点击他进行救援");
+     }
+ 

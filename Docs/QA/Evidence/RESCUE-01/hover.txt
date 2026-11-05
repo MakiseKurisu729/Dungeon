@@ -1,0 +1,23 @@
+# AC-1 Rescue.HoverIcon
+# 2026-11-05 20:56:53.455  scene=DungeonWorld  unity=2022.3.62f3c1  代码版本=最终实现（含打断清残留触发器）
+# interactCursor=gauntlet_point  interactHotspot=(4.00, 2.00)  interactColor=RGBA(1.000, 0.850, 0.200, 1.000)
+# Archer_Unit: IsDown=True dead=True hp=-9919 | Interactable=True hint=救援 | Selectable=True
+# 怪物目标用运行期夹具 RESCUE01_MonsterFixture（team=Monster, pos=(0.00, 0.08, 40.00)），测试后销毁
+
+[case1] 选中活着的 Knight，指向倒地 Archer  -> expect Interact
+        Primary=Knight_Unit  hits=ForestGround Archer_Unit[sel=Archer_Unit][inter] 
+        hover=Interact | inter=Archer_Unit(hint=救援) | selectable=Archer_Unit | enemy=null
+[case2] 未选中任何单位，指向倒地 Archer  -> expect Select
+        Primary=<null>  hits=ForestGround Archer_Unit[sel=Archer_Unit][inter] 
+        hover=Select | inter=Archer_Unit(hint=救援) | selectable=Archer_Unit | enemy=null
+[case3] 选中活着的 Knight，指向活着的 Mage（也挂了 Interactable，但 IsDown=false） -> expect Select
+        Primary=Knight_Unit  hits=ForestGround Mage_Unit[sel=Mage_Unit][inter] 
+        hover=Select | inter=Mage_Unit(hint=救援) | selectable=Mage_Unit | enemy=null
+[case4] 选中活着的 Knight，指向怪物 -> expect Attack
+        Primary=Knight_Unit  hits=ForestGround RESCUE01_MonsterFixture 
+        hover=Attack | inter=null | selectable=null | enemy=RESCUE01_MonsterFixture
+[case5] 主选中是倒地的 Archer（dead=true），指向活着的 Knight -> expect Select（倒地者不能当救援者）
+        Primary=Archer_Unit  hits=ForestGround Knight_Unit[sel=Knight_Unit][inter] 
+        hover=Select | inter=Knight_Unit(hint=救援) | selectable=Knight_Unit | enemy=null
+
+RESULT: case1=Interact / case2=Select / case3=Select / case4=Attack / case5=Select —— 5/5 命中期望；夹具已销毁。

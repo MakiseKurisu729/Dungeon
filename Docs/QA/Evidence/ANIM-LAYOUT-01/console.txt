@@ -1,0 +1,28 @@
+# ANIM-LAYOUT-01 console evidence (Unity 2022.3.62f3c1 / Dungeon@4f5c34c82f31646e / mode B)
+# collection: unityMCP read_console
+#   1) error CS scan after layout save + SPEC01 rerun: action=get types=all filter_text="error CS" -> "Retrieved 0 log entries."
+#   2) SPEC01 rerun terminal lines: filter_text="SPEC01] finish" / "INEDITOR] result"
+# note: the layout edit itself emits no console log; the asset was written by execute_code
+#       (EditorUtility.SetDirty + AssetDatabase.SaveAssets + AssetDatabase.Refresh), not by a build step.
+
+--- console (verbatim) ---
+[SPEC01] finish; mode=green; run=1; exit=0; pass=12; fail=0; blocked=0; infra=0; observed=0
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run10/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-05 19:18:23.367 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run10 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+
+--- SPEC-01/editor_run10/InEditorResult.txt (verbatim) ---
+task=SPEC01
+code=0
+finishedAt=2026-11-05 19:18:23.367
+unityVersion=2022.3.62f3c1
+scenario=in-editor
+evidenceSubdir=editor_run10
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+
+--- SPEC-01/editor_run10/SPEC01_ExitCode_run1.txt (verbatim) ---
+0
+
+--- assertion line tally (SPEC-01/editor_run10/SPEC01_Assertions.jsonl) ---
+lines=12  "pass":true=12  "pass":false=0
+
+--- so the layout did not change behavior: 10 root states + 4 sub-state machines still resolve,
+--- 12/12 assertions green, exit code 0.

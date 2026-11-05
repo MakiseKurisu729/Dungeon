@@ -1,0 +1,39 @@
+# CAM-01 控制台证据（Unity 2022.3.62f3c1 / Dungeon@4f5c34c82f31646e / 模式 B）
+# 采集方式：unityMCP read_console
+#   1) 编译后错误检查：action=get types=error count=20 → "Retrieved 0 log entries."（0 条 error/CS 错误）
+#   2) SPEC01 运行日志：action=get types=all filter_text=SPEC01 count=60 page_size=60 → total=35, nextCursor=null
+# 编译门：refresh_unity(mode=force, scope=all, compile=request, wait_for_ready=true) 后
+#         editor_state.compilation = { is_compiling:false, is_domain_reload_pending:false }
+# 完整 12 条断言原文不在本例节选内，见 Docs/QA/Evidence/SPEC-01/editor_run9/SPEC01_Assertions.jsonl
+# ---------------------------------------------------------------------------
+# [warning] MCP 插件在 refresh 期间断连重试（非编译错误、非本项目脚本）：
+MCP-FOR-UNITY: [WebSocket] Unexpected receive error: WebSocket is not initialised
+# ---------------------------------------------------------------------------
+# [log] SPEC01 关键行（原文，未改字）：
+[SPEC01] boot; isPlaying=False; started=False; finished=False
+[SPEC01] observer created; baselineGameStarted=False; frame=0
+[SPEC01] playModeStateChanged=EnteredPlayMode
+[SPEC01] play-mode runner created
+[SPEC01] runner start; mode=green; run=1; seed=20261106; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\SPEC-01\editor_run9; head=9e0b75154a82e3fb440753ad2b677c530365ceab
+[SPEC01] active scene=Assets/Scenes/DungeonWorld.unity; waited=0s
+[SPEC01] observer ready; baselineGameStarted=False
+[SPEC01] player Knight_Unit at (-2.72, 0.083, 0); sword=True; ranged=False; attackSpeed=1
+[SPEC01] player Archer_Unit at (0.85, 0.083, 0); sword=False; ranged=True; attackSpeed=3
+[SPEC01] player Mage_Unit at (3.22, 0.083, 0); sword=False; ranged=True; attackSpeed=0.8
+[SPEC01] fixture created SPEC01_Target_Combat at (0, 0, -4); showDamageNumber=False
+[SPEC01] fixture created SPEC01_Target_UI at (0, 0, -4); showDamageNumber=True
+[SPEC01] fixture created SPEC01_Target_Anchor at (0, 0, -4); showDamageNumber=True
+[SPEC01] fixture created SPEC01_Target_Cursor at (-0.379, 10.402, -0.766); showDamageNumber=False
+[SPEC01] fixture created SPEC01_Target_Pick at (1.121, 10.402, -0.766); showDamageNumber=False
+[SPEC01][SUMMARY] { "task": "SPEC-01", "mode": "green", "run": 1, "startedAt": "2026-11-05 19:13:44.671", "finishedAt": "2026-11-05 19:14:26.675", "unityVersion": "2022.3.62f3c1", "scene": "Assets/Scenes/DungeonWorld.unity", "randomSeed": 20261106, "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\editor_run9\\SPEC01_Assertions.jsonl", "assertionLinesInFile": "12", "pass": 12, "fail": 0, "blocked": 0, "infraFail": 0, "observed": 0, "mode": "green", "head": "9e0b75154a82e3fb440753ad2b677c530365ceab", "enemySourceGuid": "18dec5e6af31178468b146e0440bd081", "enemyPosition": {"x":-2.72,"y":0.0833334,"z":15.8}, "fixtureNote": "SPEC01_Target_Combat / SPEC01_Target_UI 为运行期内存 UnitHealth，结束前销毁；不写入场景", "testWroteGameStarted": false, "exitReason": "completed" }
+[SPEC01] finish; mode=green; run=1; exit=0; pass=12; fail=0; blocked=0; infra=0; observed=0
+[SPEC01] playModeStateChanged=ExitingPlayMode
+[SPEC01] playModeStateChanged=EnteredEditMode
+[SPEC01] batchmode exit 0
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run9/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-05 19:14:27.105 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run9 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+[QA][INEDITOR] done task=SPEC01 code=0
+# ---------------------------------------------------------------------------
+# 12 条断言的 pass 状态（取自 SPEC01_Assertions.jsonl 的 assertion 字段，逐条 pass=true）：
+Locomotion.AllPlayersMoveParam / Attack.DualPathUnified / Clock.MeleeNormalizedWindow / Clock.RangedOneShotPerCycle /
+Animation.PostCombatAndHit / UI.DamageNumberScale / UI.SpawnAnchor / Skill.CastSmoke / Skill.InputWired /
+Skill.CursorHover / Skill.TargetPick / Regression.FND02A

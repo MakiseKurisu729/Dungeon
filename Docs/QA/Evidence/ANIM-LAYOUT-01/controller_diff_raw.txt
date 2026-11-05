@@ -1,0 +1,112 @@
+warning: in the working copy of 'Assets/_Project/Art/Animations/PlayerBase.controller', LF will be replaced by CRLF the next time Git touches it
+diff --git a/Assets/_Project/Art/Animations/PlayerBase.controller b/Assets/_Project/Art/Animations/PlayerBase.controller
+index 49cadc08..35fc4fba 100644
+--- a/Assets/_Project/Art/Animations/PlayerBase.controller
++++ b/Assets/_Project/Art/Animations/PlayerBase.controller
+@@ -64,7 +64,7 @@ AnimatorStateMachine:
+   m_ChildStates:
+   - serializedVersion: 1
+     m_State: {fileID: 2611195555828445345}
+-    m_Position: {x: 320, y: 20, z: 0}
++    m_Position: {x: 300, y: 40, z: 0}
+   m_ChildStateMachines: []
+   m_AnyStateTransitions: []
+   m_EntryTransitions: []
+@@ -367,7 +367,7 @@ AnimatorStateMachine:
+   m_ChildStates:
+   - serializedVersion: 1
+     m_State: {fileID: 5355786750427005142}
+-    m_Position: {x: 320, y: 20, z: 0}
++    m_Position: {x: 300, y: 40, z: 0}
+   m_ChildStateMachines: []
+   m_AnyStateTransitions: []
+   m_EntryTransitions: []
+@@ -650,7 +650,7 @@ AnimatorStateMachine:
+   m_ChildStates:
+   - serializedVersion: 1
+     m_State: {fileID: 4751105542491381104}
+-    m_Position: {x: 320, y: 20, z: 0}
++    m_Position: {x: 300, y: 40, z: 0}
+   m_ChildStateMachines: []
+   m_AnyStateTransitions: []
+   m_EntryTransitions: []
+@@ -719,7 +719,7 @@ AnimatorStateMachine:
+   m_ChildStates:
+   - serializedVersion: 1
+     m_State: {fileID: -7236842491451072912}
+-    m_Position: {x: 320, y: 20, z: 0}
++    m_Position: {x: 300, y: 40, z: 0}
+   m_ChildStateMachines: []
+   m_AnyStateTransitions: []
+   m_EntryTransitions: []
+@@ -1253,47 +1253,47 @@ AnimatorStateMachine:
+   m_ChildStates:
+   - serializedVersion: 1
+     m_State: {fileID: 4538305570025381470}
+-    m_Position: {x: 280, y: 90, z: 0}
++    m_Position: {x: 260, y: 220, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -7409521161716774312}
+-    m_Position: {x: 490, y: 280, z: 0}
++    m_Position: {x: 260, y: 380, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -7663045439151268581}
+-    m_Position: {x: 40, y: 270, z: 0}
++    m_Position: {x: 260, y: 620, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -8672175783515049069}
+-    m_Position: {x: 610, y: 40, z: 0}
++    m_Position: {x: 620, y: 520, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: 2726035615246653961}
+-    m_Position: {x: 640, y: 220, z: 0}
++    m_Position: {x: 260, y: 500, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: 5907960694754117835}
+-    m_Position: {x: 460, y: -180, z: 0}
++    m_Position: {x: 900, y: 160, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -6898049284795502505}
+-    m_Position: {x: 140, y: -180, z: 0}
++    m_Position: {x: 620, y: 160, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -2786471710393149814}
+-    m_Position: {x: 150, y: 470, z: 0}
++    m_Position: {x: 620, y: 280, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: 2868969230524910054}
+-    m_Position: {x: 420, y: 470, z: 0}
++    m_Position: {x: 620, y: 400, z: 0}
+   - serializedVersion: 1
+     m_State: {fileID: -4295610436324702674}
+-    m_Position: {x: 50, y: -30, z: 0}
++    m_Position: {x: 620, y: 40, z: 0}
+   m_ChildStateMachines:
+   - serializedVersion: 1
+     m_StateMachine: {fileID: -3831832237758607705}
+-    m_Position: {x: 300, y: 140, z: 0}
++    m_Position: {x: 1000, y: 300, z: 0}
+   - serializedVersion: 1
+     m_StateMachine: {fileID: -8458543026176807555}
+-    m_Position: {x: 560, y: 140, z: 0}
++    m_Position: {x: 1200, y: 300, z: 0}
+   - serializedVersion: 1
+     m_StateMachine: {fileID: 1193714601601128641}
+-    m_Position: {x: 820, y: 140, z: 0}
++    m_Position: {x: 1400, y: 300, z: 0}
+   - serializedVersion: 1
+     m_StateMachine: {fileID: 2277572442880553480}
+-    m_Position: {x: 1080, y: 140, z: 0}
++    m_Position: {x: 1600, y: 300, z: 0}
+   m_AnyStateTransitions:
+   - {fileID: 5488358615529200332}
+   - {fileID: 3103354588128113334}
+@@ -1304,7 +1304,7 @@ AnimatorStateMachine:
+   m_EntryTransitions: []
+   m_StateMachineTransitions: {}
+   m_StateMachineBehaviours: []
+-  m_AnyStatePosition: {x: 660, y: 410, z: 0}
++  m_AnyStatePosition: {x: 670, y: 460, z: 0}
+   m_EntryPosition: {x: 50, y: 120, z: 0}
+   m_ExitPosition: {x: 800, y: 120, z: 0}
+   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

@@ -1,0 +1,17 @@
+INTERRUPT-01 / residual_ranged_interrupt.txt  (diagnostic, not an AC)
+question: the new Interact->Locomotion(Interrupt) transition is shared by all player units, but RangedCombat.CancelAttack() still
+          sets the 'Interrupt' trigger unconditionally (RangedCombat.cs:83, outside this task's allowed files).
+          Does an archer/mage move-command leave a stale Interrupt that instantly cuts the NEXT Interact animation?
+steps: Archer_Unit attacks -> CommandMove during the attack (triggers RangedCombat.CancelAttack) -> back to Locomotion -> SetTrigger(Interact) -> observe
+
+  archer attackTrigger=AttackRange targetHp=48
+  [ATTACK] archer attack running, timer=0.004 state=Locomotion
+  [MOVE] CommandMove during archer attack -> RangedCombat.CancelAttack() ran; timer now=-1
+  [STATE] settled back in Locomotion; now firing Interact WITHOUT any further move command:
+    [INTERACT +0.004s] cur=Locomotion next=Interact norm=0.145
+  [CUT] Interact left at +0.022s after the trigger
+    [INTERACT +0.107s] cur=Interact next=- norm=0.079
+    [INTERACT +0.111s] cur=Interact next=Locomotion norm=0.082
+    [INTERACT +0.210s] cur=Locomotion next=- norm=0.094
+  [RESULT] interactLifetime=0.022s | staleInterruptConfirmed=True
+  [INTERPRETATION] CONFIRMED: RangedCombat.CancelAttack leaves a stale Interrupt that insta-cuts the next Interact. Out of this task's allowed files; reported as residual.

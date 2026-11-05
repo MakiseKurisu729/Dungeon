@@ -172,12 +172,12 @@ MonoBehaviour:
   pointerCursor: {fileID: 2800000, guid: e41ae20ca1032ee4e839d63d9dadc8ef, type: 3}
   selectCursor: {fileID: 2800000, guid: 60dc4cc29e6f44c49a0ee9b9c86243bc, type: 3}
   attackCursor: {fileID: 2800000, guid: f7e44c07580106b459617c6e1bb9b310, type: 3}
-  interactCursor: {fileID: 0}
+  interactCursor: {fileID: 2800000, guid: 1424f523bde3ce14fa336dab2e4b33a9, type: 3}
   defaultHotspot: {x: 4, y: 2}
   pointerHotspot: {x: 4, y: 2}
   selectHotspot: {x: 4, y: 2}
   attackHotspot: {x: 4, y: 2}
-  interactHotspot: {x: 0, y: 0}
+  interactHotspot: {x: 4, y: 2}
   selectColor: {r: 0.3, g: 1, b: 0.5, a: 1}
   attackColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   interactColor: {r: 1, g: 0.85, b: 0.2, a: 1}

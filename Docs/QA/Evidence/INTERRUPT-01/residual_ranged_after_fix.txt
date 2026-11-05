@@ -1,0 +1,84 @@
+=== RUN 1  (20:15:50.917) ===
+code: RangedCombat.CancelAttack no longer calls SetTrigger("Interrupt") (was RangedCombat.cs:83)
+steps: archer RangedCombat.AutoAttack -> CharacterBrain.CommandMove during Attack_Draw -> wait settle Locomotion -> animator.SetTrigger("Interact") -> measure Interact lifetime
+[BOOT] runner armed at frame 35002
+[SETUP] archerPos=(0.00, 0.08, 0.00) brain=True ranged=True anim=True attackTrigger=AttackRange draw=Attack_Draw release=Attack_Release targetHp=60
+[ATTACK] RangedCombat.AutoAttack issued at t0; TASK fix point: CancelAttack must NOT leave Interrupt
+  [0.019s] cur=Locomotion next=Attack_Draw norm=0.313
+[MOVE +0.019s] CommandMove during draw; timerBefore=0.333 firedBefore=True
+[MOVE] after CommandMove: timerNow=-1.000 (CharacterBrain.OnCommandMove -> RangedCombat.CancelAttack)
+  [0.166s] cur=Attack_Draw next=- norm=0.342
+  [0.374s] cur=Attack_Draw next=Attack_Release norm=0.815
+  [0.526s] cur=Attack_Release next=- norm=0.346
+  [0.740s] cur=Attack_Release next=Locomotion norm=0.825
+  [0.886s] cur=Locomotion next=- norm=0.174
+[STATE] settled Locomotion +0.866s after move; timer=-1.000 arrowFired=True
+[INTERACT] SetTrigger("Interact") at cur=Locomotion (no further move command)
+  [0.895s] cur=Locomotion next=Interact norm=0.186
+  [INTERACT +0.004s] cur=Locomotion next=Interact norm=0.186
+  [0.997s] cur=Interact next=- norm=0.078
+  [1.947s] cur=Interact next=Locomotion norm=0.808
+  [2.049s] cur=Locomotion next=- norm=0.097
+[EXIT] Interact left at +1.158s; maxNorm=0.885 cur=Locomotion
+[RESULT] run=1 lifeBeforeFix=0.022s lifeAfterFix=1.158s threshold=0.500s pass=True moveToSettle=0.866s timerAtMove=0.333 interactMaxNorm=0.885
+
+=== RUN 2  (20:16:35.135) ===
+code: RangedCombat.CancelAttack no longer calls SetTrigger("Interrupt") (was RangedCombat.cs:83)
+steps: archer RangedCombat.AutoAttack -> CharacterBrain.CommandMove during Attack_Draw -> wait settle Locomotion -> animator.SetTrigger("Interact") -> measure Interact lifetime
+[BOOT] runner armed at frame 45017
+[SETUP] archerPos=(0.00, 0.08, 0.00) brain=True ranged=True anim=True attackTrigger=AttackRange draw=Attack_Draw release=Attack_Release targetHp=60
+[ATTACK] RangedCombat.AutoAttack issued at t0; TASK fix point: CancelAttack must NOT leave Interrupt
+  [0.012s] cur=Locomotion next=Attack_Draw norm=0.016
+[MOVE +0.012s] CommandMove during draw; timerBefore=0.017 firedBefore=False
+[MOVE] after CommandMove: timerNow=-1.000 (CharacterBrain.OnCommandMove -> RangedCombat.CancelAttack)
+  [0.164s] cur=Attack_Draw next=- norm=0.348
+  [0.372s] cur=Attack_Draw next=Attack_Release norm=0.816
+  [0.521s] cur=Attack_Release next=- norm=0.338
+  [0.735s] cur=Attack_Release next=Locomotion norm=0.819
+  [0.885s] cur=Locomotion next=- norm=0.174
+[STATE] settled Locomotion +0.873s after move; timer=-1.000 arrowFired=False
+[INTERACT] SetTrigger("Interact") at cur=Locomotion (no further move command)
+  [0.893s] cur=Locomotion next=Interact norm=0.183
+  [INTERACT +0.004s] cur=Locomotion next=Interact norm=0.183
+  [0.994s] cur=Interact next=- norm=0.078
+  [1.943s] cur=Interact next=Locomotion norm=0.808
+  [2.045s] cur=Locomotion next=- norm=0.095
+[EXIT] Interact left at +1.156s; maxNorm=0.883 cur=Locomotion
+[RESULT] run=2 lifeBeforeFix=0.022s lifeAfterFix=1.156s threshold=0.500s pass=True moveToSettle=0.873s timerAtMove=0.017 interactMaxNorm=0.883
+
+=== RUN 3  (20:17:09.498) ===
+code: RangedCombat.CancelAttack no longer calls SetTrigger("Interrupt") (was RangedCombat.cs:83)
+steps: archer RangedCombat.AutoAttack -> CharacterBrain.CommandMove during Attack_Draw -> wait settle Locomotion -> animator.SetTrigger("Interact") -> measure Interact lifetime
+[BOOT] runner armed at frame 52893
+[SETUP] archerPos=(0.00, 0.08, 0.00) brain=True ranged=True anim=True attackTrigger=AttackRange draw=Attack_Draw release=Attack_Release targetHp=60
+[ATTACK] RangedCombat.AutoAttack issued at t0; TASK fix point: CancelAttack must NOT leave Interrupt
+  [0.010s] cur=Locomotion next=Attack_Draw norm=0.015
+[MOVE +0.010s] CommandMove during draw; timerBefore=0.016 firedBefore=False
+[MOVE] after CommandMove: timerNow=-1.000 (CharacterBrain.OnCommandMove -> RangedCombat.CancelAttack)
+  [0.165s] cur=Attack_Draw next=- norm=0.348
+  [0.371s] cur=Attack_Draw next=Attack_Release norm=0.814
+  [0.523s] cur=Attack_Release next=- norm=0.342
+  [0.734s] cur=Attack_Release next=Locomotion norm=0.815
+  [0.882s] cur=Locomotion next=- norm=0.170
+[STATE] settled Locomotion +0.872s after move; timer=-1.000 arrowFired=False
+[INTERACT] SetTrigger("Interact") at cur=Locomotion (no further move command)
+  [0.892s] cur=Locomotion next=Interact norm=0.182
+  [INTERACT +0.005s] cur=Locomotion next=Interact norm=0.182
+  [0.994s] cur=Interact next=- norm=0.078
+  [1.943s] cur=Interact next=Locomotion norm=0.808
+  [2.043s] cur=Locomotion next=- norm=0.094
+[EXIT] Interact left at +1.155s; maxNorm=0.882 cur=Locomotion
+[RESULT] run=3 lifeBeforeFix=0.022s lifeAfterFix=1.155s threshold=0.500s pass=True moveToSettle=0.872s timerAtMove=0.016 interactMaxNorm=0.882
+
+=== SUMMARY (residual fix: RangedCombat.cs:83 SetTrigger("Interrupt") removed) ===
+repro = same as residual_ranged_interrupt.txt (archer attacks -> CommandMove during Attack_Draw -> settle Locomotion -> SetTrigger("Interact") with no further move)
+BEFORE: interactLifetime=0.022s  (stale Interrupt consumed by the new Interact->Locomotion(Interrupt) edge)
+AFTER : 1.158 / 1.156 / 1.155 s  (N=3), interact maxNorm 0.885 / 0.883 / 0.882
+        = natural exit at Interact exitTime 0.8077 + 0.1s blend, i.e. the Interact animation is no longer cut.
+threshold >=0.500s -> 3/3 PASS
+ranged side check: moving during Attack_Draw still sets _timer=-1 immediately (no damage/arrow when cancelled before release: runs 2/3 arrowFired=False),
+        and the animation channel still walks Attack_Draw -> Attack_Release -> Locomotion on its own (no Interrupt needed, no stuck state).
+SPEC01 regression (Docs/QA/Evidence/SPEC-01/editor_run14): pass=12 fail=0, exit=0;
+        Clock.RangedOneShotPerCycle rangedPass=True (Archer drawEntries=13 fireCount=12, every fire inside Attack_Release window 0.2~0.6; Mage fireInWindow too).
+notes: editor ran unfocused (~3 fps) during the repro, so per-frame sampling is coarse; the measured lifetimes are still >= 1 frame past the natural exit, and the cut-vs-natural test hinges on maxNorm (0.88x = natural) not on sub-frame timing.
+

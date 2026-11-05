@@ -17,6 +17,12 @@ public static class QA_InEditorMenu
     public const string EvidenceSubdirEnv = "QA_EVIDENCE_SUBDIR";
     public const string SessionActiveKey = "QA.InEditor.Active";
     public const string SessionTaskKey = "QA.InEditor.Task";
+
+    /// <summary>进 Play 前的 runInBackground 原值（收尾按它还原，不硬编码 false）。</summary>
+    public const string SessionRunInBackgroundKey = "QA.PrevRunInBackground";
+
+    /// <summary>已接管 runInBackground 的标记：保证还原只做一次，且回滚值确实被记录过。</summary>
+    public const string SessionRunInBackgroundArmedKey = "QA.PrevRunInBackground.Armed";
     public const string DefaultSubdir = "editor_run1";
 
     /// <summary>需要在收尾时清空的套件环境变量（AC-8：不污染后续 batch）。</summary>
@@ -84,8 +90,10 @@ public static class QA_InEditorMenu
             return;
         }
 
-        // 编辑器内无人值守跑探针：失焦时不冻结 Play 帧循环（只改运行期开关，不动 Player Settings）。
-        Application.runInBackground = true;
+        // 编辑器内无人值守跑探针：失焦时不冻结 Play 帧循环。
+        // 注意：编辑器里的 Application.runInBackground 会写穿到 PlayerSettings（ProjectSettings.asset），
+        // 故先记录原值、收尾还原，避免把“切后台继续跑”带进打包。
+        ApplyRunInBackground();
 
         Debug.Log("[QA][INEDITOR] start task=" + task +
                   "; subdir=" + subdir +
@@ -113,6 +121,8 @@ public static class QA_InEditorMenu
             Debug.LogError("[QA][INEDITOR] launcher threw task=" + task + "; err=" + e);
             ResetFlags();
             ClearSuiteEnvironment();
+            // 异常可能绕过 TryFinish，这里兜底还原（RestoreRunInBackground 幂等）。
+            RestoreRunInBackground();
         }
     }
 
@@ -160,6 +170,8 @@ public static class QA_InEditorMenu
         finally
         {
             ResetFlags();
+            // 收尾还原 runInBackground：只回滚到“原本为 false”的情形，不关掉用户自己打开的设置。
+            RestoreRunInBackground();
         }
 
         Debug.Log("[QA][INEDITOR] done task=" + task + " code=" + code);
@@ -206,6 +218,33 @@ public static class QA_InEditorMenu
     {
         SessionState.SetBool(SessionActiveKey, false);
         SessionState.SetString(SessionTaskKey, string.Empty);
+    }
+
+    /// <summary>
+    /// 进 Play 前记录 runInBackground 原值（SessionState 跨域重载存活），再打开后台运行。
+    /// 编辑器里的赋值会写穿到 PlayerSettings，原值必须留到收尾还原。
+    /// </summary>
+    static void ApplyRunInBackground()
+    {
+        bool prevRunInBackground = Application.runInBackground;
+        SessionState.SetBool(SessionRunInBackgroundKey, prevRunInBackground);
+        SessionState.SetBool(SessionRunInBackgroundArmedKey, true);
+        Application.runInBackground = true;
+    }
+
+    /// <summary>
+    /// 还原 PlayerSettings 的 runInBackground：只有原本为 false 时才置回 false，
+    /// 避免把用户本来打开的设置关掉。靠 Armed 标记保证幂等（重复调用不二次回滚）。
+    /// </summary>
+    static void RestoreRunInBackground()
+    {
+        if (!SessionState.GetBool(SessionRunInBackgroundArmedKey, false)) return;
+
+        if (SessionState.GetBool(SessionRunInBackgroundKey, false) == false)
+            Application.runInBackground = false;
+
+        SessionState.EraseBool(SessionRunInBackgroundKey);
+        SessionState.EraseBool(SessionRunInBackgroundArmedKey);
     }
 
     static void ClearSuiteEnvironment()

@@ -1,0 +1,40 @@
+INTERRUPT-01 / controller_transitions.txt
+读回方式：MCP execute_code（Editor，非 Play）→ AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/_Project/Art/Animations/PlayerBase.controller")
+时间：2026-11-05（本机）
+Unity：2022.3.62f3c1 / instance Dungeon@4f5c34c82f31646e
+
+controller=Assets/_Project/Art/Animations/PlayerBase.controller layers=1 params=19
+  param SpeedZ type=Float
+  param SpeedX type=Float
+  param Grounded type=Bool
+  param AttackSpeed type=Float
+  param AttackRange type=Trigger
+  param Skill type=Trigger
+  param Bash type=Trigger
+  param Interrupt type=Trigger
+  param Interact type=Trigger
+  param Die type=Trigger
+  param Revive type=Trigger
+  param Hit type=Trigger
+  param Jump type=Trigger
+  param AttackMelee type=Trigger
+  param Q type=Trigger
+  param W type=Trigger
+  param E type=Trigger
+  param R type=Trigger
+  param SkillSpeed type=Float
+STATE Interact transitions=2
+   -> Locomotion hasExitTime=True exitTime=0.8076923 duration=0.1 offset=0 interruptionSource=None orderedInterruption=True canTransitionToSelf=True mute=False solo=False fixedDuration=True conds=(none)      [既有，未改]
+   -> Locomotion hasExitTime=False exitTime=0 duration=0.1 offset=0 interruptionSource=Source orderedInterruption=True canTransitionToSelf=False mute=False solo=False fixedDuration=True conds=[Interrupt.If:0]   [新增]
+STATE AttackMelee transitions=2
+   -> Locomotion hasExitTime=True exitTime=0.75 duration=0.1 offset=0 interruptionSource=None orderedInterruption=True canTransitionToSelf=True mute=False solo=False fixedDuration=True conds=(none)         [既有，未改]
+   -> Locomotion hasExitTime=False exitTime=0 duration=0.1 offset=0 interruptionSource=Source orderedInterruption=True canTransitionToSelf=False mute=False solo=False fixedDuration=True conds=[Interrupt.If:0]   [新增]
+AnyStateTransitions=6
+   any -> Downed conds=[Die.If]
+   any -> Hit_A conds=[Hit.If]
+   any -> SM:Q conds=[Q.If]
+   any -> SM:W conds=[W.If]
+   any -> SM:E conds=[E.If]
+   any -> SM:R conds=[R.If]
+
+断言：两条新过渡参数与 TASK_INTERRUPT-01 §2 表格逐项一致（Dst=Locomotion、cond=Interrupt If、HasExitTime=False、ExitTime=0、Duration=0.1、InterruptionSource=Source、OrderedInterruption=True、CanTransitionToSelf=False）；既有两条 exitTime 过渡与 6 条 AnyState 未变。

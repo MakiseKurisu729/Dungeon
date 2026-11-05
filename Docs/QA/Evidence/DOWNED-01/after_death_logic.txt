@@ -1,0 +1,32 @@
+=== DOWNED-01 / AC-2 证据：死亡后逻辑状态（同一次运行的逐帧原始行摘录）===
+
+----- runA Knight #1 source=_run1.txt -----
+倒地期间 el≈0.2s:    f=21 t=19.628 el=0.2051 st=Downed normT=0.615 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9899 AllDowned=1 anim=True agent=False brain=False
+倒地期间 el≈1.3s:    f=184 t=20.725 el=1.3017 st=Downed normT=1.991 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9899 AllDowned=1 anim=True agent=False brain=False
+REVIVE_CALL @elapsed=1.5005 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+
+----- runB Knight #2 source=_run2.txt -----
+倒地期间 el≈0.2s:    f=27 t=53.594 el=0.2063 st=Downed normT=0.246 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9998 AllDowned=1 anim=True agent=False brain=False
+倒地期间 el≈1.3s:    f=199 t=54.690 el=1.3024 st=Downed normT=1.617 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9998 AllDowned=1 anim=True agent=False brain=False
+REVIVE_CALL @elapsed=1.5019 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+
+----- runC Knight #3 source=_run3.txt -----
+倒地期间 el≈0.2s:    f=30 t=64.567 el=0.2045 st=Downed normT=0.246 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9998 AllDowned=1 anim=True agent=False brain=False
+倒地期间 el≈1.3s:    f=196 t=65.665 el=1.3028 st=Downed normT=1.617 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9998 AllDowned=1 anim=True agent=False brain=False
+REVIVE_CALL @elapsed=1.5027 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+
+----- runD Archer #1 source=_run4_archer.txt -----
+倒地期间 el≈0.2s:    f=30 t=76.600 el=0.2057 st=Downed normT=0.653 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9919 AllDowned=1 anim=True agent=False brain=False
+倒地期间 el≈1.3s:    f=193 t=77.696 el=1.3015 st=Downed normT=2.020 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9919 AllDowned=1 anim=True agent=False brain=False
+REVIVE_CALL @elapsed=1.5041 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+
+----- runE Mage #1 source=_run5_mage.txt -----
+倒地期间 el≈0.2s:    f=27 t=93.437 el=0.2008 st=Downed normT=0.240 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9929 AllDowned=1 anim=True agent=False brain=False
+倒地期间 el≈1.3s:    f=186 t=94.540 el=1.3032 st=Downed normT=1.618 clips=[Death_A:w=1.00] IsDown=True dead=True hp=-9929 AllDowned=1 anim=True agent=False brain=False
+REVIVE_CALL @elapsed=1.5041 prevState=Downed
+REVIVE_RETURN IsDown=False dead=False hp=1
+

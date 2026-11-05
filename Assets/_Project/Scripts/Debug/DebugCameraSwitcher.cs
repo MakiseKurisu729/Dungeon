@@ -30,7 +30,7 @@ public class DebugCameraSwitcher : MonoBehaviour
     [Tooltip("拖动平移灵敏度")]
     public float panScale = 0.05f;
     [InspectorName("允许平移")]
-       [Tooltip("允许左键拖动平移——第3步选择系统接入后会改为「有选择时自动禁用」")]
+    [Tooltip("允许左键拖动平移（与选中状态无关，点击/拖动由 8px 阈值区分）")]
     public bool allowPan = true;
     [InspectorName("焦点目标")]
     [Tooltip("空格回中 / Y 锁定跟随的目标（暂时拖骑士，之后由选择系统设置）")]

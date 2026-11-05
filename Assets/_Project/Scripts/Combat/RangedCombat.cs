@@ -80,7 +80,6 @@ public class RangedCombat : MonoBehaviour, ICharacterCombat
         if (_animator != null)
         {
             _animator.ResetTrigger(attackTrigger);
-            _animator.SetTrigger("Interrupt");
         }
     }
 

@@ -1,0 +1,56 @@
+INTERRUPT-01 / skill_immune.txt (AC-3 / R-3 / Interrupt.SkillImmuneToMove)
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+skill used: SkillSystem.Cast(1) = 跳劈 -> HeavySlashEffect -> MeleeCombat.DoSkillAttack() -> Animator trigger 'Skill', skillLen=1.3 hitWindow=0.5-0.7
+unit = Knight_Unit | target = INTERRUPT01_Target at 1.4m in front, MonsterBrain disabled, HP reset each run
+assert: during the skill, CommandMove must NOT change the animator state (stays Skill) and the skill damage must still settle
+
+RUN #1  dist=1.40 targetHp0=60.0 castOk=True mana=70
+    [t0] Skill entered; timer=0.3333333
+    [SKILL +0.005s] cur=Locomotion next=Skill norm=35.430 timer=0.3418431
+    [SKILL +0.049s] cur=Skill next=- norm=0.039 timer=0.3853724
+    [MOVE] CommandMove at Skill+0.104s; stateBefore=Skill nextBefore=- timerBefore=0.4403329
+    [MOVE] after CommandMove: timer=-1
+    [CP +0.10s] cur=Skill next=- norm=0.157 timer=-1
+    [CP +0.20s] cur=Skill next=- norm=0.231 timer=-1
+    [CP +0.40s] cur=Skill next=- norm=0.384 timer=-1
+    [CP +0.60s] cur=Skill next=- norm=0.530 timer=-1
+    [CP +0.80s] cur=Skill next=- norm=0.682 timer=-1
+    [MOVE +0.980s] cur=Skill next=Locomotion norm=0.815 timer=-1
+    [VIOLATION] Locomotion appeared at +0.980s after CommandMove
+    [CP +1.00s] cur=Skill next=Locomotion norm=0.831 timer=-1
+    [RESULT] skillInterruptedByMove=True latLoco=0.980s | hp: 60.0 -> 60.0 | skillDamageSettled=False | verdict=FAIL
+
+RUN #2  dist=1.40 targetHp0=60.0 castOk=True mana=70
+    [t0] Skill entered; timer=0.0047773
+    [SKILL +0.004s] cur=Locomotion next=Skill norm=0.512 timer=0.0088843
+    [SKILL +0.052s] cur=Skill next=- norm=0.039 timer=0.0570795
+    [MOVE] CommandMove at Skill+0.103s; stateBefore=Skill nextBefore=- timerBefore=0.1079466
+    [MOVE] after CommandMove: timer=-1
+    [CP +0.10s] cur=Skill next=- norm=0.155 timer=-1
+    [CP +0.20s] cur=Skill next=- norm=0.227 timer=-1
+    [CP +0.40s] cur=Skill next=- norm=0.380 timer=-1
+    [CP +0.60s] cur=Skill next=- norm=0.529 timer=-1
+    [CP +0.80s] cur=Skill next=- norm=0.679 timer=-1
+    [MOVE +0.982s] cur=Skill next=Locomotion norm=0.813 timer=-1
+    [VIOLATION] Locomotion appeared at +0.982s after CommandMove
+    [CP +1.00s] cur=Skill next=Locomotion norm=0.830 timer=-1
+    [RESULT] skillInterruptedByMove=True latLoco=0.982s | hp: 60.0 -> 60.0 | skillDamageSettled=False | verdict=FAIL
+
+RUN #3  dist=1.40 targetHp0=60.0 castOk=True mana=70
+    [t0] Skill entered; timer=0.0048945
+    [SKILL +0.005s] cur=Locomotion next=Skill norm=0.511 timer=0.0097717
+    [SKILL +0.054s] cur=Skill next=- norm=0.040 timer=0.05869351
+    [MOVE] CommandMove at Skill+0.104s; stateBefore=Skill nextBefore=- timerBefore=0.1089913
+    [MOVE] after CommandMove: timer=-1
+    [CP +0.10s] cur=Skill next=- norm=0.154 timer=-1
+    [CP +0.20s] cur=Skill next=- norm=0.228 timer=-1
+    [CP +0.40s] cur=Skill next=- norm=0.381 timer=-1
+    [CP +0.60s] cur=Skill next=- norm=0.528 timer=-1
+    [CP +0.80s] cur=Skill next=- norm=0.679 timer=-1
+    [MOVE +0.982s] cur=Skill next=Locomotion norm=0.815 timer=-1
+    [VIOLATION] Locomotion appeared at +0.982s after CommandMove
+    [CP +1.00s] cur=Skill next=Locomotion norm=0.831 timer=-1
+    [RESULT] skillInterruptedByMove=True latLoco=0.982s | hp: 60.0 -> 60.0 | skillDamageSettled=False | verdict=FAIL
+
+
+done: 3 runs

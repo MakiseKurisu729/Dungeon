@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 1116910718786336663}
   - component: {fileID: 2428230424868387509}
   - component: {fileID: -63824219877848339}
+  - component: {fileID: 2829977216517189157}
   m_Layer: 8
   m_Name: Knight_Unit
   m_TagString: Player
@@ -195,9 +196,11 @@ MonoBehaviour:
   attackMode: 0
   hitRange: 2.2
   attackLen: 1
+  attackTrigger: AttackMelee
   activeStart: 0.35
   activeEnd: 0.55
   attackStateName: AttackMelee
+  hitStateName: AttackMelee
   drawStateName: Attack_Draw
   releaseStateName: Attack_Release
   skillStateName: Skill
@@ -397,6 +400,19 @@ MonoBehaviour:
   rescueRange: 2.5
   reviveHp: 1
   riseDuration: 1.2
+--- !u!114 &2829977216517189157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2235231795659222389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f7c06b434ceff24ab2dac5d08de108e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hint: "\u6551\u63F4"
 --- !u!1001 &1837856430033410893
 PrefabInstance:
   m_ObjectHideFlags: 0

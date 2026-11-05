@@ -1,0 +1,51 @@
+INTERRUPT-01 / attack_by_move.txt (AC-1 / R-1 / Interrupt.AttackByMove)
+driver = MCP execute_code, Play mode, EditorApplication.update tick sampler
+unit = Knight_Unit | target = runtime instance of Assets/_Project/Prefabs/Skeleton_Warrior.prefab (brain disabled, HP reset each run)
+attackLen=1 hitWindow(normalized)=0.35-0.55 attackTrigger=AttackMelee
+trigger condition: CommandMove fired on the first tick where MeleeCombat._timer >= 0.10s (0.10s AFTER the attack really started), not on sampler-detected state entry
+assert: CommandMove at attack+0.10s -> Locomotion within 0.15s; that attack settles no damage (HP unchanged)
+
+RUN #1  dist=1.40 targetHp0=60.0
+    [MOVE] CommandMove issued at attack timer=0.253s norm=0.237 (activeStart=0.35) stateBefore=AttackMelee nextBefore=-
+    [MOVE] after cancel: timer=-1
+    [MOVE +0.005s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.005s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.29
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.108s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion fully current at +0.108s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.47
+    [RESULT] moveAtTimer=0.253s normAtMove=0.237 latencyFirstLocomotion=0.005s latencyFullyCurrent=0.108s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+RUN #2  dist=1.40 targetHp0=60.0
+    [MOVE] CommandMove issued at attack timer=0.253s norm=0.238 (activeStart=0.35) stateBefore=AttackMelee nextBefore=-
+    [MOVE] after cancel: timer=-1
+    [MOVE +0.004s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.29
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.106s] cur=Locomotion next=- norm=0.10 timer=-1
+    [ASSERT] Locomotion fully current at +0.106s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.46
+    [RESULT] moveAtTimer=0.253s normAtMove=0.238 latencyFirstLocomotion=0.004s latencyFullyCurrent=0.106s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+RUN #3  dist=1.40 targetHp0=60.0
+    [MOVE] CommandMove issued at attack timer=0.254s norm=0.238 (activeStart=0.35) stateBefore=AttackMelee nextBefore=-
+    [MOVE] after cancel: timer=-1
+    [MOVE +0.004s] cur=AttackMelee next=Locomotion norm=0.24 timer=-1
+    [ASSERT] first Locomotion (cur or next) at +0.004s after CommandMove
+    [CP +0.05s] cur=AttackMelee next=Locomotion norm=0.29
+    [CP +0.10s] cur=AttackMelee next=Locomotion norm=0.33
+    [MOVE +0.104s] cur=Locomotion next=- norm=0.09 timer=-1
+    [ASSERT] Locomotion fully current at +0.104s (transition done)
+    [CP +0.15s] cur=Locomotion next=- norm=0.14
+    [CP +0.25s] cur=Locomotion next=- norm=0.23
+    [CP +0.50s] cur=Locomotion next=- norm=0.47
+    [RESULT] moveAtTimer=0.254s normAtMove=0.238 latencyFirstLocomotion=0.004s latencyFullyCurrent=0.104s | hp: 60.0 -> 60.0 | damageSettled=False | verdict=PASS
+
+
+done: 3 runs (knight brain disabled + agent stopped after probe)
