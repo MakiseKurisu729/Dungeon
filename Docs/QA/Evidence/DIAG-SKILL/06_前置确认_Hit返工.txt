@@ -1,0 +1,11 @@
+SPEC-DIAG-SKILL-1 / Step 0 前置自证
+采集时间: 2026-11-05 04:50:47
+命令:
+  $p = @(Get-Process -Name Unity -ErrorAction SilentlyContinue)
+  Test-Path "D:\unity\Dungeon\Temp\UnityLockfile"
+  Test-Path "D:\unity\2022.3.62f3c1\Editor\Unity.exe"
+结果:
+  UnityProcessCount = 0
+  UnityLockfile     = False
+  EditorExe         = True
+判定: 通过（无 Unity.exe 运行、无项目锁文件、编辑器可执行文件存在）

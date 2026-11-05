@@ -1,0 +1,15 @@
+SPEC-DIAG-SKILL-3 / Step 0 前置确认（SPEC01 原生 N=3 重跑）
+时间: 2026-11-05 12:48:48
+git HEAD: 7cf874f7c5db448215b33a90fcad1d209f1fb781
+Get-Process -Name Unity 数量: 0
+Test-Path Temp/UnityLockfile: False
+SPEC01_RUN: 
+SPEC01_EVIDENCE_TAG: 
+SPEC01_MODE: 
+结论: 若进程数=0 且锁文件=False 则满足 run1 启动前提；每次 run 之间重复此检查。
+
+--- 每 run 启动前复核（轮询结果） ---
+run1: procs=0 lock=False  启动 12:49:07，结束 12:50:25（进程归零+锁消失后取证据）
+run2: procs=0 lock=False  启动 12:50:39，结束 12:51:55
+run3: procs=0 lock=False  启动 12:52:04，结束 12:53:19
+说明: Windows 上 Unity.exe 为启动器，Start-Process 立即返回；以 Get-Process -Name Unity 归零且 Temp/UnityLockfile 消失双条件连续 2 次采样成立作为完成判据。

@@ -1,0 +1,11 @@
+﻿diff --git a/Assets/_Project/Scripts/Combat/SwordSwing.cs b/Assets/_Project/Scripts/Combat/MeleeCombat.cs
+index 3ecfb094..009e4cd3 100644
+--- a/Assets/_Project/Scripts/Combat/SwordSwing.cs
++++ b/Assets/_Project/Scripts/Combat/MeleeCombat.cs
+@@ -6,7 +6,7 @@ using UnityEngine;
+ /// 鏅敾=鍗曚綋閿佸畾锛堝彧缁撶畻鍙戣捣鏃堕攣瀹氱殑鐩爣锛屾牎楠屽墤绋嬶級锛涙妧鑳芥柀/鎵帬妯″紡=绐楀彛鍐呯兢浣撴壂鎺犮€? /// 鎶€鑳芥柀鍙己鍒舵墦鏂繘琛屼腑鐨勬櫘鏀汇€? /// </summary>
+-public class SwordSwing : MonoBehaviour, ICharacterCombat
++public class MeleeCombat : MonoBehaviour, ICharacterCombat
+ {
+     public enum AttackMode { SingleTarget, Sweep }   // 鍗曚綋=閿佸畾鐩爣锛涙壂鎺?绐楀彛鍐呯兢浣擄紙骞崇爫AOE鐣欐寮€鍏筹級
+ 

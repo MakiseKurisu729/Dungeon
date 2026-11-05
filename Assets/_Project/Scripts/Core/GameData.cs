@@ -16,7 +16,7 @@ public static class GameData
 
     public static int LevelCost() { return 50 * level; }
 
-    public static bool TryLevelUp(SwordSwing sw, UnitHealth uh)
+    public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)
     {
         if (gold < LevelCost()) return false;
         gold -= LevelCost();

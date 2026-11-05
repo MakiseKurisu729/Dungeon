@@ -41,7 +41,7 @@ public class HUD : MonoBehaviour
             var root = SelectionManager.instance != null && SelectionManager.instance.Primary != null
                 ? SelectionManager.instance.Primary.transform.root : null;
             var uh = root != null ? root.GetComponent<UnitHealth>() : null;
-            var sw = root != null ? root.GetComponent<SwordSwing>() : null;
+            var sw = root != null ? root.GetComponent<MeleeCombat>() : null;
 
             if (GameData.TryLevelUp(sw, uh))
                 GameData.SetMessage($"升级！现在 {GameData.level} 级");

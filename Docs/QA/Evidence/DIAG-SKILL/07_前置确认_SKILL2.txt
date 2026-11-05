@@ -1,0 +1,45 @@
+SPEC-DIAG-SKILL-2 · Step 0 前置确认
+================================================================
+采集时间      : 2026-11-05 12:31:25 +08:00
+工单          : Docs/Handoff/TASK_SPEC-DIAG-SKILL-2.md
+风险等级      : 中风险（所有者逐项批准，落盘即批准）
+回滚锚        : 7cf874f7c5db448215b33a90fcad1d209f1fb781
+
+1) Unity 编辑器已关闭自证
+----------------------------------------------------------------
+命令 : Get-Process Unity -ErrorAction SilentlyContinue | Measure-Object
+结果 : Unity 进程数 = 0
+
+命令 : Test-Path "D:\unity\Dungeon\Temp\UnityLockfile"
+结果 : False（无锁文件）
+
+2) 仓库状态（只读采集，未做任何写操作）
+----------------------------------------------------------------
+命令 : git rev-parse HEAD
+结果 : 7cf874f7c5db448215b33a90fcad1d209f1fb781（与工单回滚锚一致）
+
+命令 : Get-Content ProjectSettings\ProjectVersion.txt
+结果 : m_EditorVersion: 2022.3.62f3c1
+       m_EditorVersionWithRevision: 2022.3.62f3c1 (1623fc0bbb97)
+
+命令 : git status --short（节选，与本单相关的既有工作树改动）
+结果 :  M Assets/Scenes/DungeonWorld.unity        <- 资产 A（所有者手动完成，本单不动）
+        M Assets/_Project/Scripts/Combat/SkillEffects.cs      <- 本单待改（删除 HeavySlashEffect）
+        M Assets/_Project/Scripts/Units/SkillSystem.cs        <- 本单待改（CanCast 先于扣蓝）
+        M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs  <- 本单待改（CastSmoke 口径）
+        ?? Assets/_Project/Tests/DIAG/                        <- 夹具待迁出
+
+3) 资产 A 的处理声明
+----------------------------------------------------------------
+资产 A（场景 SkillInputController）由所有者手动完成并核实；
+本单执行者不打开、不编辑、不保存 Assets/Scenes/DungeonWorld.unity，
+仅在 Step 2 red 与 Step 4 green 中通过 SPEC01 的 Skill.InputWired 断言读取其运行期结果。
+
+4) 本单不允许触碰（对照工单 §2）
+----------------------------------------------------------------
+Q_Bash_Effect.asset / Q_Bash.asset / W_HeavySlash.asset / Knight_Unit.prefab /
+任何场景 / 任何 Animator(.controller) / ProjectSettings/ / Packages/ / 其它资产或生产代码。
+
+5) 结论
+----------------------------------------------------------------
+前置条件满足，可以进入 Step 1（只改测试：夹具迁移 + CastSmoke 新口径）。

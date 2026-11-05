@@ -1,0 +1,35 @@
+SPEC-DIAG-SKILL-3 / Step 2 验收核验（自动生成，禁止手工编辑）
+生成时间: 2026-11-05 12:54:50
+HEAD: 7cf874f7c5db448215b33a90fcad1d209f1fb781
+
+[PASS] A1.run1.summary :: pass=10 fail=0 blocked=0 infraFail=0 observed=0 exitReason=completed run=1 mode=green assertLines=10
+[PASS] A1.run2.summary :: pass=10 fail=0 blocked=0 infraFail=0 observed=0 exitReason=completed run=2 mode=green assertLines=20
+[PASS] A1.run3.summary :: pass=10 fail=0 blocked=0 infraFail=0 observed=0 exitReason=completed run=3 mode=green assertLines=30
+[PASS] A2.run1.exitCode :: value='0'  file=SPEC01_ExitCode_run1.txt
+[PASS] A2.run2.exitCode :: value='0'  file=SPEC01_ExitCode_run2.txt
+[PASS] A2.run3.exitCode :: value='0'  file=SPEC01_ExitCode_run3.txt
+[PASS] A3.totalLines :: lines=30
+[PASS] A3.run1.rows :: rows=10
+[PASS] A3.run2.rows :: rows=10
+[PASS] A3.run3.rows :: rows=10
+[PASS] A3.statusAllPass :: non-pass rows=0  statusSet=pass:30
+[PASS] A3.kindAllProduction :: non-production rows=0
+[PASS] A3.failFlagFalse :: pass!=true rows=0
+[PASS] A3.assertionNameSetStable :: 三次 run 的 10 条断言名集合一致
+      断言名: Animation.PostCombatAndHit, Attack.DualPathUnified, Clock.MeleeNormalizedWindow, Clock.RangedOneShotPerCycle, Locomotion.AllPlayersMoveParam, Regression.FND02A, Skill.CastSmoke, Skill.InputWired, UI.DamageNumberScale, UI.SpawnAnchor
+[PASS] A4.CastSmokeAllRuns :: 三次 run 的 CastSmoke 关键字段全部符合工单 §3 Step2-4
+       run1: pass=True failedNoManaPass=True manaDeltaFailed=0 cdFailed=0 failedCastReturn=False failedException= qEffectType=BashEffect wEffectType=HeavySlashEffect qPass=True wPass=True emptyPass=True | Q mana 100->80 (delta 20) cd=6/6 hp 1000->985 dmg=15/15 | W delta=30 cd=6
+       run2: pass=True failedNoManaPass=True manaDeltaFailed=0 cdFailed=0 failedCastReturn=False failedException= qEffectType=BashEffect wEffectType=HeavySlashEffect qPass=True wPass=True emptyPass=True | Q mana 100->80 (delta 20) cd=6/6 hp 1000->985 dmg=15/15 | W delta=30 cd=6
+       run3: pass=True failedNoManaPass=True manaDeltaFailed=0 cdFailed=0 failedCastReturn=False failedException= qEffectType=BashEffect wEffectType=HeavySlashEffect qPass=True wPass=True emptyPass=True | Q mana 100->80 (delta 20) cd=6/6 hp 1000->985 dmg=15/15 | W delta=30 cd=6
+[PASS] A5.InputWiredAllRuns :: 三次 run controllerCount=1
+       run1: pass=True controllerCount=1 indicatorCount=1 indicator=SkillIndicator skillKeys=Q,W,E,R skillKeysOk=True
+       run2: pass=True controllerCount=1 indicatorCount=1 indicator=SkillIndicator skillKeys=Q,W,E,R skillKeysOk=True
+       run3: pass=True controllerCount=1 indicatorCount=1 indicator=SkillIndicator skillKeys=Q,W,E,R skillKeysOk=True
+[PASS] A6.RunsIndexTail3 :: tail runs=run1/pass10/fail0, run2/pass10/fail0, run3/pass10/fail0; fileLines=13
+[PASS] A7.run1.errorCS :: file=SPEC01_skill2_final_run1.log exists=True errorCS=0 size=157548
+[PASS] A7.run2.errorCS :: file=SPEC01_skill2_final_run2.log exists=True errorCS=0 size=157495
+[PASS] A7.run3.errorCS :: file=SPEC01_skill2_final_run3.log exists=True errorCS=0 size=157505
+[PASS] A8.noAssetWrites :: Assets/ProjectSettings/Packages 中 12:48 后被修改的文件数=0
+
+失败项计数: 0
+总体: PASS —— SPEC01 = 10/10 × 3、exit 0

@@ -158,7 +158,7 @@
 | 类型 | 字段 | 默认 | 说明 |
 |---|---|---|---|
 | UnitMana | `mana` | — | — |
-| SwordSwing | `sword` | — | — |
+| MeleeCombat | `sword` | — | — |
 | SkillData[] | `skills` | new SkillData[4] | Q/W/E/R，空槽留空 |
 | | **▸ 盾击节奏** | | |
 | float | `bashTotalTime` | 0.6f | Q/W/E/R，空槽留空 |
@@ -367,10 +367,10 @@
 | GameObject | `arrowPrefab` | — | — |
 | UnitStats | `stats` | — | — |
 | UnitHealth | `health` | — | — |
-| string | `attackTrigger` | "Attack" | 与动画器参数一致：玩家弓手填 Attack，骷髅弓手填 AttackRanged |
+| string | `attackTrigger` | "Attack" | 与动画器参数一致：玩家弓手/法师预制体覆写为 AttackRange；骷髅弓手填 AttackRanged |
 | | **▸ 动画状态名（用于读取播放进度）** | | |
-| string | `drawStateName` | "Attack_Draw" | 与动画器参数一致：玩家弓手填 Attack，骷髅弓手填 AttackRanged |
-| string | `releaseStateName` | "Attack_Release" | 与动画器参数一致：玩家弓手填 Attack，骷髅弓手填 AttackRanged |
+| string | `drawStateName` | "Attack_Draw" | 两段式第一段：与动画器参数一致（玩家弓手/法师 AttackRange 状态内为 Attack_Draw） |
+| string | `releaseStateName` | "Attack_Release" | 两段式第二段：与动画器参数一致（玩家弓手/法师 AttackRange 状态内为 Attack_Release） |
 | float | `attackLen` | 1.0f | — |
 | float | `releasePoint` | 0.45f | — |
 | float | `damage` | 12f | — |
@@ -419,7 +419,7 @@
 | float | `knockDuration` | 0.3f | — |
 | float | `bashLen` | 0.6f | — |
 
-### `SwordSwing`  `Combat/SwordSwing.cs`
+### `MeleeCombat`  `Combat/MeleeCombat.cs`
 
 *基类/接口：`MonoBehaviour, ICharacterCombat`*
 
@@ -442,10 +442,14 @@
 | float | `attackLen` | 0.8f | — |
 | float | `activeStart` | 0.35f | — |
 | float | `activeEnd` | 0.55f | — |
-| | **▸ 动画状态名（UpperBody 层）** | | |
-| string | `attackStateName` | "Attack" | — |
+| | **▸ 动画状态名（单层动画 layer 0）** | | |
+| string | `attackTrigger` | "AttackMelee" | 出招写入的 Animator Trigger；近战单段用 AttackMelee（与状态名一致） |
+| string | `attackStateName` | "Attack_Draw" | 旧配置的攻击状态名；新控制器以前摇/释放/命中状态名为准 |
+| string | `hitStateName` | "AttackMelee" | 命中窗口按此状态 normalizedTime 判定（状态名＝触发器名，不复用两段式 releaseStateName） |
+| string | `drawStateName` | "Attack_Draw" | 攻击前摇状态名：只播放动画，不结算命中 |
+| string | `releaseStateName` | "Attack_Release" | 攻击释放状态名（两段式远程复用） |
 | string | `skillStateName` | "Skill" | — |
-| int | `attackLayer` | 1 | — |
+| int | `attackLayer` | 0 | 攻击动画所在层；越界时运行时收敛到合法层 |
 | | **▸ 命中** | | |
 | float | `bladeLength` | 1.05f | — |
 | float | `hitRadius` | 0.28f | — |
@@ -847,7 +851,7 @@ UI 管理器（唯一咽喉）：所有面板的显示/隐藏只允许经过这�
 
 ### `ICharacterCombat`  `Combat/ICharacterCombat.cs`（接口）
 
-角色战斗执行器接口：自动攻击 + 指令打断。近战(SwordSwing)与远程(RangedCombat)均实现。
+角色战斗执行器接口：自动攻击 + 指令打断。近战(MeleeCombat)与远程(RangedCombat)均实现。攻击触发器/状态口径：近战 `AttackMelee`（状态名＝触发器名，单段）；远程 `AttackRange`（两段式 `Attack_Draw → Attack_Release`）。
 
 - void AutoAttack(Transform target) — 大脑/玩家指令触发一次攻击
 - void CancelAttack() — 打断当前攻击（移动指令等调用）
@@ -895,9 +899,9 @@ UI 管理器（唯一咽喉）：所有面板的显示/隐藏只允许经过这�
 | 🔴 | **文件名与类名不一致**：`PlayerCommandController.cs csharp.cs` | Player/ | 改名 `PlayerCommandController.cs` |
 | 🟡 | Update() 内每帧 FindObjectsByType（NearestEnemy） | Player/SkillInputController.cs | 加缓存或事件驱动目标列表 |
 | ⚪ | Monster/ 空文件夹残留 | Monster/ | 删除 |
-| ⚪ | PlayerStateMachine.cs 已无任何消费者（SwordSwing 摘除状态机后） | Combat/ | 删除（将来做脱战回鞘再建） |
+| ⚪ | PlayerStateMachine.cs 已无任何消费者（MeleeCombat 摘除状态机后） | Combat/ | 删除（将来做脱战回鞘再建） |
 
-**合规确认（已达标项）**：动画时钟原则三执行器全部落实（SwordSwing/RangedCombat/MonsterBrain 均有 ReadAnimProgress + 代码时钟回退）✓；RequireComponent(Animator) 已清除 ✓；技能策略模式无 switch 残留 ✓；对象池（箭矢走 SimplePool）✓；UnitHealth Stats 空槽报错 ✓；无硬编码物体名查找 ✓。
+**合规确认（已达标项）**：动画时钟原则三执行器全部落实（MeleeCombat/RangedCombat/MonsterBrain 均有 ReadAnimProgress + 代码时钟回退）✓；RequireComponent(Animator) 已清除 ✓；技能策略模式无 switch 残留 ✓；对象池（箭矢走 SimplePool）✓；UnitHealth Stats 空槽报错 ✓；无硬编码物体名查找 ✓。
 
 ---
 

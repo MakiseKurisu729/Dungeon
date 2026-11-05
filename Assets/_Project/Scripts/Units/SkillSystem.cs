@@ -9,7 +9,7 @@ public class SkillSystem : MonoBehaviour
     [InspectorName("蓝量组件")]
     public UnitMana mana;
     [InspectorName("近战执行器")]
-    public SwordSwing sword;
+    public MeleeCombat sword;
 
     [InspectorName("技能槽")]
     [Tooltip("Q/W/E/R，空槽留空")]
@@ -32,12 +32,15 @@ public class SkillSystem : MonoBehaviour
         var s = GetSkill(index);
         if (s == null || s.effects == null || s.effects.Length == 0) return false;
         if (!_cds[index].Ready) { GameData.SetMessage($"{s.skillName} 冷却中"); return false; }
-        if (mana == null || !mana.Consume(s.manaCost)) { GameData.SetMessage("蓝量不足"); return false; }
+        if (mana == null) { GameData.SetMessage("蓝量不足"); return false; }
 
+        // 先验效果可释放（CanCast），再扣蓝：施放失败不产生任何消耗，也不写冷却。
         foreach (var eff in s.effects)
         {
             if (!eff.CanCast(this, target)) return false;
         }
+        if (!mana.Consume(s.manaCost)) { GameData.SetMessage("蓝量不足"); return false; }
+
         foreach (var eff in s.effects)
         {
             eff.Execute(this, target);

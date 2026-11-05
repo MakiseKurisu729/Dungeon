@@ -37,11 +37,11 @@ public class FND00B06_ProbeRunner : MonoBehaviour
 
     static readonly string[] KnownStates =
     {
-        " Locomotion", "Locomotion", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Bash", "Skill"
+        " Locomotion", "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Bash", "Skill"
     };
-    static readonly string[] AttackStates = { "Attack_Draw", "Attack_Release" };
-    static readonly string[] RequiredStates = { " Locomotion", "Attack_Draw", "Hit_A", "Downed", "Rise" };
-    static readonly string[] RequiredParams = { "SpeedX", "SpeedZ", "Grounded", "AttackSpeed", "Attack", "Hit", "Die", "Revive" };
+    static readonly string[] AttackStates = { "AttackMelee" };
+    static readonly string[] RequiredStates = { "Locomotion", "Attack_Draw", "Hit_A", "Downed", "Rise" };
+    static readonly string[] RequiredParams = { "SpeedX", "SpeedZ", "Grounded", "AttackSpeed", "AttackRange", "Hit", "Die", "Revive" };
 
     static readonly string[] AttackAssertionIds =
     {
@@ -60,7 +60,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
     UnitHealth _player;
     CharacterBrain _brain;
     Selectable _playerSel;
-    SwordSwing _sword;
+    MeleeCombat _sword;
     Animator _pAnim;
     NavMeshAgent _pAgent;
 
@@ -291,7 +291,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             "position", V3(h.transform.position),
             "hasSelectable", h.GetComponentInChildren<Selectable>(true) != null,
             "hasCharacterBrain", h.GetComponent<CharacterBrain>() != null,
-            "hasSwordSwing", FindSword(h) != null,
+            "hasMeleeCombat", FindSword(h) != null,
             "hasRangedCombat", h.GetComponentInChildren<RangedCombat>(true) != null,
             "agentPresent", h.GetComponent<NavMeshAgent>() != null,
             "agentEnabled", h.GetComponent<NavMeshAgent>() != null && h.GetComponent<NavMeshAgent>().enabled,
@@ -305,7 +305,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         {
             _ev.BlockedAssertion("4", "Attack.Fixture",
                 Dict("requirement", "场景存在可下达攻击指令的近战玩家单位"),
-                "未找到「存活 + CharacterBrain + SwordSwing」的玩家单位",
+                "未找到「存活 + CharacterBrain + MeleeCombat」的玩家单位",
                 Dict("playerCount", players.Length, "playerScan", playerScan,
                      "sceneMonsterCount", monsterCount, "scene", SceneManager.GetActiveScene().path));
             for (int i = 1; i < AttackAssertionIds.Length; i++)
@@ -320,9 +320,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _playerSel = _player.GetComponentInChildren<Selectable>(true);
         _pAgent = _player.GetComponent<NavMeshAgent>();
         _pAnim = _brain.unitAnimator != null ? _brain.unitAnimator : _player.GetComponentInChildren<Animator>(true);
-        _swordTimerField = PrivField(typeof(SwordSwing), "_timer");
-        _swordTargetField = PrivField(typeof(SwordSwing), "_target");
-        _swordCurLenField = PrivField(typeof(SwordSwing), "_curLen");
+        _swordTimerField = PrivField(typeof(MeleeCombat), "_timer");
+        _swordTargetField = PrivField(typeof(MeleeCombat), "_target");
+        _swordCurLenField = PrivField(typeof(MeleeCombat), "_curLen");
         _orderedTargetField = PrivField(typeof(CharacterBrain), "_orderedTarget");
         _enemySelectedField = PrivField(typeof(SelectionManager), "_enemySelected");
 
@@ -531,7 +531,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 "requirement", "下发一次真实普攻命令，命令被接受且目标正确",
                 "selectionEntry", "SelectionManager.SingleSelect(Selectable)（左键单选生产方法）",
                 "attackCommandEntry", "SelectionManager.SelectEnemy(UnitHealth) + CharacterBrain.CommandAttack(Transform)",
-                "chain", "SelectionManager.HandleClick → SelectEnemy + CharacterBrain.CommandAttack → CharacterBrain.Update → UnitBrain.AttackLoop → SwordSwing.AutoAttack",
+                "chain", "SelectionManager.HandleClick → SelectEnemy + CharacterBrain.CommandAttack → CharacterBrain.Update → UnitBrain.AttackLoop → MeleeCombat.AutoAttack",
                 "forbidden", "不得逐帧调用攻击执行器、不得直接扣血"),
             Dict("playerSelected", selected, "primaryIsPlayer", primaryOk,
                  "enemyMarked", enemyMarked, "orderedTargetIsTarget", orderedOk,
@@ -640,7 +640,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _ev.Record("4", "Attack.Starts",
             Dict(
                 "requirement", "观察到实际出招事件/状态；仅靠近未出招为产品失败",
-                "signal", "SwordSwing 私有 _timer >= 0 或 Animator 进入攻击状态",
+                "signal", "MeleeCombat 私有 _timer >= 0 或 Animator 进入攻击状态",
                 "targetLocked", true),
             Dict("firstAttackAtSeconds", _firstAttackAt,
                  "firstAttackState", _firstAttackState,
@@ -843,9 +843,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         var mismatches = new List<object>();
         if (refAnim == null) mismatches.Add("未找到可用 Animator");
         if (_sword != null && _runtimeLayerCount >= 0 && _sword.attackLayer >= _runtimeLayerCount)
-            mismatches.Add("SwordSwing.attackLayer=" + _sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
+            mismatches.Add("MeleeCombat.attackLayer=" + _sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
         if (_sword != null && _stateList.Count > 0 && !_stateList.Any(s => (string)s == _sword.attackStateName))
-            mismatches.Add("SwordSwing.attackStateName=\"" + _sword.attackStateName + "\" 不在控制器状态列表");
+            mismatches.Add("MeleeCombat.attackStateName=\"" + _sword.attackStateName + "\" 不在控制器状态列表");
         foreach (var st in RequiredStates)
             if (_stateList.Count > 0 && !_stateList.Any(s => (string)s == st))
                 mismatches.Add("缺少状态: " + st);
@@ -980,9 +980,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         else
         {
             var attackEntries = _stateTimeline.Select(s => (Dictionary<string, object>)s)
-                                              .Where(d => IsAttackState((string)d["stateName"])).ToList();
+                                              .Where(d => IsMeleeAttackState((string)d["stateName"])).ToList();
             var firstEntry = attackEntries.FirstOrDefault();
-            bool enteredAttackState = attackEntries.Count > 0 || IsAttackState(_firstAttackState);
+            bool enteredAttackState = attackEntries.Count > 0 || IsMeleeAttackState(_firstAttackState);
 
             var firstDamage = _hitEvents.Select(e => (Dictionary<string, object>)e)
                                         .FirstOrDefault(d => (bool)d["sourceIsSelectedPlayer"]);
@@ -990,7 +990,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             float damageAt = firstDamage != null ? (float)firstDamage["tSinceCommand"] : -1f;
 
             _ev.Record("6", "Animation.Attack",
-                Dict("requirement", "真实出招触发 Animator 进入 Attack_Draw/Attack_Release，且 AttackSpeed 参数与 UnitStats.attackSpeed 一致",
+                Dict("requirement", "真实出招触发 Animator 进入 AttackMelee（单段，状态名=触发器名），且 AttackSpeed 参数与 UnitStats.attackSpeed 一致",
                      "attackStates", AttackStates,
                      "attackSpeedExpected", _brain != null && _brain.stats != null ? _brain.stats.attackSpeed : -1f),
                 Dict("firstAttackState", _firstAttackState,
@@ -1009,7 +1009,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                      "configuredMapping", Dict("attackStateName", _sword != null ? _sword.attackStateName : null,
                                                "attackLayer", _sword != null ? _sword.attackLayer : -1,
                                                "layerCount", _runtimeLayerCount),
-                     "note", "未直接设置 Attack 触发器；状态变化来自生产 SwordSwing.DoAttack；时间轴按状态变化记录"));
+                     "note", "未直接设置 Attack 触发器；状态变化来自生产 MeleeCombat.DoAttack；时间轴按状态变化记录"));
         }
 
         yield return HitAnimationFixture();
@@ -1028,10 +1028,56 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             yield break;
         }
 
-        yield return null;
-        yield return null;
+        // 夹具生命周期：先让 CharacterBrain/UnitBrain 正常走完 Awake/Start（生产侧在此订阅
+        // UnitHealth.OnHit → OnDamaged），再禁用以免夹具自主移动/索敌。
+        // 禁用组件不会撤销已建立的委托订阅，因此受击反馈仍走生产链路。
+        CharacterBrain fixtureBrain = _animFixtureGo.GetComponent<CharacterBrain>();
+        bool brainEnabledAtCreate = fixtureBrain != null && fixtureBrain.enabled;
+        int brainSettleFrames = 0;
+        for (int i = 0; i < 2; i++) { yield return null; brainSettleFrames++; }
+        bool hitSubscribedAfterStart = HasHitSubscriber(_animFixtureHealth);
+        if (fixtureBrain != null) fixtureBrain.enabled = false;
 
         Animator anim = _animFixtureGo.GetComponentInChildren<Animator>(true);
+
+        // 受击前置：Animator 参数置为静止稳态（与 PlayerCommandController.Update 静止时同值）
+        if (anim != null)
+        {
+            anim.SetBool("Grounded", true);
+            anim.SetFloat("SpeedX", 0f);
+            anim.SetFloat("SpeedZ", 0f);
+        }
+
+        // 受击前置：轮询等待进入 Locomotion（上限 AnimWaitSeconds）；不成立则 blocked，不伪造通过
+        bool locomotionReady = false;
+        string preState = anim != null ? ResolveState(anim) : "no_animator";
+        int locomotionWaitFrames = 0;
+        float locomotionWaitT0 = Time.realtimeSinceStartup;
+        while (Time.realtimeSinceStartup - locomotionWaitT0 < AnimWaitSeconds)
+        {
+            preState = ResolveState(anim);
+            if (TrimState(preState) == "Locomotion") { locomotionReady = true; break; }
+            locomotionWaitFrames++;
+            yield return null;
+        }
+        float locomotionWaitSeconds = (float)Math.Round(Time.realtimeSinceStartup - locomotionWaitT0, 3);
+
+        if (!locomotionReady)
+        {
+            _ev.BlockedAssertion("6", "Animation.Hit",
+                Dict("requirement", "独立动画夹具中通过生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件",
+                     "expectedState", "Hit_A",
+                     "precondition", "受击前 Animator 处于 Locomotion"),
+                "夹具未能进入 Locomotion（轮询 " + locomotionWaitSeconds + "s）",
+                Dict("preState", preState,
+                     "locomotionWaitFrames", locomotionWaitFrames,
+                     "locomotionWaitSeconds", locomotionWaitSeconds,
+                     "brainEnabledAtCreate", brainEnabledAtCreate,
+                     "brainSettleFrames", brainSettleFrames,
+                     "hitSubscribedAfterStart", hitSubscribedAfterStart));
+            yield break;
+        }
+
         _animFixtureHitEvents = 0;
         _animFixturePreHitHp = _animFixtureHealth.hp;
         _animFixturePostHitHp = _animFixtureHealth.hp;
@@ -1046,7 +1092,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _animFixtureHealth.OnHit += onHit;
 
         Dictionary<string, object> preSample = AnimSample(anim, "hit_pre", null);
-        string preState = (string)preSample["stateName"];
+        preState = (string)preSample["stateName"];
 
         float damage = 5f;
         _animFixtureHealth.ApplyDamage(damage, _animFixtureHealth.transform.position + Vector3.up * 0.6f, null);
@@ -1087,6 +1133,12 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             pass, pass ? "pass" : "product_fail", "production",
             Dict("fixtureName", _animFixtureGo != null ? _animFixtureGo.name : null,
                  "fixturePath", _animFixtureGo != null ? GetPath(_animFixtureGo.transform) : null,
+                 "brainEnabledAtCreate", brainEnabledAtCreate,
+                 "brainSettleFrames", brainSettleFrames,
+                 "hitSubscribedAfterStart", hitSubscribedAfterStart,
+                 "brainDisabledBeforeDamage", fixtureBrain != null && !fixtureBrain.enabled,
+                 "locomotionWaitFrames", locomotionWaitFrames,
+                 "locomotionWaitSeconds", locomotionWaitSeconds,
                  "samples", samples,
                  "note", "该伤害只作动画刺激，不计入第 4 项普攻结算；夹具为 Knight_Unit 内存实例，未改生产资产"));
     }
@@ -1189,8 +1241,10 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             return false;
         }
 
-        var brain = _animFixtureGo.GetComponent<CharacterBrain>();
-        if (brain != null) brain.enabled = false;
+        // 不在此处禁用 CharacterBrain：生产链路只有 CharacterBrain.Start() 才执行
+        // UnitHealth.OnHit += OnDamaged，Instantiate 后立刻禁用会让 Start 永不执行，
+        // 受击时也就不会再 SetTrigger("Hit")（Spec-Diag-Skill 已用 red 证据确认）。
+        // 禁用时机下移到 HitAnimationFixture：等 Awake/Start 走完再禁用。
 
         _animFixtureHealth = _animFixtureGo.GetComponent<UnitHealth>();
         _animFixtureDowned = _animFixtureGo.GetComponent<DownedRescue>();
@@ -1283,7 +1337,13 @@ public class FND00B06_ProbeRunner : MonoBehaviour
     static bool IsAttackState(string s)
     {
         string t = TrimState(s);
-        return t == "Attack_Draw" || t == "Attack_Release";
+        return t == "AttackMelee" || t == "Attack_Draw" || t == "Attack_Release";
+    }
+
+    /// <summary>单段近战口径：状态名 = 触发器名 = AttackMelee。</summary>
+    static bool IsMeleeAttackState(string s)
+    {
+        return TrimState(s) == "AttackMelee";
     }
 
     float GetSwordTimer()
@@ -1406,11 +1466,23 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         return t.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
-    static SwordSwing FindSword(UnitHealth h)
+    /// <summary>
+    /// 只读检查生产事件订阅：C# event 编译为私有委托字段（UnitHealth 的 OnHit）。
+    /// 用于确认 CharacterBrain.Start() 已执行 UnitHealth.OnHit += OnDamaged，而非靠猜测。
+    /// </summary>
+    static bool HasHitSubscriber(UnitHealth h)
+    {
+        if (h == null) return false;
+        FieldInfo f = PrivField(typeof(UnitHealth), "OnHit");
+        if (f == null) return false;
+        return f.GetValue(h) as Delegate != null;
+    }
+
+    static MeleeCombat FindSword(UnitHealth h)
     {
         if (h == null) return null;
-        var s = h.GetComponent<SwordSwing>();
-        if (s == null) s = h.GetComponentInChildren<SwordSwing>(true);
+        var s = h.GetComponent<MeleeCombat>();
+        if (s == null) s = h.GetComponentInChildren<MeleeCombat>(true);
         return s;
     }
 

@@ -1,0 +1,60 @@
+# DIAG-SKILL 前置确认（Step 0）
+时间: 2026-11-05
+执行者: 【执行者】DeepSeek V4.1 Flash
+
+## 1. 编辑器关闭自证
+命令: Get-Process -Name Unity -ErrorAction SilentlyContinue
+结果: count = 0                                  → PASS（无 Unity.exe；Unity Hub 不计入）
+
+命令: Test-Path 'D:\unity\Dungeon\Temp\UnityLockfile'
+结果: False                                       → PASS（无编辑器锁定）
+
+## 2. 工具与项目版本
+Unity 可执行: D:\unity\2022.3.62f3c1\Editor\Unity.exe → exists = True
+ProjectSettings/ProjectVersion.txt:
+  m_EditorVersion: 2022.3.62f3c1
+  m_EditorVersionWithRevision: 2022.3.62f3c1 (1623fc0bbb97)
+
+## 3. 仓库快照（只读，本单不写 git）
+git rev-parse HEAD: 7cf874f7c5db448215b33a90fcad1d209f1fb781
+（与工单 §回滚锚一致）
+
+git status --porcelain（原样快照）:
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Combat/SkillEffects.cs
+ D Assets/_Project/Scripts/Combat/SwordSwing.cs
+ D Assets/_Project/Scripts/Combat/SwordSwing.cs.meta
+ M Assets/_Project/Scripts/Core/GameData.cs
+ M Assets/_Project/Scripts/UI/HUD.cs
+ M Assets/_Project/Scripts/Units/SkillSystem.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+ D Assets/_Project/Tests/FND02B.meta
+ D Assets/_Project/Tests/FND02B/Editor.meta
+ D Assets/_Project/Tests/FND02B/Editor/FND02B_BatchAcceptance.cs
+ D Assets/_Project/Tests/FND02B/Editor/FND02B_BatchAcceptance.cs.meta
+ D Assets/_Project/Tests/FND02B/Runtime.meta
+ D Assets/_Project/Tests/FND02B/Runtime/FND02B_Evidence.cs
+ D Assets/_Project/Tests/FND02B/Runtime/FND02B_Evidence.cs.meta
+ D Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs
+ D Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs.meta
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M Docs/Handoff/CURRENT.md
+ M "docx/API文档_魔石地牢_v1.0.md"
+?? Assets/_Project/Scripts/Combat/MeleeCombat.cs
+?? Assets/_Project/Scripts/Combat/MeleeCombat.cs.meta
+?? "Docs/Handoff/PROPOSAL_FND-03-模块依赖地图.md"
+?? Docs/Handoff/REPORT_SPEC-01-CLEANUP.md
+?? Docs/Handoff/TASK_SPEC-01-CLEANUP-2.md
+?? Docs/Handoff/TASK_SPEC-01-CLEANUP.md
+?? Docs/Handoff/TASK_SPEC-DIAG-SKILL.md
+?? "Docs/Handoff/醒来目检清单_SPEC-01-CLEANUP.md"
+?? Docs/QA/Evidence/CLEANUP/
+
+## 4. 声明
+- 本单全程不执行任何 git 写操作（add/commit/stash/restore/checkout 一律不执行）。
+- 上述 SPEC-01-CLEANUP 未提交改动均为所有者既有改动，本单不回滚、不覆盖。
+- 本单对 SPEC01_ProbeRunner.cs / FND00B06_ProbeRunner.cs 只追加最小 hunk，REPORT 单列 before/after。
+
+## 结论
+前置条件全部满足 → 允许继续 Step 1。

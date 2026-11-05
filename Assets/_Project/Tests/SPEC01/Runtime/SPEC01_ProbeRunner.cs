@@ -20,7 +20,7 @@ using UnityEditor.Animations;
 /// 断言：Locomotion.AllPlayersMoveParam → Regression.FND02A → Attack.DualPathUnified →
 ///       Clock.MeleeNormalizedWindow → Clock.RangedOneShotPerCycle →
 ///       Animation.PostCombatAndHit → UI.DamageNumberScale → UI.SpawnAnchor。
-/// 新 API（SwordSwing.attackTrigger/hitStateName、DamageNumber 共享画布/池/尺寸字段）
+/// 新 API（MeleeCombat.attackTrigger/hitStateName、DamageNumber 共享画布/池/尺寸字段）
 /// 一律通过反射读取，保证 red 阶段（产品未实现）可编译且只产生 product_fail。
 /// 不使用 Warp、不写玩家坐标、不直接 SetDestination 冒充指令。
 /// </summary>
@@ -91,7 +91,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         public CharacterBrain brain;
         public Animator animator;
         public Selectable selectable;
-        public SwordSwing sword;
+        public MeleeCombat sword;
         public RangedCombat ranged;
         public Vector3 home;
         public float attackSpeed = 1f;
@@ -218,6 +218,8 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         yield return RunSafe("Animation.PostCombatAndHit", AssertPostCombatAndHit());
         yield return RunSafe("UI.DamageNumberScale", AssertDamageNumber());
         yield return RunSafe("UI.SpawnAnchor", AssertSpawnAnchor());
+        yield return RunSafe("Skill.CastSmoke", AssertSkillCastSmoke());
+        yield return RunSafe("Skill.InputWired", AssertSkillInputWired());
 
         RecordRegressionFinal();
         CleanupFixtures();
@@ -661,7 +663,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                 .ToList();
         }
 
-        // ---- 触发器名核验（SwordSwing / RangedCombat 序列化字段） ----
+        // ---- 触发器名核验（MeleeCombat / RangedCombat 序列化字段） ----
         var meleePlayer = _players.FirstOrDefault(p => p.sword != null);
         string swordTrigger = meleePlayer != null ? ReadStringMember(meleePlayer.sword, "attackTrigger") : "<no-sword>";
         string swordHitState = meleePlayer != null ? ReadStringMember(meleePlayer.sword, "hitStateName") : "<no-sword>";
@@ -755,7 +757,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         else
         {
             _ev.BlockedAssertion("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
-                "骑士近战时钟", "未找到 SwordSwing 玩家", null);
+                "骑士近战时钟", "未找到 MeleeCombat 玩家", null);
         }
 
         // ---- Clock.RangedOneShotPerCycle ----
@@ -1183,6 +1185,198 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     }
 
     // ============================================================
+    // 技能施法回归（SPEC-DIAG-SKILL）
+    // ============================================================
+    static readonly Vector3 SkillFixturePos = new Vector3(80f, 0f, 80f);
+
+    /// <summary>
+    /// Q/W/E/R 四槽直接经生产 SkillSystem.Cast 施放（不按键盘）。
+    /// 夹具在运行期实例化 Knight_Unit 并销毁，不写场景。
+    /// 口径（SPEC-DIAG-SKILL-2）：①失败施放不扣蓝/不写冷却 ②Q 行为不变（防 Bash 回归）
+    /// ③W 效果类型为 HeavySlashEffect ④E/R 复核"空槽=设计内静默"契约。四条全过于算 pass。
+    /// </summary>
+    IEnumerator AssertSkillCastSmoke()
+    {
+        SkillCastFixture fx = null;
+        try { fx = SkillCastFixture.Create(SkillFixturePos, true); }
+        catch (Exception e)
+        {
+            _ev.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建抛异常: " + e.Message, e.StackTrace);
+            yield break;
+        }
+        if (fx == null || !string.IsNullOrEmpty(fx.Error))
+        {
+            string err = fx != null ? fx.Error : "null";
+            if (fx != null) fx.Dispose();
+            _ev.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建失败: " + err, "");
+            yield break;
+        }
+
+        var failed = new CastProbeResult();
+        var q = new CastProbeResult();
+        var w = new CastProbeResult();
+        var e2 = new CastProbeResult();
+        var r2 = new CastProbeResult();
+        bool failedNoManaPass = false, qPass = false, wPass = false, emptyPass = false;
+        float prepSeconds = -1f;
+        string prepState = "none";
+        string fixturePath = fx.CasterPath();
+
+        try
+        {
+            yield return fx.Prepare(6f);
+            prepSeconds = fx.PrepareSeconds;
+            prepState = fx.PrepareState;
+            if (!fx.PrepareLocomotion)
+            {
+                _ev.BlockedAssertion("Skill.CastSmoke", "Skill.CastSmoke",
+                    Dict("expected", "失败施放不扣蓝 + Q/W 效果链执行 + E/R 空槽静默"),
+                    "夹具未能进入 Locomotion（preState=" + prepState + "）",
+                    Dict("prepareState", prepState, "preparePhase", fx.PreparePhase));
+                yield break;
+            }
+
+            // ① 失败施放不扣蓝：Q 需要目标，传 null → BashEffect.CanCast 失败。
+            //    若实现先扣蓝再 CanCast，这里会白扣 20 蓝，并连带污染后续 Q 的蓝量读数。
+            yield return fx.Cast(0, null, null, 0f, failed);
+            failedNoManaPass = !failed.castReturn &&
+                               Mathf.Abs(failed.manaDelta) < 0.0001f &&
+                               Mathf.Abs(failed.cdRemaining) < 0.0001f &&
+                               string.IsNullOrEmpty(failed.exception);
+
+            // ② Q 行为不变（防 Bash 回归）
+            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
+            bool qType = q.effectType == "BashEffect";
+            bool qMana = Mathf.Abs(q.manaDelta - 20f) < 0.01f;
+            bool qCd = q.cdRemaining > 0f && Mathf.Abs(q.cdRemaining - 6f) <= 0.05f;
+            bool qDmg = q.damageObserved && Mathf.Abs(q.damageApplied - q.expectedDamage) < 0.01f;
+            bool qAnim = q.animEntered && q.animEntrySeconds >= 0f && q.animEntrySeconds <= 0.5f;
+            qPass = q.castReturn && qType && qMana && qCd && qDmg && qAnim;
+
+            // ③ W 类型正确（W_Slash_Effect 必须解析为 HeavySlashEffect，而不是同文件里的 BashEffect）
+            yield return fx.EnsureLocomotion(3f);
+            yield return fx.Cast(1, null, "Skill", 0.5f, w);
+            bool wType = w.effectType == "HeavySlashEffect";
+            bool wMana = Mathf.Abs(w.manaDelta - 30f) < 0.01f;
+            bool wCd = w.cdRemaining > 0f;
+            bool wTimer = w.swordTimer >= 0f;
+            bool wAnim = w.animEntered && w.animEntrySeconds >= 0f && w.animEntrySeconds <= 0.5f;
+            wPass = w.castReturn && wType && wMana && wCd && wTimer && wAnim;
+
+            // ④ E/R 空槽契约
+            yield return fx.Cast(2, null, null, 0f, e2);
+            yield return fx.Cast(3, null, null, 0f, r2);
+            emptyPass = !e2.castReturn && !r2.castReturn &&
+                        Mathf.Abs(e2.manaDelta) < 0.0001f && Mathf.Abs(r2.manaDelta) < 0.0001f &&
+                        string.IsNullOrEmpty(e2.exception) && string.IsNullOrEmpty(r2.exception);
+        }
+        finally
+        {
+            if (fx != null) fx.Dispose();
+        }
+
+        bool pass = failedNoManaPass && qPass && wPass && emptyPass;
+        var slotNames = new List<object>
+        {
+            failed.slotName, q.slotName, w.slotName, e2.slotName, r2.slotName
+        };
+
+        _ev.Record("Skill", "Skill.CastSmoke",
+            Dict("失败施放", "Cast(0,null) false；manaDelta=0；CdRemaining=0；无异常",
+                 "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Bash",
+                 "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 Skill",
+                 "E/R", "Cast(2/3) false；蓝不变；无异常"),
+            Dict("failedCastReturn", failed.castReturn,
+                 "manaDeltaFailed", failed.manaDelta,
+                 "cdFailed", failed.cdRemaining,
+                 "failedException", failed.exception,
+                 "qEffectType", q.effectType,
+                 "wEffectType", w.effectType,
+                 "qPass", qPass, "wPass", wPass, "emptyPass", emptyPass,
+                 "failedNoManaPass", failedNoManaPass),
+            pass, pass ? "pass" : "product_fail", "production",
+            Dict("failed", failed.Data(),
+                 "Q", q.Data(), "W", w.Data(), "E/R", new List<object> { e2.Data(), r2.Data() },
+                 "manaBefore0", q.manaBefore,
+                 "manaAfter0", q.manaAfter,
+                 "manaBefore1", w.manaBefore,
+                 "manaAfter1", w.manaAfter,
+                 "cdRemaining0", q.cdRemaining,
+                 "cdRemaining1", w.cdRemaining,
+                 "targetHpBefore", q.targetHpBefore,
+                 "targetHpAfter", q.targetHpAfter,
+                 "expectedDamage", q.expectedDamage,
+                 "animState0", q.animStateAfter,
+                 "animState1", w.animStateAfter,
+                 "slotNames", slotNames,
+                 "fixturePath", fixturePath,
+                 "fixturePos", V3(SkillFixturePos),
+                 "prepareState", prepState,
+                 "prepareSeconds", prepSeconds,
+                 "failedCastReturn", failed.castReturn,
+                 "manaDeltaFailed", failed.manaDelta,
+                 "cdFailed", failed.cdRemaining,
+                 "qEffectType", q.effectType,
+                 "wEffectType", w.effectType,
+                 "qPass", qPass,
+                 "wPass", wPass,
+                 "emptyPass", emptyPass,
+                 "failedNoManaPass", failedNoManaPass,
+                 "note", "全部数据来自生产 SkillSystem.Cast；E/R 空槽=设计内静默，非缺陷（不修）"));
+        yield return null;
+    }
+
+    /// <summary>
+    /// 输入层看门狗：DungeonWorld 运行期必须恰好有 1 个 SkillInputController，
+    /// 且 indicator 指向场景 SkillIndicator、skillKeys = Q/W/E/R。
+    /// 当前场景缺组件 → 如实记 product_fail（不得改写为 blocked/observed）。
+    /// </summary>
+    IEnumerator AssertSkillInputWired()
+    {
+        yield return null;
+        var ctrls = FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        var inds = FindObjectsByType<SkillIndicator>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        bool refOk = false;
+        bool keysOk = false;
+        string keys = "none";
+        string indicatorName = "none";
+        int controllerCount = ctrls.Length;
+        if (controllerCount == 1)
+        {
+            var c = ctrls[0];
+            if (c.indicator != null)
+            {
+                indicatorName = c.indicator.name;
+                refOk = System.Array.IndexOf(inds, c.indicator) >= 0;
+            }
+            if (c.skillKeys != null)
+            {
+                var parts = new List<string>();
+                for (int i = 0; i < c.skillKeys.Length; i++) parts.Add(c.skillKeys[i].ToString());
+                keys = string.Join(",", parts.ToArray());
+                keysOk = c.skillKeys.Length == 4 &&
+                         c.skillKeys[0] == KeyCode.Q && c.skillKeys[1] == KeyCode.W &&
+                         c.skillKeys[2] == KeyCode.E && c.skillKeys[3] == KeyCode.R;
+            }
+        }
+
+        bool pass = controllerCount == 1 && refOk && keysOk;
+        _ev.Record("Skill", "Skill.InputWired",
+            Dict("controllerCount", 1, "indicatorPointsToSceneIndicator", true, "skillKeys", "Q,W,E,R"),
+            Dict("controllerCount", controllerCount, "indicatorPointsToSceneIndicator", refOk,
+                 "indicator", indicatorName, "skillKeys", keys, "indicatorCount", inds.Length),
+            pass, pass ? "pass" : "product_fail", "production",
+            Dict("controllerCount", controllerCount,
+                 "indicatorCount", inds.Length,
+                 "indicator", indicatorName,
+                 "indicatorPointsToSceneIndicator", refOk,
+                 "skillKeys", keys,
+                 "skillKeysOk", keysOk,
+                 "note", "DungeonWorld 场景缺失该组件时本条必为 product_fail；这是资产缺陷的永久看门狗，不得删除"));
+    }
+
+    // ============================================================
     // 回归汇总
     // ============================================================
     void RecordRegressionFinal()
@@ -1337,7 +1531,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             p.brain = h.GetComponent<CharacterBrain>();
             p.animator = h.GetComponentInChildren<Animator>();
             p.selectable = h.GetComponent<Selectable>();
-            p.sword = h.GetComponent<SwordSwing>();
+            p.sword = h.GetComponent<MeleeCombat>();
             p.ranged = h.GetComponent<RangedCombat>();
             p.home = h.transform.position;
             p.attackSpeed = p.brain != null && p.brain.stats != null ? p.brain.stats.attackSpeed : 1f;

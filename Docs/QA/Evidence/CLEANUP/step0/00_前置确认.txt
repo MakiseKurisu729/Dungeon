@@ -1,0 +1,87 @@
+﻿TASK_SPEC-01-CLEANUP / Step 0 前置确认
+时间: 2026-11-05 02:45:53
+Unity 进程数: 0
+Temp/UnityLockfile 存在: False
+git rev-parse HEAD: 7cf874f7c5db448215b33a90fcad1d209f1fb781
+期望 HEAD: 7cf874f7c5db448215b33a90fcad1d209f1fb781
+HEAD 符合: True
+git status --porcelain -uall:
+---
+ M Docs/Handoff/CURRENT.md
+?? Docs/Handoff/TASK_SPEC-01-CLEANUP.md
+?? "Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/00_\345\211\215\347\275\256\347\241\256\350\256\244.txt"
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Assertions_preliminary_run1.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Assertions_preliminary_run2.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Automation_failed_attempt1_compile.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Automation_preliminary_run1.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Automation_preliminary_run2.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Automation_run1.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Automation_run2.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_ExitCode_preliminary_run1.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_ExitCode_preliminary_run2.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_ExitCode_run1.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_ExitCode_run2.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Summary_preliminary_run1.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Summary_preliminary_run2.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Summary_run1.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_Summary_run2.json
+?? "Docs/QA/Evidence/CLEANUP/_backup/FND-00B-06/06_\344\272\272\345\267\245\347\233\256\346\243\200.md"
+?? "Docs/QA/Evidence/CLEANUP/_backup/FND-02B/00_\345\211\215\347\275\256\347\241\256\350\256\244.txt"
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Automation_run1.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Automation_run2.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Automation_run3.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_ExitCode_run1.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_ExitCode_run2.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_ExitCode_run3.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Red_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Red_Automation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Red_ExitCode.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Red_Summary.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Summary_run1.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Summary_run2.json
+?? Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_Summary_run3.json
+?? "Docs/QA/Evidence/CLEANUP/_backup/FND-02B/02B_\344\272\272\345\267\245\347\233\256\346\243\200.md"
+?? "Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/00_\345\211\215\347\275\256\347\241\256\350\256\244.txt"
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Automation_run1.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Automation_run2.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Automation_run3.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_ExitCode_run1.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_ExitCode_run2.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_ExitCode_run3.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run1_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run1_Automation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run1_ExitCode.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run1_Summary.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run2_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run2_Automation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run2_ExitCode.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Green_fix_run2_Summary.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_NewTestFiles.diff
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Pre_fix.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Assertions_pre_isolation.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Automation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Automation_attempt1_compile_error.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Automation_pre_isolation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_ExitCode.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_ExitCode_pre_isolation.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Summary.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_Summary_pre_isolation.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_fix_Assertions.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_fix_Automation.log
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_fix_ExitCode.txt
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Red_fix_Summary.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Runs.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Runs_fix.jsonl
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Summary_run1.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Summary_run2.json
+?? Docs/QA/Evidence/CLEANUP/_backup/SPEC-01/SPEC01_Summary_run3.json
+?? Docs/QA/Evidence/CLEANUP/_backup/hashes_before.txt
+---
+说明: 工作区非空，仅 Docs/Handoff/CURRENT.md(已修改) 与 TASK_SPEC-01-CLEANUP.md(未跟踪)，均为【大脑】本轮派单产物，非代码/资产改动；判定为预期状态，非 git 异常。
+Unity.exe: D:\Unity\2022.3.62f3c1\Editor\Unity.exe
+Unity 版本: 2022.3.62f3c1
+既有证据备份: Docs/QA/Evidence/CLEANUP/_backup (70 文件, hashes_before.txt)

@@ -1,0 +1,391 @@
+﻿diff --git a/Assets/_Project/Scripts/Combat/SkillEffects.cs b/Assets/_Project/Scripts/Combat/SkillEffects.cs
+index 2e7722e1..dded0448 100644
+--- a/Assets/_Project/Scripts/Combat/SkillEffects.cs
++++ b/Assets/_Project/Scripts/Combat/SkillEffects.cs
+@@ -74,7 +74,7 @@ public class BashEffect : SkillEffectBase
+     }
+ }
+ 
+-/// <summary>寮哄寲鏂╋細绔嬪嵆閲婃斁涓€娆″ぇ濞佸姏杩戞垬鏀诲嚮锛堟暟鎹叏鍦?SwordSwing锛屾棤棰濆鍙傛暟锛夈€?/summary>
++/// <summary>寮哄寲鏂╋細绔嬪嵆閲婃斁涓€娆″ぇ濞佸姏杩戞垬鏀诲嚮锛堟暟鎹叏鍦?MeleeCombat锛屾棤棰濆鍙傛暟锛夈€?/summary>
+ [CreateAssetMenu(menuName = "Dungeon/Skill Effects/Heavy Slash")]
+ public class HeavySlashEffect : SkillEffectBase
+ {
+diff --git a/Assets/_Project/Scripts/Core/GameData.cs b/Assets/_Project/Scripts/Core/GameData.cs
+index dfef1d50..2e23932b 100644
+--- a/Assets/_Project/Scripts/Core/GameData.cs
++++ b/Assets/_Project/Scripts/Core/GameData.cs
+@@ -16,7 +16,7 @@ public static class GameData
+ 
+     public static int LevelCost() { return 50 * level; }
+ 
+-    public static bool TryLevelUp(SwordSwing sw, UnitHealth uh)
++    public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)
+     {
+         if (gold < LevelCost()) return false;
+         gold -= LevelCost();
+diff --git a/Assets/_Project/Scripts/UI/HUD.cs b/Assets/_Project/Scripts/UI/HUD.cs
+index ded8f1d1..b001df34 100644
+--- a/Assets/_Project/Scripts/UI/HUD.cs
++++ b/Assets/_Project/Scripts/UI/HUD.cs
+@@ -41,7 +41,7 @@ public class HUD : MonoBehaviour
+             var root = SelectionManager.instance != null && SelectionManager.instance.Primary != null
+                 ? SelectionManager.instance.Primary.transform.root : null;
+             var uh = root != null ? root.GetComponent<UnitHealth>() : null;
+-            var sw = root != null ? root.GetComponent<SwordSwing>() : null;
++            var sw = root != null ? root.GetComponent<MeleeCombat>() : null;
+ 
+             if (GameData.TryLevelUp(sw, uh))
+                 GameData.SetMessage($"鍗囩骇锛佺幇鍦?{GameData.level} 绾?);
+diff --git a/Assets/_Project/Scripts/Units/SkillSystem.cs b/Assets/_Project/Scripts/Units/SkillSystem.cs
+index f5f40e47..2349d3bc 100644
+--- a/Assets/_Project/Scripts/Units/SkillSystem.cs
++++ b/Assets/_Project/Scripts/Units/SkillSystem.cs
+@@ -9,7 +9,7 @@ public class SkillSystem : MonoBehaviour
+     [InspectorName("钃濋噺缁勪欢")]
+     public UnitMana mana;
+     [InspectorName("杩戞垬鎵ц鍣?)]
+-    public SwordSwing sword;
++    public MeleeCombat sword;
+ 
+     [InspectorName("鎶€鑳芥Ы")]
+     [Tooltip("Q/W/E/R锛岀┖妲界暀绌?)]
+diff --git a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+index 46a3823a..8bcc1d4d 100644
+--- a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
++++ b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+@@ -40,8 +40,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         " Locomotion", "Locomotion", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Bash", "Skill"
+     };
+     static readonly string[] AttackStates = { "Attack_Draw", "Attack_Release" };
+-    static readonly string[] RequiredStates = { " Locomotion", "Attack_Draw", "Hit_A", "Downed", "Rise" };
+-    static readonly string[] RequiredParams = { "SpeedX", "SpeedZ", "Grounded", "AttackSpeed", "Attack", "Hit", "Die", "Revive" };
++    static readonly string[] RequiredStates = { "Locomotion", "Attack_Draw", "Hit_A", "Downed", "Rise" };
++    static readonly string[] RequiredParams = { "SpeedX", "SpeedZ", "Grounded", "AttackSpeed", "AttackRange", "Hit", "Die", "Revive" };
+ 
+     static readonly string[] AttackAssertionIds =
+     {
+@@ -60,7 +60,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+     UnitHealth _player;
+     CharacterBrain _brain;
+     Selectable _playerSel;
+-    SwordSwing _sword;
++    MeleeCombat _sword;
+     Animator _pAnim;
+     NavMeshAgent _pAgent;
+ 
+@@ -291,7 +291,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+             "position", V3(h.transform.position),
+             "hasSelectable", h.GetComponentInChildren<Selectable>(true) != null,
+             "hasCharacterBrain", h.GetComponent<CharacterBrain>() != null,
+-            "hasSwordSwing", FindSword(h) != null,
++            "hasMeleeCombat", FindSword(h) != null,
+             "hasRangedCombat", h.GetComponentInChildren<RangedCombat>(true) != null,
+             "agentPresent", h.GetComponent<NavMeshAgent>() != null,
+             "agentEnabled", h.GetComponent<NavMeshAgent>() != null && h.GetComponent<NavMeshAgent>().enabled,
+@@ -305,7 +305,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         {
+             _ev.BlockedAssertion("4", "Attack.Fixture",
+                 Dict("requirement", "鍦烘櫙瀛樺湪鍙笅杈炬敾鍑绘寚浠ょ殑杩戞垬鐜╁鍗曚綅"),
+-                "鏈壘鍒般€屽瓨娲?+ CharacterBrain + SwordSwing銆嶇殑鐜╁鍗曚綅",
++                "鏈壘鍒般€屽瓨娲?+ CharacterBrain + MeleeCombat銆嶇殑鐜╁鍗曚綅",
+                 Dict("playerCount", players.Length, "playerScan", playerScan,
+                      "sceneMonsterCount", monsterCount, "scene", SceneManager.GetActiveScene().path));
+             for (int i = 1; i < AttackAssertionIds.Length; i++)
+@@ -320,9 +320,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         _playerSel = _player.GetComponentInChildren<Selectable>(true);
+         _pAgent = _player.GetComponent<NavMeshAgent>();
+         _pAnim = _brain.unitAnimator != null ? _brain.unitAnimator : _player.GetComponentInChildren<Animator>(true);
+-        _swordTimerField = PrivField(typeof(SwordSwing), "_timer");
+-        _swordTargetField = PrivField(typeof(SwordSwing), "_target");
+-        _swordCurLenField = PrivField(typeof(SwordSwing), "_curLen");
++        _swordTimerField = PrivField(typeof(MeleeCombat), "_timer");
++        _swordTargetField = PrivField(typeof(MeleeCombat), "_target");
++        _swordCurLenField = PrivField(typeof(MeleeCombat), "_curLen");
+         _orderedTargetField = PrivField(typeof(CharacterBrain), "_orderedTarget");
+         _enemySelectedField = PrivField(typeof(SelectionManager), "_enemySelected");
+ 
+@@ -531,7 +531,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+                 "requirement", "涓嬪彂涓€娆＄湡瀹炴櫘鏀诲懡浠わ紝鍛戒护琚帴鍙椾笖鐩爣姝ｇ‘",
+                 "selectionEntry", "SelectionManager.SingleSelect(Selectable)锛堝乏閿崟閫夌敓浜ф柟娉曪級",
+                 "attackCommandEntry", "SelectionManager.SelectEnemy(UnitHealth) + CharacterBrain.CommandAttack(Transform)",
+-                "chain", "SelectionManager.HandleClick 鈫?SelectEnemy + CharacterBrain.CommandAttack 鈫?CharacterBrain.Update 鈫?UnitBrain.AttackLoop 鈫?SwordSwing.AutoAttack",
++                "chain", "SelectionManager.HandleClick 鈫?SelectEnemy + CharacterBrain.CommandAttack 鈫?CharacterBrain.Update 鈫?UnitBrain.AttackLoop 鈫?MeleeCombat.AutoAttack",
+                 "forbidden", "涓嶅緱閫愬抚璋冪敤鏀诲嚮鎵ц鍣ㄣ€佷笉寰楃洿鎺ユ墸琛€"),
+             Dict("playerSelected", selected, "primaryIsPlayer", primaryOk,
+                  "enemyMarked", enemyMarked, "orderedTargetIsTarget", orderedOk,
+@@ -640,7 +640,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         _ev.Record("4", "Attack.Starts",
+             Dict(
+                 "requirement", "瑙傚療鍒板疄闄呭嚭鎷涗簨浠?鐘舵€侊紱浠呴潬杩戞湭鍑烘嫑涓轰骇鍝佸け璐?,
+-                "signal", "SwordSwing 绉佹湁 _timer >= 0 鎴?Animator 杩涘叆鏀诲嚮鐘舵€?,
++                "signal", "MeleeCombat 绉佹湁 _timer >= 0 鎴?Animator 杩涘叆鏀诲嚮鐘舵€?,
+                 "targetLocked", true),
+             Dict("firstAttackAtSeconds", _firstAttackAt,
+                  "firstAttackState", _firstAttackState,
+@@ -843,9 +843,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         var mismatches = new List<object>();
+         if (refAnim == null) mismatches.Add("鏈壘鍒板彲鐢?Animator");
+         if (_sword != null && _runtimeLayerCount >= 0 && _sword.attackLayer >= _runtimeLayerCount)
+-            mismatches.Add("SwordSwing.attackLayer=" + _sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
++            mismatches.Add("MeleeCombat.attackLayer=" + _sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
+         if (_sword != null && _stateList.Count > 0 && !_stateList.Any(s => (string)s == _sword.attackStateName))
+-            mismatches.Add("SwordSwing.attackStateName=\"" + _sword.attackStateName + "\" 涓嶅湪鎺у埗鍣ㄧ姸鎬佸垪琛?);
++            mismatches.Add("MeleeCombat.attackStateName=\"" + _sword.attackStateName + "\" 涓嶅湪鎺у埗鍣ㄧ姸鎬佸垪琛?);
+         foreach (var st in RequiredStates)
+             if (_stateList.Count > 0 && !_stateList.Any(s => (string)s == st))
+                 mismatches.Add("缂哄皯鐘舵€? " + st);
+@@ -1009,7 +1009,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+                      "configuredMapping", Dict("attackStateName", _sword != null ? _sword.attackStateName : null,
+                                                "attackLayer", _sword != null ? _sword.attackLayer : -1,
+                                                "layerCount", _runtimeLayerCount),
+-                     "note", "鏈洿鎺ヨ缃?Attack 瑙﹀彂鍣紱鐘舵€佸彉鍖栨潵鑷敓浜?SwordSwing.DoAttack锛涙椂闂磋酱鎸夌姸鎬佸彉鍖栬褰?));
++                     "note", "鏈洿鎺ヨ缃?Attack 瑙﹀彂鍣紱鐘舵€佸彉鍖栨潵鑷敓浜?MeleeCombat.DoAttack锛涙椂闂磋酱鎸夌姸鎬佸彉鍖栬褰?));
+         }
+ 
+         yield return HitAnimationFixture();
+@@ -1406,11 +1406,11 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+         return t.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+     }
+ 
+-    static SwordSwing FindSword(UnitHealth h)
++    static MeleeCombat FindSword(UnitHealth h)
+     {
+         if (h == null) return null;
+-        var s = h.GetComponent<SwordSwing>();
+-        if (s == null) s = h.GetComponentInChildren<SwordSwing>(true);
++        var s = h.GetComponent<MeleeCombat>();
++        if (s == null) s = h.GetComponentInChildren<MeleeCombat>(true);
+         return s;
+     }
+ 
+diff --git a/Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs b/Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs
+index ef1765b0..50ebc180 100644
+--- a/Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs
++++ b/Assets/_Project/Tests/FND02B/Runtime/FND02B_ProbeRunner.cs
+@@ -19,7 +19,8 @@ using UnityEditor.Animations;
+ /// 浠ュ強杩愯鏈熷唴瀛樺す鍏凤紙FND02B_Target_*锛岀粨鏉熷墠閿€姣侊級銆? /// 鏂█锛歀ocomotion.AllPlayersMoveParam 鈫?Regression.FND02A 鈫?Attack.DualPathUnified 鈫? ///       Clock.MeleeNormalizedWindow 鈫?Clock.RangedOneShotPerCycle 鈫?-///       Animation.PostCombatAndHit 鈫?UI.DamageNumberScale銆?+///       Animation.PostCombatAndHit銆?+/// UI.DamageNumberScale 宸茬敱 SPEC-01 濂椾欢瑕嗙洊锛圫PEC-01 鏀跺彛锛?026-11-05锛夈€? /// 涓嶄娇鐢?Warp銆佷笉鍐欑帺瀹跺潗鏍囥€佷笉鐩存帴 SetDestination 鍐掑厖鎸囦护銆? /// </summary>
+ public class FND02B_ProbeRunner : MonoBehaviour
+@@ -78,7 +79,7 @@ public class FND02B_ProbeRunner : MonoBehaviour
+         public CharacterBrain brain;
+         public Animator animator;
+         public Selectable selectable;
+-        public SwordSwing sword;
++        public MeleeCombat sword;
+         public RangedCombat ranged;
+         public Vector3 home;
+         public float attackSpeed = 1f;
+@@ -201,7 +202,6 @@ public class FND02B_ProbeRunner : MonoBehaviour
+         yield return RunSafe("Regression.FND02A", AssertRegressionFND02A());
+         yield return RunSafe("Attack.DualPathUnified", AssertDualPathAndClocks());
+         yield return RunSafe("Animation.PostCombatAndHit", AssertPostCombatAndHit());
+-        yield return RunSafe("UI.DamageNumberScale", AssertDamageNumberScale());
+ 
+         RecordRegressionFinal();
+         CleanupFixtures();
+@@ -702,7 +702,7 @@ public class FND02B_ProbeRunner : MonoBehaviour
+         else
+         {
+             _ev.BlockedAssertion("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
+-                "楠戝＋杩戞垬鏃堕挓", "鏈壘鍒?SwordSwing 鐜╁", null);
++                "楠戝＋杩戞垬鏃堕挓", "鏈壘鍒?MeleeCombat 鐜╁", null);
+         }
+ 
+         // ---- Clock.RangedOneShotPerCycle ----
+@@ -857,77 +857,6 @@ public class FND02B_ProbeRunner : MonoBehaviour
+         yield return new WaitForSeconds(1.0f);
+     }
+ 
+-    // ============================================================
+-    // 7. UI.DamageNumberScale
+-    // ============================================================
+-    IEnumerator AssertDamageNumberScale()
+-    {
+-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+-        if (knight == null || knight.health == null)
+-        {
+-            _ev.BlockedAssertion("UI.DamageNumberScale", "UI.DamageNumberScale",
+-                "浼ゅ椋樺瓧鏀惧ぇ 3.5x", "鏈壘鍒?Knight", null);
+-            yield break;
+-        }
+-
+-        knight.health.ApplyDamage(3f, knight.tx.position + Vector3.up * 1.5f, null);
+-        float t = 0f;
+-        DamageNumber[] found = null;
+-        while (t < 1.0f)
+-        {
+-            yield return null;
+-            t += Time.deltaTime;
+-            found = FindObjectsByType<DamageNumber>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+-            if (found != null && found.Length > 0) break;
+-        }
+-
+-        float fontSize = -1f;
+-        Vector3 localScale = Vector3.zero;
+-        int count = found != null ? found.Length : 0;
+-        if (count > 0)
+-        {
+-            DamageNumber chosen = found.OrderByDescending(d => d.transform.localScale.x).First();
+-            Text text = chosen.GetComponentInChildren<Text>();
+-            fontSize = text != null ? text.fontSize : -1f;
+-            localScale = chosen.transform.localScale;
+-        }
+-
+-        const float baselineScale = 0.006f;
+-        const float expectedMultiplier = 3.5f;
+-        float expectedScale = baselineScale * expectedMultiplier;
+-        bool scaleOk = Mathf.Abs(localScale.x - expectedScale) <= expectedScale * 0.15f;
+-
+-        CombatFeedback cf = FindFirstObjectByType<CombatFeedback>();
+-        FieldInfo field = typeof(CombatFeedback).GetField("damageNumberScale");
+-        float multiplier = -1f;
+-        bool rangeAttr = false;
+-        if (field != null && cf != null)
+-        {
+-            multiplier = (float)field.GetValue(cf);
+-            rangeAttr = field.GetCustomAttributes(typeof(RangeAttribute), true).Length > 0;
+-        }
+-        bool fieldOk = field != null && Mathf.Abs(multiplier - expectedMultiplier) < 0.01f && rangeAttr;
+-
+-        bool pass = count > 0 && scaleOk && fieldOk;
+-        _ev.Record("UI.DamageNumberScale", "UI.DamageNumberScale",
+-            "鎴樻枟缁撶畻鐢熸垚鐨?DamageNumber 瑙嗚灏哄涓哄熀绾?3.5x锛堥粯璁?3.5锛孖nspector 鍙皟锛?,
+-            "instances=" + count + "; localScale=" + F(localScale.x) + " (expected " + F(expectedScale) + ")" +
+-            "; fontSize=" + F(fontSize) + "; multiplierField=" + F(multiplier) + "; rangeAttr=" + rangeAttr,
+-            pass, pass ? "pass" : "product_fail", "production",
+-            Dict("baselineLocalScale", baselineScale,
+-                 "expectedMultiplier", expectedMultiplier,
+-                 "expectedLocalScale", expectedScale,
+-                 "instances", count,
+-                 "observedFontSize", fontSize,
+-                 "observedLocalScale", V3(localScale),
+-                 "combatFeedbackField", field != null,
+-                 "fieldValue", multiplier,
+-                 "rangeAttribute", rangeAttr,
+-                 "scaleOk", scaleOk,
+-                 "fieldOk", fieldOk,
+-                 "note", "鍩虹嚎锛歠ontSize=40锛宭ocalScale=0.006锛涙湰鍗曟寜 Transform 缂╂斁鏀惧ぇ锛屽瓧浣撳ぇ灏忎繚鎸佸熀绾?));
+-    }
+-
+     // ============================================================
+     // 鍥炲綊姹囨€?     // ============================================================
+@@ -1083,7 +1012,7 @@ public class FND02B_ProbeRunner : MonoBehaviour
+             p.brain = h.GetComponent<CharacterBrain>();
+             p.animator = h.GetComponentInChildren<Animator>();
+             p.selectable = h.GetComponent<Selectable>();
+-            p.sword = h.GetComponent<SwordSwing>();
++            p.sword = h.GetComponent<MeleeCombat>();
+             p.ranged = h.GetComponent<RangedCombat>();
+             p.home = h.transform.position;
+             p.attackSpeed = p.brain != null && p.brain.stats != null ? p.brain.stats.attackSpeed : 1f;
+diff --git a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+index da264802..19c98230 100644
+--- a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
++++ b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+@@ -20,7 +20,7 @@ using UnityEditor.Animations;
+ /// 鏂█锛歀ocomotion.AllPlayersMoveParam 鈫?Regression.FND02A 鈫?Attack.DualPathUnified 鈫? ///       Clock.MeleeNormalizedWindow 鈫?Clock.RangedOneShotPerCycle 鈫? ///       Animation.PostCombatAndHit 鈫?UI.DamageNumberScale 鈫?UI.SpawnAnchor銆?-/// 鏂?API锛圫wordSwing.attackTrigger/hitStateName銆丏amageNumber 鍏变韩鐢诲竷/姹?灏哄瀛楁锛?+/// 鏂?API锛圡eleeCombat.attackTrigger/hitStateName銆丏amageNumber 鍏变韩鐢诲竷/姹?灏哄瀛楁锛? /// 涓€寰嬮€氳繃鍙嶅皠璇诲彇锛屼繚璇?red 闃舵锛堜骇鍝佹湭瀹炵幇锛夊彲缂栬瘧涓斿彧浜х敓 product_fail銆? /// 涓嶄娇鐢?Warp銆佷笉鍐欑帺瀹跺潗鏍囥€佷笉鐩存帴 SetDestination 鍐掑厖鎸囦护銆? /// </summary>
+@@ -91,7 +91,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+         public CharacterBrain brain;
+         public Animator animator;
+         public Selectable selectable;
+-        public SwordSwing sword;
++        public MeleeCombat sword;
+         public RangedCombat ranged;
+         public Vector3 home;
+         public float attackSpeed = 1f;
+@@ -661,7 +661,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+                 .ToList();
+         }
+ 
+-        // ---- 瑙﹀彂鍣ㄥ悕鏍搁獙锛圫wordSwing / RangedCombat 搴忓垪鍖栧瓧娈碉級 ----
++        // ---- 瑙﹀彂鍣ㄥ悕鏍搁獙锛圡eleeCombat / RangedCombat 搴忓垪鍖栧瓧娈碉級 ----
+         var meleePlayer = _players.FirstOrDefault(p => p.sword != null);
+         string swordTrigger = meleePlayer != null ? ReadStringMember(meleePlayer.sword, "attackTrigger") : "<no-sword>";
+         string swordHitState = meleePlayer != null ? ReadStringMember(meleePlayer.sword, "hitStateName") : "<no-sword>";
+@@ -755,7 +755,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+         else
+         {
+             _ev.BlockedAssertion("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
+-                "楠戝＋杩戞垬鏃堕挓", "鏈壘鍒?SwordSwing 鐜╁", null);
++                "楠戝＋杩戞垬鏃堕挓", "鏈壘鍒?MeleeCombat 鐜╁", null);
+         }
+ 
+         // ---- Clock.RangedOneShotPerCycle ----
+@@ -1337,7 +1337,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+             p.brain = h.GetComponent<CharacterBrain>();
+             p.animator = h.GetComponentInChildren<Animator>();
+             p.selectable = h.GetComponent<Selectable>();
+-            p.sword = h.GetComponent<SwordSwing>();
++            p.sword = h.GetComponent<MeleeCombat>();
+             p.ranged = h.GetComponent<RangedCombat>();
+             p.home = h.transform.position;
+             p.attackSpeed = p.brain != null && p.brain.stats != null ? p.brain.stats.attackSpeed : 1f;
+diff --git "a/docx/API\346\226\207\346\241\243_\351\255\224\347\237\263\345\234\260\347\211\242_v1.0.md" "b/docx/API\346\226\207\346\241\243_\351\255\224\347\237\263\345\234\260\347\211\242_v1.0.md"
+index 1ac3398c..2ee9a7ac 100644
+--- "a/docx/API\346\226\207\346\241\243_\351\255\224\347\237\263\345\234\260\347\211\242_v1.0.md"
++++ "b/docx/API\346\226\207\346\241\243_\351\255\224\347\237\263\345\234\260\347\211\242_v1.0.md"
+@@ -158,7 +158,7 @@
+ | 绫诲瀷 | 瀛楁 | 榛樿 | 璇存槑 |
+ |---|---|---|---|
+ | UnitMana | `mana` | 鈥?| 鈥?|
+-| SwordSwing | `sword` | 鈥?| 鈥?|
++| MeleeCombat | `sword` | 鈥?| 鈥?|
+ | SkillData[] | `skills` | new SkillData[4] | Q/W/E/R锛岀┖妲界暀绌?|
+ | | **鈻?鐩惧嚮鑺傚** | | |
+ | float | `bashTotalTime` | 0.6f | Q/W/E/R锛岀┖妲界暀绌?|
+@@ -367,10 +367,10 @@
+ | GameObject | `arrowPrefab` | 鈥?| 鈥?|
+ | UnitStats | `stats` | 鈥?| 鈥?|
+ | UnitHealth | `health` | 鈥?| 鈥?|
+-| string | `attackTrigger` | "Attack" | 涓庡姩鐢诲櫒鍙傛暟涓€鑷达細鐜╁寮撴墜濉?Attack锛岄楂呭紦鎵嬪～ AttackRanged |
++| string | `attackTrigger` | "Attack" | 涓庡姩鐢诲櫒鍙傛暟涓€鑷达細鐜╁寮撴墜/娉曞笀棰勫埗浣撹鍐欎负 AttackRange锛涢楂呭紦鎵嬪～ AttackRanged |
+ | | **鈻?鍔ㄧ敾鐘舵€佸悕锛堢敤浜庤鍙栨挱鏀捐繘搴︼級** | | |
+-| string | `drawStateName` | "Attack_Draw" | 涓庡姩鐢诲櫒鍙傛暟涓€鑷达細鐜╁寮撴墜濉?Attack锛岄楂呭紦鎵嬪～ AttackRanged |
+-| string | `releaseStateName` | "Attack_Release" | 涓庡姩鐢诲櫒鍙傛暟涓€鑷达細鐜╁寮撴墜濉?Attack锛岄楂呭紦鎵嬪～ AttackRanged |
++| string | `drawStateName` | "Attack_Draw" | 涓ゆ寮忕涓€娈碉細涓庡姩鐢诲櫒鍙傛暟涓€鑷达紙鐜╁寮撴墜/娉曞笀 AttackRange 鐘舵€佸唴涓?Attack_Draw锛?|
++| string | `releaseStateName` | "Attack_Release" | 涓ゆ寮忕浜屾锛氫笌鍔ㄧ敾鍣ㄥ弬鏁颁竴鑷达紙鐜╁寮撴墜/娉曞笀 AttackRange 鐘舵€佸唴涓?Attack_Release锛?|
+ | float | `attackLen` | 1.0f | 鈥?|
+ | float | `releasePoint` | 0.45f | 鈥?|
+ | float | `damage` | 12f | 鈥?|
+@@ -419,7 +419,7 @@
+ | float | `knockDuration` | 0.3f | 鈥?|
+ | float | `bashLen` | 0.6f | 鈥?|
+ 
+-### `SwordSwing`  `Combat/SwordSwing.cs`
++### `MeleeCombat`  `Combat/MeleeCombat.cs`
+ 
+ *鍩虹被/鎺ュ彛锛歚MonoBehaviour, ICharacterCombat`*
+ 
+@@ -442,10 +442,14 @@
+ | float | `attackLen` | 0.8f | 鈥?|
+ | float | `activeStart` | 0.35f | 鈥?|
+ | float | `activeEnd` | 0.55f | 鈥?|
+-| | **鈻?鍔ㄧ敾鐘舵€佸悕锛圲pperBody 灞傦級** | | |
+-| string | `attackStateName` | "Attack" | 鈥?|
++| | **鈻?鍔ㄧ敾鐘舵€佸悕锛堝崟灞傚姩鐢?layer 0锛?* | | |
++| string | `attackTrigger` | "AttackMelee" | 鍑烘嫑鍐欏叆鐨?Animator Trigger锛涜繎鎴樺崟娈电敤 AttackMelee锛堜笌鐘舵€佸悕涓€鑷达級 |
++| string | `attackStateName` | "Attack_Draw" | 鏃ч厤缃殑鏀诲嚮鐘舵€佸悕锛涙柊鎺у埗鍣ㄤ互鍓嶆憞/閲婃斁/鍛戒腑鐘舵€佸悕涓哄噯 |
++| string | `hitStateName` | "AttackMelee" | 鍛戒腑绐楀彛鎸夋鐘舵€?normalizedTime 鍒ゅ畾锛堢姸鎬佸悕锛濊Е鍙戝櫒鍚嶏紝涓嶅鐢ㄤ袱娈靛紡 releaseStateName锛?|
++| string | `drawStateName` | "Attack_Draw" | 鏀诲嚮鍓嶆憞鐘舵€佸悕锛氬彧鎾斁鍔ㄧ敾锛屼笉缁撶畻鍛戒腑 |
++| string | `releaseStateName` | "Attack_Release" | 鏀诲嚮閲婃斁鐘舵€佸悕锛堜袱娈靛紡杩滅▼澶嶇敤锛?|
+ | string | `skillStateName` | "Skill" | 鈥?|
+-| int | `attackLayer` | 1 | 鈥?|
++| int | `attackLayer` | 0 | 鏀诲嚮鍔ㄧ敾鎵€鍦ㄥ眰锛涜秺鐣屾椂杩愯鏃舵敹鏁涘埌鍚堟硶灞?|
+ | | **鈻?鍛戒腑** | | |
+ | float | `bladeLength` | 1.05f | 鈥?|
+ | float | `hitRadius` | 0.28f | 鈥?|
+@@ -847,7 +851,7 @@ UI 绠＄悊鍣紙鍞竴鍜藉枆锛夛細鎵€鏈夐潰鏉跨殑鏄剧ず/闅愯棌鍙厑璁哥粡杩囪繖
+ 
+ ### `ICharacterCombat`  `Combat/ICharacterCombat.cs`锛堟帴鍙ｏ級
+ 
+-瑙掕壊鎴樻枟鎵ц鍣ㄦ帴鍙ｏ細鑷姩鏀诲嚮 + 鎸囦护鎵撴柇銆傝繎鎴?SwordSwing)涓庤繙绋?RangedCombat)鍧囧疄鐜般€?+瑙掕壊鎴樻枟鎵ц鍣ㄦ帴鍙ｏ細鑷姩鏀诲嚮 + 鎸囦护鎵撴柇銆傝繎鎴?MeleeCombat)涓庤繙绋?RangedCombat)鍧囧疄鐜般€傛敾鍑昏Е鍙戝櫒/鐘舵€佸彛寰勶細杩戞垬 `AttackMelee`锛堢姸鎬佸悕锛濊Е鍙戝櫒鍚嶏紝鍗曟锛夛紱杩滅▼ `AttackRange`锛堜袱娈靛紡 `Attack_Draw 鈫?Attack_Release`锛夈€? 
+ - void AutoAttack(Transform target) 鈥?澶ц剳/鐜╁鎸囦护瑙﹀彂涓€娆℃敾鍑? - void CancelAttack() 鈥?鎵撴柇褰撳墠鏀诲嚮锛堢Щ鍔ㄦ寚浠ょ瓑璋冪敤锛?@@ -895,9 +899,9 @@ UI 绠＄悊鍣紙鍞竴鍜藉枆锛夛細鎵€鏈夐潰鏉跨殑鏄剧ず/闅愯棌鍙厑璁哥粡杩囪繖
+ | 馃敶 | **鏂囦欢鍚嶄笌绫诲悕涓嶄竴鑷?*锛歚PlayerCommandController.cs csharp.cs` | Player/ | 鏀瑰悕 `PlayerCommandController.cs` |
+ | 馃煛 | Update() 鍐呮瘡甯?FindObjectsByType锛圢earestEnemy锛?| Player/SkillInputController.cs | 鍔犵紦瀛樻垨浜嬩欢椹卞姩鐩爣鍒楄〃 |
+ | 鈿?| Monster/ 绌烘枃浠跺す娈嬬暀 | Monster/ | 鍒犻櫎 |
+-| 鈿?| PlayerStateMachine.cs 宸叉棤浠讳綍娑堣垂鑰咃紙SwordSwing 鎽橀櫎鐘舵€佹満鍚庯級 | Combat/ | 鍒犻櫎锛堝皢鏉ュ仛鑴辨垬鍥為灅鍐嶅缓锛?|
++| 鈿?| PlayerStateMachine.cs 宸叉棤浠讳綍娑堣垂鑰咃紙MeleeCombat 鎽橀櫎鐘舵€佹満鍚庯級 | Combat/ | 鍒犻櫎锛堝皢鏉ュ仛鑴辨垬鍥為灅鍐嶅缓锛?|
+ 
+-**鍚堣纭锛堝凡杈炬爣椤癸級**锛氬姩鐢绘椂閽熷師鍒欎笁鎵ц鍣ㄥ叏閮ㄨ惤瀹烇紙SwordSwing/RangedCombat/MonsterBrain 鍧囨湁 ReadAnimProgress + 浠ｇ爜鏃堕挓鍥為€€锛夆湏锛汻equireComponent(Animator) 宸叉竻闄?鉁擄紱鎶€鑳界瓥鐣ユā寮忔棤 switch 娈嬬暀 鉁擄紱瀵硅薄姹狅紙绠煝璧?SimplePool锛夆湏锛沀nitHealth Stats 绌烘Ы鎶ラ敊 鉁擄紱鏃犵‖缂栫爜鐗╀綋鍚嶆煡鎵?鉁撱€?+**鍚堣纭锛堝凡杈炬爣椤癸級**锛氬姩鐢绘椂閽熷師鍒欎笁鎵ц鍣ㄥ叏閮ㄨ惤瀹烇紙MeleeCombat/RangedCombat/MonsterBrain 鍧囨湁 ReadAnimProgress + 浠ｇ爜鏃堕挓鍥為€€锛夆湏锛汻equireComponent(Animator) 宸叉竻闄?鉁擄紱鎶€鑳界瓥鐣ユā寮忔棤 switch 娈嬬暀 鉁擄紱瀵硅薄姹狅紙绠煝璧?SimplePool锛夆湏锛沀nitHealth Stats 绌烘Ы鎶ラ敊 鉁擄紱鏃犵‖缂栫爜鐗╀綋鍚嶆煡鎵?鉁撱€? 
+ ---
+ 
