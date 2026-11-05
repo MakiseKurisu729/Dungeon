@@ -1,7 +1,7 @@
 # 工作流细则
 
 > 由 `AGENTS.md` 索引。本文件承载**模板与格式**（TASK 三节 / REPORT / 证据 / 提交分支 / 前置清单 / 风险 / 讲稿 / Replan / Done）；硬约束以 `AGENTS.md` 为准，冲突时 AGENTS 胜。
-> 最后更新：2026-11-05（WF-03：三节 spec、AC 表、讲稿、Replanning 与 Done 门槛）
+> 最后更新：2026-11-05（WF-05 MCP 常开编辑器规则）
 
 ## 1. TASK 模板要求
 
@@ -183,12 +183,24 @@ git add Docs/Handoff/REPORT_XXX.md Docs/QA/YYY.md
 
 用户确认后才编辑。纯 `Docs/` 单可由所有者在工单中预批。新增测试 `.cs` 引起的 `.csproj` 自动改动视为隐含延伸。
 
-### 5.2 Unity 关闭自证
+### 5.2 Unity 访问模式自证
+
+与 `AGENTS.md` §3.2 / §3.2.1 同源，此处只写自证细则；冲突时 AGENTS 胜。模式二选一，由任务书声明，未声明按模式 A。
+
+**模式 A｜batchmode（默认）**
 
 - 编辑器打开着项目时**不得**做任何 Unity 操作。
 - 自证：Unity 进程数 = 0，且 `Temp/UnityLockfile` 不存在。
 - 长任务允许以自证替代人工确认；证据写进 REPORT。
 - 需隔离副本时，操作前必须告知用户并说明代价；未告知不得动手。
+
+**模式 B｜MCP 常开编辑器**
+
+- 前置三条同时成立才可动手：① 任务书已声明模式 B 与授权范围；② 影响面清单已确认（§5.1）；③ 多实例时已 `set_active_instance` pin 到唯一实例。
+- 只读白名单与写操作三件套以 `AGENTS.md` §3.2.1 为准；本条不重复列出，也不放宽。
+- REPORT 必写 `editor_state` 记录：`instance_id`、`is_compiling`、`is_domain_reload_pending`、`play_mode`（取作业开始与结束两次）。
+- 域重载未完成（`is_compiling` 仍为 true）时，不得继续任何写操作或验收判定。
+- 模式 B 下，AI 可自行 `refresh_unity` / 聚焦唤醒编辑器，无需逐次询问；唤醒仅限让编辑器响应，不含任何资产改动。
 
 ### 5.3 资产改动清单格式
 
@@ -231,11 +243,14 @@ git add Docs/Handoff/REPORT_XXX.md Docs/QA/YYY.md
 - [ ] 计划外资产改动 / 装包 / 升引擎 / 目录迁移
 - [ ] git 异常
 - [ ] 配额撞限
-- [ ] Unity 未关或状态不明
+- [ ] 模式 A 下 Unity 未关或状态不明
 - [ ] 仓库与任务基线不符
 - [ ] 同一命令重复 3 次无进展
 - [ ] 修改文件数超过工单上限
 - [ ] 需要改公共契约但工单未允许
+- [ ] 模式 B 下调用了未授权写工具
+- [ ] 域重载未完成继续操作（`isCompiling` 仍为 true）
+- [ ] 同一 Unity 实例被两个会话同时驱动
 
 停止后保留差异与日志，由大脑判断“缩小任务 / 补基线 / 转工具任务 / 人工定位”，不在原会话反复“继续修好”。
 

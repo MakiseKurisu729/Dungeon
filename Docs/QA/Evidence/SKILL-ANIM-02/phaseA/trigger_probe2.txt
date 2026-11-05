@@ -1,0 +1,6 @@
+# in-editor play probe #2: Knight.SetTrigger(Q), log on state CHANGE only, 2.5s window
+# t = seconds since SetTrigger
+t=0.008 ENTER Locomotion norm=20.660 len=1.067
+t=0.058 ENTER Q_1 norm=0.049 len=1.067
+t=1.172 ENTER Locomotion norm=0.095 len=1.067
+t=2.501 END state=Locomotion frames=681 isPlaying=True

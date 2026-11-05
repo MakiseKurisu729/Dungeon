@@ -1,0 +1,30 @@
+﻿# AC-1｜AGENTS.md §3.2 = 双模式（A/B），且无“Unity 操作前必须关闭”的绝对表述
+
+命令: Select-String -Path AGENTS.md -Pattern "模式 A｜batchmode|模式 B｜MCP 常开编辑器"
+期望: 命中 2 行（模式 A 一行、模式 B 一行）
+命令: Select-String -Path AGENTS.md -Pattern '模式 A｜batchmode|模式 B｜MCP 常开编辑器'
+实际: 命中 2 行
+--- 原始行 ---
+49: - **模式 A｜batchmode（默认）**：编辑器必须关闭；自证 = Unity 进程数 0 且无 `Temp/UnityLockfile`。封装、烘焙、全量验收、CI 用此模式。长任务允许以自证替代人工确认，但证据必须写进 REPORT。
+50: - **模式 B｜MCP 常开编辑器**：编辑器保持打开，经 `unityMCP` 访问，仅限 §3.2.1 白名单与任务书授权范围。
+
+命令: Select-String -Path AGENTS.md -Pattern "Unity 必须关闭"   （反向断言）
+期望: 命中 0 行（旧绝对表述已删除）
+命令: Select-String -Path AGENTS.md -Pattern 'Unity 必须关闭'
+实际: 命中 0 行
+--- 原始行 ---
+(无匹配)
+
+--- 另查“必须关闭”其它写法（含 Unity 字样）---
+命令: Select-String -Path AGENTS.md -Pattern 'Unity.*必须关闭'
+实际: 命中 0 行
+--- 原始行 ---
+(无匹配)
+
+命令: Select-String -Path AGENTS.md -Pattern "### 3.2.1 MCP 使用规则"
+期望: 命中 1 行（新章节标题）
+命令: Select-String -Path AGENTS.md -Pattern '### 3.2.1 MCP 使用规则'
+实际: 命中 1 行
+--- 原始行 ---
+54: ### 3.2.1 MCP 使用规则（模式 B）
+

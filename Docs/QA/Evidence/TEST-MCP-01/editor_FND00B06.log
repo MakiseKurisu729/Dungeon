@@ -1,0 +1,578 @@
+﻿[QA][INEDITOR] start task=FND00B06; subdir=editor_run1; unity=2022.3.62f3c1; envAtStart={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=1;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=editor_run1}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:86)
+QA_InEditorMenu:RunFND00B06 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:43)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:<RequestMainThreadPump>g__Pump|11_0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:184)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/<>c:<RequestMainThreadPump>b__11_1 (object) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:189)
+UnityEngine.UnitySynchronizationContext/WorkRequest:Invoke ()
+UnityEngine.UnitySynchronizationContext:Exec ()
+UnityEngine.UnitySynchronizationContext:ExecuteTasks ()
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 86)
+
+[FND00B06] launcher start; pid=8000; args=D:\unity\2022.3.62f3c1\Editor\Unity.exe -projectpath D:\unity\Dungeon -useHub -hubIPC -cloudEnvironment production -licensingIpc LicenseClient-lll -hubSessionId 4fd876c0-d58c-11f1-873b-072aeea03741 -accessToken Po7WSUeZrCFq3FEDUn4ZptOGmGct-LoNyseV8vm-BaQ01ef
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_BatchAcceptance:Run () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:23)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:99)
+QA_InEditorMenu:RunFND00B06 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:43)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:<RequestMainThreadPump>g__Pump|11_0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:184)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/<>c:<RequestMainThreadPump>b__11_1 (object) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:189)
+UnityEngine.UnitySynchronizationContext/WorkRequest:Invoke ()
+UnityEngine.UnitySynchronizationContext:Exec ()
+UnityEngine.UnitySynchronizationContext:ExecuteTasks ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 23)
+
+Opening scene 'Assets/Scenes/DungeonWorld.unity'
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Scenes/DungeonWorld.unity'
+	Deserialize:            5.480 ms
+	Integration:            253.431 ms
+	Integration of assets:  0.003 ms
+	Thread Wait Time:       0.037 ms
+	Total Operation Time:   258.952 ms
+Unloading 6 unused Assets / (136.5 KB). Loaded Objects now: 9809.
+Memory consumption went from 241.9 MB to 241.7 MB.
+Total: 14.171400 ms (FindLiveObjects: 0.725300 ms CreateObjectMapping: 0.276500 ms MarkObjects: 12.998000 ms  DeleteObjects: 0.170500 ms)
+
+[FND00B06] opened scene Assets/Scenes/DungeonWorld.unity; loaded=True; dirty=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_BatchAcceptance:Run () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:29)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:99)
+QA_InEditorMenu:RunFND00B06 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:43)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:<RequestMainThreadPump>g__Pump|11_0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:184)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/<>c:<RequestMainThreadPump>b__11_1 (object) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:189)
+UnityEngine.UnitySynchronizationContext/WorkRequest:Invoke ()
+UnityEngine.UnitySynchronizationContext:Exec ()
+UnityEngine.UnitySynchronizationContext:ExecuteTasks ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 29)
+
+[SPEC01] playModeStateChanged=ExitingEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:137)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+UnityEditor.EditorApplication:EnterPlaymode ()
+FND00B06_BatchAcceptance:Run () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:36)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:99)
+QA_InEditorMenu:RunFND00B06 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:43)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:<RequestMainThreadPump>g__Pump|11_0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:184)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/<>c:<RequestMainThreadPump>b__11_1 (object) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:189)
+UnityEngine.UnitySynchronizationContext/WorkRequest:Invoke ()
+UnityEngine.UnitySynchronizationContext:Exec ()
+UnityEngine.UnitySynchronizationContext:ExecuteTasks ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 137)
+
+[FND00B06] EnterPlaymode requested
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_BatchAcceptance:Run () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:37)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:99)
+QA_InEditorMenu:RunFND00B06 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:43)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:<RequestMainThreadPump>g__Pump|11_0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:184)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/<>c:<RequestMainThreadPump>b__11_1 (object) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:189)
+UnityEngine.UnitySynchronizationContext/WorkRequest:Invoke ()
+UnityEngine.UnitySynchronizationContext:Exec ()
+UnityEngine.UnitySynchronizationContext:ExecuteTasks ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 37)
+
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.809 seconds
+Refreshing native plugins compatible for Editor in 9.83 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Dungeon
+[FND00B06] boot; isPlaying=False; started=False; finished=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:Boot () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:69)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 69)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.200 seconds
+Domain Reload Profiling: 3012ms
+	BeginReloadAssembly (629ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (46ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (1ms)
+		CreateAndSetChildDomain (377ms)
+	RebuildCommonClasses (32ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (112ms)
+		LoadAssemblies (232ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (24ms)
+			TypeCache.Refresh (6ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (15ms)
+	FinalizeReload (2200ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1424ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (74ms)
+			ProcessInitializeOnLoadAttributes (1267ms)
+			ProcessInitializeOnLoadMethodAttributes (70ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (419ms)
+Asset Pipeline Refresh (id=0e13f8b0f45d2754c95505766af7c9f9): Total: 3.575 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=477 ms
+		Asset DB Callback time: managed=22 ms, native=1 ms
+		Scripting: domain reloads=1, domain reload time=3072 ms, compile time=2 ms, other=0 ms
+		Project Asset Count: scripts=7708, non-scripts=5910
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 1.015ms
+	ApplyChangesToAssetFolders: 0.082ms
+	Scan: 0.002ms
+	OnSourceAssetsModified: 0.001ms
+	GetAllGuidsForCategorization: 2.594ms
+	CategorizeAssets: 251.255ms
+	ImportOutOfDateAssets: 2258.323ms (2247.474ms without children)
+		CompileScripts: 2.026ms
+		CollectScriptTypesHashes: 0.053ms
+		ReloadNativeAssets: 0.411ms
+		UnloadImportedAssets: 1.206ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 4.696ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 2.455ms
+	PostProcessAllAssets: 22.178ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.522ms
+	UnloadStreamsBegin: 0.339ms
+	PersistCurrentRevisions: 0.384ms
+	UnloadStreamsEnd: 0.072ms
+	GenerateScriptTypeHashes: 3.263ms
+	Untracked: 1037.744ms
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[DebugTestTools] host created in DungeonWorld; keys F5/F9/F10
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugTestToolsBootstrap:AfterSceneLoadHook () (at Assets/_Project/Scripts/Debug/DebugTestTools.cs:171)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugTestTools.cs Line: 171)
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            7.985 ms
+	Integration:            306.213 ms
+	Integration of assets:  0.011 ms
+	Thread Wait Time:       0.007 ms
+	Total Operation Time:   314.216 ms
+0 个身体部件已挂到 PlayerBody 层
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugCameraSwitcher:Start () (at Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs:102)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs Line: 102)
+
+[FND00B06] playModeStateChanged=EnteredPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[FND00B06] play-mode runner created
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:TryStartRunner () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:121)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:81)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 121)
+
+[FND00B06] runner start; run=1; seed=20261105; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-06\editor_run1
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:143)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 143)
+
+[FND00B06] active scene=Assets/Scenes/DungeonWorld.unity; loaded=True; waited=0.00s
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:154)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 154)
+
+[FND00B06] env timeScale=1; paused=False; gameStarted=True; gameFlowInstance=True; isWiped=False; level=1
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:161)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 161)
+
+[FND00B06] initial idle captured; player=Knight_Unit; state=Locomotion
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<SampleInitialIdle>d__85:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:258)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 258)
+
+[FND00B06] === QA item 4: Attack ===
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:267)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 267)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.Fixture","expected":{"requirement":"选中 1 名存活近战玩家；以既有普通敌人预制体在内存建立目标夹具；记录双方 ID/队伍/位置/生命/存活/可选中/Agent 导航状态","playerEntity":"DungeonWorld 场景内玩家单位","targetEntity":"既有敌人预制体内存实例（不写入场景）"},"actual":{"player":{"id":-12476,"name":"Knight_Unit","hp":100,"maxHp":100,"dead":false,"agentOk":true,"agentReason":"ok","agentPos":{"x":-2.72,"y":0.08333,"z":0}},"target":{"id":-16294,"name":"FND00B06_AttackTarget","path":"FND00B06_AttackTarget","prefabSource":"Assets/_Project/Prefabs/Skeleton_Warrior.prefab","team":"Monster","hp":60,"maxHp":60,"dead":false,"position":{"x":-2.72,"y":0.08333,"z":7},"distanceToPlayer":7,"hasSelectableComponent":false,"agentPresent":true,"agentEnabled":true,"agentOnNavMesh":true,"monsterBrainPresent":true,"monsterBrainDisabledForFixture":true,"fixtureTag":"FND00B06_"},"sceneMonsterCount":1,"playerCount":3},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:39.432","data":{"playerScan":[{"id":-12476,"name":"Knight_Unit","path":"Knight_Unit","team":"Player","hp":100,"maxHp":100,"dead":false,"position":{"x":-2.72,"y":0.08333,"z":0},"hasSelectable":true,"hasCharacterBrain":true,"hasMeleeCombat":true,"hasRangedCombat":false,"agentPresent":true,"agentEnabled":true,"agentOnNavMesh":true,"agentPosition":{"x":-2.72,"y":0.08333,"z":0}},{"id":-13220,"name":"Mage_Unit","path":"Mage_Unit","team":"Player","hp":70,"maxHp":70,"dead":false,"position":{"x":3.22,"y":0.08333,"z":0},"hasSelectable":true,"hasCharacterBrain":true,"hasMeleeCombat":false,"hasRangedCombat":true,"agentPresent":true,"agentEnabled":true,"agentOnNavMesh":true,"agentPosition":{"x":3.22,"y":0.08333,"z":0}},{"id":-12730,"name":"Archer_Unit","path":"Archer_Unit","team":"Player","hp":80,"maxHp":80,"dead":false,"position":{"x":0.85,"y":0.08333,"z":0},"hasSelectable":true,"hasCharacterBrain":true,"hasMeleeCombat":false,"hasRangedCombat":true,"agentPresent":true,"agentEnabled":true,"agentOnNavMesh":true,"agentPosition":{"x":0.85,"y":0.08333,"z":0}}],"spawnMethod":"NavMesh.SamplePosition + NavMesh.CalculatePath（d=7m）","spawnTrials":[{"distance":7,"requested":{"x":-2.72,"y":0.08333,"z":7},"sampled":true,"candidate":{"x":-2.72,"y":0.08333,"z":7},"pathStatus":"PathComplete","cornerCount":2}],"spawnSeconds":0.00577,"scene":"Assets/Scenes/DungeonWorld.unity","otherPlayersBrainIsolation":{"count":2,"names":["Mage_Unit","Archer_Unit"],"note":"仅运行时禁用其他玩家 CharacterBrain，避免其自动攻击夹具目标；测后恢复，不改资产"},"fixtureNote":"目标为内存夹具：Skeleton_Warrior 预制体实例，关闭其 MonsterBrain 以免反击/追击；场景真实怪物数为上值，不把夹具存在写成遭遇通过"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:448)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.CommandAccepted","expected":{"requirement":"下发一次真实普攻命令，命令被接受且目标正确","selectionEntry":"SelectionManager.SingleSelect(Selectable)（左键单选生产方法）","attackCommandEntry":"SelectionManager.SelectEnemy(UnitHealth) + CharacterBrain.CommandAttack(Transform)","chain":"SelectionManager.HandleClick → SelectEnemy + CharacterBrain.CommandAttack → CharacterBrain.Update → UnitBrain.AttackLoop → MeleeCombat.AutoAttack","forbidden":"不得逐帧调用攻击执行器、不得直接扣血"},"actual":{"playerSelected":true,"primaryIsPlayer":true,"enemyMarked":true,"orderedTargetIsTarget":true,"error":null},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:39.442","data":{"selectionManagerPresent":true,"playerSelectable":true,"note":"batchmode 无真实鼠标射线输入，按工单允许使用生产选择/命令方法作自动等价输入"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:529)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.Approach","expected":{"requirement":"由现有命令/移动链接近至实际攻击范围；不得用测试 Warp 玩家冒充接敌","attackRange":2.2,"endCondition":"XZ 距离 <= attackRange + 0.2"},"actual":{"startDistance":7,"endDistance":2.39731,"configuredRange":2.2,"elapsedSeconds":1.50384,"inRange":true,"endReason":"in range","maxFrameStep":0.02211,"teleportDetected":false,"agentPathStatus":"PathComplete","agentRemainingDistance":2.39731,"moveSamples":24},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:40.947","data":{"moveSampleDetail":[{"label":"move","t":8.459,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.17573,"speedX":0.00481,"speedZ":0.03817,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.03847,"swordTimer":-1},{"label":"move","t":8.495,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.20836,"speedX":0.02779,"speedZ":0.31304,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.31427,"swordTimer":-1},{"label":"move","t":8.512,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.22449,"speedX":0.01319,"speedZ":0.44774,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.44794,"swordTimer":-1},{"label":"move","t":8.527,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.24009,"speedX":0.00171,"speedZ":0.57638,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.57638,"swordTimer":-1},{"label":"move","t":8.543,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.25503,"speedX":-0.00151,"speedZ":0.69885,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.69885,"swordTimer":-1},{"label":"move","t":8.56,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.27199,"speedX":-0.00312,"speedZ":0.83676,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.83677,"swordTimer":-1},{"label":"move","t":8.578,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.28817,"speedX":-0.00706,"speedZ":0.96699,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.96702,"swordTimer":-1},{"label":"move","t":8.597,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.30945,"speedX":-0.00985,"speedZ":1.13663,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.13668,"swordTimer":-1},{"label":"move","t":8.613,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.32492,"speedX":-0.0066,"speedZ":1.25888,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.25889,"swordTimer":-1},{"label":"move","t":8.628,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.34074,"speedX":-0.00905,"speedZ":1.38274,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.38277,"swordTimer":-1},{"label":"move","t":8.644,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.35744,"speedX":-0.00683,"speedZ":1.51249,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.5125,"swordTimer":-1},{"label":"move","t":8.663,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.37711,"speedX":-0.00914,"speedZ":1.66375,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.66377,"swordTimer":-1},{"label":"move","t":8.68,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.39427,"speedX":-0.00478,"speedZ":1.79457,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.79458,"swordTimer":-1},{"label":"move","t":8.697,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.41223,"speedX":-0.00421,"speedZ":1.93007,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.93008,"swordTimer":-1},{"label":"move","t":8.713,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.42962,"speedX":-0.002,"speedZ":2.06011,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.06011,"swordTimer":-1},{"label":"move","t":8.73,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.44804,"speedX":-0.00275,"speedZ":2.19654,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.19655,"swordTimer":-1},{"label":"move","t":8.747,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.46602,"speedX":-0.00331,"speedZ":2.32841,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.32841,"swordTimer":-1},{"label":"move","t":8.762,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.48423,"speedX":-0.00372,"speedZ":2.46074,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.46074,"swordTimer":-1},{"label":"move","t":8.779,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.50187,"speedX":-0.0038,"speedZ":2.58761,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.58762,"swordTimer":-1},{"label":"move","t":8.795,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.51986,"speedX":-0.0038,"speedZ":2.71584,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.71585,"swordTimer":-1},{"label":"move","t":8.811,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.53785,"speedX":-0.00373,"speedZ":2.84287,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.84287,"swordTimer":-1},{"label":"move","t":8.826,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.55599,"speedX":-0.00366,"speedZ":2.96966,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.96966,"swordTimer":-1},{"label":"move","t":8.842,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.57428,"speedX":-0.00353,"speedZ":3.09628,"grounded":true,"attackSpeedParam":1,"agentVelocity":3.09629,"swordTimer":-1},{"label":"move","t":8.858,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.59269,"speedX":-0.0034,"speedZ":3.2225,"grounded":true,"attackSpeedParam":1,"agentVelocity":3.2225,"swordTimer":-1}],"note":"全程仅通过 CharacterBrain.CommandAttack 触发的 AttackLoop 追击；无 Warp、无 transform 直写"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:587)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.Starts","expected":{"requirement":"观察到实际出招事件/状态；仅靠近未出招为产品失败","signal":"MeleeCombat 私有 _timer >= 0 或 Animator 进入攻击状态","targetLocked":true},"actual":{"firstAttackAtSeconds":0.05799,"firstAttackState":"Locomotion","swordTargetIsFixture":true,"playerHp":100,"targetHp":60},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:41.008","data":{"attackStates":["AttackMelee"],"swordConfigured":{"attackStateName":"AttackMelee","attackLayer":0,"attackLen":1,"activeStart":0.35,"activeEnd":0.55,"hitRange":2.2,"runtimeCurLen":1,"statsAttackSpeed":1}}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:640)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Update check failed (this is normal if offline): The operation has timed out.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Services.PackageUpdateService:FetchLatestVersionFromGitHub (string) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/PackageUpdateService.cs:374)
+MCPForUnity.Editor.Services.PackageUpdateService:FetchAndCompare (string,bool,string) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/PackageUpdateService.cs:127)
+MCPForUnity.Editor.Windows.MCPForUnityEditorWindow/<>c__DisplayClass37_0:<CheckForPackageUpdates>b__0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Windows/MCPForUnityEditorWindow.cs:462)
+System.Threading.Tasks.Task`1<MCPForUnity.Editor.Services.UpdateCheckResult>:InnerInvoke ()
+System.Threading.Tasks.Task:Execute ()
+System.Threading.Tasks.Task:ExecutionContextCallback (object)
+System.Threading.ExecutionContext:RunInternal (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Threading.ExecutionContext:Run (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Threading.Tasks.Task:ExecuteWithThreadLocal (System.Threading.Tasks.Task&)
+System.Threading.Tasks.Task:ExecuteEntry (bool)
+System.Threading.Tasks.Task:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Helpers/McpLog.cs Line: 40)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.Repeats","expected":{"requirement":"固定观察窗口内至少出现 2 次有效攻击结算；不得以动画播放次数替代伤害次数","minHits":2,"windowSeconds":8,"expectedIntervalSeconds":1,"attackSpeed":1},"actual":{"hitCount":4,"unattributedHitCount":0,"swingCount":1,"swingTimes":[0.059],"intervals":[{"from":10.385,"to":11.29,"intervalSeconds":0.905},{"from":11.29,"to":12.191,"intervalSeconds":0.901},{"from":12.191,"to":13.098,"intervalSeconds":0.907}],"observationWindowSeconds":4.156,"targetHp":0},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:45.106","data":{"hitEvents":[{"index":1,"tSinceCommand":1.948,"tAbs":10.385,"hpBefore":60,"hpAfter":45,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":2,"tSinceCommand":2.852,"tAbs":11.29,"hpBefore":45,"hpAfter":30,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":3,"tSinceCommand":3.754,"tAbs":12.191,"hpBefore":30,"hpAfter":15,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":4,"tSinceCommand":4.661,"tAbs":13.098,"hpBefore":15,"hpAfter":0,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false}],"expectedIntervalFormula":"attackLen / UnitStats.attackSpeed","note":"判定以被选中玩家的 OnHit 结算次数为准；其他玩家单位的命中单列不计入，swingCount 仅作对照"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:703)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.DamageResolved","expected":{"requirement":"每次有效命中经既有生命/伤害入口结算；记录目标 HP 前后值、结算伤害、事件顺序与累计次数","entry":"UnitHealth.TakeHit → ApplyDamageInfo → OnHit","testWritesHp":false},"actual":{"hitCount":4,"unattributedHitCount":0,"totalDamage":60,"targetHp":0,"targetMaxHp":60,"targetDead":true,"hpDeltaConsistent":true},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:45.107","data":{"hitEvents":[{"index":1,"tSinceCommand":1.948,"tAbs":10.385,"hpBefore":60,"hpAfter":45,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":2,"tSinceCommand":2.852,"tAbs":11.29,"hpBefore":45,"hpAfter":30,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":3,"tSinceCommand":3.754,"tAbs":12.191,"hpBefore":30,"hpAfter":15,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":4,"tSinceCommand":4.661,"tAbs":13.098,"hpBefore":15,"hpAfter":0,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false}],"note":"断言侧无任何 HP 写入路径；HP 变化全部来自生产伤害管线"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:733)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"4","assertion":"Attack.TargetDeath","expected":{"requirement":"若观察窗口内目标死亡，记录死亡事件仅一次、后续不再重复结算","deathEvents":1},"actual":{"dead":true,"deathEvents":1,"hitCount":4,"unattributedHitCount":0,"targetHp":0,"elapsedSeconds":3.153},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:45.109","data":{"hitEvents":[{"index":1,"tSinceCommand":1.948,"tAbs":10.385,"hpBefore":60,"hpAfter":45,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":2,"tSinceCommand":2.852,"tAbs":11.29,"hpBefore":45,"hpAfter":30,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":3,"tSinceCommand":3.754,"tAbs":12.191,"hpBefore":30,"hpAfter":15,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false},{"index":4,"tSinceCommand":4.661,"tAbs":13.098,"hpBefore":15,"hpAfter":0,"finalAmount":15,"rawAmount":15,"brokeDefense":true,"damageType":"Slash","sourceName":"Knight_Unit","sourceIsSelectedPlayer":true,"targetDeadAfter":false}],"note":"死亡后仍保持 1 秒观察，未再出现新的伤害结算"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAttack>d__86:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:753)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06] === QA item 6: Animation ===
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:829)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 829)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.ConfigMapping","expected":{"requirement":"只读确认 Animator Controller/Override 的状态名或哈希、参数与预期映射；不得凭名称猜测播放成功","expectedStates":["Locomotion","Attack_Draw","Hit_A","Downed","Rise"],"expectedParams":["SpeedX","SpeedZ","Grounded","AttackSpeed","AttackRange","Hit","Die","Revive"]},"actual":{"controller":"OC_Knight","overrideBase":"PlayerBase","layerCount":1,"swordAttackLayer":0,"swordAttackStateName":"AttackMelee","mappingConsistent":true,"mismatchCount":0},"pass":true,"status":"observed","kind":"production","timestamp":"2026-11-05 18:10:45.122","data":{"animatorOwner":"Knight_Unit/Knight","states":["Locomotion","Hit_A","Interact","Rise","Downed","Attack_Release","Attack_Draw","Bash","Skill","AttackMelee"],"parameters":[{"name":"SpeedZ","type":"Float","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"SpeedX","type":"Float","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Grounded","type":"Bool","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"AttackSpeed","type":"Float","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"AttackRange","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Skill","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Bash","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Interrupt","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Interact","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Die","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Revive","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Hit","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"Jump","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"},{"name":"AttackMelee","type":"Trigger","defaultFloat":0,"defaultBool":false,"source":"controller"}],"mismatches":[],"note":"本记录只做只读映射登记；不使用 Animator.Play 制造通过"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:857)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.Idle","expected":{"requirement":"无指令时进入 Locomotion 待机混合树，SpeedX/SpeedZ≈0，Grounded=true","expectedState":" Locomotion（控制器实际状态名含前导空格）","maxAbsSpeed":0.3,"samplePoint":"下达任何指令之前（Play 进入后、第 4 项开始前）"},"actual":{"stateName":"Locomotion","speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"player":"Knight_Unit"},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:45.123","data":{"samples":[{"label":"idle_pre_command","t":8.369,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.08368,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"idle_pre_command","t":8.375,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.09244,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"idle_pre_command","t":8.379,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.10039,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"idle_pre_command","t":8.383,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.10448,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"idle_pre_command","t":8.388,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.1078,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"idle_pre_command","t":8.392,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.1121,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1}],"note":"Idle 取样点在战斗前，避免把「出招链未收尾」误判为待机失败；战后状态另记于 Animation.PostCombatState"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:893)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.PostCombatState","expected":{"requirement":"补充观察：战斗结束（目标死亡）且无后续指令时 Animator 是否回到 Locomotion","countedAs":"not_counted（不计入五类状态通过/失败，仅记录产品表现）"},"actual":{"stateName":"Locomotion","normalizedTime":0.69649,"swordTimer":-1,"speedX":0,"speedZ":0,"notInLocomotion":false,"waitSeconds":7.6},"pass":false,"status":"observed","kind":"production","timestamp":"2026-11-05 18:10:52.739","data":{"samples":[{"label":"post_combat","t":21.721,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.6861,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"post_combat","t":21.725,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.68922,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"post_combat","t":21.729,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.69278,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"post_combat","t":21.733,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.69649,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1}],"stateTimeline":[{"phase":"pre_command","tAbs":8.438,"tSinceCommand":0,"stateName":"Locomotion","normalizedTime":0.14757,"attackSpeedParam":1,"swordTimer":-1},{"phase":"attack","tAbs":10.261,"tSinceCommand":1.823,"stateName":"AttackMelee","normalizedTime":0.23774,"attackSpeedParam":1,"swordTimer":0.258},{"phase":"attack","tAbs":10.911,"tSinceCommand":2.473,"stateName":"Locomotion","normalizedTime":0.09607,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":11.165,"tSinceCommand":2.727,"stateName":"AttackMelee","normalizedTime":0.23469,"attackSpeedParam":1,"swordTimer":0.25471},{"phase":"attack","tAbs":11.814,"tSinceCommand":3.377,"stateName":"Locomotion","normalizedTime":0.09387,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":12.069,"tSinceCommand":3.631,"stateName":"AttackMelee","normalizedTime":0.23481,"attackSpeedParam":1,"swordTimer":0.25436},{"phase":"attack","tAbs":12.72,"tSinceCommand":4.282,"stateName":"Locomotion","normalizedTime":0.09497,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":12.974,"tSinceCommand":4.536,"stateName":"AttackMelee","normalizedTime":0.23523,"attackSpeedParam":1,"swordTimer":0.25457},{"phase":"attack","tAbs":13.623,"tSinceCommand":5.185,"stateName":"Locomotion","normalizedTime":0.09405,"attackSpeedParam":1,"swordTimer":-1}],"analysis":"控制器链路 Attack_Draw --Attack--> Attack_Release --Attack--> Locomotion；出招中途停止后没有新的 Attack 触发器推进，可长期停留在攻击状态","note":"本记录只陈述观察结果，不修复；若状态非 Locomotion 说明击杀/停止攻击后动画不回待机"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:925)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.Move","expected":{"requirement":"追击移动期间 Animator 处于 Locomotion 且 SpeedX/SpeedZ 随速度非零","minAgentVelocity":0.5,"expectedState":"Locomotion"},"actual":{"maxAbsSpeedX":0.02779,"maxAbsSpeedZ":3.2225,"maxAgentVelocity":3.2225,"anyLocomotionSample":true,"sampleCount":24},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:52.741","data":{"samples":[{"label":"move","t":8.459,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.17573,"speedX":0.00481,"speedZ":0.03817,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.03847,"swordTimer":-1},{"label":"move","t":8.495,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.20836,"speedX":0.02779,"speedZ":0.31304,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.31427,"swordTimer":-1},{"label":"move","t":8.512,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.22449,"speedX":0.01319,"speedZ":0.44774,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.44794,"swordTimer":-1},{"label":"move","t":8.527,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.24009,"speedX":0.00171,"speedZ":0.57638,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.57638,"swordTimer":-1},{"label":"move","t":8.543,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.25503,"speedX":-0.00151,"speedZ":0.69885,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.69885,"swordTimer":-1},{"label":"move","t":8.56,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.27199,"speedX":-0.00312,"speedZ":0.83676,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.83677,"swordTimer":-1},{"label":"move","t":8.578,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.28817,"speedX":-0.00706,"speedZ":0.96699,"grounded":true,"attackSpeedParam":1,"agentVelocity":0.96702,"swordTimer":-1},{"label":"move","t":8.597,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.30945,"speedX":-0.00985,"speedZ":1.13663,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.13668,"swordTimer":-1},{"label":"move","t":8.613,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.32492,"speedX":-0.0066,"speedZ":1.25888,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.25889,"swordTimer":-1},{"label":"move","t":8.628,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.34074,"speedX":-0.00905,"speedZ":1.38274,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.38277,"swordTimer":-1},{"label":"move","t":8.644,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.35744,"speedX":-0.00683,"speedZ":1.51249,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.5125,"swordTimer":-1},{"label":"move","t":8.663,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.37711,"speedX":-0.00914,"speedZ":1.66375,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.66377,"swordTimer":-1},{"label":"move","t":8.68,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.39427,"speedX":-0.00478,"speedZ":1.79457,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.79458,"swordTimer":-1},{"label":"move","t":8.697,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.41223,"speedX":-0.00421,"speedZ":1.93007,"grounded":true,"attackSpeedParam":1,"agentVelocity":1.93008,"swordTimer":-1},{"label":"move","t":8.713,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.42962,"speedX":-0.002,"speedZ":2.06011,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.06011,"swordTimer":-1},{"label":"move","t":8.73,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.44804,"speedX":-0.00275,"speedZ":2.19654,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.19655,"swordTimer":-1},{"label":"move","t":8.747,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.46602,"speedX":-0.00331,"speedZ":2.32841,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.32841,"swordTimer":-1},{"label":"move","t":8.762,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.48423,"speedX":-0.00372,"speedZ":2.46074,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.46074,"swordTimer":-1},{"label":"move","t":8.779,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.50187,"speedX":-0.0038,"speedZ":2.58761,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.58762,"swordTimer":-1},{"label":"move","t":8.795,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.51986,"speedX":-0.0038,"speedZ":2.71584,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.71585,"swordTimer":-1},{"label":"move","t":8.811,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.53785,"speedX":-0.00373,"speedZ":2.84287,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.84287,"swordTimer":-1},{"label":"move","t":8.826,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.55599,"speedX":-0.00366,"speedZ":2.96966,"grounded":true,"attackSpeedParam":1,"agentVelocity":2.96966,"swordTimer":-1},{"label":"move","t":8.842,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.57428,"speedX":-0.00353,"speedZ":3.09628,"grounded":true,"attackSpeedParam":1,"agentVelocity":3.09629,"swordTimer":-1},{"label":"move","t":8.858,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.59269,"speedX":-0.0034,"speedZ":3.2225,"grounded":true,"attackSpeedParam":1,"agentVelocity":3.2225,"swordTimer":-1}],"note":"不另判移动 QA，仅验证移动时动画参数与状态"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:961)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.Attack","expected":{"requirement":"真实出招触发 Animator 进入 AttackMelee（单段，状态名=触发器名），且 AttackSpeed 参数与 UnitStats.attackSpeed 一致","attackStates":["AttackMelee"],"attackSpeedExpected":1},"actual":{"firstAttackState":"Locomotion","enteredAttackState":true,"attackStateEntryCount":4,"firstAttackStateAtSinceCommand":1.823,"firstDamageAtSinceCommand":1.948,"animationLagBehindDamageSeconds":-0.125,"attackSpeedParam":1,"firstAttackAtSeconds":0.05799,"swordTargetIsFixture":true,"damageHits":4},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:52.742","data":{"stateTimeline":[{"phase":"pre_command","tAbs":8.438,"tSinceCommand":0,"stateName":"Locomotion","normalizedTime":0.14757,"attackSpeedParam":1,"swordTimer":-1},{"phase":"attack","tAbs":10.261,"tSinceCommand":1.823,"stateName":"AttackMelee","normalizedTime":0.23774,"attackSpeedParam":1,"swordTimer":0.258},{"phase":"attack","tAbs":10.911,"tSinceCommand":2.473,"stateName":"Locomotion","normalizedTime":0.09607,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":11.165,"tSinceCommand":2.727,"stateName":"AttackMelee","normalizedTime":0.23469,"attackSpeedParam":1,"swordTimer":0.25471},{"phase":"attack","tAbs":11.814,"tSinceCommand":3.377,"stateName":"Locomotion","normalizedTime":0.09387,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":12.069,"tSinceCommand":3.631,"stateName":"AttackMelee","normalizedTime":0.23481,"attackSpeedParam":1,"swordTimer":0.25436},{"phase":"attack","tAbs":12.72,"tSinceCommand":4.282,"stateName":"Locomotion","normalizedTime":0.09497,"attackSpeedParam":1,"swordTimer":0},{"phase":"attack","tAbs":12.974,"tSinceCommand":4.536,"stateName":"AttackMelee","normalizedTime":0.23523,"attackSpeedParam":1,"swordTimer":0.25457},{"phase":"attack","tAbs":13.623,"tSinceCommand":5.185,"stateName":"Locomotion","normalizedTime":0.09405,"attackSpeedParam":1,"swordTimer":-1}],"attackEntries":[{"phase":"attack","tAbs":10.261,"tSinceCommand":1.823,"stateName":"AttackMelee","normalizedTime":0.23774,"attackSpeedParam":1,"swordTimer":0.258},{"phase":"attack","tAbs":11.165,"tSinceCommand":2.727,"stateName":"AttackMelee","normalizedTime":0.23469,"attackSpeedParam":1,"swordTimer":0.25471},{"phase":"attack","tAbs":12.069,"tSinceCommand":3.631,"stateName":"AttackMelee","normalizedTime":0.23481,"attackSpeedParam":1,"swordTimer":0.25436},{"phase":"attack","tAbs":12.974,"tSinceCommand":4.536,"stateName":"AttackMelee","normalizedTime":0.23523,"attackSpeedParam":1,"swordTimer":0.25457}],"configuredMapping":{"attackStateName":"AttackMelee","attackLayer":0,"layerCount":1},"note":"未直接设置 Attack 触发器；状态变化来自生产 MeleeCombat.DoAttack；时间轴按状态变化记录"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<GroupAnimation>d__90:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:992)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.Hit","expected":{"requirement":"独立动画夹具中经生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件","expectedState":"Hit_A","damageEntry":"UnitHealth.ApplyDamage（生产入口）","notCountedInItem4":true},"actual":{"hitEvents":1,"hpBefore":100,"hpAfter":95,"finalAmount":5,"preState":"Locomotion","hitStateObserved":true,"hitState":"Hit_A","playerHpUnaffected":100},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:52.810","data":{"fixtureName":"FND00B06_HitFixture","fixturePath":"FND00B06_HitFixture","brainEnabledAtCreate":true,"brainSettleFrames":2,"hitSubscribedAfterStart":true,"brainDisabledBeforeDamage":true,"locomotionWaitFrames":0,"locomotionWaitSeconds":0,"samples":[{"label":"hit","t":21.754,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.01517,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.758,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.01882,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.762,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.02333,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.766,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.02695,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.769,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.03071,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.772,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.0337,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.776,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.03701,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.781,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.04052,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.784,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.04482,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.787,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.04796,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.791,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.05076,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.803,"stateName":"Locomotion","stateHash":-2089788878,"normalizedTime":0.05464,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"hit","t":21.807,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.07501,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1}],"note":"该伤害只作动画刺激，不计入第 4 项普攻结算；夹具为 Knight_Unit 内存实例，未改生产资产"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<HitAnimationFixture>d__91:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:1120)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][ASSERT] {"run":1,"qaItem":"6","assertion":"Animation.DownedOrDeath","expected":{"requirement":"对夹具角色施加致命伤害后：dead=true、IsDown=true、死亡事件仅 1 次、Animator 进入 Downed，且不制造团灭","expectedState":"Downed","deathEvents":1},"actual":{"dead":true,"isDown":true,"deathEvents":1,"stateEntered":true,"state":"Downed","wipedBefore":false,"wipedAfter":false,"timeScale":1,"downedListBefore":0,"downedListAfter":1},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:10:52.916","data":{"fixtureName":"FND00B06_HitFixture","samples":[{"label":"downed","t":21.811,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.07501,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.815,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.08041,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.821,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.0934,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.828,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.10222,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.832,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.11224,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.835,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.11799,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.838,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.12262,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.843,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.12766,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.846,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.13442,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.85,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.13992,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.853,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.14501,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.857,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.14985,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.861,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.15603,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.864,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.16225,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.868,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.16722,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.872,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.17233,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.876,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.17778,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.88,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.18436,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.883,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.19054,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.887,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.19511,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.891,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.20048,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.895,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.20709,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.898,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.21277,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.901,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.21819,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.905,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.22253,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.91,"stateName":"Hit_A","stateHash":-2020627443,"normalizedTime":0.22852,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1},{"label":"downed","t":21.913,"stateName":"Downed","stateHash":-660779543,"normalizedTime":0.12852,"speedX":0,"speedZ":0,"grounded":true,"attackSpeedParam":1,"agentVelocity":0,"swordTimer":-1}],"note":"当前玩家设计以倒地（Downed）代替彻底死亡；本断言不触发全员团灭，未改生产资产"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:88)
+FND00B06_ProbeRunner/<DownedAnimationFixture>d__92:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:1189)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 88)
+
+[FND00B06][SUMMARY] {   "run": 1,   "task": "FND-00B-06",   "qaItems": "4,6",   "startedAt": "2026-11-05 18:10:39.293",   "finishedAt": "2026-11-05 18:10:52.925",   "unityVersion": "2022.3.62f3c1",   "scene": "Assets/Scenes/DungeonWorld.unity",   "randomSeed": 20261105,   "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\FND-00B-06\\editor_run1\\06_Assertions.jsonl",   "assertionLinesInFile": "14",   "pass": 12,   "fail": 0,   "blocked": 0,   "infraFail": 0,   "observed": 2,   "exitReason": "completed" } 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Evidence:WriteSummary (string,int,string) (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:142)
+FND00B06_ProbeRunner:Finish () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:193)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:174)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs Line: 142)
+
+[FND00B06] finish; exit=0; pass=12; fail=0; blocked=0; infra=0; observed=2
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_ProbeRunner:Finish () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:200)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:174)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs Line: 200)
+
+[FND00B06] playModeStateChanged=ExitingPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+FND00B06_ProbeRunner:Finish () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:220)
+FND00B06_ProbeRunner/<Start>d__82:MoveNext () (at Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:174)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            4.839 ms
+	Integration:            248.945 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       0.017 ms
+	Total Operation Time:   253.805 ms
+Unloading 100 unused Assets / (0.6 MB). Loaded Objects now: 9745.
+Memory consumption went from 245.6 MB to 245.0 MB.
+Total: 13.330800 ms (FindLiveObjects: 0.661400 ms CreateObjectMapping: 0.259700 ms MarkObjects: 11.911000 ms  DeleteObjects: 0.497900 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+[FND00B06] playModeStateChanged=EnteredEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[FND00B06] batchmode exit 0
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:ExitWithCode () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:108)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:85)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 108)
+
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/FND-00B-06/editor_run1/InEditorResult.txt; task=FND00B06 code=0 finishedAt=2026-11-05 18:10:53.421 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run1 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:TryFinish (string,int) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:148)
+FND00B06_Boot:ExitWithCode () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:109)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:85)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 148)
+
+[QA][INEDITOR] done task=FND00B06 code=0

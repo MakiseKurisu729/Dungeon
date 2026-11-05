@@ -1,0 +1,33 @@
+SKILL-ANIM-02 Phase A — 参数读回（改后）
+controller=Assets/_Project/Art/Animations/PlayerBase.controller
+layers=1
+--- all parameters ---
+  SpeedZ : Float (defaultFloat=0)
+  SpeedX : Float (defaultFloat=0)
+  Grounded : Bool (defaultFloat=0)
+  AttackSpeed : Float (defaultFloat=0)
+  AttackRange : Trigger (defaultFloat=0)
+  Skill : Trigger (defaultFloat=0)
+  Bash : Trigger (defaultFloat=0)
+  Interrupt : Trigger (defaultFloat=0)
+  Interact : Trigger (defaultFloat=0)
+  Die : Trigger (defaultFloat=0)
+  Revive : Trigger (defaultFloat=0)
+  Hit : Trigger (defaultFloat=0)
+  Jump : Trigger (defaultFloat=0)
+  AttackMelee : Trigger (defaultFloat=0)
+  Q : Trigger (defaultFloat=0)
+  W : Trigger (defaultFloat=0)
+  E : Trigger (defaultFloat=0)
+  R : Trigger (defaultFloat=0)
+  SkillSpeed : Float (defaultFloat=0)
+OK    Q : Trigger
+OK    W : Trigger
+OK    E : Trigger
+OK    R : Trigger
+OK    SkillSpeed : Float
+--- substate machines ---
+  Q states=1
+  W states=1
+  E states=1
+  R states=1

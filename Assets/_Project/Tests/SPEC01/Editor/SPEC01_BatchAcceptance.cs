@@ -50,7 +50,8 @@ public static class SPEC01_BatchAcceptance
         catch (Exception e)
         {
             Debug.LogError("[SPEC01] launcher failed: " + e);
-            EditorApplication.Exit(3);
+            if (QA_InEditorMenu.TryFinish("SPEC01", 3)) return;   // 编辑器内：只记失败，不退 Unity
+            EditorApplication.Exit(3);                            // batch：原样
         }
     }
 
@@ -165,6 +166,7 @@ public static class SPEC01_Boot
         SessionState.SetBool(FinishedKey, false);
         SessionState.SetBool(SPEC01_BatchAcceptance.ActiveKey, false);
         Debug.Log("[SPEC01] batchmode exit " + code);
+        if (QA_InEditorMenu.TryFinish("SPEC01", code)) return;
         EditorApplication.Exit(code);
     }
 

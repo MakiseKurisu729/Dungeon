@@ -1,0 +1,56 @@
+AC-10  编辑器内跑探针不被“失焦冻结”卡死（Application.runInBackground 运行期开关）
+证据追加时间：2026-11-05 19:03（本文件只追加，不改动既有条目）
+执行者：OpenCode / executor 子代理；Unity 模式 B（MCP 常开编辑器，未关 Unity）
+
+=== 1. 改动（唯一文件） ===
+文件：Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs（该目录整体为未跟踪新文件，git diff 无基线）
+  87:        // 编辑器内无人值守跑探针：失焦时不冻结 Play 帧循环（只改运行期开关，不动 Player Settings）。
+  88:        Application.runInBackground = true;
+  93:                  "; runInBackground=" + Application.runInBackground +
+插入位置：QA_InEditorMenu.Run(string task) 内，PassGate 之后、task 分派之前，
+即 SPEC01_BatchAcceptance.Run() / FND00B06_BatchAcceptance.Run() / DIAG_BatchAcceptance.Run() 三者共用的唯一入口，
+早于任何一套进入 Play。未改 ProjectSettings/**、未改任何 *_BatchAcceptance / *_Evidence / 断言。
+
+=== 2. 编译闸门 ===
+mcpforunity://editor/state → compilation.is_compiling=false, is_domain_reload_pending=false
+（last_domain_reload_after_unix_ms=1793876099530，改写后刷新触发）
+read_console filter_text="error CS" → 0 条。
+
+=== 3. 运行记录（均走 execute_menu_item: Tools/QA/In-Editor/SPEC01 (green)） ===
+run6  18:57:37.129 → 18:58:19.128  pass=12 fail=0 blocked=0 infraFail=0 observed=0  ExitCode=0
+      证据：Docs/QA/Evidence/SPEC-01/editor_run6/
+      前台焦点：混合（Unity 与 OpenCode 交替），作为对照跑
+run7  18:59:33.280 → 19:00:15.333  pass=12 fail=0 blocked=0 infraFail=0 observed=0  ExitCode=0
+      证据：Docs/QA/Evidence/SPEC-01/editor_run7/
+      触发前：Win32 GetForegroundWindow=15784(OpenCode)，MCP editor_state.is_focused=false
+      （即“先切走再触发”的场景，Unity 未聚焦时 gate 仍放行并完成整跑）
+      焦点轨迹 focus_trace_run7.txt（250ms 采样，PID|标题）：
+        18:59:10.694 -> 18:59:23.092  15784|MCP(OpenCode)
+        18:59:23.092 -> 18:59:44.743  8000|Dungeon(Unity)     ← 编辑器自行抢到前台
+        18:59:44.743 -> 19:00:09.261  15784|MCP(OpenCode)     ← 连续 24.5s 非 Unity 前台
+        19:00:09.261 -> 19:00:21.679  8000|Dungeon(Unity)
+        19:00:21.679 -> 19:00:35.374  15784|MCP(OpenCode)
+      这 24.5s 失焦窗口内落下的断言（均为 Play 帧驱动产物）：
+        19:00:08.675 Attack.DualPathUnified / 19:00:08.677 Clock.MeleeNormalizedWindow
+        19:00:08.678 Clock.RangedOneShotPerCycle / 19:00:09.241 Animation.PostCombatAndHit
+      → 失焦期间 Play 帧循环仍在推进，探针跑完、结果文件写出、code=0。
+run8  19:01:47.469 → 19:02:29.475  pass=12 fail=0 blocked=0 infraFail=0 observed=0  ExitCode=0
+      证据：Docs/QA/Evidence/SPEC-01/editor_run8/
+      强化对照：跑前启动“前台钉住”进程（250ms 一次 AppActivate(15784=OpenCode)），全程压低 Unity 前台。
+      焦点轨迹 focus_trace_run8.txt：353 条有效采样中 PID 8000(Unity) 前台采样数 = 0，
+      整段（19:01:33.455 → 采样结束）唯一前台进程为 15784|MCP(OpenCode)；轨迹段数=1（无切换）。
+      该跑仍 pass=12 fail=0 ExitCode=0，12 条断言时间戳 19:01:54.776 → 19:02:29.471 全部落在非 Unity 前台期间。
+      触发前后 editor_state.is_focused 均为 false。
+
+=== 4. 收尾态（run8 之后） ===
+mcpforunity://editor/state：is_playing=false, is_paused=false, is_changing=false,
+  is_compiling=false, is_domain_reload_pending=false, is_focused=false
+read_console：`[QA][INEDITOR] done task=SPEC01 code=0`；0 条 `error CS`
+Docs/QA/Evidence/SPEC-01/editor_run8/InEditorResult.txt：
+  task=SPEC01 / code=0 / finishedAt=2026-11-05 19:02:29.977 / evidenceSubdir=editor_run8 / envAfter 全 <null>
+Unity 进程 8000 存活（Responding=True），未执行任何 Exit。
+
+=== 5. 结论 ===
+“失焦冻结”在前一版（runInBackground=0，见 editor_run2_abort_note.txt）会让编辑器内 Play 帧循环停摆；
+本次在菜单入口设置 Application.runInBackground=true 后，3 次连跑（含 1 次 0/353 前台采样的全失焦跑）均 12/0/exit0，
+断言时间戳覆盖失焦区间，且收尾 is_playing=false、Unity 未退出。AC-10 通过。

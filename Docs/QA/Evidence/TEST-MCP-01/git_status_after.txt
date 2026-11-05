@@ -1,0 +1,24 @@
+﻿ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/TASK_SKILL-ANIM-02.md
+ M Docs/Handoff/workflow-rules.md
+?? Assets/_Project/Tests/QA.meta
+?? Assets/_Project/Tests/QA/
+?? Docs/Handoff/REPORT_TEST-MCP-01.md
+?? Docs/Handoff/REPORT_WF-05.md
+?? Docs/Handoff/TASK_TEST-MCP-01.md
+?? Docs/Handoff/TASK_WF-05.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run1/
+?? Docs/QA/Evidence/FND-00B-06/editor_run1/
+?? Docs/QA/Evidence/SPEC-01/editor_run1/
+?? Docs/QA/Evidence/SPEC-01/editor_run3/
+?? Docs/QA/Evidence/TEST-MCP-01/
+?? Docs/QA/Evidence/WF-05/

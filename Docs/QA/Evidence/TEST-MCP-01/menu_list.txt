@@ -1,0 +1,8 @@
+# AC-1 QA.Menu.Present
+# source: MCP resource mcpforunity://menu-items, filtered by prefix "Tools/QA"
+# capturedAt: 2026-11-05 17:55 (local)
+# unity instance: Dungeon@4f5c34c82f31646e, Unity 2022.3.62f3c1
+Tools/QA/In-Editor/DIAG
+Tools/QA/In-Editor/FND00B06
+Tools/QA/In-Editor/SPEC01 (green)
+# matchedCount=3 (no other Tools/QA/* menu exists yet)

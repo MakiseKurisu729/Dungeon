@@ -1,0 +1,41 @@
+SKILL-ANIM-02 Phase A fix — 参数读回（SkillSpeed default=1 / AnyState=If）
+controller=Assets/_Project/Art/Animations/PlayerBase.controller
+layers=1
+--- all parameters ---
+  SpeedZ : Float (defaultFloat=0)
+  SpeedX : Float (defaultFloat=0)
+  Grounded : Bool (defaultFloat=0)
+  AttackSpeed : Float (defaultFloat=0)
+  AttackRange : Trigger (defaultFloat=0)
+  Skill : Trigger (defaultFloat=0)
+  Bash : Trigger (defaultFloat=0)
+  Interrupt : Trigger (defaultFloat=0)
+  Interact : Trigger (defaultFloat=0)
+  Die : Trigger (defaultFloat=0)
+  Revive : Trigger (defaultFloat=0)
+  Hit : Trigger (defaultFloat=0)
+  Jump : Trigger (defaultFloat=0)
+  AttackMelee : Trigger (defaultFloat=0)
+  Q : Trigger (defaultFloat=0)
+  W : Trigger (defaultFloat=0)
+  E : Trigger (defaultFloat=0)
+  R : Trigger (defaultFloat=0)
+  SkillSpeed : Float (defaultFloat=1)
+--- skill params check ---
+OK    Q : Trigger
+OK    W : Trigger
+OK    E : Trigger
+OK    R : Trigger
+OK    SkillSpeed : Float default=1
+--- substate machines ---
+  Q states=1
+  W states=1
+  E states=1
+  R states=1
+--- AnyState condition modes (expect: Downed=If/Die, others=If) ---
+  -> Downed | mode=1(If) param=Die thr=0
+  -> Hit_A | mode=1(If) param=Hit thr=0
+  -> Q | mode=1(If) param=Q thr=0
+  -> W | mode=1(If) param=W thr=0
+  -> E | mode=1(If) param=E thr=0
+  -> R | mode=1(If) param=R thr=0

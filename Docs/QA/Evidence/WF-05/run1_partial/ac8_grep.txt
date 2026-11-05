@@ -1,0 +1,50 @@
+﻿# AC-8｜§3.2.1 第 9 条存在，且与 §6.1 的域重载熔断不再冲突
+
+命令: Select-String -Path AGENTS.md -Pattern "卡在编辑器焦点时自行推进"
+期望: 命中 1 行（§3.2.1 第 9 条）
+命令: Select-String -Path AGENTS.md -Pattern '卡在编辑器焦点时自行推进'
+实际: 命中 1 行
+--- 原始行 ---
+66: 9. **卡在编辑器焦点时自行推进**：当 MCP 操作因编辑器未获得焦点、窗口未重绘或域重载未推进而停滞（进 Play 无响应、菜单不触发、`is_compiling` 长时间不变、Unity 窗口未激活），AI **不必询问所有者**，可直接调用 `refresh_unity`、把 Unity 窗口切到前台、触发一次重绘或重新查询 `editor_state` 来唤醒；连续 3 次仍无进展才按 §6.1 停。该操作只允许“唤醒编辑器”，**不得借唤醒之名改任何资产**。
+
+命令: Select-String -Path AGENTS.md -Pattern "refresh_unity"
+期望: 命中 ≥1 行（唤醒手段）
+命令: Select-String -Path AGENTS.md -Pattern 'refresh_unity'
+实际: 命中 1 行
+--- 原始行 ---
+66: 9. **卡在编辑器焦点时自行推进**：当 MCP 操作因编辑器未获得焦点、窗口未重绘或域重载未推进而停滞（进 Play 无响应、菜单不触发、`is_compiling` 长时间不变、Unity 窗口未激活），AI **不必询问所有者**，可直接调用 `refresh_unity`、把 Unity 窗口切到前台、触发一次重绘或重新查询 `editor_state` 来唤醒；连续 3 次仍无进展才按 §6.1 停。该操作只允许“唤醒编辑器”，**不得借唤醒之名改任何资产**。
+
+命令: Select-String -Path AGENTS.md -Pattern "不必询问所有者"
+期望: 命中 1 行（免逐次批准）
+命令: Select-String -Path AGENTS.md -Pattern '不必询问所有者'
+实际: 命中 1 行
+--- 原始行 ---
+66: 9. **卡在编辑器焦点时自行推进**：当 MCP 操作因编辑器未获得焦点、窗口未重绘或域重载未推进而停滞（进 Play 无响应、菜单不触发、`is_compiling` 长时间不变、Unity 窗口未激活），AI **不必询问所有者**，可直接调用 `refresh_unity`、把 Unity 窗口切到前台、触发一次重绘或重新查询 `editor_state` 来唤醒；连续 3 次仍无进展才按 §6.1 停。该操作只允许“唤醒编辑器”，**不得借唤醒之名改任何资产**。
+
+命令: Select-String -Path AGENTS.md -Pattern "不得借唤醒之名改任何资产"
+期望: 命中 1 行（唤醒不得顺带改资产）
+命令: Select-String -Path AGENTS.md -Pattern '不得借唤醒之名改任何资产'
+实际: 命中 1 行
+--- 原始行 ---
+66: 9. **卡在编辑器焦点时自行推进**：当 MCP 操作因编辑器未获得焦点、窗口未重绘或域重载未推进而停滞（进 Play 无响应、菜单不触发、`is_compiling` 长时间不变、Unity 窗口未激活），AI **不必询问所有者**，可直接调用 `refresh_unity`、把 Unity 窗口切到前台、触发一次重绘或重新查询 `editor_state` 来唤醒；连续 3 次仍无进展才按 §6.1 停。该操作只允许“唤醒编辑器”，**不得借唤醒之名改任何资产**。
+
+命令: Select-String -Path AGENTS.md -Pattern "10 分钟且 §3.2.1 第 9 条"
+期望: 命中 1 行（§6.1 已改为“唤醒手段用过仍无进展”才熔断，与第 9 条不打架）
+命令: Select-String -Path AGENTS.md -Pattern '10 分钟且 §3\.2\.1 第 9 条'
+实际: 命中 1 行
+--- 原始行 ---
+100: - MCP 连接/工具调用连续 3 次失败；域重载后 `isCompiling` 单次超 10 分钟且 §3.2.1 第 9 条的唤醒手段已用过仍无进展。
+
+命令: 反向断言——旧的“超 10 分钟未结束”无条件熔断表述应为 0 行
+命令: Select-String -Path AGENTS.md -Pattern '超 10 分钟未结束'
+实际: 命中 0 行
+--- 原始行 ---
+(无匹配)
+
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern "可自行 `refresh_unity`"
+期望: 命中 1 行（§5.2 模式 B 段落补句）
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern '可自行 `refresh_unity`'
+实际: 命中 1 行
+--- 原始行 ---
+203: - 模式 B 下，AI 可自行 `refresh_unity` / 聚焦唤醒编辑器，无需逐次询问；唤醒仅限让编辑器响应，不含任何资产改动。
+

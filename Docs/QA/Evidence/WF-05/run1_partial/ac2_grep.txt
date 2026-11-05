@@ -1,0 +1,28 @@
+﻿# AC-2｜§3.2.1 第 1 条：≥5 个只读工具/资源名 + “无需逐次批准”
+
+命令: Select-String -Path AGENTS.md -Pattern "无需逐次批准"
+期望: 命中 ≥1 行
+命令: Select-String -Path AGENTS.md -Pattern '无需逐次批准'
+实际: 命中 1 行
+--- 原始行 ---
+58: 1. **只读可直接用**（无需逐次批准）：`read_console`；MCP 资源 `mcpforunity://editor/state`、`mcpforunity://project/info`、`mcpforunity://instances`、`mcpforunity://custom-tools`、`mcpforunity://tests`、`mcpforunity://menu-items` 等；`find_gameobjects` 与各工具的 `get_*`／`get_info` 查询；`manage_editor` 的查询类 action。只读仍受第 4、8 条约束。
+
+命令: 逐个 Select-String（-SimpleMatch）校验只读名单，期望每项 ≥1 命中
+  read_console -> 1 行
+  mcpforunity://editor/state -> 1 行
+  mcpforunity://project/info -> 1 行
+  mcpforunity://instances -> 1 行
+  mcpforunity://custom-tools -> 1 行
+  mcpforunity://tests -> 1 行
+  mcpforunity://menu-items -> 1 行
+  find_gameobjects -> 1 行
+  get_info -> 1 行
+  manage_editor -> 1 行
+小计: 10 / 10 项命中
+
+命令: Select-String -Path AGENTS.md -Pattern "只读可直接用"
+命令: Select-String -Path AGENTS.md -Pattern '只读可直接用'
+实际: 命中 1 行
+--- 原始行 ---
+58: 1. **只读可直接用**（无需逐次批准）：`read_console`；MCP 资源 `mcpforunity://editor/state`、`mcpforunity://project/info`、`mcpforunity://instances`、`mcpforunity://custom-tools`、`mcpforunity://tests`、`mcpforunity://menu-items` 等；`find_gameobjects` 与各工具的 `get_*`／`get_info` 查询；`manage_editor` 的查询类 action。只读仍受第 4、8 条约束。
+

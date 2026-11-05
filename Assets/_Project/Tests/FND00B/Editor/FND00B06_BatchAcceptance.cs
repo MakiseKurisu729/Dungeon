@@ -39,7 +39,8 @@ public static class FND00B06_BatchAcceptance
         catch (Exception e)
         {
             Debug.LogError("[FND00B06] launcher failed: " + e);
-            EditorApplication.Exit(3);
+            if (QA_InEditorMenu.TryFinish("FND00B06", 3)) return;   // 编辑器内：只记失败，不退 Unity
+            EditorApplication.Exit(3);                              // batch：原样
         }
     }
 }
@@ -106,6 +107,7 @@ public static class FND00B06_Boot
         int code = SessionState.GetInt(ExitCodeKey, 3);
         SessionState.SetBool(FinishedKey, false);
         Debug.Log("[FND00B06] batchmode exit " + code);
+        if (QA_InEditorMenu.TryFinish("FND00B06", code)) return;
         EditorApplication.Exit(code);
     }
 

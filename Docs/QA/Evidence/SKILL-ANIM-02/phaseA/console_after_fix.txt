@@ -1,0 +1,34 @@
+SKILL-ANIM-02 Phase A fix — console 检查（SkillSpeed=1 / AnyState=If 之后）
+时间：2026-11-05 19:0x（本地）；实例 Dungeon@4f5c34c82f31646e；Unity 2022.3.62f3c1；模式 B（MCP，编辑器常开）
+
+== 结论 ==
+error CS = 0
+error 级 = 1（来源为本次定点探针自身，非工程代码；见下）
+warning 级 = 0（当前 console 窗口保留的条目）
+
+== error CS 过滤 ==
+read_console(filter_text="error CS", types=all) → 0 条
+
+== error 级条目（1 条，detailed）==
+message : Parameter 'SkillSpeed' does not exist.
+file    : ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteCode.cs:241
+stack   : UnityEngine.Animator:GetFloat(string) → MCPDynamicCode:Execute()
+说明    : 定点验证的第一次探针遍历场景内全部 4 个 Animator 并读 GetFloat("SkillSpeed")；
+          Skeleton_Warrior 使用另一套控制器（无 SkillSpeed 参数），故报 1 条。
+          该调用来自临时探针 MCPDynamicCode，不写入 Assets/，不是生产代码回归；
+          之后的两条 trigger_probe 只读 Knight 的 Animator，未再产生 error。
+
+== 附加说明 ==
+本次定点验证进入过 Play 模式，Unity 在进入 Play 时清空了 Console 面板；
+因此 SPEC01 的 ASSERT/SUMMARY 行已不在面板中，但其证据文件仍在：
+Docs/QA/Evidence/SPEC-01/editor_run5/（pass=12 fail=0 code=0，见 SPEC01_ExitCode_run1.txt）
+Play 退出后 editor_state: play_mode.is_playing=false, is_compiling=false, is_domain_reload_pending=false。
+
+== 当前 console 保留条目（7 条 = 6 log + 1 error）==
+[FND00B06] boot; isPlaying=False; started=True; finished=False
+[DebugTestTools] host created in DungeonWorld; keys F5/F9/F10
+0 个身体部件已挂到 PlayerBody 层
+[FND00B06] playModeStateChanged=EnteredPlayMode
+[FND00B06] playModeStateChanged=ExitingPlayMode
+（其余 1 条 log 为编辑器常规输出）
+[Error] Parameter 'SkillSpeed' does not exist.（探针自身，见上）

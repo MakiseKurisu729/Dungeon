@@ -1,0 +1,16 @@
+SKILL-ANIM-02 Phase A — 改前 git 状态
+时间：2026-11-05
+实例：Dungeon@4f5c34c82f31646e (Unity 2022.3.62f3c1, WindowsEditor)
+编辑器：is_playing=false, is_compiling=false, is_domain_reload_pending=false, active_scene=Assets/Scenes/DungeonWorld.unity
+
+$ git rev-parse HEAD
+6872348ba191977508cc14481c55df3a564f8335
+
+$ git rev-parse --abbrev-ref HEAD
+(未采集：shell 组合命令被权限拦截；HEAD 与工单基线 6872348b 一致)
+
+$ git status --porcelain -- Assets/_Project/Art/Animations/PlayerBase.controller
+(无输出 = 干净，未修改)
+
+$ git stash list
+(空；.git/refs/stash* 不存在。未执行任何 stash 操作)

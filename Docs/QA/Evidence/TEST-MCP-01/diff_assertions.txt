@@ -1,0 +1,103 @@
+﻿# AC-7 QA.Assertions.Untouched ; generated 2026-11-05 18:12:39
+# repo: D:\unity\Dungeon  branch: docs/fnd-00-baseline  HEAD: 6872348ba191977508cc14481c55df3a564f8335
+
+## git status --short -- Assets/_Project/Tests
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+?? Assets/_Project/Tests/QA.meta
+?? Assets/_Project/Tests/QA/
+
+## git diff --stat -- Assets/_Project/Tests
+ Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs       | 1 +
+ Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs             | 2 ++
+ Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs | 1 +
+ Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs       | 2 ++
+ Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs   | 1 +
+ Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs         | 2 ++
+ 6 files changed, 9 insertions(+)
+
+## git diff -- Assets/_Project/Tests
+diff --git a/Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs b/Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+index af6f1726..927e9890 100644
+--- a/Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
++++ b/Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+@@ -125,6 +125,7 @@ public static class DIAG_Boot
+         SessionState.SetBool(FinishedKey, false);
+         SessionState.SetBool(ActiveKey, false);
+         Debug.Log("[DIAG] batchmode exit " + code);
++        if (QA_InEditorMenu.TryFinish("DIAG", code)) return;
+         EditorApplication.Exit(code);
+     }
+ 
+diff --git a/Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs b/Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+index 0c38315c..a4222d85 100644
+--- a/Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
++++ b/Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+@@ -34,6 +34,8 @@ public class DIAG_Evidence
+         Mode = mode;
+         string root = Directory.GetParent(Application.dataPath).FullName;
+         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "DIAG-SKILL");
++        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
++        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
+         Directory.CreateDirectory(_dir);
+         _assertPath = Path.Combine(_dir, "DIAG_Assertions.jsonl");
+         try { if (File.Exists(_assertPath)) File.Delete(_assertPath); }
+diff --git a/Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs b/Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+index 10bb1af9..d8d2d4d7 100644
+--- a/Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
++++ b/Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+@@ -106,6 +106,7 @@ public static class FND00B06_Boot
+         int code = SessionState.GetInt(ExitCodeKey, 3);
+         SessionState.SetBool(FinishedKey, false);
+         Debug.Log("[FND00B06] batchmode exit " + code);
++        if (QA_InEditorMenu.TryFinish("FND00B06", code)) return;
+         EditorApplication.Exit(code);
+     }
+ 
+diff --git a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+index 5a287979..e6b941df 100644
+--- a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
++++ b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+@@ -33,6 +33,8 @@ public class FND00B06_Evidence
+         Run = run;
+         string root = Directory.GetParent(Application.dataPath).FullName;
+         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "FND-00B-06");
++        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
++        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
+         Directory.CreateDirectory(_dir);
+         _assertPath = Path.Combine(_dir, "06_Assertions.jsonl");
+ 
+diff --git a/Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs b/Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+index 977529a0..59026db7 100644
+--- a/Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
++++ b/Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+@@ -165,6 +165,7 @@ public static class SPEC01_Boot
+         SessionState.SetBool(FinishedKey, false);
+         SessionState.SetBool(SPEC01_BatchAcceptance.ActiveKey, false);
+         Debug.Log("[SPEC01] batchmode exit " + code);
++        if (QA_InEditorMenu.TryFinish("SPEC01", code)) return;
+         EditorApplication.Exit(code);
+     }
+ 
+diff --git a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+index 5e6a7ee3..a3433abc 100644
+--- a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
++++ b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+@@ -39,6 +39,8 @@ public class SPEC01_Evidence
+         Mode = mode;
+         string root = Directory.GetParent(Application.dataPath).FullName;
+         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "SPEC-01");
++        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
++        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
+         Directory.CreateDirectory(_dir);
+ 
+         string tag = Environment.GetEnvironmentVariable("SPEC01_EVIDENCE_TAG");
+
+## assertion-body check: changed lines containing 'Assert' (expect 0)
+count=0
+
+## removed-line check: lines starting with single '-' (expect only the 6 replaced originals)

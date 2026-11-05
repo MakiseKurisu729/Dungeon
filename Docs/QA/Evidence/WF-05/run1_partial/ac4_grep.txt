@@ -1,0 +1,42 @@
+﻿# AC-4｜§3.2.1/§6.1：单实例单驱动、域重载门、编辑器内测试入口
+
+命令: Select-String -Path AGENTS.md -Pattern "同一时刻只允许一个 AI"
+期望: 命中 1 行（R-4）
+命令: Select-String -Path AGENTS.md -Pattern '同一时刻只允许一个 AI'
+实际: 命中 1 行
+--- 原始行 ---
+61: 4. **单实例单驱动**：同一时刻只允许一个 AI 驱动 Unity；其他会话/子代理只能只读，需要写时排队。实例不唯一且未 `set_active_instance` 时，先用 `set_active_instance` pin 再操作。
+
+命令: Select-String -Path AGENTS.md -Pattern "isCompiling"
+期望: ≥2 行（§3.2.1 第 5 条 + §6.1 新增熔断）
+命令: Select-String -Path AGENTS.md -Pattern 'isCompiling'
+实际: 命中 2 行
+--- 原始行 ---
+62: 5. **域重载门**：写操作后等 `editor_state.compilation.is_compiling`（资源 JSON 字段 `isCompiling`）为 `false` 且 `is_domain_reload_pending` 为 `false` 再继续；编译错误连续 2 轮按 §6.1 熔断。
+100: - MCP 连接/工具调用连续 3 次失败；域重载后 `isCompiling` 单次超 10 分钟且 §3.2.1 第 9 条的唤醒手段已用过仍无进展。
+
+命令: Select-String -Path AGENTS.md -Pattern "run_tests"
+期望: ≥1 行且语义为“不得用 run_tests 跑这三套”
+命令: Select-String -Path AGENTS.md -Pattern 'run_tests'
+实际: 命中 1 行
+--- 原始行 ---
+64: 7. **编辑器内测试入口**：`SPEC01`／`FND00B06`／`DIAG` 的编辑器内执行只允许走 `Tools/QA/In-Editor/*` 菜单（`TEST-MCP-01`），由 `execute_menu_item` 触发；**不得**用 `run_tests` 跑这三套。
+
+命令: Select-String -Path AGENTS.md -Pattern "is_domain_reload_pending"
+命令: Select-String -Path AGENTS.md -Pattern 'is_domain_reload_pending'
+实际: 命中 1 行
+--- 原始行 ---
+62: 5. **域重载门**：写操作后等 `editor_state.compilation.is_compiling`（资源 JSON 字段 `isCompiling`）为 `false` 且 `is_domain_reload_pending` 为 `false` 再继续；编译错误连续 2 轮按 §6.1 熔断。
+
+命令: Select-String -Path AGENTS.md -Pattern "Tools/QA/In-Editor"
+命令: Select-String -Path AGENTS.md -Pattern 'Tools/QA/In-Editor'
+实际: 命中 1 行
+--- 原始行 ---
+64: 7. **编辑器内测试入口**：`SPEC01`／`FND00B06`／`DIAG` 的编辑器内执行只允许走 `Tools/QA/In-Editor/*` 菜单（`TEST-MCP-01`），由 `execute_menu_item` 触发；**不得**用 `run_tests` 跑这三套。
+
+命令: 反向断言——"不得用 `run_tests` 跑这三套" 所在行不得含"允许/推荐"
+命令: Select-String -Path AGENTS.md -Pattern '不得\*\*用 `run_tests`'
+实际: 命中 1 行
+--- 原始行 ---
+64: 7. **编辑器内测试入口**：`SPEC01`／`FND00B06`／`DIAG` 的编辑器内执行只允许走 `Tools/QA/In-Editor/*` 菜单（`TEST-MCP-01`），由 `execute_menu_item` 触发；**不得**用 `run_tests` 跑这三套。
+

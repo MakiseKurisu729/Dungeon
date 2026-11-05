@@ -2,7 +2,7 @@
 
 > 本文件是**流程规则的唯一入口**。事实看 `Docs/00_项目事实基线.md`；进度看 `Docs/Handoff/CURRENT.md`；目标与范围看 `Docs/Specs/constitution.md`；细则（模板/证据/提交格式）看 `Docs/Handoff/workflow-rules.md`。
 > `Docs/Archive/` 只作背景资料，**不作为开工依据**。
-> 最后更新：2026-11-05（WF-03 对齐 spec-driven 工作流）
+> 最后更新：2026-11-05（WF-05 MCP 常开编辑器规则）
 
 ## 0. 先读
 
@@ -45,9 +45,25 @@
 
 1. **影响面清单**：涉及代码/资产修改，动手编辑前输出“受影响文件与符号清单”（新文件、符号、字符串引用、场景引用、`.meta`），用户确认后才编辑。纯 `Docs/` 文档单可由所有者在工单中预批，免逐项确认。
    - 新增测试 `.cs` 引起的 `.csproj` 自动改动，视为清单的隐含延伸，随资产一并确认。
-2. **Unity 必须关闭**：任何 Unity 操作（批处理、烘焙、资产写入）前先确认编辑器已关；自证 = Unity 进程数 0 且无 `Temp/UnityLockfile`。长任务允许以自证替代人工确认，但证据必须写进 REPORT。
+2. **Unity 访问模式（二选一，任务书声明）**：开工前由任务书写明模式，未声明按模式 A 处理。
+   - **模式 A｜batchmode（默认）**：编辑器必须关闭；自证 = Unity 进程数 0 且无 `Temp/UnityLockfile`。封装、烘焙、全量验收、CI 用此模式。长任务允许以自证替代人工确认，但证据必须写进 REPORT。
+   - **模式 B｜MCP 常开编辑器**：编辑器保持打开，经 `unityMCP` 访问，仅限 §3.2.1 白名单与任务书授权范围。
    - 重命名/移动文件必须连 `.meta` 一起；Animator 参数名、`SendMessage`、`GameObject.Find("名字")` 等字符串引用单列核查。
 3. **资产管辖权**：场景、预制体、Animator Controller、`.asset` 归用户；AI 只出“改动清单/编辑器工具”，不直接改 YAML、不批量猜改 GUID。
+
+### 3.2.1 MCP 使用规则（模式 B）
+
+模式 B 的唯一细则表。与 §3.3（资产管辖权）并存，**不放宽**；与本文其他条款冲突时，以本条为准。
+
+1. **只读可直接用**（无需逐次批准）：`read_console`；MCP 资源 `mcpforunity://editor/state`、`mcpforunity://project/info`、`mcpforunity://instances`、`mcpforunity://custom-tools`、`mcpforunity://tests`、`mcpforunity://menu-items` 等；`find_gameobjects` 与各工具的 `get_*`／`get_info` 查询；`manage_editor` 的查询类 action。只读仍受第 4、8 条约束。
+2. **写操作按单授权**：`manage_asset`、`manage_scene`、`manage_components`、`manage_gameobject` 的写 action、`manage_prefabs`、`manage_animation` 写、脚本编辑（`create_script`／`manage_script`／`apply_text_edits`／`script_apply_edits`）、`execute_code`、`manage_scriptable_object`、`manage_material`／`manage_texture`／`manage_shader` 的写。必须同时满足三件套：① 任务书写明授权范围；② 动手前输出影响面清单（§3.1）；③ 用户确认。**缺任一项即越界**。
+3. **资产管辖权不变**：MCP 写工具不放宽 §3.3；场景/预制体/Animator/`.asset` 的最终形态由所有者确认并提交。
+4. **单实例单驱动**：同一时刻只允许一个 AI 驱动 Unity；其他会话/子代理只能只读，需要写时排队。实例不唯一且未 `set_active_instance` 时，先用 `set_active_instance` pin 再操作。
+5. **域重载门**：写操作后等 `editor_state.compilation.is_compiling`（资源 JSON 字段 `isCompiling`）为 `false` 且 `is_domain_reload_pending` 为 `false` 再继续；编译错误连续 2 轮按 §6.1 熔断。
+6. **batchmode 不废止**：编辑器关闭的回归、全量验收、CI、封装仍走模式 A（batchmode），不得用常开编辑器替代全量验收。
+7. **编辑器内测试入口**：`SPEC01`／`FND00B06`／`DIAG` 的编辑器内执行只允许走 `Tools/QA/In-Editor/*` 菜单（`TEST-MCP-01`），由 `execute_menu_item` 触发；**不得**用 `run_tests` 跑这三套。
+8. **不并行**：Unity 打开时不得两个 AI 同时操作，也不得在 MCP 作业期间手工改同一资产。
+9. **卡在编辑器焦点时自行推进**：当 MCP 操作因编辑器未获得焦点、窗口未重绘或域重载未推进而停滞（进 Play 无响应、菜单不触发、`is_compiling` 长时间不变、Unity 窗口未激活），AI **不必询问所有者**，可直接调用 `refresh_unity`、把 Unity 窗口切到前台、触发一次重绘或重新查询 `editor_state` 来唤醒；连续 3 次仍无进展才按 §6.1 停。该操作只允许“唤醒编辑器”，**不得借唤醒之名改任何资产**。
 
 ## 4. 验证与证据
 
@@ -79,8 +95,11 @@
 - 单步重试 ≥3 次仍红；编译错误连续 ≥2 轮。
 - 计划外需求：资产改动、装包/换包、升 Unity、目录迁移。
 - git 异常（冲突、非预期改动、需要回退）；配额/额度撞限；消耗明显高于同类任务。
-- Unity 未关闭或状态不明；仓库与任务基线不符。
+- 模式 A 下 Unity 未关闭或状态不明；仓库与任务基线不符。
 - 同一命令重复 3 次以上无进展（疑似循环）。
+- MCP 连接/工具调用连续 3 次失败；域重载后 `isCompiling` 单次超 10 分钟且 §3.2.1 第 9 条的唤醒手段已用过仍无进展。
+- 发现第二个 AI/会话正在写同一 Unity 实例（单实例单驱动被破坏）。
+- 未经授权调用了 §3.2.1 第 2 条列出的写工具：立即停、保留现场、按回滚锚还原。
 
 ### 6.2 When stuck
 

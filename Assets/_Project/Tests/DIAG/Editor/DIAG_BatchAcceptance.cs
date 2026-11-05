@@ -42,7 +42,8 @@ public static class DIAG_BatchAcceptance
         catch (Exception e)
         {
             Debug.LogError("[DIAG] launcher failed: " + e);
-            EditorApplication.Exit(3);
+            if (QA_InEditorMenu.TryFinish("DIAG", 3)) return;   // 编辑器内：只记失败，不退 Unity
+            EditorApplication.Exit(3);                          // batch：原样
         }
     }
 
@@ -125,6 +126,7 @@ public static class DIAG_Boot
         SessionState.SetBool(FinishedKey, false);
         SessionState.SetBool(ActiveKey, false);
         Debug.Log("[DIAG] batchmode exit " + code);
+        if (QA_InEditorMenu.TryFinish("DIAG", code)) return;
         EditorApplication.Exit(code);
     }
 

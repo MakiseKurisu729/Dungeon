@@ -1,0 +1,519 @@
+﻿[QA][INEDITOR] start task=DIAG; subdir=editor_run1; unity=2022.3.62f3c1; envAtStart={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=1;DIAG_MODE=probe;QA_EVIDENCE_SUBDIR=editor_run1}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:86)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 86)
+
+[DIAG] launcher start; pid=8000; args=D:\unity\2022.3.62f3c1\Editor\Unity.exe -projectpath D:\unity\Dungeon -useHub -hubIPC -cloudEnvironment production -licensingIpc LicenseClient-lll -hubSessionId 4fd876c0-d58c-11f1-873b-072aeea03741 -accessToken Po7WSUeZrCFq3FEDUn4ZptOGmGct-LoNyseV8vm-BaQ01ef
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_BatchAcceptance:Run () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:23)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:102)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 23)
+
+[DIAG] head=6872348ba191977508cc14481c55df3a564f8335; mode=probe
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_BatchAcceptance:Run () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:30)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:102)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 30)
+
+Opening scene 'Assets/Scenes/DungeonWorld.unity'
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Scenes/DungeonWorld.unity'
+	Deserialize:            4.702 ms
+	Integration:            259.925 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       0.027 ms
+	Total Operation Time:   264.658 ms
+Unloading 6 unused Assets / (164.1 KB). Loaded Objects now: 9817.
+Memory consumption went from 244.1 MB to 243.9 MB.
+Total: 14.719300 ms (FindLiveObjects: 1.448100 ms CreateObjectMapping: 0.604600 ms MarkObjects: 12.475400 ms  DeleteObjects: 0.190000 ms)
+
+[DIAG] opened scene Assets/Scenes/DungeonWorld.unity; loaded=True; dirty=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_BatchAcceptance:Run () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:33)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:102)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 33)
+
+[FND00B06] playModeStateChanged=ExitingEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+UnityEditor.EditorApplication:EnterPlaymode ()
+DIAG_BatchAcceptance:Run () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:39)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:102)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[DIAG] EnterPlaymode requested
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_BatchAcceptance:Run () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:40)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:102)
+QA_InEditorMenu:RunDIAG () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:49)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 40)
+
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.808 seconds
+Refreshing native plugins compatible for Editor in 10.15 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Dungeon
+[FND00B06] boot; isPlaying=False; started=True; finished=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:Boot () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:69)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 69)
+
+[DIAG] boot; isPlaying=False; started=False; finished=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:Boot () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:94)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 94)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.248 seconds
+Domain Reload Profiling: 3060ms
+	BeginReloadAssembly (636ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (48ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (1ms)
+		CreateAndSetChildDomain (379ms)
+	RebuildCommonClasses (33ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (104ms)
+		LoadAssemblies (232ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (23ms)
+			TypeCache.Refresh (6ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (14ms)
+	FinalizeReload (2249ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1419ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (74ms)
+			ProcessInitializeOnLoadAttributes (1264ms)
+			ProcessInitializeOnLoadMethodAttributes (68ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (439ms)
+Asset Pipeline Refresh (id=21296fb797536304a867657cbc24d311): Total: 3.603 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=458 ms
+		Asset DB Callback time: managed=20 ms, native=1 ms
+		Scripting: domain reloads=1, domain reload time=3120 ms, compile time=2 ms, other=0 ms
+		Project Asset Count: scripts=7708, non-scripts=5910
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 1.243ms
+	ApplyChangesToAssetFolders: 0.098ms
+	Scan: 0.003ms
+	OnSourceAssetsModified: 0.002ms
+	GetAllGuidsForCategorization: 2.652ms
+	CategorizeAssets: 244.539ms
+	ImportOutOfDateAssets: 2310.818ms (2298.331ms without children)
+		CompileScripts: 1.755ms
+		CollectScriptTypesHashes: 0.060ms
+		ReloadNativeAssets: 0.672ms
+		UnloadImportedAssets: 1.341ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 5.300ms
+		InitializingProgressBar: 0.001ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 3.356ms
+	PostProcessAllAssets: 20.884ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.527ms
+	UnloadStreamsBegin: 0.360ms
+	PersistCurrentRevisions: 0.334ms
+	UnloadStreamsEnd: 0.066ms
+	GenerateScriptTypeHashes: 3.323ms
+	Untracked: 1021.572ms
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[DebugTestTools] host created in DungeonWorld; keys F5/F9/F10
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugTestToolsBootstrap:AfterSceneLoadHook () (at Assets/_Project/Scripts/Debug/DebugTestTools.cs:171)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugTestTools.cs Line: 171)
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            6.025 ms
+	Integration:            297.862 ms
+	Integration of assets:  0.006 ms
+	Thread Wait Time:       0.011 ms
+	Total Operation Time:   303.904 ms
+0 个身体部件已挂到 PlayerBody 层
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugCameraSwitcher:Start () (at Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs:102)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs Line: 102)
+
+[FND00B06] playModeStateChanged=EnteredPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[DIAG] playModeStateChanged=EnteredPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:103)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 103)
+
+[DIAG] play-mode runner created
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:TryStartRunner () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:140)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:104)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 140)
+
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run1; head=6872348ba191977508cc14481c55df3a564f8335
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:62)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs Line: 62)
+
+[DIAG] active scene=Assets/Scenes/DungeonWorld.unity; waited=0s
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:72)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs Line: 72)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"DIAG-SKILL","assertion":"Diag.Scene.SkillInputController","expected":{"expectedCount":1,"note":"DungeonWorld 运行期应恰好存在 1 个 SkillInputController"},"actual":{"count":1,"waitedSeconds":0},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:24.046","data":{"scene":"Assets/Scenes/DungeonWorld.unity","waitedSeconds":0,"controllerCount":1,"controllerNames":["Managers"],"indicatorCount":1,"note":"count=0 即复现目标缺陷：输入层组件缺失，Update() 从未执行"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertController>d__22:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:142)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"DIAG-SKILL","assertion":"Diag.Scene.Indicator","expected":{"expectedCount":1,"matAssigned":true,"hasConsumer":true},"actual":{"count":1,"matAssigned":true,"hasConsumer":true,"consumerIndicatorId":36068},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:24.058","data":{"count":1,"matAssigned":true,"matName":"MonsterRing","hasConsumer":true,"controllerIndicator":"SkillIndicator","indicatorNames":["SkillIndicator"],"note":"有指示器、无输入消费者 = 孤儿组件（当前复现）"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertIndicator>d__23:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:175)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"DIAG-SKILL","assertion":"Diag.Input.FirstExit","expected":{"expected":"MISSING_CONTROLLER","note":"按 Q 首个失效节点"},"actual":{"firstExit":"NO_PRIMARY","controllerCount":1,"selectionManagerInstance":true,"primary":"none","primaryHasSkillSystem":false,"slot0":"n/a","slot0Effects":-1},"pass":false,"status":"product_fail","kind":"production","timestamp":"2026-11-05 18:11:24.064","data":{"enumeratedOrder":"MISSING_CONTROLLER → NO_PRIMARY → EMPTY_SLOT → NO_EFFECTS → NONE","controllerCount":1,"selectionManagerInstance":true,"primary":"none","primaryHasSkillSystem":false,"slot0":"n/a","slot0Effects":-1,"note":"该枚举按生产 Update() 的早退顺序排列"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertFirstExit>d__24:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:227)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"DIAG-SKILL","assertion":"Diag.Prefab.Slots","expected":{"slotCount":4,"Q":"非空","W":"非空","E":"空","R":"空"},"actual":{"slotCount":4,"slotNames":["Q_Bash","W_HeavySlash","<empty>","<empty>"]},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:24.066","data":{"prefab":"Assets/_Project/Prefabs/Knight_Unit.prefab","slotCount":4,"slotNames":["Q_Bash","W_HeavySlash","<empty>","<empty>"],"Q":"Q_Bash","W":"W_HeavySlash","E":"<empty>","R":"<empty>","note":"直接读取预制体资产，不实例化、不写资产"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertPrefabSlots>d__25:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:280)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"Diag.CastChain.Q","assertion":"Diag.CastChain.Q","expected":{"castReturn":true,"manaDelta":20,"cdRemaining":">0 且≈6","targetDamage":"== MeleeCombat.GetRawDamage()","animState":"Bash（≤0.5s）"},"actual":{"slot":0,"slotName":"Q_Bash","effectType":"BashEffect","castReturn":true,"exception":null,"manaBefore":100,"manaAfter":80,"manaDelta":20,"cdRemaining":6,"cdTotal":6,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.652821064,"animNormalizedBefore":0.652821064,"animEntered":true,"animEntrySeconds":0.135011792,"animPollFrames":34,"animStateAfter":"Bash","animPhaseAfter":0.04725182,"animNormalizedAfter":0.04725182,"animInTransitionAfter":false,"targetHpBefore":1000,"targetHpAfter":985,"expectedDamage":15,"damageApplied":15,"damageObserved":true,"damageWaitSeconds":0.930656552},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:25.832","data":{"slot":0,"fixturePath":"DIAG_SkillFixture_Knight","fixturePos":{"x":50,"y":0,"z":50},"prepareState":"Locomotion","preparePhase":0.652821064,"prepareSeconds":0.0084893,"phaseWaitSeconds":0.6791721,"animator":{"enabled":true,"isActiveAndEnabled":true,"cullingMode":"AlwaysAnimate","updateMode":"Normal","speed":1,"layerCount":1,"controller":"OC_Knight"},"manaOk":true,"cdOk":true,"damageOk":true,"animOk":true,"targetMaxHp":1000}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertQ>d__26:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:335)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Update check failed (this is normal if offline): The operation has timed out.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Services.PackageUpdateService:FetchLatestVersionFromGitHub (string) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/PackageUpdateService.cs:374)
+MCPForUnity.Editor.Services.PackageUpdateService:FetchAndCompare (string,bool,string) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/PackageUpdateService.cs:127)
+MCPForUnity.Editor.Windows.MCPForUnityEditorWindow/<>c__DisplayClass37_0:<CheckForPackageUpdates>b__0 () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Windows/MCPForUnityEditorWindow.cs:462)
+System.Threading.Tasks.Task`1<MCPForUnity.Editor.Services.UpdateCheckResult>:InnerInvoke ()
+System.Threading.Tasks.Task:Execute ()
+System.Threading.Tasks.Task:ExecutionContextCallback (object)
+System.Threading.ExecutionContext:RunInternal (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Threading.ExecutionContext:Run (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Threading.Tasks.Task:ExecuteWithThreadLocal (System.Threading.Tasks.Task&)
+System.Threading.Tasks.Task:ExecuteEntry (bool)
+System.Threading.Tasks.Task:System.Threading.IThreadPoolWorkItem.ExecuteWorkItem ()
+System.Threading.ThreadPoolWorkQueue:Dispatch ()
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+(Filename: ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Helpers/McpLog.cs Line: 40)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"Diag.CastChain.W","assertion":"Diag.CastChain.W","expected":{"castReturn":true,"manaDelta":30,"cdRemaining":">0","swordTimer":">=0（反射 _timer，证明效果已执行）","animState":"Skill（≤0.5s）"},"actual":{"slot":1,"slotName":"W_HeavySlash","effectType":"HeavySlashEffect","castReturn":true,"exception":null,"manaBefore":100,"manaAfter":70,"manaDelta":30,"cdRemaining":6,"cdTotal":6,"swordTimer":0,"animStateBefore":"Locomotion","animPhaseBefore":0.653371751,"animNormalizedBefore":0.653371751,"animEntered":true,"animEntrySeconds":0.0561290048,"animPollFrames":13,"animStateAfter":"Skill","animPhaseAfter":0.0390022472,"animNormalizedAfter":0.0390022472,"animInTransitionAfter":false,"targetHpBefore":-1,"targetHpAfter":-1,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:26.588","data":{"slot":1,"fixturePath":"DIAG_SkillFixture_Knight","fixturePos":{"x":50,"y":0,"z":50},"prepareState":"Locomotion","preparePhase":0.653371751,"prepareSeconds":0.0088241,"phaseWaitSeconds":0.680926859,"animator":{"enabled":true,"isActiveAndEnabled":true,"cullingMode":"AlwaysAnimate","updateMode":"Normal","speed":1,"layerCount":1,"controller":"OC_Knight"},"manaOk":true,"cdOk":true,"timerOk":true,"animOk":true}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertW>d__27:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:399)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][ASSERT] {"run":1,"qaItem":"Diag.CastChain.EmptySlots","assertion":"Diag.CastChain.EmptySlots","expected":{"castReturn2":false,"castReturn3":false,"manaDelta":0,"exception":null},"actual":{"slot2":{"slot":2,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":100,"manaAfter":100,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.6514159,"animNormalizedBefore":0.6514159,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":-1,"targetHpAfter":-1,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"slot3":{"slot":3,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":100,"manaAfter":100,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.6548051,"animNormalizedBefore":0.6548051,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":-1,"targetHpAfter":-1,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1}},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:11:27.293","data":{"slot2":{"slot":2,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":100,"manaAfter":100,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.6514159,"animNormalizedBefore":0.6514159,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":-1,"targetHpAfter":-1,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"slot3":{"slot":3,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":100,"manaAfter":100,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.6548051,"animNormalizedBefore":0.6548051,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":-1,"targetHpAfter":-1,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"slotNames":["<empty>","<empty>"],"note":"空槽=设计内静默，非缺陷（不修）"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:65)
+DIAG_ProbeRunner/<AssertEmptySlots>d__28:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:465)
+DIAG_ProbeRunner/<RunSafe>d__21:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:111)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 65)
+
+[DIAG][CONCLUSION] 见断言数据（Q/W 链条或控制器状态与预期不符）
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:90)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs Line: 90)
+
+[DIAG][SUMMARY] {   "task": "DIAG-SKILL",   "mode": "probe",   "run": 1,   "startedAt": "2026-11-05 18:11:23.038",   "finishedAt": "2026-11-05 18:11:27.300",   "unityVersion": "2022.3.62f3c1",   "scene": "Assets/Scenes/DungeonWorld.unity",   "head": "6872348ba191977508cc14481c55df3a564f8335",   "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\DIAG-SKILL\\editor_run1\\DIAG_Assertions.jsonl",   "pass": 6,   "fail": 1,   "blocked": 0,   "infraFail": 0,   "observed": 0,   "conclusion": "见断言数据（Q/W 链条或控制器状态与预期不符）",   "exitReason": "completed" } 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Evidence:WriteSummary (string,string,string,string) (at Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:109)
+DIAG_ProbeRunner:Finish () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:491)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:92)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs Line: 109)
+
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_ProbeRunner:Finish () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:500)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:92)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs Line: 500)
+
+[FND00B06] playModeStateChanged=ExitingPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+DIAG_ProbeRunner:Finish () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:520)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:92)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[DIAG] playModeStateChanged=ExitingPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:103)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+DIAG_ProbeRunner:Finish () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:520)
+DIAG_ProbeRunner/<Start>d__19:MoveNext () (at Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:92)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 103)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            5.865 ms
+	Integration:            243.089 ms
+	Integration of assets:  0.007 ms
+	Thread Wait Time:       0.007 ms
+	Total Operation Time:   248.968 ms
+Unloading 100 unused Assets / (0.5 MB). Loaded Objects now: 9753.
+Memory consumption went from 244.8 MB to 244.2 MB.
+Total: 12.886600 ms (FindLiveObjects: 0.687400 ms CreateObjectMapping: 0.274000 ms MarkObjects: 11.424900 ms  DeleteObjects: 0.499200 ms)
+
+[FND00B06] playModeStateChanged=EnteredEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:78)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 78)
+
+[DIAG] playModeStateChanged=EnteredEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:103)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 103)
+
+[DIAG] batchmode exit 2
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DIAG_Boot:ExitWithCode () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:127)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:105)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs Line: 127)
+
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run1/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-05 18:11:27.755 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run1 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:TryFinish (string,int) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:148)
+DIAG_Boot:ExitWithCode () (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:128)
+DIAG_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:105)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 148)
+
+[QA][INEDITOR] done task=DIAG code=2

@@ -1,0 +1,40 @@
+SKILL-ANIM-02 Phase A — 证据索引与结论
+时间：2026-11-05 18:36–18:43
+实例：Dungeon@4f5c34c82f31646e（Unity 2022.3.62f3c1，WindowsEditor，单实例）
+执行方式：模式 B（MCP，编辑器常开），execute_code / execute_menu_item / read_console
+
+== 证据文件 ==
+before_git.txt        改前 git status（控制器干净）+ HEAD 6872348b…
+after_dump.txt        改后控制器读回（execute_code 内 File.WriteAllText 原样落盘）
+controller.diff       git diff --stat（461 insertions, 1 deletion）+ 完整 diff
+console_after.txt     error CS = 0；error 级 13 条均为改前 SPEC01 ASSERT 日志
+readback_params.txt   参数读回：Q/W/E/R=Trigger，SkillSpeed=Float
+（SPEC01 回归证据：Docs/QA/Evidence/SPEC-01/editor_run4/）
+
+== Phase A 8 条对照 ==
+1. 参数 Q/W/E/R(Trigger) + SkillSpeed(Float)：已新增（已存在则跳过）
+2. 四个子状态机 Q/W/E/R，各含 Q_1/W_1/E_1/R_1，占位 Clip = Bash/Skill 的 motion：已建
+3. AnyState → 各子状态机：hasExitTime=false, exitTime=0, dur=0.05, src=Source,
+   orderedInterruption=true, canTransitionToSelf=false：已配
+4. *_1 → Locomotion：hasExitTime=true, exitTime=1, dur=0.1：已配
+5. AnyState → Hit_A：与技能过渡同参数，顺序 Downed → Hit_A → Q → W → E → R：已配
+6. *_1 的 speedParameterActive=true, speedParameter="SkillSpeed"：已配
+7. 未新增 Interact → * 过渡（由 AnyState 负责打断）：符合
+8. Bash/Skill 状态与触发器保留：RootStates 中仍在
+9. 未碰 AttackRange / Attack_Draw / Attack_Release / OC_* / 场景 / 预制体 / .asset：
+   diff 唯一删除行是 m_ChildStateMachines: []（被列表替换），无既有状态/过渡被删
+
+== 回归守卫 ==
+Tools/QA/In-Editor/SPEC01 (green) → editor_run4：pass=12 fail=0 blocked=0 infraFail=0 exit=0
+（与改动前一致，无回归）
+
+== 需所有者/大脑确认的两点（未自行改动）==
+A. AnyState 新过渡条件序列化为 m_ConditionMode: 2（IfNot），而工单 §2 第 3/5 条文字为“条件 Q/W/E/R/Hit”，
+   且资产内既有触发器条件均为 mode 1（If）。按给定代码原样执行未改。
+   实测：SPEC01 中 Hit_A 可正常进入、其余角色保持 Locomotion，未观察到常驻重入。
+B. SkillSpeed 的 defaultFloat 为 0（给定代码 defaultFloat = 0f），工单 §2 第 1 条写“默认 1”。
+   Phase B 施法时会显式 SetFloat，运行时影响待确认。
+
+== 改动范围自查 ==
+git status 中本任务涉及的资产只有 M Assets/_Project/Art/Animations/PlayerBase.controller；
+其余 M/?? 条目为本次 Phase A 之前的既有工作区状态（未新增任何代码/资产改动）。

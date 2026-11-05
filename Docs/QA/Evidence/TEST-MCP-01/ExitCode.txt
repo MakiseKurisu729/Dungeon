@@ -1,0 +1,6 @@
+SPEC01 exit=0
+FND00B06 exit=0
+DIAG exit=2
+aggregate=2
+aggregateRule=non-zero if any suite non-zero; DIAG=2 matches its existing batch baseline (Docs/QA/Evidence/DIAG-SKILL/DIAG_ExitCode.txt = 2)
+generated=2026-11-05 18:13 (local)

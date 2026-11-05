@@ -1,0 +1,17 @@
+SKILL-ANIM-02 Phase A — 改后控制台检查
+时间：2026-11-05（改动 PlayerBase.controller 之后）
+实例：Dungeon@4f5c34c82f31646e
+
+[查询] read_console action=get types=["error"] filter_text="error CS" count=50 format=plain
+[结果] Retrieved 0 log entries. data=[]  → 编译错误 error CS 计数 = 0
+
+[补充] read_console action=get types=["error"] count=200 format=plain
+[结果] errorCount = 13，全部为 18:30-18:31（本次 Phase A 改动之前）SPEC01 [ASSERT] 日志（pass:true），非编译错误。
+
+[编辑器状态] read_mcp_resource mcpforunity://editor/state
+is_compiling=false
+is_domain_reload_pending=false
+is_playing=false / is_paused=false / is_changing=false
+active_scene=Assets/Scenes/DungeonWorld.unity
+
+结论：控制器资产改动未引入编译错误。

@@ -1,0 +1,14 @@
+﻿# AC-8 QA.Env.Clean
+# source: each suite's <canonical>/editor_run1/InEditorResult.txt, line 'envAfter=' written by QA_InEditorMenu.TryFinish AFTER Environment.SetEnvironmentVariable(key, null).
+# 7 keys checked: SPEC01_MODE, SPEC01_RUN, SPEC01_EVIDENCE_TAG, FND00B06_RUN, DIAG_RUN, DIAG_MODE, QA_EVIDENCE_SUBDIR
+# envAtStart values are from the [QA][INEDITOR] start console line of each suite (see editor_*.log).
+
+## Docs\QA\Evidence\SPEC-01\editor_run1\InEditorResult.txt
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+
+## Docs\QA\Evidence\FND-00B-06\editor_run1\InEditorResult.txt
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+
+## Docs\QA\Evidence\DIAG-SKILL\editor_run1\InEditorResult.txt
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+

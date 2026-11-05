@@ -1,0 +1,35 @@
+﻿# AC-3｜§3.2.1 第 2 条：写工具清单 + 三件套（任务书授权 / 影响面清单 / 用户确认）
+
+命令: Select-String -Path AGENTS.md -Pattern "写操作按单授权"
+期望: 命中 1 行
+命令: Select-String -Path AGENTS.md -Pattern '写操作按单授权'
+实际: 命中 1 行
+--- 原始行 ---
+59: 2. **写操作按单授权**：`manage_asset`、`manage_scene`、`manage_components`、`manage_gameobject` 的写 action、`manage_prefabs`、`manage_animation` 写、脚本编辑（`create_script`／`manage_script`／`apply_text_edits`／`script_apply_edits`）、`execute_code`、`manage_scriptable_object`、`manage_material`／`manage_texture`／`manage_shader` 的写。必须同时满足三件套：① 任务书写明授权范围；② 动手前输出影响面清单（§3.1）；③ 用户确认。**缺任一项即越界**。
+
+命令: 逐个 Select-String（-SimpleMatch）校验写工具名单，期望每项 ≥1 命中
+  manage_asset -> 1 行
+  manage_scene -> 1 行
+  manage_components -> 1 行
+  manage_gameobject -> 1 行
+  manage_prefabs -> 1 行
+  manage_animation -> 1 行
+  create_script -> 1 行
+  manage_script -> 1 行
+  apply_text_edits -> 1 行
+  script_apply_edits -> 1 行
+  execute_code -> 1 行
+  manage_scriptable_object -> 1 行
+  manage_material -> 1 行
+  manage_texture -> 1 行
+  manage_shader -> 1 行
+小计: 15 / 15 项命中
+
+命令: 逐个 Select-String 校验三件套措辞
+  任务书写明授权范围 -> 1 行
+  影响面清单（§3.1） -> 1 行
+  用户确认 -> 2 行
+  缺任一项即越界 -> 1 行
+小计: 4 / 4 项命中
+
+--- 第 2 条全文（原文摘录）---

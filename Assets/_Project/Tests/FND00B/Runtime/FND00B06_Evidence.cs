@@ -33,6 +33,8 @@ public class FND00B06_Evidence
         Run = run;
         string root = Directory.GetParent(Application.dataPath).FullName;
         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "FND-00B-06");
+        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
+        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
         Directory.CreateDirectory(_dir);
         _assertPath = Path.Combine(_dir, "06_Assertions.jsonl");
 

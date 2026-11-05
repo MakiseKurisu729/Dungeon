@@ -34,6 +34,8 @@ public class DIAG_Evidence
         Mode = mode;
         string root = Directory.GetParent(Application.dataPath).FullName;
         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "DIAG-SKILL");
+        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
+        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
         Directory.CreateDirectory(_dir);
         _assertPath = Path.Combine(_dir, "DIAG_Assertions.jsonl");
         try { if (File.Exists(_assertPath)) File.Delete(_assertPath); }

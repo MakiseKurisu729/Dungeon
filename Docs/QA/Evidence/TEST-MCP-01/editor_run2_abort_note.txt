@@ -1,0 +1,55 @@
+TEST-MCP-01 / AC-9 追加验证：SPEC01 二次运行现场记录
+============================================================
+
+时间均为本机时间（2026-11-05）。
+
+一、第 1 次尝试（证据目录 editor_run2，未完成）
+------------------------------------------------------------
+[QA][INEDITOR] start task=SPEC01; subdir=editor_run2（Editor.log 第 3907 行起，见 editor_run2_abort.log）
+[SPEC01] runner start ... evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\SPEC-01\editor_run2
+[SPEC01] active scene=Assets/Scenes/DungeonWorld.unity; waited=0s
+[SPEC01] observer ready; baselineGameStarted=False
+之后无任何日志写入：Editor.log mtime 停在 18:24:17，直到 18:27:34 才再次写入。
+
+现场观测（editor/state）：
+  editor.is_focused = false
+  editor.play_mode.is_playing = true, is_paused = false
+  Player Settings: ProjectSettings.asset runInBackground: 0
+Unity 进程 8000 存活、Responding=True，CPU 5 秒内 +0.78s（编辑器在跑，但不是 Play 帧循环推进）。
+
+二、唤醒与副作用
+------------------------------------------------------------
+按 AGENTS §3.2.1 第 9 条，用 Win32 SetForegroundWindow/AttachThreadInput 把 Unity 窗口置前台
+（未改任何资产、未调用 execute_code）。
+18:27:33 置前台成功；18:27:34 Unity 处理了挂起的导入/编译：
+  editor/state.compilation.last_domain_reload_after_unix_ms = 1793874454224（≈18:27:34）
+Play 模式中发生域重载，运行期探针 runner 丢失；控制台随后只剩
+  [SPEC01] boot; isPlaying=True; started=True; finished=False
+即 boot 认为已 start，不再重建 runner，该轮永远无法收尾。
+
+editor_run2/ 目录由 SPEC01_Evidence 构造时创建（18:24:17），未写入任何文件，故为空目录。
+
+三、复位与第 2 次运行（证据目录 editor_run3，通过）
+------------------------------------------------------------
+处置：manage_editor(action="stop") 退出卡住的 Play（只影响编辑器播放状态，不写场景/资产）；
+随后 editor/state 为 is_playing=false、is_compiling=false、external_changes_dirty=false。
+18:30:39 再次域重载（挂起的编译收尾，last_domain_reload_after_unix_ms=1793874639146）；
+18:30:44 触发同一个菜单 Tools/QA/In-Editor/SPEC01 (green)，
+subdir=editor_run3（NextSubdir 扫描到已存在的 editor_run2 后递增，符合预期）。
+
+结果（Docs/QA/Evidence/SPEC-01/editor_run3/）：
+  SPEC01_Summary_run1.json : pass=12 fail=0 blocked=0 infraFail=0 observed=0
+  SPEC01_ExitCode_run1.txt : 0
+  SPEC01_Assertions.jsonl  : 12 行
+  InEditorResult.txt       : task=SPEC01 code=0 evidenceSubdir=editor_run3
+                             envAfter 7 键全 <null>
+  控制台 token              : [QA][INEDITOR] done task=SPEC01 code=0
+  startedAt 18:30:44.002 → finishedAt 18:31:25.977（约 42s，与 run1 的 42s 同量级）
+跑完 editor/state：is_playing=false、is_changing=false、is_compiling=false；Unity 进程 8000 存活。
+
+四、结论
+------------------------------------------------------------
+1) 递增子目录生效：run1 → run2（被中断）→ run3（重试）。
+2) 失焦会冻结 Play 帧循环（runInBackground: 0），是本轮中断的外因，非代码改动引入；
+   重试在保持编辑器前台的前提下一次通过，断言口径与 run1/batch 基线一致（12/0/exit0）。
+3) 空目录 editor_run2/ 为中断轮残留（git 不跟踪空目录），此处如实记录，不删除、不补写内容。

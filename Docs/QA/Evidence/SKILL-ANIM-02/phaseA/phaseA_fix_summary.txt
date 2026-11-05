@@ -1,0 +1,40 @@
+SKILL-ANIM-02 Phase A — fix 补充记录（2026-11-05，MCP 模式 B）
+负责人：执行者（子代理）；所有者已授权 Phase A；仅改 PlayerBase.controller
+
+== 本次修的两点（对应 phaseA_summary.txt 的待确认项 A、B）==
+1. SkillSpeed.defaultFloat: 0 → 1
+   （AnimatorControllerParameter 值类型，按索引写回 ac.parameters）
+   读回：SkillSpeed : Float default=1；controller.diff: m_DefaultFloat: 1
+2. AnyState → Hit_A / Q / W / E / R 条件：IfNot(mode=2) → If(mode=1)
+   参数名沿用原值（Hit/Q/W/E/R）；Downed(Die) 未触碰
+   读回：mode=1(If) × 6（Downed 原本即 If）
+   未改：过渡时长 0.05/0.1、InterruptionSource=Source、OrderedInterruption=True、
+         CanTransitionToSelf=False、子状态机结构、占位 Clip、SpeedParameterActive/SkillSpeed 绑定
+
+== 幂等性 ==
+脚本按"清空 conditions 后 AddCondition(If,0f,原参数名)"与"按名字设 defaultFloat=1"编写，
+重复执行结果一致（第二次执行 log: fixed ... 同名同模式）。
+
+== 验证 ==
+1) error CS = 0（filter_text="error CS" → 0 条）
+2) SPEC01 编辑器内跑（Tools/QA/In-Editor/SPEC01 (green)）：
+   Docs/QA/Evidence/SPEC-01/editor_run5/
+   pass=12 fail=0 blocked=0 infraFail=0 observed=0；SPEC01_ExitCode_run1.txt = 0
+   断言摘要见 editor_run5/SPEC01_Summary_run1.json，逐条 jsonl = SPEC01_Assertions.jsonl
+   其中 Animation.PostCombatAndHit 与 Locomotion.AllPlayersMoveParam 均 pass
+3) 触发器定点验证（直接法，Play 内）：
+   进入 Play 等 6s 不按任何技能 → 三角色 Knight/Ranger/Mage 均 Locomotion，无 Q_1 常驻
+   Knight.SetTrigger("Q") 后逐帧采样（trigger_probe2.txt）：
+     t=0.058 ENTER Q_1 norm=0.049 len=1.067
+     t=1.172 ENTER Locomotion norm=0.095
+   即：未按 Q 不会被拽入 Q_1；按下 Q 约 0.06s 进入 Q_1，1.07s（=Clip 长度，SkillSpeed=1）播完回 Locomotion
+   （trigger_probe.txt 为第一版逐帧前 60 行，含同一次进入 Q_1 的记录）
+   Play 已正常退出：is_playing=false, is_compiling=false
+
+== 证据清单（本目录）==
+after_dump_fix.txt      改后控制器全文读回（params/AnyState/子状态机/RootStates）
+readback_params_fix.txt 参数与 6 条 AnyState 条件读回
+controller.diff         重新生成的完整 diff（基 HEAD 6872348b）
+console_after_fix.txt   error CS=0 与 1 条探针自身 error 的说明
+trigger_probe.txt       定点探针 v1（逐帧前 60 行）
+trigger_probe2.txt      定点探针 v2（状态切换事件，含进入/退出 Q_1）

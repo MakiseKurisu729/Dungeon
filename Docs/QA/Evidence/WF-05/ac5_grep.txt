@@ -1,0 +1,51 @@
+﻿# AC-5｜workflow-rules.md §5.2 双模式 + §7 三条 MCP 勾选，且与 AGENTS.md 无冲突
+
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern "### 5.2 Unity 访问模式自证"
+期望: 命中 1 行（标题已由“Unity 关闭自证”改为“Unity 访问模式自证”）
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern '### 5.2 Unity 访问模式自证'
+实际: 命中 1 行
+--- 原始行 ---
+186: ### 5.2 Unity 访问模式自证
+
+命令: 反向断言——旧标题 "Unity 关闭自证" 应为 0 行
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern 'Unity 关闭自证'
+实际: 命中 0 行
+--- 原始行 ---
+(无匹配)
+
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern "模式 B｜MCP 常开编辑器"
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern '模式 B｜MCP 常开编辑器'
+实际: 命中 1 行
+--- 原始行 ---
+197: **模式 B｜MCP 常开编辑器**
+
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern "模式 A｜batchmode（默认）"
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern '模式 A｜batchmode（默认）'
+实际: 命中 1 行
+--- 原始行 ---
+190: **模式 A｜batchmode（默认）**
+
+命令: 逐条校验 §7 三条 MCP 勾选项
+  - [ ] 模式 B 下调用了未授权写工具 -> 1 行
+  - [ ] 域重载未完成继续操作 -> 1 行
+  - [ ] 同一 Unity 实例被两个会话同时驱动 -> 1 行
+小计: 3 / 3 项命中
+
+命令: 冲突检查——"不得做任何 Unity 操作" 必须只出现在模式 A 段（计数应为 1）
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern '不得\*\*做任何 Unity 操作'
+实际: 命中 1 行
+--- 原始行 ---
+192: - 编辑器打开着项目时**不得**做任何 Unity 操作。
+
+命令: 冲突检查——"Unity 未关或状态不明" 应限定为模式 A
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern 'Unity 未关或状态不明'
+实际: 命中 1 行
+--- 原始行 ---
+246: - [ ] 模式 A 下 Unity 未关或状态不明
+
+命令: 指针检查——§5.2 是否指向 AGENTS.md §3.2.1
+命令: Select-String -Path Docs/Handoff/workflow-rules.md -Pattern 'AGENTS.md` §3.2 / §3.2.1'
+实际: 命中 1 行
+--- 原始行 ---
+188: 与 `AGENTS.md` §3.2 / §3.2.1 同源，此处只写自证细则；冲突时 AGENTS 胜。模式二选一，由任务书声明，未声明按模式 A。
+

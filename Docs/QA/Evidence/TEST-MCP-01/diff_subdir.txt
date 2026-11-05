@@ -1,0 +1,37 @@
+﻿# QA_InEditorMenu.cs 子目录命名改动（该文件为未跟踪新文件，git diff 不含）
+# 行号取自当前工作副本
+55: 
+56:         // 鍏堟竻鎺変笂涓€娆″彲鑳芥畫鐣欑殑濂椾欢鍙橀噺锛屽啀鎸夊浠舵敞鍏ワ紝閬垮厤璺ㄥ浠舵薄鏌撱€?        ClearSuiteEnvironment();
+57:         string subdir = NextSubdir(task);   // editor_run1 / editor_run2 / 鈥?閫掑锛屼笉瑕嗙洊鍘嗗彶璇佹嵁
+58:         Environment.SetEnvironmentVariable(EvidenceSubdirEnv, subdir);
+59: 
+60:         if (task == "SPEC01")
+61:         {
+62:             Environment.SetEnvironmentVariable("SPEC01_MODE", "green");
+63:             Environment.SetEnvironmentVariable("SPEC01_RUN", "1");
+64:         }
+65:         else if (task == "FND00B06")
+66:         {
+67:             Environment.SetEnvironmentVariable("FND00B06_RUN", "1");
+68:         }
+69:         else if (task == "DIAG")
+70:         {
+240:             {
+241:                 foreach (string dir in Directory.GetDirectories(root, "editor_run*"))
+242:                 {
+243:                     int n;
+244:                     if (int.TryParse(Path.GetFileName(dir).Substring("editor_run".Length), out n) && n >= next)
+245:                     {
+246:                         next = n + 1;
+247:                     }
+248:                 }
+249:             }
+250:         }
+251:         catch (Exception e)
+252:         {
+253:             Debug.LogWarning("[QA][INEDITOR] subdir scan failed; fallback=" + DefaultSubdir + "; err=" + e.Message);
+254:             return DefaultSubdir;
+255:         }
+256:         return "editor_run" + next;
+257:     }
+258: }

@@ -39,6 +39,8 @@ public class SPEC01_Evidence
         Mode = mode;
         string root = Directory.GetParent(Application.dataPath).FullName;
         _dir = Path.Combine(root, "Docs", "QA", "Evidence", "SPEC-01");
+        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
+        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
         Directory.CreateDirectory(_dir);
 
         string tag = Environment.GetEnvironmentVariable("SPEC01_EVIDENCE_TAG");

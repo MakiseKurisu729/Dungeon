@@ -1,0 +1,670 @@
+﻿[QA][INEDITOR] start task=SPEC01; subdir=editor_run3; unity=2022.3.62f3c1; envAtStart={SPEC01_MODE=green;SPEC01_RUN=1;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=editor_run3}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:87)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 87)
+
+[SPEC01] launcher start; pid=8000; args=D:\unity\2022.3.62f3c1\Editor\Unity.exe -projectpath D:\unity\Dungeon -useHub -hubIPC -cloudEnvironment production -licensingIpc LicenseClient-lll -hubSessionId 4fd876c0-d58c-11f1-873b-072aeea03741 -accessToken Po7WSUeZrCFq3FEDUn4ZptOGmGct-LoNyseV8vm-BaQ01ef
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:26)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 26)
+
+[SPEC01] head=6872348ba191977508cc14481c55df3a564f8335
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:33)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 33)
+
+Opening scene 'Assets/Scenes/DungeonWorld.unity'
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Scenes/DungeonWorld.unity'
+	Deserialize:            4.442 ms
+	Integration:            241.967 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.021 ms
+	Total Operation Time:   246.432 ms
+Unloading 6 unused Assets / (148.2 KB). Loaded Objects now: 9845.
+Memory consumption went from 243.6 MB to 243.4 MB.
+Total: 23.226400 ms (FindLiveObjects: 0.918700 ms CreateObjectMapping: 0.319700 ms MarkObjects: 21.854500 ms  DeleteObjects: 0.132300 ms)
+
+[SPEC01] opened scene Assets/Scenes/DungeonWorld.unity; loaded=True; dirty=False; enemySourceGuid=18dec5e6af31178468b146e0440bd081; mode=green
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:38)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 38)
+
+[SPEC01] playModeStateChanged=ExitingEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:138)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+UnityEditor.EditorApplication:EnterPlaymode ()
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:47)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 138)
+
+[FND00B06] playModeStateChanged=ExitingEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:79)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+UnityEditor.EditorApplication:EnterPlaymode ()
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:47)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 79)
+
+[SPEC01] EnterPlaymode requested
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_BatchAcceptance:Run () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:48)
+QA_InEditorMenu:Run (string) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:97)
+QA_InEditorMenu:RunSPEC01 () (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:37)
+UnityEditor.EditorApplication:ExecuteMenuItem (string)
+MCPForUnity.Editor.Tools.ExecuteMenuItem:HandleCommand (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/ExecuteMenuItem.cs:38)
+MCPForUnity.Editor.Tools.CommandRegistry:ExecuteCommand (string,Newtonsoft.Json.Linq.JObject,System.Threading.Tasks.TaskCompletionSource`1<string>) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Tools/CommandRegistry.cs:305)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessCommand (string,MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher/PendingCommand) (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:366)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:ProcessQueue () (at ./Library/PackageCache/com.coplaydev.unity-mcp@10.0.0/Editor/Services/Transport/TransportCommandDispatcher.cs:262)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 48)
+
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.845 seconds
+Refreshing native plugins compatible for Editor in 9.97 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-Dungeon
+[SPEC01] boot; isPlaying=False; started=False; finished=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:Boot () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:129)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 129)
+
+[FND00B06] boot; isPlaying=False; started=True; finished=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:Boot () (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:70)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadMethodAttributes ()
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 70)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  2.136 seconds
+Domain Reload Profiling: 2986ms
+	BeginReloadAssembly (665ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (45ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (1ms)
+		CreateAndSetChildDomain (406ms)
+	RebuildCommonClasses (35ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (30ms)
+	LoadAllAssembliesAndSetupDomain (110ms)
+		LoadAssemblies (228ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (24ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (13ms)
+	FinalizeReload (2137ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1368ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (5ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (75ms)
+			ProcessInitializeOnLoadAttributes (1211ms)
+			ProcessInitializeOnLoadMethodAttributes (69ms)
+			AfterProcessingInitializeOnLoad (2ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (403ms)
+Asset Pipeline Refresh (id=e69c6e48127fca7478025bb2c9896f3e): Total: 3.531 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=462 ms
+		Asset DB Callback time: managed=21 ms, native=1 ms
+		Scripting: domain reloads=1, domain reload time=3043 ms, compile time=2 ms, other=0 ms
+		Project Asset Count: scripts=7708, non-scripts=5910
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 1.208ms
+	ApplyChangesToAssetFolders: 0.095ms
+	Scan: 0.002ms
+	OnSourceAssetsModified: 0.002ms
+	GetAllGuidsForCategorization: 2.263ms
+	CategorizeAssets: 251.282ms
+	ImportOutOfDateAssets: 2195.844ms (2182.738ms without children)
+		CompileScripts: 2.082ms
+		CollectScriptTypesHashes: 0.057ms
+		ReloadNativeAssets: 0.421ms
+		UnloadImportedAssets: 1.238ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 4.541ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 4.766ms
+	PostProcessAllAssets: 21.786ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.638ms
+	UnloadStreamsBegin: 0.341ms
+	PersistCurrentRevisions: 0.688ms
+	UnloadStreamsEnd: 0.096ms
+	GenerateScriptTypeHashes: 3.295ms
+	Untracked: 1056.780ms
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[DebugTestTools] host created in DungeonWorld; keys F5/F9/F10
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugTestToolsBootstrap:AfterSceneLoadHook () (at Assets/_Project/Scripts/Debug/DebugTestTools.cs:171)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugTestTools.cs Line: 171)
+
+[SPEC01] observer created; baselineGameStarted=False; frame=0
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_BootHook:AfterSceneLoadHook () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:2147)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 2147)
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            7.136 ms
+	Integration:            304.956 ms
+	Integration of assets:  0.008 ms
+	Thread Wait Time:       0.005 ms
+	Total Operation Time:   312.105 ms
+0 涓韩浣撻儴浠跺凡鎸傚埌 PlayerBody 灞?
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+DebugCameraSwitcher:Start () (at Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs:102)
+
+(Filename: Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs Line: 102)
+
+[SPEC01] playModeStateChanged=EnteredPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:138)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 138)
+
+[SPEC01] play-mode runner created
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:TryStartRunner () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:181)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:141)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 181)
+
+[FND00B06] playModeStateChanged=EnteredPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:79)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 79)
+
+[SPEC01] runner start; mode=green; run=1; seed=20261106; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\SPEC-01\editor_run3; head=6872348ba191977508cc14481c55df3a564f8335
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:179)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 179)
+
+[SPEC01] active scene=Assets/Scenes/DungeonWorld.unity; waited=0s
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:189)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 189)
+
+[SPEC01] observer ready; baselineGameStarted=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:206)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 206)
+
+[SPEC01] player Knight_Unit at (-2.72, 0.083, 0); sword=True; ranged=False; attackSpeed=1
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:FindPlayers () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1754)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1754)
+
+[SPEC01] player Archer_Unit at (0.85, 0.083, 0); sword=False; ranged=True; attackSpeed=3
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:FindPlayers () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1754)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1754)
+
+[SPEC01] player Mage_Unit at (3.22, 0.083, 0); sword=False; ranged=True; attackSpeed=0.8
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:FindPlayers () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1754)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1754)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Locomotion.AllPlayersMoveParam","assertion":"Locomotion.AllPlayersMoveParam","expected":"涓夎鑹茬粡鐢熶骇绉诲姩鍛戒护绉诲姩鏃跺浜?Locomotion锛孲peedZ 闅忓疄闄呴€熷害闈為浂鍙樺寲锛屽仠绋冲綊闆讹紱鎺у埗鍣?Locomotion 鐘舵€佸悕绮剧‘銆佹贩鍚堟爲涓?1D銆佸弬鏁?SpeedZ銆侀槇鍊?0/4","actual":"playersPass=True; controllerPass=True; stateNameExact=True; blend1D=True; blendParameter=SpeedZ; thresholdsOk=True","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:30:51.303","data":{"entry":"SelectionManager.SingleSelect(Selectable) 鈫?ForEachSelectedBrain(b => b.CommandMove(Vector3))锛堜笌鍙抽敭绉诲姩鍚屼竴鐢熶骇鏂规硶锛?,"players":[{"name":"Knight_Unit","destination":{"x":-2.71999955,"y":0.08333337,"z":3},"arrived":true,"durationSeconds":0.8970523,"traveled":2.55246,"maxSingleFrameDisplacement":0.02706039,"peakAgentSpeed":4.00002766,"peakAnimatorSpeedZ":4.00002766,"stateDuringMove":"Locomotion","finalAgentSpeed":0,"finalAnimatorSpeedZ":0,"groundedDuringMove":true,"pass":true},{"name":"Archer_Unit","destination":{"x":0.85,"y":0.08333337,"z":3},"arrived":true,"durationSeconds":0.896504343,"traveled":2.55133,"maxSingleFrameDisplacement":0.0236158371,"peakAgentSpeed":4.00002241,"peakAnimatorSpeedZ":4.00002241,"stateDuringMove":"Locomotion","finalAgentSpeed":0,"finalAnimatorSpeedZ":0,"groundedDuringMove":true,"pass":true},{"name":"Mage_Unit","destination":{"x":3.22,"y":0.08333337,"z":3},"arrived":true,"durationSeconds":0.8966857,"traveled":2.5536952,"maxSingleFrameDisplacement":0.0367589,"peakAgentSpeed":4.00003052,"peakAnimatorSpeedZ":4.00003052,"stateDuringMove":"Locomotion","finalAgentSpeed":0,"finalAnimatorSpeedZ":0,"groundedDuringMove":true,"pass":true}],"controllerPath":"Assets/_Project/Art/Animations/PlayerBase.controller","controller":{"stateNameExact":true,"blendTreeIs1D":true,"blendParameter":"SpeedZ","thresholds":[0,4],"layerCount":1,"layer0Only":true,"note":"SPEC-01 鍙ｅ緞锛歀ocomotion 娣峰悎鏍?1D锛屽弬鏁?SpeedZ锛岄槇鍊?0(Idle)/4(Running)"}}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertLocomotion>d__57:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:405)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01] fixture created SPEC01_Target_Combat at (0, 0, -4); showDamageNumber=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:CreateTarget (string,UnityEngine.Vector3,bool) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1842)
+SPEC01_ProbeRunner/<AssertDualPathAndClocks>d__59:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:548)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1842)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Attack.DualPathUnified","assertion":"Attack.DualPathUnified","expected":"CommandAttack 涓?Aggro 鑷姩绱㈡晫涓ゆ潯璺緞锛氶獞澹懡涓灛闂村浜?AttackMelee锛堝崟娈碉紝鐘舵€佸悕=瑙﹀彂鍣ㄥ悕锛夛紝寮?娉曞彂灏勭灛闂村浜?Attack_Release锛涜繙绋嬭Е鍙戝櫒涓?AttackRange锛涗笉瀛樺湪 Locomotion 鍑轰激/鍑哄皠","actual":"designatedPass=True; autoPass=True; swordFieldsOk=True; rangedTriggerOk=True; swordTrigger=AttackMelee; swordHitState=AttackMelee","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:19.460","data":{"designatedPath":[{"path":"CommandAttack","player":"Knight_Unit","event":"hit","time":14.2082205,"state":"AttackMelee","normalizedTime":0.353069484,"expectedState":"AttackMelee","attackSpeedParam":1,"attackSpeedStats":1,"pass":true},{"path":"CommandAttack","player":"Archer_Unit","event":"fire","time":15.2982025,"state":"Attack_Release","normalizedTime":0.341714829,"expectedState":"Attack_Release","attackSpeedParam":3,"attackSpeedStats":3,"pass":true},{"path":"CommandAttack","player":"Mage_Unit","event":"fire","time":18.6302128,"state":"Attack_Release","normalizedTime":0.200618938,"expectedState":"Attack_Release","attackSpeedParam":0.8,"attackSpeedStats":0.8,"pass":true}],"autoPath":[{"path":"AggroAuto","player":"Knight_Unit","event":"hit","state":"AttackMelee","expectedState":"AttackMelee","normalizedTime":0.3522924,"attackSpeedParam":1,"attackSpeedStats":1,"pass":true},{"path":"AggroAuto","player":"Archer_Unit","event":"fire","state":"Attack_Release","expectedState":"Attack_Release","normalizedTime":0.341002554,"attackSpeedParam":3,"attackSpeedStats":3,"pass":true},{"path":"AggroAuto","player":"Mage_Unit","event":"fire","state":"Attack_Release","expectedState":"Attack_Release","normalizedTime":0.201821208,"attackSpeedParam":0.8,"attackSpeedStats":0.8,"pass":true}],"swordTriggerField":"AttackMelee","swordHitStateField":"AttackMelee","rangedTriggers":[{"player":"Archer_Unit","attackTrigger":"AttackRange","expected":"AttackRange","pass":true},{"player":"Mage_Unit","attackTrigger":"AttackRange","expected":"AttackRange","pass":true}],"fixture":"SPEC01_Target_Combat锛堣繍琛屾湡鍐呭瓨 UnitHealth锛岄珮 HP锛屾棤 AI锛?,"note":"鎸囧畾鏀诲嚮閫氳繃 CharacterBrain.CommandAttack锛堜笌 SelectionManager 鐐规晫鍚屼竴鐢熶骇鏂规硶锛夛紱鑷姩鏀诲嚮閫氳繃 CharacterBrain.Update 鈫?UnitBrain.AttackLoop 鈫?ICharacterCombat.AutoAttack"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertDualPathAndClocks>d__59:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:726)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Clock.MeleeNormalizedWindow","assertion":"Clock.MeleeNormalizedWindow","expected":"楠戝＋鍛戒腑鐢?layer 0 AttackMelee.normalizedTime 鐨?[activeStart, activeEnd] 绐楀彛椹卞姩锛涘崟鍛ㄦ湡鎭?1 娆★紱瑙﹀彂鍣?鍛戒腑鐘舵€佸悕鍧囦负 AttackMelee锛汚ttackSpeed 鍙傛暟绛変簬 stats.attackSpeed","actual":"hits=12; inWindow=12; meleeEntries=12; window=[0.35,0.55]; attackTrigger=AttackMelee; hitStateName=AttackMelee; attackSpeedParam=1; stats=1","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:19.461","data":{"windowStart":0.35,"windowEnd":0.55,"hits":[{"time":25.3442669,"state":"AttackMelee","normalizedTime":0.3522924,"inWindow":true,"amount":15},{"time":26.253643,"state":"AttackMelee","normalizedTime":0.353632271,"inWindow":true,"amount":15},{"time":27.1558418,"state":"AttackMelee","normalizedTime":0.351934642,"inWindow":true,"amount":15},{"time":28.0619545,"state":"AttackMelee","normalizedTime":0.350316435,"inWindow":true,"amount":15},{"time":28.9682617,"state":"AttackMelee","normalizedTime":0.350153655,"inWindow":true,"amount":15},{"time":29.8769684,"state":"AttackMelee","normalizedTime":0.3525726,"inWindow":true,"amount":15},{"time":30.7842522,"state":"AttackMelee","normalizedTime":0.353072554,"inWindow":true,"amount":15},{"time":31.6877232,"state":"AttackMelee","normalizedTime":0.352037281,"inWindow":true,"amount":15},{"time":32.59156,"state":"AttackMelee","normalizedTime":0.351226777,"inWindow":true,"amount":15},{"time":33.50031,"state":"AttackMelee","normalizedTime":0.35256353,"inWindow":true,"amount":15},{"time":34.4109421,"state":"AttackMelee","normalizedTime":0.355957985,"inWindow":true,"amount":15},{"time":35.30949,"state":"AttackMelee","normalizedTime":0.350660831,"inWindow":true,"amount":15}],"meleeEntries":12,"attackTrigger":"AttackMelee","hitStateName":"AttackMelee","attackSpeedParam":1,"attackSpeedStats":1,"effectiveLayer":0,"singleTargetMode":"SingleTarget"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertDualPathAndClocks>d__59:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:764)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Clock.RangedOneShotPerCycle","assertion":"Clock.RangedOneShotPerCycle","expected":"寮撴墜/娉曞笀鍗曚釜鏀诲嚮鍔ㄧ敾鍛ㄦ湡鎭板彂灏?1 娆★紱鍙戝皠鐬棿澶勪簬 Attack_Release 鐨勫彲璋?normalizedTime 绐楀彛锛涙硶甯堜笅浠ゅ埌棣栨鍑烘墜绗﹀悎鏀婚€熷懆鏈?,"actual":"rangedPass=True","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:19.462","data":{"players":[{"player":"Archer_Unit","drawEntries":13,"fireCount":12,"releaseEntries":12,"windowStart":0.2,"windowEnd":0.6,"fires":[{"time":24.9646759,"state":"Attack_Release","normalizedTime":0.341002554,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":25.8417587,"state":"Attack_Release","normalizedTime":0.343575627,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":26.72444,"state":"Attack_Release","normalizedTime":0.346595049,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":27.6035576,"state":"Attack_Release","normalizedTime":0.347715676,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":28.4847946,"state":"Attack_Release","normalizedTime":0.348258555,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":29.3576088,"state":"Attack_Release","normalizedTime":0.3391881,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":30.2376213,"state":"Attack_Release","normalizedTime":0.344292164,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":31.1123562,"state":"Attack_Release","normalizedTime":0.339099318,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":31.9913387,"state":"Attack_Release","normalizedTime":0.3427871,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":32.8713646,"state":"Attack_Release","normalizedTime":0.338217676,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":33.75164,"state":"Attack_Release","normalizedTime":0.339309663,"stateOk":true,"windowOk":true,"attackSpeedParam":3},{"time":34.631,"state":"Attack_Release","normalizedTime":0.342945635,"stateOk":true,"windowOk":true,"attackSpeedParam":3}],"minFireInterval":0.8728142,"expectedCycle":0.8886666,"firstDrawToFirstFireLatency":0.35827446,"latencyLimit":0.7887667,"attackSpeedParam":3,"attackSpeedStats":3,"countOk":true,"fireStateOk":true,"fireWindowOk":true,"intervalOk":true,"latencyOk":true,"speedOk":true,"pass":true},{"player":"Mage_Unit","drawEntries":3,"fireCount":4,"releaseEntries":4,"windowStart":0.2,"windowEnd":0.6,"fires":[{"time":25.1140022,"state":"Attack_Release","normalizedTime":0.201821208,"stateOk":true,"windowOk":true,"attackSpeedParam":0.8},{"time":28.3523941,"state":"Attack_Release","normalizedTime":0.203529656,"stateOk":true,"windowOk":true,"attackSpeedParam":0.8},{"time":31.5863419,"state":"Attack_Release","normalizedTime":0.20214,"stateOk":true,"windowOk":true,"attackSpeedParam":0.8},{"time":34.82299,"state":"Attack_Release","normalizedTime":0.201793492,"stateOk":true,"windowOk":true,"attackSpeedParam":0.8}],"minFireInterval":3.23394775,"expectedCycle":3.79125,"firstDrawToFirstFireLatency":-1.02026367,"latencyLimit":2.38518763,"attackSpeedParam":0.8,"attackSpeedStats":0.8,"countOk":true,"fireStateOk":true,"fireWindowOk":true,"intervalOk":true,"latencyOk":true,"speedOk":true,"pass":true}],"note":"瑙傛祴绐?10.978s锛涗互 Attack_Draw 杩涘叆娆℃暟 vs 鍙戝皠娆℃暟銆佸彂灏勭灛闂寸姸鎬?褰掍竴鍖栨椂闂淬€佹渶灏忓彂灏勯棿闅斾笌棣栨鍑烘墜寤惰繜鍏卞悓鍒ゅ畾"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertDualPathAndClocks>d__59:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:854)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Animation.PostCombatAndHit","assertion":"Animation.PostCombatAndHit","expected":"鐩爣閿€姣佸悗闄愬畾鏃堕棿鍐呬笁瑙掕壊鍥炲埌 Locomotion锛涚帺瀹剁粡鐢熶骇 UnitHealth.ApplyDamage 鍙楅潪鑷村懡浼ゅ鍚庤繘鍏?Hit_A","actual":"allLocomotion=True; settle=0.392s; hitState=Hit_A; hp=100鈫?5; onHit=1","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:19.909","data":{"postCombat":{"targetDestroyed":true,"allPlayersLocomotion":true,"settleSeconds":0.392246753,"states":[{"name":"Knight_Unit","state":"Hit_A"},{"name":"Archer_Unit","state":"Locomotion"},{"name":"Mage_Unit","state":"Locomotion"}]},"hit":{"entry":"UnitHealth.ApplyDamage(5f, hitPos, null)锛堢敓浜х粺涓€浼ゅ鍏ュ彛锛?,"hpBefore":100,"hpAfter":95,"onHitCount":1,"observedState":"Hit_A","observedNormalizedTime":0.0781468451,"dead":false}}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertPostCombatAndHit>d__60:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:915)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01] fixture created SPEC01_Target_UI at (0, 0, -4); showDamageNumber=True
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:CreateTarget (string,UnityEngine.Vector3,bool) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1842)
+SPEC01_ProbeRunner/<AssertDamageNumber>d__61:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:950)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1842)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"UI.DamageNumberScale","assertion":"UI.DamageNumberScale","expected":"鍗曚釜鍏变韩 Screen Space-Overlay 鐢诲竷锛堝敮涓€銆佷笉闅忎激瀹虫柊澧烇級锛涘瓧鍙烽殢浼ゅ鍒嗘。锛?鈫?.5x銆?00鈫?x 閽冲埗锛夛紱Text raycastTarget=false锛涜繛缁?40 娆?Show 娲昏穬/鎬诲疄渚?鈮?32","actual":"sharedOk=True; namedCanvasCount=1; overlayBeforeStress=2; overlayAfterStress=2; smallMult=1.5; largeMult=5; smallFont=24; largeFont=80; baseFontSize=16; activeAfterStress=32; totalAfterStress=32; raycastOk=True; element=Physical/Physical","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:23.468","data":{"overlayName":"DamageNumberOverlay","sharedCanvasRenderMode":"ScreenSpaceOverlay","namedCanvasCount":1,"overlayCanvasBeforeStress":2,"overlayCanvasAfterStress":2,"totalInstancesBeforeStress":1,"activeAfterStress":32,"totalAfterStress":32,"poolCapacity":32,"smallAmount":5,"smallAppliedMultiplier":1.5,"smallAppliedFontSize":24,"largeAmount":200,"largeAppliedMultiplier":5,"largeAppliedFontSize":80,"baseFontSize":16,"minMultiplier":1.5,"maxMultiplier":5,"minDamage":5,"maxDamage":60,"baselineScaleReference":0.006,"raycastTargetFalse":true,"canvasGroupPresent":true,"smallElement":"Physical","largeElement":"Physical","sharedOk":true,"uniqueCanvasOk":true,"canvasStable":true,"poolOk":true,"smallClampOk":true,"largeClampOk":true,"fontOk":true,"raycastOk":true,"groupOk":true,"elementOk":true,"fixture":"SPEC01_Target_UI锛堣繍琛屾湡鍐呭瓨 UnitHealth锛岄珮 HP锛宻howDamageNumber=true锛?,"entry":"UnitHealth.ApplyDamage 鈫?DamageDealtEvent 鈫?CombatFeedback锛堢敓浜ц矾寰勶級"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertDamageNumber>d__61:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1048)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01] fixture created SPEC01_Target_Anchor at (0, 0, -4); showDamageNumber=True
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:CreateTarget (string,UnityEngine.Vector3,bool) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1842)
+SPEC01_ProbeRunner/<AssertSpawnAnchor>d__62:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1115)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1842)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"UI.SpawnAnchor","assertion":"UI.SpawnAnchor","expected":"椋樺瓧鍑虹敓鐬棿鐨勫睆骞曚綅缃笌鐩爣鑳稿彛锛坱arget.position + up*ChestHeight锛夌浉鏈烘姇褰辫窛绂?鈮?50px","actual":"distancePx=0; actual=(528.397,-71.624); expected=(528.397,-71.624); anchorMin=(0.5,0.5); anchorMax=(0.5,0.5); pivot=(0.5,0.5)","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:24.107","data":{"entry":"UnitHealth.ApplyDamage(25f) 鈫?DamageDealtEvent 鈫?CombatFeedback 鈫?DamageNumber.Show锛堢敓浜ц矾寰勶級","cameraSource":"Camera.main","targetPosition":{"x":0,"y":0,"z":-4},"chestHeight":1.2,"worldChestPoint":{"x":0,"y":1.2,"z":-4},"actualScreen":{"x":528.3969,"y":-71.62387},"expectedScreen":{"x":528.3969,"y":-71.62385},"distancePx":2.28881836E-05,"tolerancePx":50,"anchorMin":"0.5,0.5","anchorMax":"0.5,0.5","pivot":"0.5,0.5","canvasSize":"1800.832x1151.468","screenWidth":1015,"screenHeight":649,"ageAtSample":0,"sampleWaitSeconds":0.116450191,"instanceFound":true,"fixture":"SPEC01_Target_Anchor锛堣繍琛屾湡鍐呭瓨 UnitHealth锛宻howDamageNumber=true锛?}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertSpawnAnchor>d__62:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1181)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Skill","assertion":"Skill.CastSmoke","expected":{"澶辫触鏂芥斁":"Cast(0,null) false锛沵anaDelta=0锛汣dRemaining=0锛涙棤寮傚父","Q":"Cast(0,enemy) true锛沞ffectType=BashEffect锛涜摑-20锛汣D>0鈮?锛涘懡涓抚鍚庨澏鎺夎=GetRawDamage锛涒墹0.5s 杩涘叆 Bash","W":"Cast(1,null) true锛沞ffectType=HeavySlashEffect锛涜摑-30锛汣D>0锛沖timer>=0锛涒墹0.5s 杩涘叆 Skill","E/R":"Cast(2/3) false锛涜摑涓嶅彉锛涙棤寮傚父"},"actual":{"failedCastReturn":false,"manaDeltaFailed":0,"cdFailed":0,"failedException":null,"qEffectType":"BashEffect","wEffectType":"HeavySlashEffect","qPass":true,"wPass":true,"emptyPass":true,"failedNoManaPass":true},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:25.941","data":{"failed":{"slot":0,"slotName":"Q_Bash","effectType":"BashEffect","castReturn":false,"exception":null,"manaBefore":100,"manaAfter":100,"manaDelta":0,"cdRemaining":0,"cdTotal":6,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.6513776,"animNormalizedBefore":0.6513776,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":1000,"targetHpAfter":1000,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"Q":{"slot":0,"slotName":"Q_Bash","effectType":"BashEffect","castReturn":true,"exception":null,"manaBefore":100,"manaAfter":80,"manaDelta":20,"cdRemaining":6,"cdTotal":6,"swordTimer":-1,"animStateBefore":"Locomotion","animPhaseBefore":0.655180752,"animNormalizedBefore":0.655180752,"animEntered":true,"animEntrySeconds":0.134049714,"animPollFrames":31,"animStateAfter":"Bash","animPhaseAfter":0.0487095,"animNormalizedAfter":0.0487095,"animInTransitionAfter":false,"targetHpBefore":1000,"targetHpAfter":985,"expectedDamage":15,"damageApplied":15,"damageObserved":true,"damageWaitSeconds":0.932804942},"W":{"slot":1,"slotName":"W_HeavySlash","effectType":"HeavySlashEffect","castReturn":true,"exception":null,"manaBefore":90.68693,"manaAfter":60.6869278,"manaDelta":30,"cdRemaining":6,"cdTotal":6,"swordTimer":0,"animStateBefore":"Locomotion","animPhaseBefore":0.1616972,"animNormalizedBefore":0.1616972,"animEntered":true,"animEntrySeconds":0.0562536046,"animPollFrames":13,"animStateAfter":"Skill","animPhaseAfter":0.0391786471,"animNormalizedAfter":0.0391786471,"animInTransitionAfter":false,"targetHpBefore":985,"targetHpAfter":985,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},"E/R":[{"slot":2,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":61.24519,"manaAfter":61.24519,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":0.0558255,"animStateBefore":"Skill","animPhaseBefore":0.0391786471,"animNormalizedBefore":0.0391786471,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":985,"targetHpAfter":985,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1},{"slot":3,"slotName":"<empty>","effectType":"none","castReturn":false,"exception":null,"manaBefore":61.29173,"manaAfter":61.29173,"manaDelta":0,"cdRemaining":0,"cdTotal":1,"swordTimer":0.0604794025,"animStateBefore":"Skill","animPhaseBefore":0.0418691225,"animNormalizedBefore":0.0418691225,"animEntered":false,"animEntrySeconds":-1,"animPollFrames":0,"animStateAfter":"none","animPhaseAfter":-1,"animNormalizedAfter":-1,"animInTransitionAfter":false,"targetHpBefore":985,"targetHpAfter":985,"expectedDamage":-1,"damageApplied":0,"damageObserved":false,"damageWaitSeconds":-1}],"manaBefore0":100,"manaAfter0":80,"manaBefore1":90.68693,"manaAfter1":60.6869278,"cdRemaining0":6,"cdRemaining1":6,"targetHpBefore":1000,"targetHpAfter":985,"expectedDamage":15,"animState0":"Bash","animState1":"Skill","slotNames":["Q_Bash","Q_Bash","W_HeavySlash","<empty>","<empty>"],"fixturePath":"DIAG_SkillFixture_Knight","fixturePos":{"x":80,"y":0,"z":80},"prepareState":"Locomotion","prepareSeconds":0.0039615,"failedCastReturn":false,"manaDeltaFailed":0,"cdFailed":0,"qEffectType":"BashEffect","wEffectType":"HeavySlashEffect","qPass":true,"wPass":true,"emptyPass":true,"failedNoManaPass":true,"note":"鍏ㄩ儴鏁版嵁鏉ヨ嚜鐢熶骇 SkillSystem.Cast锛汦/R 绌烘Ы=璁捐鍐呴潤榛橈紝闈炵己闄凤紙涓嶄慨锛?}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertSkillCastSmoke>d__64:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1306)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Skill","assertion":"Skill.InputWired","expected":{"controllerCount":1,"indicatorPointsToSceneIndicator":true,"skillKeys":"Q,W,E,R"},"actual":{"controllerCount":1,"indicatorPointsToSceneIndicator":true,"indicator":"SkillIndicator","skillKeys":"Q,W,E,R","indicatorCount":1},"pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:25.953","data":{"controllerCount":1,"indicatorCount":1,"indicator":"SkillIndicator","indicatorPointsToSceneIndicator":true,"skillKeys":"Q,W,E,R","skillKeysOk":true,"note":"DungeonWorld 鍦烘櫙缂哄け璇ョ粍浠舵椂鏈潯蹇呬负 product_fail锛涜繖鏄祫浜х己闄风殑姘镐箙鐪嬮棬鐙楋紝涓嶅緱鍒犻櫎"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertSkillInputWired>d__65:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1387)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01] fixture created SPEC01_Target_Cursor at (-0.379, 10.402, -0.766); showDamageNumber=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:CreateTarget (string,UnityEngine.Vector3,bool) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1842)
+SPEC01_ProbeRunner/<AssertCursorHover>d__68:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1437)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1842)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Skill.CursorHover","assertion":"Skill.CursorHover","expected":"缁欏畾鐬勫噯鎬佷笌涓€鏉′粠鐩告満鎸囧悜鏁屼汉鑳稿彛鐨勫悎鎴愬皠绾匡紝ResolveHover(ray) 杩斿洖 Hover.Attack 涓斿懡涓晫浜哄氨鏄鏁屼汉","actual":"apiPresent=True; hover=Attack; enemy=SPEC01_Target_Cursor; enemyIsFixture=True; distance=4.424; fixtureHits=1","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:25.957","data":{"entry":"CursorManager.ResolveHover(Ray, out UnitHealth, out float)锛堢瀯鍑嗘€?hover 鍒嗙被鐨勭函鏌ヨ鍏ュ彛锛?,"apiPresent":true,"hover":"Attack","expectedHover":"Attack","enemyName":"SPEC01_Target_Cursor","enemyIsFixture":true,"enemyTeam":"Monster","enemyDead":false,"distance":4.424042,"fixtureHits":1,"fixtureDistance":4.424042,"fixturePosition":{"x":-0.378554344,"y":10.4018955,"z":-0.765524864},"chestHeight":1.2,"chestPoint":{"x":-0.378554344,"y":11.6018953,"z":-0.765524864},"cameraPosition":{"x":-0.378554344,"y":15.6995811,"z":-3.58235431},"rayOrigin":{"x":-0.378554344,"y":15.6995811,"z":-3.58235431},"rayDirection":{"x":0,"y":-0.8240729,"z":0.566483855},"raycastDistance":300,"clickableLayers":-1,"isTargeting":false,"cameraSource":"Camera.main","note":"鍚堟垚灏勭嚎锛堢浉鏈?鈫?鏁屼汉鑳稿彛锛夛紝涓嶄娇鐢?WorldToScreenPoint锛涚瀯鍑嗘€佹棭閫€鐨勭Щ闄ょ敱 AC-4 浜哄伐鐩瑕嗙洊"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertCursorHover>d__68:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1486)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01] fixture created SPEC01_Target_Pick at (1.121, 10.402, -0.766); showDamageNumber=False
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:CreateTarget (string,UnityEngine.Vector3,bool) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1842)
+SPEC01_ProbeRunner/<AssertTargetPick>d__69:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1545)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1842)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Skill.TargetPick","assertion":"Skill.TargetPick","expected":"缁欏畾鍚屼竴鏉℃寚鍚戞晫浜鸿兏鍙ｇ殑鍚堟垚灏勭嚎锛孭ickEnemyFromRay(ray) 杩斿洖璇ユ晫浜虹殑 UnitHealth锛坱eam=Monster銆佸瓨娲伙級","actual":"apiPresent=True; picked=SPEC01_Target_Pick; pickedIsFixture=True; team=Monster; distance=5.194; pendingRange=0; inRange=False","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:25.967","data":{"entry":"SkillInputController.PickEnemyFromRay(Ray)锛堢偣鍑婚€夋晫涓庢寚閽堝垎绫诲叡鐢ㄥ皠绾垮彛寰勶級","apiPresent":true,"pickedName":"SPEC01_Target_Pick","pickedIsFixture":true,"pickedTeam":"Monster","pickedDead":false,"distance":5.1938,"pendingRange":0,"pendingRangePresent":true,"inRange":false,"fixturePosition":{"x":1.12144566,"y":10.4018955,"z":-0.765524864},"chestPoint":{"x":1.12144566,"y":11.6018953,"z":-0.765524864},"cameraPosition":{"x":-0.378554344,"y":15.6995811,"z":-3.58235431},"rayDirection":{"x":0.288805872,"y":-0.7889572,"z":0.5423446},"isTargeting":false,"screenPathTested":false,"note":"涓嶄娇鐢?WorldToScreenPoint锛堟晫浜哄彲鑳戒笉鍦ㄨ閿ワ級锛涘睆骞曞潗鏍囩偣鍑昏矾寰勭敱 AC-4 浜哄伐鐩瑕嗙洊"}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner/<AssertTargetPick>d__69:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1582)
+SPEC01_ProbeRunner/<RunSafe>d__56:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:250)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][ASSERT] {"run":1,"qaItem":"Regression.FND02A","assertion":"Regression.FND02A","expected":"FND-02A 鑷姩寮€灞€銆佸満鏅疄闄呴伃閬囦綅缃负鍩虹嚎銆佺湡瀹炲璺浉瀵规帴杩戙€侀浂鏂板 Console 閿欒/寮傚父缁х画閫氳繃","actual":"gameStarted=True; enemyFound=True; enemyCount=1; posOk=True; guidOk=True; navOk=True; approachOk=True; consoleErrors=0","pass":true,"status":"pass","kind":"production","timestamp":"2026-11-05 18:31:25.974","data":{"gameStarted":true,"enemyFound":true,"enemyCount":1,"enemyName":"Skeleton_Warrior","enemyStartPosition":{"x":-2.72,"y":0.0833334,"z":15.8},"positionBaseline":"scene-actual锛堝姩鎬佽鍙栧満鏅晫浜轰綅缃紝涓嶅啀鍐欐鍧愭爣锛?,"enemySourceGuid":"18dec5e6af31178468b146e0440bd081","expectedPrefabGuid":"18dec5e6af31178468b146e0440bd081","navMeshOk":true,"approachArrived":true,"approachGainTarget":5,"approachPlannedStandOff":10.8,"approachDestination":{"x":-2.71999931,"y":0.08333337,"z":5},"approachStartDistance":15.8,"approachEndDistance":10.8,"approachTraveled":5,"approachMaxSingleFrameDisplacement":0.0277454853,"approachPathStatus":"PathComplete","approachPathCorners":2,"consoleErrorCount":0,"consoleErrors":[],"errorWindow":"RuntimeInitializeOnLoadMethod(AfterSceneLoad) 璧疯嚦鏈柇瑷€","testWroteGameStarted":false,"testDisabledRealEnemyAfterRegression":true}}
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:Record (string,string,object,object,bool,string,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:93)
+SPEC01_ProbeRunner:RecordRegressionFinal () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1633)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:229)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 93)
+
+[SPEC01][SUMMARY] {   "task": "SPEC-01",   "mode": "green",   "run": 1,   "startedAt": "2026-11-05 18:30:44.002",   "finishedAt": "2026-11-05 18:31:25.977",   "unityVersion": "2022.3.62f3c1",   "scene": "Assets/Scenes/DungeonWorld.unity",   "randomSeed": 20261106,   "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\SPEC-01\\editor_run3\\SPEC01_Assertions.jsonl",   "assertionLinesInFile": "12",   "pass": 12,   "fail": 0,   "blocked": 0,   "infraFail": 0,   "observed": 0,   "mode": "green",   "head": "6872348ba191977508cc14481c55df3a564f8335",   "enemySourceGuid": "18dec5e6af31178468b146e0440bd081",   "enemyPosition": {"x":-2.72,"y":0.0833334,"z":15.8},   "fixtureNote": "SPEC01_Target_Combat / SPEC01_Target_UI 涓鸿繍琛屾湡鍐呭瓨 UnitHealth锛岀粨鏉熷墠閿€姣侊紱涓嶅啓鍏ュ満鏅?,   "testWroteGameStarted": false,   "exitReason": "completed" } 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Evidence:WriteSummary (string,int,string,System.Collections.Generic.Dictionary`2<string, object>) (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs:172)
+SPEC01_ProbeRunner:Finish () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1700)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:231)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs Line: 172)
+
+[SPEC01] finish; mode=green; run=1; exit=0; pass=12; fail=0; blocked=0; infra=0; observed=0
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_ProbeRunner:Finish () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1714)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:231)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs Line: 1714)
+
+[SPEC01] playModeStateChanged=ExitingPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:138)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+SPEC01_ProbeRunner:Finish () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1737)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:231)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 138)
+
+[FND00B06] playModeStateChanged=ExitingPlayMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+FND00B06_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs:79)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+SPEC01_ProbeRunner:Finish () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:1737)
+SPEC01_ProbeRunner/<Start>d__54:MoveNext () (at Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:231)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs Line: 79)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            4.807 ms
+	Integration:            246.175 ms
+	Integration of assets:  0.006 ms
+	Thread Wait Time:       0.011 ms
+	Total Operation Time:   250.999 ms
+Unloading 100 unused Assets / (0.9 MB). Loaded Objects now: 9781.
+Memory consumption went from 250.2 MB to 249.4 MB.
+Total: 11.797800 ms (FindLiveObjects: 0.718800 ms CreateObjectMapping: 0.346200 ms MarkObjects: 9.879100 ms  DeleteObjects: 0.852500 ms)
+
+[Licensing::Client] Successfully resolved entitlement details
+[SPEC01] playModeStateChanged=EnteredEditMode
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:138)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 138)
+
+[SPEC01] batchmode exit 0
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+SPEC01_Boot:ExitWithCode () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:168)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:145)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs Line: 168)
+
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run3/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-05 18:31:26.495 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run3 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+QA_InEditorMenu:TryFinish (string,int) (at Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:149)
+SPEC01_Boot:ExitWithCode () (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:169)
+SPEC01_Boot:OnPlayModeChanged (UnityEditor.PlayModeStateChange) (at Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs:145)
+UnityEditor.EditorApplication:Internal_PlayModeStateChanged (UnityEditor.PlayModeStateChange)
+
+(Filename: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs Line: 149)
+
+[QA][INEDITOR] done task=SPEC01 code=0

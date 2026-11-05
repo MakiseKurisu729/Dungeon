@@ -1,0 +1,67 @@
+﻿# AC-6｜git status --porcelain 与本单允许改动逐项比对
+
+命令: git status --porcelain
+期望: 相对基线（baseline_git_status.txt，编辑前采集）新增项只落在允许清单内
+
+--- 当前完整输出 ---
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/TASK_SKILL-ANIM-02.md
+ M Docs/Handoff/workflow-rules.md
+?? Assets/_Project/Tests/QA.meta
+?? Assets/_Project/Tests/QA/
+?? Docs/Handoff/REPORT_TEST-MCP-01.md
+?? Docs/Handoff/REPORT_WF-05.md
+?? Docs/Handoff/TASK_TEST-MCP-01.md
+?? Docs/Handoff/TASK_WF-05.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run1/
+?? Docs/QA/Evidence/FND-00B-06/editor_run1/
+?? Docs/QA/Evidence/SPEC-01/editor_run1/
+?? Docs/QA/Evidence/TEST-MCP-01/
+?? Docs/QA/Evidence/WF-05/
+
+小计: 当前 23 行；基线 19 行
+
+--- 相对基线的新增项（编辑前基线 = baseline_git_status.txt）---
+ M AGENTS.md
+ M Docs/Handoff/workflow-rules.md
+?? Docs/Handoff/REPORT_WF-05.md
+?? Docs/QA/Evidence/WF-05/
+
+--- 允许清单（TASK §4）---
+ M AGENTS.md
+ M Docs/Handoff/workflow-rules.md
+?? Docs/Handoff/REPORT_WF-05.md
+?? Docs/QA/Evidence/WF-05/
+
+--- 越界项（新增但不在允许清单内，期望为空）---
+(无越界项)
+
+--- 基线中已存在、本单未触碰的项（说明：工作区在本单开工前即非干净）---
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/TASK_SKILL-ANIM-02.md
+?? Assets/_Project/Tests/QA.meta
+?? Assets/_Project/Tests/QA/
+?? Docs/Handoff/REPORT_TEST-MCP-01.md
+?? Docs/Handoff/TASK_TEST-MCP-01.md
+?? Docs/Handoff/TASK_WF-05.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run1/
+?? Docs/QA/Evidence/FND-00B-06/editor_run1/
+?? Docs/QA/Evidence/SPEC-01/editor_run1/
+?? Docs/QA/Evidence/TEST-MCP-01/
