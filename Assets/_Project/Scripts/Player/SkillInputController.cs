@@ -12,6 +12,9 @@ public class SkillInputController : MonoBehaviour
     public static SkillInputController instance;
     public static bool IsTargeting { get; private set; }
 
+    /// <summary>待放技能射程（瞄准/追放期间有效，取消后归零）；指针与测试读同一份数据。</summary>
+    public float PendingRange { get; private set; }
+
     [InspectorName("快捷施法")]
     [Tooltip("快捷施法：跳过目标指示，直接对最近敌人释放")]
     public bool quickCast = false;
@@ -53,11 +56,12 @@ public class SkillInputController : MonoBehaviour
             if (puh == null || puh.dead) { Cancel(); return; }
 
             float range = GetSkillRange(sk);
+            PendingRange = range;
             Vector3 d = _pendingTarget.position - _pendingCaster.transform.position; d.y = 0f;
 
             if (d.magnitude <= range)
             {
-                _pendingCaster.Cast(_pendingIndex, _pendingTarget);   // 到位：自动释放
+                CastWithFeedback(_pendingCaster, _pendingIndex, _pendingTarget);   // 到位：自动释放
                 Cancel();
                 return;
             }
@@ -80,6 +84,7 @@ public class SkillInputController : MonoBehaviour
             if (ss == null || ss.GetSkill(_pendingIndex) == null) { Cancel(); return; }
 
             float range = GetSkillRange(ss.GetSkill(_pendingIndex));
+            PendingRange = range;
             if (indicator != null) indicator.UpdateVisual(ss.transform.position, range);
 
             if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
@@ -88,22 +93,29 @@ public class SkillInputController : MonoBehaviour
             }
             else if (Input.GetMouseButtonDown(0))
             {
-                var target = PickEnemy();
-                if (target == null) { Cancel(); return; }          // 点空地=取消
-                Vector3 d = target.position - ss.transform.position; d.y = 0f;
+                var targetHealth = PickEnemyAt(Input.mousePosition);
+                if (targetHealth == null)
+                {
+                    GameData.SetMessage("未选中敌人");   // 点空地=取消，但要说明原因
+                    Cancel();
+                    return;
+                }
+                Vector3 targetPos = targetHealth.transform.position;
+                Vector3 d = targetPos - ss.transform.position; d.y = 0f;
                 if (d.magnitude <= range)
                 {
-                    ss.Cast(_pendingIndex, target);                // 范围内：直接放
+                    CastWithFeedback(ss, _pendingIndex, targetHealth.transform);   // 范围内：直接放
                     Cancel();
                 }
                 else
                 {
                     // ★ 范围外：走向目标，进入范围自动放
+                    GameData.SetMessage("目标超出射程，正在接近");
                     _chase = true;
                     _pendingCaster = ss;
-                    _pendingTarget = target;
+                    _pendingTarget = targetHealth.transform;
                     var brain = ss.GetComponent<CharacterBrain>();
-                    if (brain != null) brain.CommandMove(target.position);
+                    if (brain != null) brain.CommandMove(targetPos);
                 }
             }
             return;
@@ -118,7 +130,7 @@ public class SkillInputController : MonoBehaviour
             if (s == null || s.effects == null || s.effects.Length == 0) continue;
 
             if (quickCast)
-                ss.Cast(i, NearestEnemy(ss.transform, GetSkillRange(s)));
+                CastWithFeedback(ss, i, NearestEnemy(ss.transform, GetSkillRange(s)));
             else
             {
                 _pendingIndex = i;
@@ -143,6 +155,7 @@ public class SkillInputController : MonoBehaviour
         _pendingIndex = -1;
         _pendingCaster = null;
         _pendingTarget = null;
+        PendingRange = 0f;
         if (indicator != null) indicator.Hide();
     }
 
@@ -152,16 +165,32 @@ public class SkillInputController : MonoBehaviour
         return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();
     }
 
-    Transform PickEnemy()
+    /// <summary>施放并补一条失败提示：Cast 自身已写消息（冷却/蓝量）时保留，未写时补“技能释放失败”。</summary>
+    void CastWithFeedback(SkillSystem caster, int index, Transform target)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        string before = GameData.message;
+        if (caster.Cast(index, target)) return;
+        if (GameData.message == before) GameData.SetMessage("技能释放失败");
+    }
+
+    /// <summary>屏幕坐标（像素）→ 最近存活敌人（Monster）；点击选敌的唯一入口。</summary>
+    public UnitHealth PickEnemyAt(Vector3 screenPosition)
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return null;
+        return PickEnemyFromRay(cam.ScreenPointToRay(screenPosition));
+    }
+
+    /// <summary>射线 → 最近存活敌人（Monster）。指针分类与点击选敌共用同一射线口径。</summary>
+    public UnitHealth PickEnemyFromRay(Ray ray)
+    {
         RaycastHit[] hits = Physics.RaycastAll(ray, 300f);
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
         foreach (var h in hits)
         {
             var uh = h.collider.GetComponentInParent<UnitHealth>();
             if (uh != null && uh.team == Team.Monster && !uh.dead)
-                return uh.transform;
+                return uh;
         }
         return null;
     }

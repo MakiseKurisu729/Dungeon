@@ -49,31 +49,21 @@ public class CursorManager : MonoBehaviour
         if (UIManager.instance != null && UIManager.instance.IsInventoryOpen)
         { SetHover(Hover.Pointer); Apply(pointerCursor, pointerHotspot, Color.white); return; }
 
-        if (SkillInputController.instance != null && SkillInputController.IsTargeting)
-        { SetHover(Hover.Pointer); Apply(pointerCursor, pointerHotspot, Color.white); return; }
+        // 瞄准态不再强制普通指针：与常态共用同一套 hover 分类，
+        // 玩家才能从指针判断“这一下能不能打到谁”。
+        Camera cam = Camera.main;
+        if (cam == null) return;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, 300f, clickableLayers);
+        UnitHealth enemy;
+        Interactable inter;
+        Selectable selectable;
+        float distance;
+        Hover hover = ResolveHover(ray, out enemy, out inter, out selectable, out distance);
+        SetHover(hover);
 
-        UnitHealth enemy = null;
-        Interactable inter = null;
-        Selectable selectable = null;
-        foreach (var h in hits)
+        if (hover == Hover.Interact)
         {
-            if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)
-                selectable = h.collider.GetComponentInParent<Selectable>();
-            if (enemy == null)
-            {
-                var uh = h.collider.GetComponentInParent<UnitHealth>();
-                if (uh != null && uh.team == Team.Monster && !uh.dead) enemy = uh;
-            }
-            if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
-                inter = h.collider.GetComponentInParent<Interactable>();
-        }
-
-        if (inter != null && selectable == null)
-        {
-            SetHover(Hover.Interact);
             if (interactCursor != null)
             {
                 Apply(interactCursor, interactHotspot, interactColor);
@@ -84,21 +74,62 @@ public class CursorManager : MonoBehaviour
                 Apply(pointerCursor, pointerHotspot, Color.white);
             }
         }
-        else if (selectable != null)
+        else if (hover == Hover.Select)
         {
-            SetHover(Hover.Select);
             Apply(selectCursor, selectHotspot, selectColor);
         }
-        else if (enemy != null)
+        else if (hover == Hover.Attack)
         {
-            SetHover(Hover.Attack);
             Apply(attackCursor, attackHotspot, attackColor);
         }
         else
         {
-            SetHover(Hover.Pointer);
             Apply(pointerCursor, pointerHotspot, Color.white);
         }
+    }
+
+    /// <summary>射线 → hover 分类（纯查询，不写光标）。瞄准态与常态共用，batchmode 可用合成射线断言。</summary>
+    public Hover ResolveHover(Ray ray)
+    {
+        UnitHealth enemy;
+        float distance;
+        return ResolveHover(ray, out enemy, out distance);
+    }
+
+    /// <summary>射线 → hover 分类，并输出命中的存活敌人与其射线距离（无敌人时 distance = -1）。</summary>
+    public Hover ResolveHover(Ray ray, out UnitHealth enemy, out float distance)
+    {
+        Interactable inter;
+        Selectable selectable;
+        return ResolveHover(ray, out enemy, out inter, out selectable, out distance);
+    }
+
+    Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,
+                       out float distance)
+    {
+        enemy = null; inter = null; selectable = null; distance = -1f;
+        RaycastHit[] hits = Physics.RaycastAll(ray, 300f, clickableLayers);
+        foreach (var h in hits)
+        {
+            if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)
+                selectable = h.collider.GetComponentInParent<Selectable>();
+            if (enemy == null)
+            {
+                var uh = h.collider.GetComponentInParent<UnitHealth>();
+                if (uh != null && uh.team == Team.Monster && !uh.dead)
+                {
+                    enemy = uh;
+                    distance = h.distance;
+                }
+            }
+            if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
+                inter = h.collider.GetComponentInParent<Interactable>();
+        }
+
+        if (inter != null && selectable == null) return Hover.Interact;
+        if (selectable != null) return Hover.Select;
+        if (enemy != null) return Hover.Attack;
+        return Hover.Pointer;
     }
 
     void SetHover(Hover h) { _hover = h; }

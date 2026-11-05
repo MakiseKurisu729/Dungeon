@@ -1,0 +1,23 @@
+﻿ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Player/SkillInputController.cs
+ M Assets/_Project/Scripts/UI/CursorManager.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/TASK_SKILL-ANIM-01.md
+ M Docs/Handoff/workflow-rules.md
+?? Docs/QA/Evidence/SKILL-ANIM-01/
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run1_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run1_ExitCode.txt
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run1_Summary.json
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run2_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run2_ExitCode.txt
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run2_Summary.json
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run3_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run3_ExitCode.txt
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01_run3_Summary.json
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01red_run1_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01red_run1_ExitCode.txt
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Green_skillanim01red_run1_Summary.json
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Runs_skillanim01.jsonl
+?? Docs/QA/Evidence/SPEC-01/SPEC01_Runs_skillanim01red.jsonl

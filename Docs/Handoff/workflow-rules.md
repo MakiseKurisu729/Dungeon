@@ -126,14 +126,14 @@ TASK §5 必须表态：需要讲稿（feature / 高风险）或写“不适用 
 
 ## 3. 提交规范
 
-1. 标题用 Conventional Commits：`<type>(<scope>): <摘要>`，type 取 `feat` / `fix` / `test` / `docs` / `refactor` / `chore`。
+1. 标题用**中文类型前缀**：`功能 / 修复 / 测试 / 文档 / 重构：一句话中文摘要`。不再使用英文 `type(scope)`（所有者 2026-11-05 明确要求“英文看不懂”）。
 2. 正文：**一行“为什么”**（动机/根因），不写“做了什么”。
 3. 默认**单提交**；用户用 GitHub Desktop 一键提交。不再要求分 hunk。
 4. 混合改动（代码 + 测试 + 文档）仅在用户要求拆分时给分组清单：每组列 `git add` 文件与各自的提交信息。
 5. 提交内容不得包含账号、密码、令牌、许可证文件或私人路径；`Library`/`Temp`/`Logs`/`obj` 等生成目录不入库。
 
 ```text
-docs(workflow): consolidate agent rules into AGENTS.md
+文档：收敛工作流规则到 AGENTS.md
 为什么：流程规则散落在 8+ 个文件中且互相冲突，入口文件与当前状态不一致
 ```
 
@@ -142,12 +142,12 @@ docs(workflow): consolidate agent rules into AGENTS.md
 ```text
 组 1：
 git add Assets/_Project/Scripts/Foo.cs Assets/_Project/Scripts/Foo.cs.meta
-fix(combat): 修正普攻伤害重复结算
+修复：修正普攻伤害重复结算
 为什么：OnHit 在动画事件与协程中各调用一次，导致单次攻击结算两次。
 
 组 2：
 git add Docs/Handoff/REPORT_XXX.md Docs/QA/YYY.md
-docs(qa): 登记 XXX 修复验收证据
+文档：登记 XXX 修复验收证据
 为什么：修复结论需可追溯到断言与日志。
 ```
 

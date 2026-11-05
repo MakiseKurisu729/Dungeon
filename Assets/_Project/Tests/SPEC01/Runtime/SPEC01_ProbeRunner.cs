@@ -58,6 +58,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     static FieldInfo _firedField;
     static FieldInfo _rangedTimerField;
     static FieldInfo _damageElementField;
+    static MethodInfo _resolveHoverWithOut;
 
     int _run;
     string _mode;
@@ -222,6 +223,8 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         yield return RunSafe("UI.SpawnAnchor", AssertSpawnAnchor());
         yield return RunSafe("Skill.CastSmoke", AssertSkillCastSmoke());
         yield return RunSafe("Skill.InputWired", AssertSkillInputWired());
+        yield return RunSafe("Skill.CursorHover", AssertCursorHover());
+        yield return RunSafe("Skill.TargetPick", AssertTargetPick());
 
         RecordRegressionFinal();
         CleanupFixtures();
@@ -1393,6 +1396,218 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                  "skillKeys", keys,
                  "skillKeysOk", keysOk,
                  "note", "DungeonWorld 场景缺失该组件时本条必为 product_fail；这是资产缺陷的永久看门狗，不得删除"));
+    }
+
+    // ============================================================
+    // 9. Skill.CursorHover（瞄准态 hover 分类：合成射线 → 攻击指针）
+    // ============================================================
+    /// <summary>反射取 ResolveHover(Ray, out UnitHealth, out float)：产品未实现时返回 null，红阶段仍可编译。</summary>
+    static MethodInfo ResolveHoverWithOut
+    {
+        get
+        {
+            if (_resolveHoverWithOut == null)
+                _resolveHoverWithOut = typeof(CursorManager).GetMethod("ResolveHover",
+                    new[] { typeof(Ray), typeof(UnitHealth).MakeByRefType(), typeof(float).MakeByRefType() });
+            return _resolveHoverWithOut;
+        }
+    }
+
+    /// <summary>
+    /// 口径：瞄准态下指针分类不再强制 Pointer，而是与常态共用 ResolveHover。
+    /// 这里用合成射线（相机 → 敌人胸口）直接验证分类函数，不使用 WorldToScreenPoint（敌人可能不在视锥）。
+    /// 瞄准态早退的移除属视觉行为，由 AC-4 人工目检覆盖；本断言只认纯函数返回值。
+    /// </summary>
+    IEnumerator AssertCursorHover()
+    {
+        const string AssertionId = "Skill.CursorHover";
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
+            yield break;
+        }
+        var manager = CursorManager.instance;
+        if (manager == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "CursorManager.instance 为空（场景未装配光标管理器）", "");
+            yield break;
+        }
+
+        var fixture = CreateTarget("SPEC01_Target_Cursor",
+            cam.transform.position + cam.transform.forward * 6f, false);
+        if (fixture == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "瞄准指针夹具创建失败", "");
+            yield break;
+        }
+        var fh = fixture.GetComponent<UnitHealth>();
+        Vector3 chest = fixture.transform.position + Vector3.up * DamageNumber.ChestHeight;
+        Physics.SyncTransforms();   // 新建夹具的碰撞体需同步后才会被本帧射线看到
+        Ray ray = new Ray(cam.transform.position, (chest - cam.transform.position).normalized);
+
+        int fixtureHits = 0;
+        float fixtureDistance = -1f;
+        foreach (var h in Physics.RaycastAll(ray, 300f))
+        {
+            if (h.collider == null || h.collider.GetComponentInParent<UnitHealth>() != fh) continue;
+            fixtureHits++;
+            if (fixtureDistance < 0f) fixtureDistance = h.distance;
+        }
+
+        MethodInfo method = ResolveHoverWithOut;
+        bool apiPresent = method != null;
+        object result = null;
+        UnitHealth hoverEnemy = null;
+        float distance = -1f;
+        if (apiPresent)
+        {
+            object[] args = { ray, null, 0f };
+            try
+            {
+                result = method.Invoke(manager, args);
+                hoverEnemy = args[1] as UnitHealth;
+                if (args[2] is float f) distance = f;
+            }
+            catch (Exception e)
+            {
+                _ev.InfraFailure(AssertionId, AssertionId,
+                    "ResolveHover 反射调用抛异常: " + e.Message, e.StackTrace);
+                Destroy(fixture);
+                DestroyTarget();
+                yield break;
+            }
+        }
+
+        string hover = result != null ? result.ToString() : "<missing>";
+        bool enemyIsFixture = hoverEnemy != null && hoverEnemy == fh;
+        bool pass = apiPresent && hover == "Attack" && enemyIsFixture;
+
+        _ev.Record(AssertionId, AssertionId,
+            "给定瞄准态与一条从相机指向敌人胸口的合成射线，ResolveHover(ray) 返回 Hover.Attack 且命中敌人就是该敌人",
+            "apiPresent=" + apiPresent + "; hover=" + hover +
+            "; enemy=" + (hoverEnemy != null ? hoverEnemy.name : "none") +
+            "; enemyIsFixture=" + enemyIsFixture +
+            "; distance=" + F(distance) + "; fixtureHits=" + fixtureHits,
+            pass, pass ? "pass" : "product_fail", "production",
+            Dict("entry", "CursorManager.ResolveHover(Ray, out UnitHealth, out float)（瞄准态 hover 分类的纯查询入口）",
+                 "apiPresent", apiPresent,
+                 "hover", hover,
+                 "expectedHover", "Attack",
+                 "enemyName", hoverEnemy != null ? hoverEnemy.name : "none",
+                 "enemyIsFixture", enemyIsFixture,
+                 "enemyTeam", hoverEnemy != null ? hoverEnemy.team.ToString() : "none",
+                 "enemyDead", hoverEnemy != null && hoverEnemy.dead,
+                 "distance", distance,
+                 "fixtureHits", fixtureHits,
+                 "fixtureDistance", fixtureDistance,
+                 "fixturePosition", V3(fixture.transform.position),
+                 "chestHeight", DamageNumber.ChestHeight,
+                 "chestPoint", V3(chest),
+                 "cameraPosition", V3(cam.transform.position),
+                 "rayOrigin", V3(ray.origin),
+                 "rayDirection", V3(ray.direction),
+                 "raycastDistance", 300f,
+                 "clickableLayers", manager.clickableLayers.value,
+                 "isTargeting", SkillInputController.IsTargeting,
+                 "cameraSource", "Camera.main",
+                 "note", "合成射线（相机 → 敌人胸口），不使用 WorldToScreenPoint；瞄准态早退的移除由 AC-4 人工目检覆盖"));
+
+        Destroy(fixture);
+        DestroyTarget();
+        yield return null;
+    }
+
+    // ============================================================
+    // 10. Skill.TargetPick（点击选敌：同一射线口径 → 敌人 UnitHealth）
+    // ============================================================
+    /// <summary>
+    /// 口径：点击选敌与指针分类共用同一射线口径，PickEnemyFromRay 直接返回命中敌人的 UnitHealth。
+    /// 瞄准态在 batchmode 下无法稳定保持（无键盘输入、每帧会因空槽取消），
+    /// 故只验证纯查询函数本身；PendingRange 如实记录（非瞄准态为 0）。
+    /// </summary>
+    IEnumerator AssertTargetPick()
+    {
+        const string AssertionId = "Skill.TargetPick";
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
+            yield break;
+        }
+        var input = SkillInputController.instance;
+        if (input == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "SkillInputController.instance 为空（场景未装配技能输入）", "");
+            yield break;
+        }
+
+        var fixture = CreateTarget("SPEC01_Target_Pick",
+            cam.transform.position + cam.transform.forward * 6f + cam.transform.right * 1.5f, false);
+        if (fixture == null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId, "点击选敌夹具创建失败", "");
+            yield break;
+        }
+        var fh = fixture.GetComponent<UnitHealth>();
+        Vector3 chest = fixture.transform.position + Vector3.up * DamageNumber.ChestHeight;
+        Physics.SyncTransforms();
+        Ray ray = new Ray(cam.transform.position, (chest - cam.transform.position).normalized);
+        float rayDistance = Vector3.Distance(cam.transform.position, chest);
+
+        MethodInfo method = typeof(SkillInputController).GetMethod("PickEnemyFromRay", new[] { typeof(Ray) });
+        bool apiPresent = method != null;
+        UnitHealth picked = null;
+        Exception invokeError = null;
+        if (apiPresent)
+        {
+            try { picked = method.Invoke(input, new object[] { ray }) as UnitHealth; }
+            catch (Exception e) { invokeError = e; }
+        }
+        if (invokeError != null)
+        {
+            _ev.InfraFailure(AssertionId, AssertionId,
+                "PickEnemyFromRay 反射调用抛异常: " + invokeError.Message, invokeError.StackTrace);
+            Destroy(fixture);
+            DestroyTarget();
+            yield break;
+        }
+
+        object rangeValue = ReadMember(input, "PendingRange");
+        float pendingRange = rangeValue is float pf ? pf : -1f;
+        bool inRange = pendingRange > 0f && rayDistance <= pendingRange;
+        bool pickedIsFixture = picked != null && picked == fh;
+        bool pass = apiPresent && pickedIsFixture && picked.team == Team.Monster && !picked.dead;
+
+        _ev.Record(AssertionId, AssertionId,
+            "给定同一条指向敌人胸口的合成射线，PickEnemyFromRay(ray) 返回该敌人的 UnitHealth（team=Monster、存活）",
+            "apiPresent=" + apiPresent +
+            "; picked=" + (picked != null ? picked.name : "none") +
+            "; pickedIsFixture=" + pickedIsFixture +
+            "; team=" + (picked != null ? picked.team.ToString() : "none") +
+            "; distance=" + F(rayDistance) + "; pendingRange=" + F(pendingRange) + "; inRange=" + inRange,
+            pass, pass ? "pass" : "product_fail", "production",
+            Dict("entry", "SkillInputController.PickEnemyFromRay(Ray)（点击选敌与指针分类共用射线口径）",
+                 "apiPresent", apiPresent,
+                 "pickedName", picked != null ? picked.name : "none",
+                 "pickedIsFixture", pickedIsFixture,
+                 "pickedTeam", picked != null ? picked.team.ToString() : "none",
+                 "pickedDead", picked != null && picked.dead,
+                 "distance", rayDistance,
+                 "pendingRange", pendingRange,
+                 "pendingRangePresent", rangeValue != null,
+                 "inRange", inRange,
+                 "fixturePosition", V3(fixture.transform.position),
+                 "chestPoint", V3(chest),
+                 "cameraPosition", V3(cam.transform.position),
+                 "rayDirection", V3(ray.direction),
+                 "isTargeting", SkillInputController.IsTargeting,
+                 "screenPathTested", false,
+                 "note", "不使用 WorldToScreenPoint（敌人可能不在视锥）；屏幕坐标点击路径由 AC-4 人工目检覆盖"));
+
+        Destroy(fixture);
+        DestroyTarget();
+        yield return null;
     }
 
     // ============================================================
