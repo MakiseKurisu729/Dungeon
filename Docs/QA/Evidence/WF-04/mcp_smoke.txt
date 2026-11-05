@@ -1,0 +1,25 @@
+=== AC-4 Unity MCP smoke test — PENDING / NOT EXECUTED ===
+生成时间: 2026-11-05 (执行者 WF-04)
+状态: 未执行。执行者不得代填“已连通”。
+
+阻塞原因（属于所有者动作，非执行者能力范围）:
+1. MCP server 需在 Unity 内 Window → MCP for Unity → Start Server 启动（执行者不能点击编辑器 UI）。
+2. OpenCode 需重启会话才会加载 opencode.json 新增的 mcp.unity 配置。
+3. 本单约束：Unity 保持打开、不跑 batchmode，因此不能以批处理方式代启服务。
+
+执行者已就绪的部分（可核对）:
+- uv 0.13.7 已安装: C:\Users\lll\.local\bin\uv.exe（版本见 uv.txt）
+- opencode.json: mcp.unity = { type: remote, url: http://localhost:8080/mcp, enabled: true }
+- Packages/manifest.json: com.coplaydev.unity-mcp -> https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#v10.0.0
+  - 远端核对: tag v10.0.0 存在（git ls-remote）；/MCPForUnity/package.json 中 name=com.coplaydev.unity-mcp, version=10.0.0, unity=2021.3
+- 2026-11-05 16:0x 检查: Library/PackageCache 内暂无 coplay 目录，packages-lock.json 无 coplaydev 条目
+  → 说明 Unity 尚未刷新包解析（编辑器未获焦点时不会自动 refresh），需所有者切回 Unity 触发。
+
+所有者完成后应补齐的 ACTUAL 段（原样粘贴工具输出）:
+[ ] 1) Unity 窗口显示的 server address/port（默认 localhost:8080；若不同，改 opencode.json 的 url 后重启 OpenCode）
+[ ] 2) 重启后的 OpenCode 工具列表中可见 unity MCP 工具（如 read_console / execute_menu_item）
+[ ] 3) 调用 read_console 的返回内容（摘要 + 是否报错）
+[ ] 4) Unity 侧包状态: Package Manager 中 MCP for Unity 已安装且无编译错误
+
+--- ACTUAL (由所有者填写) ---
+(待填)

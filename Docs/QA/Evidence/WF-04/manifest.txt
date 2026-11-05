@@ -1,0 +1,15 @@
+﻿=== manifest.json ===
+ConvertFrom-Json: OK
+com.coplaydev.unity-mcp = https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#v10.0.0
+dependency count = 54
+Select-String unity-mcp:
+  line 3: "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#v10.0.0",
+
+=== opencode.json ===
+ConvertFrom-Json: OK
+mcp.unity.type = remote
+mcp.unity.url  = http://localhost:8080/mcp
+mcp.unity.enabled = True
+providers preserved = opencode,opencode-go
+providers.opencode.models = deepseek-v4.1-flash
+providers.opencode-go.models = deepseek-v4.1-flash

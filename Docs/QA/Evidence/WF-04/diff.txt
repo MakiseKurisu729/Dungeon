@@ -1,0 +1,28 @@
+﻿diff --git a/Packages/manifest.json b/Packages/manifest.json
+index bd0fb1ba..7a993fd6 100644
+--- a/Packages/manifest.json
++++ b/Packages/manifest.json
+@@ -1,5 +1,6 @@
+ {
+   "dependencies": {
++    "com.coplaydev.unity-mcp": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#v10.0.0",
+     "com.unity.2d.sprite": "1.0.0",
+     "com.unity.ai.navigation": "1.1.7",
+     "com.unity.animation.rigging": "1.2.1",
+diff --git a/opencode.json b/opencode.json
+index a9091317..01bf3fb0 100644
+--- a/opencode.json
++++ b/opencode.json
+@@ -19,5 +19,12 @@
+         }
+       }
+     }
++  },
++  "mcp": {
++    "unity": {
++      "type": "remote",
++      "url": "http://localhost:8080/mcp",
++      "enabled": true
++    }
+   }
+ }

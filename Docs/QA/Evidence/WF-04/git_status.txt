@@ -1,0 +1,24 @@
+﻿=== git status --porcelain (2026-11-05 16:05:11) ===
+M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Docs/Handoff/CURRENT.md
+ M Packages/manifest.json
+ M opencode.json
+?? Docs/Handoff/REVIEW_ANIMATOR.md
+?? Docs/Handoff/TASK_SKILL-ANIM-02.md
+?? Docs/Handoff/TASK_WF-04.md
+?? Docs/QA/Evidence/WF-04/
+
+=== git diff --stat ===
+Assembly-CSharp-Editor.csproj | 431 +++++++++++++++++++++---------------------
+ Assembly-CSharp.csproj        | 425 +++++++++++++++++++++--------------------
+ Docs/Handoff/CURRENT.md       |  18 +-
+ Packages/manifest.json        |   1 +
+ opencode.json                 |   7 +
+ 5 files changed, 451 insertions(+), 431 deletions(-)
+
+=== HEAD ===
+a7817b5538542e849be9fddf012bdbf90b0b0827
+
+=== forbidden paths touched? (Assets/ ProjectSettings/ *.cs Packages/packages-lock.json) ===
+NONE (clean) except pre-existing csproj (Unity-regenerated)

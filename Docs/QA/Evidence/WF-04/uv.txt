@@ -1,0 +1,13 @@
+﻿=== uv install evidence (2026-11-05 16:05:09) ===
+path: C:\Users\lll\.local\bin\uv.exe
+exists: True
+
+uv --version:
+uv 0.13.7 (316c827e0 2026-11-03 x86_64-pc-windows-msvc)
+
+uvx --version:
+uvx 0.13.7 (316c827e0 2026-11-03 x86_64-pc-windows-msvc)
+
+installer stdout: downloading uv 0.13.7 (x86_64-pc-windows-msvc) / installing to C:\Users\lll\.local\bin -> everything's installed!
+on PATH in this shell: False
+note: uv manages Python toolchains; MCP server python deps are resolved by uvx at first start.
