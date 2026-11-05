@@ -3,7 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// 选择系统：左键=单选友军；Ctrl+左键=加选；Ctrl+A 全选；1~4 热键=切换选中；
-/// 反引号清空；点敌人=选定并标记（红圈）；点击交互物=选中单位走过去执行交互；
+/// 反引号清空；点敌人=选定并标记（红圈）；点击交互物=选中单位走过去执行交互（按优先级分发）；
+/// 靠近可 F 交互的目标（如地牢门）→ 提示 + F 键执行；
 /// 瞄准技能时左键让给施法。
 /// </summary>
 public class SelectionManager : MonoBehaviour
@@ -22,6 +23,16 @@ public class SelectionManager : MonoBehaviour
     }
 
     public bool MultiSelected { get { return _selected.Count > 1; } }
+
+    /// <summary>主选单位的角色大脑（没有选中/不是玩家时 null）。</summary>
+    CharacterBrain PrimaryBrain
+    {
+        get
+        {
+            var p = Primary;
+            return p != null ? p.GetComponentInParent<CharacterBrain>() : null;
+        }
+    }
 
     /// <summary>相机系统实例：Awake 先后顺序不保证，取不到时惰性重试（行为与 FindObjectOfType 一致）。</summary>
     DebugCameraSwitcher Cam
@@ -100,6 +111,17 @@ public class SelectionManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && !_moved && !(SkillInputController.instance != null && SkillInputController.IsTargeting))
             HandleClick();
 
+        // 交互键与提示：只看主选单位的交互执行器（不再由交互物自己读 Input / 写提示）
+        var primaryBrain = PrimaryBrain;
+        if (primaryBrain != null)
+        {
+            var runner = InteractionRunner.Ensure(primaryBrain);
+            if (Input.GetKeyDown(KeyCode.F)) runner.TryKeyInteract();
+            // 每帧写入：保持“靠近门时提示持续显示”的观感（与原 DungeonDoor.Update 一致）
+            string hint = runner.PollKeyHint();
+            if (!string.IsNullOrEmpty(hint)) MessageFeed.SetMessage(hint);
+        }
+
         if (_enemySelected != null && _enemySelected.dead)
             SelectEnemy(null);
 
@@ -126,7 +148,8 @@ public class SelectionManager : MonoBehaviour
 
         Selectable sel = null;
         UnitHealth enemy = null;
-        Interactable inter = null;
+        IInteractionTarget inter = null;
+        var primaryBrain = PrimaryBrain;
         foreach (var h in hits)
         {
             if (sel == null)
@@ -139,8 +162,7 @@ public class SelectionManager : MonoBehaviour
                 var uh = h.collider.GetComponentInParent<UnitHealth>();
                 if (uh != null && uh.team == Team.Monster && !uh.dead) enemy = uh;
             }
-            if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
-                inter = h.collider.GetComponentInParent<Interactable>();
+            inter = BestTarget(inter, h.collider.GetComponentInParent<IInteractionTarget>(), primaryBrain);
         }
 
         bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
@@ -165,7 +187,7 @@ public class SelectionManager : MonoBehaviour
         }
         else if (inter != null)
         {
-            // ★ 点击交互物：选中单位走过去执行（走到范围后由目标自己的逻辑接管，如 DownedRescue 自动读条）
+            // ★ 点击交互物：选中单位走过去执行（走到范围后由目标自己的 Interact 接管，如 DownedRescue 自动读条）
             foreach (var s in _selected)
             {
                 var brain = s.GetComponent<CharacterBrain>();
@@ -179,14 +201,22 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
+    /// <summary>命中物的交互目标择优：只收可交互的，优先级高者胜（救援 &gt; 默认；同优先级先命中的近者）。</summary>
+    static IInteractionTarget BestTarget(IInteractionTarget best, IInteractionTarget cand, CharacterBrain unit)
+    {
+        if (cand == null) return best;
+        if (unit != null && !cand.IsAvailable(unit)) return best;
+        if (best == null) return cand;
+        return cand.Priority > best.Priority ? cand : best;
+    }
+
     /// <summary>点中的是倒地队友、且当前选中里有活着的玩家 → 对每个选中玩家下达救援指令。
     /// 返回 true = 已下达（调用方不再走选中/攻击分支）。</summary>
-    bool TryCommandRescue(Interactable inter)
+    bool TryCommandRescue(IInteractionTarget target)
     {
-        if (inter == null) return false;
-        var target = inter.GetComponent<DownedRescue>();
-        if (target == null) target = inter.GetComponentInParent<DownedRescue>();
-        if (target == null || !target.IsDown) return false;
+        if (target == null || target.Priority != InteractionPriority.Rescue) return false;
+        var primaryBrain = PrimaryBrain;
+        if (primaryBrain == null || !target.IsAvailable(primaryBrain)) return false;
 
         int issued = 0;
         foreach (var s in _selected)
@@ -194,7 +224,9 @@ public class SelectionManager : MonoBehaviour
             if (s == null) continue;
             var h = s.GetComponentInParent<UnitHealth>();
             if (h == null || h.dead || h.team != Team.Player) continue;   // 倒地者 dead=true，救不了自己
-            target.CommandRescue(h);
+            var brain = s.GetComponentInParent<CharacterBrain>();
+            if (brain == null) continue;
+            target.Interact(brain);
             issued++;
         }
         return issued > 0;

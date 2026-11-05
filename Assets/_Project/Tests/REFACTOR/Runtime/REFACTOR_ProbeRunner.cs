@@ -16,7 +16,7 @@ using UnityEditor;
 /// 只读生产状态；测试自身唯一写入面为 Docs 证据、SessionState 退出码、
 /// 以及运行期内存夹具（结束前销毁）。
 ///
-/// 10 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+/// 11 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
 ///   1. Party.PresentAndMove       三职业存在 + 生产移动命令可移动
 ///   2. Combat.MeleeHit            骑士近战普攻命中，命中瞬间处于 AttackMelee
 ///   3. Combat.RangedShot          弓/法远程普攻发射，发射瞬间处于 Attack_Release
@@ -27,6 +27,7 @@ using UnityEditor;
 ///   8. Chest.Interact             点击宝箱指令 → 走到范围 → 开盖 + 内容物现身
 ///   9. Refactor.RegistrySemantics 单位注册表契约（未激活语义 / Nearest 与全场扫描同口径）
 ///  10. Refactor.StateFacade       状态/流程门面（新旧 API 双向一致 / 事件恰好一次 / 暂停 timeScale）
+///  11. Refactor.InteractionContract 交互契约（接口语义 / KeyInteractable / 开箱事件恰好一次 / Runner 复用）
 /// </summary>
 public class REFACTOR_ProbeRunner : MonoBehaviour
 {
@@ -151,7 +152,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 "Party.PresentAndMove", "Combat.MeleeHit", "Combat.RangedShot", "Skill.QW",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
-                "Refactor.RegistrySemantics", "Refactor.StateFacade"
+                "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -169,6 +170,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Downed.Knockdown", AssertKnockdown());
         yield return RunSafe("Rescue.ChannelInterrupt", AssertRescue());
         yield return RunSafe("Chest.Interact", AssertChest());
+        yield return RunSafe("Refactor.InteractionContract", AssertInteractionContract());
         yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics());
         yield return RunSafe("Refactor.StateFacade", AssertStateFacade());
         RestoreMonstersAndUi();
@@ -804,6 +806,155 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         if (_chestOpenedField == null)
             _chestOpenedField = typeof(Chest).GetField("_opened", BindingFlags.Instance | BindingFlags.NonPublic);
         return _chestOpenedField != null && (bool)_chestOpenedField.GetValue(chest);
+    }
+
+    // ============================================================
+    // 11. Refactor.InteractionContract（M3 新增）
+    // ============================================================
+    /// <summary>交互契约：三个交互目标都实现 IInteractionTarget；KeyInteractable/Priority/IsAvailable 取值成立；
+    /// 宝箱 Opened 事件恰好一次且重复 Interact 幂等；InteractionRunner.Ensure 不重复挂组件。
+    /// 夹具全部运行期内存创建并在断言结束前销毁（不写场景）。</summary>
+    IEnumerator AssertInteractionContract()
+    {
+        const string Id = "Refactor.InteractionContract";
+        var rows = new List<object>();
+        bool allPass = true;
+
+        var unit = _players.FirstOrDefault(p => p.brain != null && p.health != null && !p.health.dead);
+        var downed = _players.FirstOrDefault(p => p.rescue != null);
+        if (unit == null || downed == null)
+        {
+            _ev.BlockedAssertion(Id, Id, "三个交互目标实现 IInteractionTarget / 契约取值 / 开箱事件恰好一次 / Runner 复用",
+                "缺少可用玩家或 DownedRescue", null);
+            yield break;
+        }
+
+        // 场景里没有 Chest / DungeonDoor 实例（全工程 .unity/.prefab 无这两个脚本的 GUID），
+        // 因此“各取一个实例”= 倒地救援用场景真实组件，宝箱与门用运行期内存夹具（结束前销毁，不写场景）。
+        GameObject chestGo = null;
+        GameObject doorGo = null;
+        ItemData chestItem = null;
+        Chest chest = null;
+        Interactable chestMarker = null;
+        int openedCount = 0;
+        System.Action<Chest> onOpened = c => { if (c == chest) openedCount++; };
+
+        try
+        {
+            // ---- 夹具：宝箱（Collider + lid + 内容物 + Inventory + Interactable + Chest） ----
+            chestGo = new GameObject("REFACTOR_ContractChest");
+            var body = chestGo.AddComponent<BoxCollider>();
+            body.center = new Vector3(0f, 0.4f, 0f);
+            body.size = new Vector3(0.8f, 0.8f, 0.8f);
+
+            var lid = new GameObject("lid");
+            lid.transform.SetParent(chestGo.transform, false);
+            lid.transform.localPosition = new Vector3(0f, 0.8f, 0f);
+
+            var itemGo = new GameObject("item");
+            itemGo.transform.SetParent(chestGo.transform, false);
+            var chestItemComp = itemGo.AddComponent<ChestItem>();
+            chestItem = ScriptableObject.CreateInstance<ItemData>();
+            chestItem.itemName = "REFACTOR_契约测试物品";
+            chestItem.goldValue = 0;
+            chestItemComp.data = chestItem;
+
+            var inv = chestGo.AddComponent<Inventory>();
+            inv.capacity = 4;
+            chestMarker = chestGo.AddComponent<Interactable>();   // 先于 Chest：Chest.Awake 会取它做 Hint
+            chestMarker.hint = "点击开启宝箱";
+            chest = chestGo.AddComponent<Chest>();
+            chest.lid = lid.transform;
+            chest.openDuration = 0f;                              // 事件在 Interact 内同步抛，判定可重复
+
+            // ---- 夹具：门（不调 Interact，避免传送干扰后续断言；放到远处避免影响提示轮询） ----
+            doorGo = new GameObject("REFACTOR_ContractDoor");
+            doorGo.transform.position = unit.tx.position + new Vector3(200f, 0f, 200f);
+            var door = doorGo.AddComponent<DungeonDoor>();
+            door.interactRange = 3.5f;
+
+            // ---- 1. 三个交互目标都实现接口；Interactable 标记能解析到目标 ----
+            bool chestIsTarget = chest is IInteractionTarget;
+            bool rescueIsTarget = downed.rescue is IInteractionTarget;
+            bool doorIsTarget = door is IInteractionTarget;
+            bool markerResolves = chestMarker.Target() != null && (object)chestMarker.Target() == chest;
+            bool implementsOk = chestIsTarget && rescueIsTarget && doorIsTarget && markerResolves;
+            allPass &= implementsOk;
+            rows.Add(Dict("step", "implements", "chest", chestIsTarget, "downedRescue", rescueIsTarget,
+                          "dungeonDoor", doorIsTarget, "interactableMarkerResolves", markerResolves,
+                          "chestSource", "运行期夹具（场景内无 Chest 实例）",
+                          "doorSource", "运行期夹具（场景内无 DungeonDoor 实例）",
+                          "rescueSource", downed.name + " 场景实例",
+                          "pass", implementsOk));
+
+            // ---- 2. 契约取值：KeyInteractable / Priority ----
+            bool keyOk = !chest.KeyInteractable && !downed.rescue.KeyInteractable && door.KeyInteractable;
+            bool priorityOk = downed.rescue.Priority == InteractionPriority.Rescue &&
+                              chest.Priority == InteractionPriority.Default &&
+                              door.Priority == InteractionPriority.Default;
+            allPass &= keyOk && priorityOk;
+            rows.Add(Dict("step", "contractValues",
+                          "chestKeyInteractable", chest.KeyInteractable,
+                          "rescueKeyInteractable", downed.rescue.KeyInteractable,
+                          "doorKeyInteractable", door.KeyInteractable,
+                          "chestPriority", chest.Priority, "rescuePriority", downed.rescue.Priority,
+                          "doorPriority", door.Priority, "pass", keyOk && priorityOk));
+
+            // ---- 3. 宝箱：开箱前可交互 → Interact → Opened 恰好一次 → 不可交互；再 Interact 不再触发 ----
+            Chest.Opened += onOpened;
+            bool availableBefore = chest.IsAvailable(unit.brain);
+            chest.Interact(unit.brain);
+            float waited = 0f;
+            while (openedCount == 0 && waited < 5f) { yield return null; waited += Time.deltaTime; }
+            int countAfterFirst = openedCount;
+            bool availableAfter = chest.IsAvailable(unit.brain);
+            chest.Interact(unit.brain);                           // 幂等：已开箱应无副作用
+            float waited2 = 0f;
+            while (waited2 < 0.5f) { yield return null; waited2 += Time.deltaTime; }
+            bool idempotent = openedCount == countAfterFirst;
+            bool chestOk = availableBefore && countAfterFirst == 1 && !availableAfter && idempotent;
+            allPass &= chestOk;
+            rows.Add(Dict("step", "chestContract", "availableBefore", availableBefore,
+                          "openedEventsAfterFirstInteract", countAfterFirst,
+                          "availableAfter", availableAfter, "openedEventsAfterSecondInteract", openedCount,
+                          "idempotent", idempotent, "waitSeconds", waited, "pass", chestOk));
+
+            // ---- 4. 门：初始可交互，且本断言不触发 Enter ----
+            bool doorAvailable = door.IsAvailable(unit.brain);
+            allPass &= doorAvailable;
+            rows.Add(Dict("step", "doorAvailability", "isAvailable", doorAvailable,
+                          "enteredByTest", false,
+                          "note", "只读 IsAvailable，不调用 Interact，避免黑屏过场与全员传送干扰后续断言",
+                          "pass", doorAvailable));
+
+            // ---- 5. Runner.Ensure 复用：两次同一实例，且组件只有一个 ----
+            var runner1 = InteractionRunner.Ensure(unit.brain);
+            var runner2 = InteractionRunner.Ensure(unit.brain);
+            int runnerCount = unit.brain.GetComponents<InteractionRunner>().Length;
+            bool runnerOk = runner1 != null && runner1 == runner2 && runnerCount == 1;
+            allPass &= runnerOk;
+            rows.Add(Dict("step", "runnerEnsure", "sameInstance", runner1 != null && runner1 == runner2,
+                          "componentCount", runnerCount, "runtimeOnly", true, "pass", runnerOk));
+        }
+        finally
+        {
+            Chest.Opened -= onOpened;
+            if (chestGo != null) Destroy(chestGo);
+            if (doorGo != null) Destroy(doorGo);
+            if (chestItem != null) Destroy(chestItem);
+        }
+
+        _ev.Record(Id, Id,
+            "Chest/DownedRescue/DungeonDoor 都实现 IInteractionTarget；KeyInteractable 只有门为 true、救援 Priority=Rescue；" +
+            "宝箱开箱前 IsAvailable=true、Interact 后 Opened 恰好 1 次且 IsAvailable=false、重复 Interact 不再触发；" +
+            "门初始 IsAvailable=true 且不被本断言触发；InteractionRunner.Ensure 两次返回同一实例且只挂 1 个组件",
+            "allPass=" + allPass,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            Dict("steps", rows,
+                 "fixture", "REFACTOR_ContractChest / REFACTOR_ContractDoor 为运行期内存对象，断言结束前销毁；不写入场景",
+                 "note", "M3 新增第 11 条；M0–M2 的 10 条断言口径未改动"));
+
+        yield break;
     }
 
     // ============================================================

@@ -1,7 +1,9 @@
 using UnityEngine;
 
 /// <summary>
-/// 玩家 Driver：移动指令（先取消当前攻击）> 集火 > 坚守自动攻击；交互指令（走到范围→执行）。
+/// 玩家 Driver：移动指令（先取消当前攻击）> 集火 > 坚守自动攻击。
+/// 交互指令（走到范围→补播 Interact→执行）交给同物体的 <see cref="InteractionRunner"/>，
+/// 本类只保留“到位检测”的时点与兼容入口。
 /// </summary>
 public class CharacterBrain : UnitBrain
 {
@@ -12,11 +14,24 @@ public class CharacterBrain : UnitBrain
     public float interactExtraRange = 0.6f;   // 比交互物尺寸再大一圈
 
     Transform _orderedTarget;
-    Interactable _pendingInteract;
+    InteractionRunner _runner;
     bool _moving;
     UnitHealth _health;
 
     protected override Team MyTeam { get { return Team.Player; } }
+
+    /// <summary>本单位的生命组件（只读；交互目标执行时按单位取用）。</summary>
+    public UnitHealth Health
+    {
+        get
+        {
+            if (_health == null) _health = GetComponent<UnitHealth>();
+            return _health;
+        }
+    }
+
+    /// <summary>技能期间交互指令无效（Runner 与兼容入口共用这一条门禁）。</summary>
+    public bool CanAcceptInteract { get { return !InSkillState(); } }
 
     protected override void Start()
     {
@@ -47,21 +62,21 @@ public class CharacterBrain : UnitBrain
     public void CommandInteract(Interactable it)
     {
         if (it == null) return;
-        if (InSkillState()) return;     // 技能期间交互指令无效：不排队、不走进交互落点
-        var col = it.GetComponent<Collider>();
-        float r = 1.5f;
-        if (col != null) r = Mathf.Max(col.bounds.extents.x, col.bounds.extents.z) + interactExtraRange;
+        CommandInteract(it.Target());   // 兼容入口：Interactable 标记 → 目标契约
+    }
 
-        Vector3 d = transform.position - it.transform.position; d.y = 0f;
-        if (d.sqrMagnitude < 0.01f) d = Vector3.forward;
-        CommandMove(it.transform.position + d.normalized * r);
-        _pendingInteract = it;
+    /// <summary>交互指令的新入口：直接按目标契约下单（输入层分发到这里）。</summary>
+    public void CommandInteract(IInteractionTarget target)
+    {
+        if (target == null) return;
+        if (_runner == null) _runner = InteractionRunner.Ensure(this);
+        _runner.Order(target);
     }
 
     /// <summary>撤销“走到交互物落点后自动补播一次 Interact”的待办。
     /// 读条动画由 DownedRescue 自己循环推送；不撤的话，救援者跑到落点会再补一次 Interact，
     /// 若此时救援已被打断，就会在打断后白播一轮交互动作（违反 R-5“打断即停”）。</summary>
-    public void CancelPendingInteract() { _pendingInteract = null; }
+    public void CancelPendingInteract() { if (_runner != null) _runner.CancelPending(); }
 
     protected override void OnCommandMove(Vector3 point)
     {
@@ -87,7 +102,7 @@ public class CharacterBrain : UnitBrain
                 if (breaking) unitAnimator.SetTrigger("Interrupt");
             }
         }
-        _pendingInteract = null;
+        if (_runner != null) _runner.CancelPending();
         // 真正下达移动指令 = 放弃当前救援（受击位移不经过这里）；DownedRescue 自己负责 2s 冷却。
         DownedRescue.NotifyMoveCommand(gameObject);
         base.OnCommandMove(point);
@@ -128,13 +143,10 @@ public class CharacterBrain : UnitBrain
 
         bool wasMoving = _moving;
         _moving = ExecutingMove;
-        if (wasMoving && !_moving && _pendingInteract != null)
+        if (wasMoving && !_moving && _runner != null && _runner.HasPending)
         {
-            // 走到交互范围：播交互动作 + 执行
-            if (unitAnimator != null) unitAnimator.SetTrigger("Interact");
-            var chest = _pendingInteract.GetComponent<Chest>();
-            if (chest != null) chest.OpenBy(this);
-            _pendingInteract = null;
+            // 走到交互范围：播交互动作 + 执行（逻辑同重构前内联；执行体改成目标契约）
+            _runner.OnMovedTick(wasMoving, _moving);
             return;
         }
         if (_moving) return;

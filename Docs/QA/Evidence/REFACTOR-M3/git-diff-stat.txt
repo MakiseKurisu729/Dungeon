@@ -1,0 +1,40 @@
+﻿== git rev-parse --short HEAD ==
+1961c93b
+
+== git status --porcelain ==
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Player/SelectionManager.cs
+ M Assets/_Project/Scripts/System/Chest.cs
+ M Assets/_Project/Scripts/System/DungeonDoor.cs
+ M Assets/_Project/Scripts/System/Interactable.cs
+ M Assets/_Project/Scripts/UI/UIManager.cs
+ M Assets/_Project/Scripts/Units/CharacterBrain.cs
+ M Assets/_Project/Scripts/Units/DownedRescue.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Gameplay.meta
+?? Assets/_Project/Scripts/Gameplay/
+?? Docs/Handoff/TASK_REFACTOR-M3.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M3/
+?? Docs/QA/Evidence/SPEC-01/editor_run29/
+?? Docs/QA/Evidence/SPEC-01/editor_run30/
+?? Docs/QA/Evidence/SPEC-01/editor_run31/
+
+== git diff --stat (tracked) ==
+ Assembly-CSharp-Editor.csproj                      | 445 ++++++++++----------
+ Assembly-CSharp.csproj                             | 449 +++++++++++----------
+ Assets/_Project/Scripts/Player/SelectionManager.cs |  54 ++-
+ Assets/_Project/Scripts/System/Chest.cs            |  35 +-
+ Assets/_Project/Scripts/System/DungeonDoor.cs      |  34 +-
+ Assets/_Project/Scripts/System/Interactable.cs     |  14 +-
+ Assets/_Project/Scripts/UI/UIManager.cs            |  15 +
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    |  50 ++-
+ Assets/_Project/Scripts/Units/DownedRescue.cs      |  31 +-
+ .../REFACTOR/Editor/REFACTOR_BatchAcceptance.cs    |   2 +-
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs | 155 ++++++-
+ 11 files changed, 805 insertions(+), 479 deletions(-)
+
+== 场景/预制体/.asset/ProjectSettings 改动（期望为空）==

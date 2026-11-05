@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// 通用宝箱：由角色交互指令触发（走过去→Interact 动作→开盖+内容物现身+双面板）。
+/// 通用宝箱：实现 <see cref="IInteractionTarget"/>，由交互执行器走到范围后调用 Interact/OpenBy
+/// （开盖 + 内容物现身）。开启完成时抛 <see cref="Opened"/> 事件，面板由 UIManager 订阅打开，
+/// 宝箱本身不再直接调用 UI。
 /// </summary>
-public class Chest : MonoBehaviour
+public class Chest : MonoBehaviour, IInteractionTarget
 {
     [InspectorName("盖子")]
     public Transform lid;
@@ -13,12 +15,20 @@ public class Chest : MonoBehaviour
     [InspectorName("开启时长")]
     public float openDuration = 0.4f;
 
+    /// <summary>开箱完成（盖子播完、内容物已显形）。参数为本宝箱，订阅方据此取 Contents 开面板。</summary>
+    public static event System.Action<Chest> Opened;
+
     bool _opened;
     Inventory _inv;
+    Interactable _interact;
+
+    /// <summary>宝箱背包（无 Inventory 组件时为 null）。</summary>
+    public Inventory Contents { get { return _inv; } }
 
     void Awake()
     {
         _inv = GetComponent<Inventory>();
+        _interact = GetComponent<Interactable>();
         foreach (var ci in GetComponentsInChildren<ChestItem>(true))
             ci.gameObject.SetActive(false);
     }
@@ -41,6 +51,23 @@ public class Chest : MonoBehaviour
         StartCoroutine(OpenSequence());
     }
 
+    // ===== IInteractionTarget =====
+
+    public Transform Anchor { get { return transform; } }
+
+    public string Hint { get { return _interact != null ? _interact.hint : null; } }
+
+    public InteractionPriority Priority { get { return InteractionPriority.Default; } }
+
+    public bool KeyInteractable { get { return false; } }
+
+    public bool IsAvailable(CharacterBrain unit) { return !_opened; }
+
+    public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }
+
+    /// <summary>执行体 = 原 OpenBy（已开箱时为幂等空操作）。</summary>
+    public void Interact(CharacterBrain unit) { OpenBy(unit); }
+
     IEnumerator OpenSequence()
     {
         if (lid != null)
@@ -60,8 +87,8 @@ public class Chest : MonoBehaviour
         foreach (var ci in GetComponentsInChildren<ChestItem>(true))
             ci.gameObject.SetActive(true);
 
-        if (UIManager.instance != null && _inv != null)
-            UIManager.instance.ShowInventory(_inv, this);
+        var onOpened = Opened;
+        if (onOpened != null) onOpened(this);
     }
 
     public void Take(ItemData item)

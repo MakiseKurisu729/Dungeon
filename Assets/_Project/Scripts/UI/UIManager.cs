@@ -34,6 +34,21 @@ public class UIManager : MonoBehaviour
         // ★ 初始隐藏统一接管：面板物体在场景里保持激活，隐藏权 100% 归这里
         if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false);
         if (escMenuPanel != null) escMenuPanel.gameObject.SetActive(false);
+        Chest.Opened += OnChestOpened;
+    }
+
+    void OnDestroy()
+    {
+        Chest.Opened -= OnChestOpened;
+    }
+
+    /// <summary>宝箱开箱完成 → 打开背包面板（宝箱不再直接调 UI）。</summary>
+    void OnChestOpened(Chest chest)
+    {
+        if (chest == null) return;
+        var contents = chest.Contents;
+        if (contents == null) return;      // 与原实现一致：没有 Inventory 的宝箱不开面板
+        ShowInventory(contents, chest);
     }
 
     void Start()

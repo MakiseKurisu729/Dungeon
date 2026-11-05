@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>地牢入口：主选角色靠近 → 提示按 F → 黑屏过场 → 全员传送进地牢 → 镜头切到地牢上方。</summary>
-public class DungeonDoor : MonoBehaviour
+/// <summary>地牢入口：实现 <see cref="IInteractionTarget"/>（唯一 KeyInteractable 目标）。
+/// 提示与 F 键由输入层（SelectionManager）轮询/分发，本组件不再读 Input、不查 SelectionManager、不写提示；
+/// 交互 = 黑屏过场 → 全员传送进地牢 → 镜头切到地牢上方。</summary>
+public class DungeonDoor : MonoBehaviour, IInteractionTarget
 {
     [Tooltip("地牢内落点（所有角色传送到这周围）")]
     public Transform dungeonEntryPoint;
@@ -14,14 +16,28 @@ public class DungeonDoor : MonoBehaviour
 
     bool _used;
 
-    void Update()
-    {
-        if (_used || SelectionManager.instance == null || SelectionManager.instance.Primary == null) return;
-        var t = SelectionManager.instance.Primary.transform;
-        if (Vector3.Distance(t.position, transform.position) > interactRange) return;
+    void OnEnable() { InteractionRunner.RegisterKeyTarget(this); }
 
-        MessageFeed.SetMessage("按 F 进入地牢");
-        if (Input.GetKeyDown(KeyCode.F)) Enter();
+    void OnDisable() { InteractionRunner.UnregisterKeyTarget(this); }
+
+    // ===== IInteractionTarget =====
+
+    public Transform Anchor { get { return transform; } }
+
+    public string Hint { get { return "按 F 进入地牢"; } }
+
+    public InteractionPriority Priority { get { return InteractionPriority.Default; } }
+
+    public bool KeyInteractable { get { return true; } }
+
+    public bool IsAvailable(CharacterBrain unit) { return !_used; }
+
+    public float Radius(CharacterBrain unit) { return interactRange; }
+
+    public void Interact(CharacterBrain unit)
+    {
+        if (_used) return;
+        Enter();
     }
 
     void Enter()

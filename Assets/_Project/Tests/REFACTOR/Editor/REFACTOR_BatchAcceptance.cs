@@ -20,7 +20,7 @@ public static class REFACTOR_BatchAcceptance
     public const string ActiveKey = "REFACTOR.Active";
 
     /// <summary>当前里程碑（证据目录 REFACTOR-M&lt;x&gt; 的 x）。每进一个里程碑改一次。</summary>
-    public const string DefaultMilestone = "M2";
+    public const string DefaultMilestone = "M3";
 
     public static void Run()
     {

@@ -1,0 +1,33 @@
+REFACTOR-M3 证据总览（模式 B / unityMCP，编辑器内菜单执行，未使用 run_tests / 未使用 batchmode）
+Unity 2022.3.62f3c1 · 场景 Assets/Scenes/DungeonWorld.unity · 实例 Dungeon@4f5c34c82f31646e
+基线 HEAD = 1961c93b（全部 run 的 Summary.head 均为 1961c93b2b2afd7315fc3a7b51899c14c03a6db9）
+
+== REFACTOR 套件（11 条）==
+目录                                    pass/fail/blocked/infra   exit   startedAt → finishedAt
+Docs/QA/Evidence/REFACTOR-M3/editor_run1   11 / 0 / 0 / 0           0      2026-11-06 01:39:25.897 → 01:39:56.166
+Docs/QA/Evidence/REFACTOR-M3/editor_run2   11 / 0 / 0 / 0           0      2026-11-06 01:40:29.389 → 01:40:59.656
+Docs/QA/Evidence/REFACTOR-M3/editor_run3   11 / 0 / 0 / 0           0      2026-11-06 01:41:24.893 → 01:41:55.156
+Docs/QA/Evidence/REFACTOR-M3/editor_run4   11 / 0 / 0 / 0           0      2026-11-06 01:46:20.197 → 01:46:50.471   ← 换行符归一化（LF→CRLF）后的复跑
+
+== SPEC01 套件（12 条）==
+Docs/QA/Evidence/SPEC-01/editor_run29      12 / 0 / 0 / 0           0      2026-11-06 01:42:25.703 → 01:43:07.509
+Docs/QA/Evidence/SPEC-01/editor_run30      12 / 0 / 0 / 0           0      2026-11-06 01:43:41.459 → 01:44:23.253
+Docs/QA/Evidence/SPEC-01/editor_run31      12 / 0 / 0 / 0           0      2026-11-06 01:47:14.079 → 01:47:55.881   ← 换行符归一化后的复跑
+
+== 每个 run 目录内的文件 ==
+  REFACTOR_Assertions.jsonl / REFACTOR_Summary_run1.json / REFACTOR_ExitCode_run1.txt / REFACTOR_Runs.jsonl / InEditorResult.txt
+  SPEC01_Assertions.jsonl / SPEC01_Summary_run1.json / SPEC01_ExitCode_run1.txt / SPEC01_Runs.jsonl / InEditorResult.txt
+  （QA_InEditorMenu.NextSubdir 自动递增：editor_run1..4、editor_run29..31，只追加不覆盖）
+
+== 第 11 条断言实测（每次 run 都通过，键值与 editor_run1 一致）==
+  steps[0] implements            chest=true downedRescue=true dungeonDoor=true interactableMarkerResolves=true
+  steps[1] contractValues        chestKey=false rescueKey=false doorKey=true；chest/door Priority=Default，rescue=Rescue
+  steps[2] chestContract         availableBefore=true openedEvents=1 availableAfter=false 二次 Interact 仍=1（幂等）
+  steps[3] doorAvailability      isAvailable=true，enteredByTest=false（本断言不调 Enter）
+  steps[4] runnerEnsure          sameInstance=true componentCount=1 runtimeOnly=true
+
+== 其它证据文件 ==
+  grep-interaction.txt   AC-1：三目标文件 Input./SelectionManager/UIManager 去注释后命中 0（原始 2 条均为文档注释）
+  git-diff-stat.txt      AC-5：git status 清单 + diff --stat + “场景/预制体/.asset/ProjectSettings/Packages/Art 改动为空”
+  test-diff.txt          AC-6：既有 10 条断言零改动（删除行恰好 3 行，均为 TASK 允许的头注释/DefaultMilestone/blocked id）
+  test-diff-u0.txt       AC-6 原始 diff（git diff -U0 -- Assets/_Project/Tests/REFACTOR，165 行）

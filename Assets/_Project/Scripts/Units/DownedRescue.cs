@@ -5,10 +5,10 @@ using UnityEngine.AI;
 
 /// <summary>倒地与救援（指令式、动画机驱动）：挂玩家单位，且同物体挂 Interactable。
 /// 倒地：血空 → SetTrigger(Die) → Downed 保持末端；AI/移动禁用。
-/// 救援：选中活着的队友 → 点自己下指令（CommandRescue）→ 走过去 → 进 rescueRange 循环播 Interact 读条；
+/// 救援：选中活着的队友 → 点自己下指令（CommandRescue / 经 IInteractionTarget.Interact）→ 走过去 → 进 rescueRange 循环播 Interact 读条；
 /// 打断：救援者受击 / 收到移动指令 → 立即中断且 2s 内不自动重开（必须重新下令）；
 /// 完成：SetTrigger(Revive) → Rise 起身 → 1血恢复。</summary>
-public class DownedRescue : MonoBehaviour
+public class DownedRescue : MonoBehaviour, IInteractionTarget
 {
     public static readonly List<DownedRescue> AllDowned = new List<DownedRescue>();
 
@@ -86,6 +86,27 @@ public class DownedRescue : MonoBehaviour
 
     void OnDestroy() { AllDowned.Remove(this); }
 
+    // ===== IInteractionTarget =====
+
+    public Transform Anchor { get { return transform; } }
+
+    public string Hint { get { return _interact != null ? _interact.hint : null; } }
+
+    public InteractionPriority Priority { get { return InteractionPriority.Rescue; } }
+
+    public bool KeyInteractable { get { return false; } }
+
+    public bool IsAvailable(CharacterBrain unit) { return IsDown; }
+
+    public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }
+
+    /// <summary>执行体 = 原点击救援：按单位下达救援指令。</summary>
+    public void Interact(CharacterBrain unit)
+    {
+        if (unit == null) return;
+        CommandRescue(unit.Health);
+    }
+
     // ===== 指令层 =====
 
     /// <summary>下达救援指令（唯一的救援入口，只有明确的点击指令会调用）。
@@ -101,12 +122,12 @@ public class DownedRescue : MonoBehaviour
         _channeling = false;
         _rescuerAnim = null;
 
-        // 先让救援者跑位：CommandInteract 内部会走一次 CommandMove → NotifyMoveCommand，
+        // 先让救援者跑位：交互执行器内部会走一次 CommandMove → NotifyMoveCommand，
         // 此时 _rescuer 还没记录，所以不会被当成“移动打断”。
         var rBrain = rescuer.GetComponent<CharacterBrain>();
-        if (rBrain != null && _interact != null)
+        if (rBrain != null)
         {
-            rBrain.CommandInteract(_interact);
+            InteractionRunner.Ensure(rBrain).Order(this);
             // 读条动画（Interact 循环）由本组件自己推送；撤掉“到位补播一次”的待办，
             // 否则救援者跑到落点时会再压一次 Interact，打断后就会白播一轮交互动作。
             rBrain.CancelPendingInteract();

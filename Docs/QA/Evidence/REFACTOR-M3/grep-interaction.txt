@@ -1,0 +1,52 @@
+REFACTOR-M3 / AC-1 —— 三个交互目标的“自持输入面”grep 证据
+生成时间：2026-11-06 01:5x（本机，模式 B / MCP）
+
+【正则】
+  Input\.|SelectionManager|UIManager
+
+【范围（3 个交互目标文件）】
+  Assets/_Project/Scripts/System/Chest.cs
+  Assets/_Project/Scripts/Units/DownedRescue.cs
+  Assets/_Project/Scripts/System/DungeonDoor.cs
+
+【排除规则】
+  1) 排除纯注释行：去掉行首空白后以 "//" 开头的行（含 /// <summary> 文档注释）。
+     理由：TASK §3 AC-1 明确“注释不计”；注释里的类名不构成运行期依赖。
+  2) 不排除字符串字面量：命中即视为真实引用（本单无此类命中）。
+  3) 覆盖口径：Input. 覆盖 Input.GetKey/GetKeyDown/GetMouse* 等；SelectionManager 覆盖类型名与 .instance；
+     UIManager 覆盖类型名与 .instance。InteractionRunner / IInteractionTarget 等新符号不含上述子串，不会被误命中。
+
+【实测命中】
+  Chest.cs
+    原始命中 = 1
+      L6  [注释行 → 排除]  /// （开盖 + 内容物现身）。开启完成时抛 <see cref="Opened"/> 事件，面板由 UIManager 订阅打开，
+    去注释后命中 = 0
+  DownedRescue.cs
+    原始命中 = 0；去注释后命中 = 0
+  DungeonDoor.cs
+    原始命中 = 1
+      L6  [注释行 → 排除]  /// 提示与 F 键由输入层（SelectionManager）轮询/分发，本组件不再读 Input、不查 SelectionManager、不写提示；
+    去注释后命中 = 0
+  合计：原始命中 = 2；去注释后命中 = 0
+
+【结论】PASS —— 三个交互目标都不再读 Input、不再引用 SelectionManager、不再引用 UIManager。
+
+【复现命令（仓库根目录，PowerShell）】
+  $pat = 'Input\.|SelectionManager|UIManager'
+  $files = 'Assets\_Project\Scripts\System\Chest.cs','Assets\_Project\Scripts\Units\DownedRescue.cs','Assets\_Project\Scripts\System\DungeonDoor.cs'
+  foreach ($f in $files) {
+    Get-Content $f | Select-String -Pattern $pat | ForEach-Object {
+      $trim = $_.Line.TrimStart()
+      $kind = if ($trim.StartsWith('//')) { 'COMMENT(排除)' } else { 'CODE(计入)' }
+      "$f : $($_.LineNumber) : $kind : $trim"
+    }
+  }
+  # 只数代码行：
+  foreach ($f in $files) {
+    (Get-Content $f | Where-Object { -not $_.TrimStart().StartsWith('//') } | Select-String -Pattern $pat).Count
+  }
+
+【对照（不在 AC-1 口径内，说明用）】
+  - DownedRescue 仍写 MessageFeed 提示（救援中/被中断），属于“目标自述状态”，不是输入/选择/UI 依赖。
+  - Chest 改为抛 static event Opened，由 UIManager 在 Awake 订阅、OnDestroy 退订；宝箱侧零 UI 引用。
+  - DungeonDoor 的提示文案与 F 键判定全部迁到 SelectionManager（唯一读 Input 的地方）与 InteractionRunner。

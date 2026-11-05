@@ -1,0 +1,165 @@
+﻿diff --git a/Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs b/Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+index 235f6bf5..b4c59dda 100644
+--- a/Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
++++ b/Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+@@ -23 +23 @@ public static class REFACTOR_BatchAcceptance
+-    public const string DefaultMilestone = "M2";
++    public const string DefaultMilestone = "M3";
+diff --git a/Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs b/Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+index 68b5d3a1..a4675565 100644
+--- a/Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
++++ b/Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+@@ -19 +19 @@ using UnityEditor;
+-/// 10 鏉℃柇瑷€锛堟瘡鏉￠兘璧扮敓浜у叆鍙ｏ紝涓嶅鍒?SPEC01 鐨勬暟鍊煎彛寰勶級锛?+/// 11 鏉℃柇瑷€锛堟瘡鏉￠兘璧扮敓浜у叆鍙ｏ紝涓嶅鍒?SPEC01 鐨勬暟鍊煎彛寰勶級锛?@@ -29,0 +30 @@ using UnityEditor;
++///  11. Refactor.InteractionContract 浜や簰濂戠害锛堟帴鍙ｈ涔?/ KeyInteractable / 寮€绠变簨浠舵伆濂戒竴娆?/ Runner 澶嶇敤锛?@@ -154 +155 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
+-                "Refactor.RegistrySemantics", "Refactor.StateFacade"
++                "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract"
+@@ -171,0 +173 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
++        yield return RunSafe("Refactor.InteractionContract", AssertInteractionContract());
+@@ -808,0 +811,149 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
++    // ============================================================
++    // 11. Refactor.InteractionContract锛圡3 鏂板锛?+    // ============================================================
++    /// <summary>浜や簰濂戠害锛氫笁涓氦浜掔洰鏍囬兘瀹炵幇 IInteractionTarget锛汯eyInteractable/Priority/IsAvailable 鍙栧€兼垚绔嬶紱
++    /// 瀹濈 Opened 浜嬩欢鎭板ソ涓€娆′笖閲嶅 Interact 骞傜瓑锛汭nteractionRunner.Ensure 涓嶉噸澶嶆寕缁勪欢銆?+    /// 澶瑰叿鍏ㄩ儴杩愯鏈熷唴瀛樺垱寤哄苟鍦ㄦ柇瑷€缁撴潫鍓嶉攢姣侊紙涓嶅啓鍦烘櫙锛夈€?/summary>
++    IEnumerator AssertInteractionContract()
++    {
++        const string Id = "Refactor.InteractionContract";
++        var rows = new List<object>();
++        bool allPass = true;
++
++        var unit = _players.FirstOrDefault(p => p.brain != null && p.health != null && !p.health.dead);
++        var downed = _players.FirstOrDefault(p => p.rescue != null);
++        if (unit == null || downed == null)
++        {
++            _ev.BlockedAssertion(Id, Id, "涓変釜浜や簰鐩爣瀹炵幇 IInteractionTarget / 濂戠害鍙栧€?/ 寮€绠变簨浠舵伆濂戒竴娆?/ Runner 澶嶇敤",
++                "缂哄皯鍙敤鐜╁鎴?DownedRescue", null);
++            yield break;
++        }
++
++        // 鍦烘櫙閲屾病鏈?Chest / DungeonDoor 瀹炰緥锛堝叏宸ョ▼ .unity/.prefab 鏃犺繖涓や釜鑴氭湰鐨?GUID锛夛紝
++        // 鍥犳鈥滃悇鍙栦竴涓疄渚嬧€? 鍊掑湴鏁戞彺鐢ㄥ満鏅湡瀹炵粍浠讹紝瀹濈涓庨棬鐢ㄨ繍琛屾湡鍐呭瓨澶瑰叿锛堢粨鏉熷墠閿€姣侊紝涓嶅啓鍦烘櫙锛夈€?+        GameObject chestGo = null;
++        GameObject doorGo = null;
++        ItemData chestItem = null;
++        Chest chest = null;
++        Interactable chestMarker = null;
++        int openedCount = 0;
++        System.Action<Chest> onOpened = c => { if (c == chest) openedCount++; };
++
++        try
++        {
++            // ---- 澶瑰叿锛氬疂绠憋紙Collider + lid + 鍐呭鐗?+ Inventory + Interactable + Chest锛?----
++            chestGo = new GameObject("REFACTOR_ContractChest");
++            var body = chestGo.AddComponent<BoxCollider>();
++            body.center = new Vector3(0f, 0.4f, 0f);
++            body.size = new Vector3(0.8f, 0.8f, 0.8f);
++
++            var lid = new GameObject("lid");
++            lid.transform.SetParent(chestGo.transform, false);
++            lid.transform.localPosition = new Vector3(0f, 0.8f, 0f);
++
++            var itemGo = new GameObject("item");
++            itemGo.transform.SetParent(chestGo.transform, false);
++            var chestItemComp = itemGo.AddComponent<ChestItem>();
++            chestItem = ScriptableObject.CreateInstance<ItemData>();
++            chestItem.itemName = "REFACTOR_濂戠害娴嬭瘯鐗╁搧";
++            chestItem.goldValue = 0;
++            chestItemComp.data = chestItem;
++
++            var inv = chestGo.AddComponent<Inventory>();
++            inv.capacity = 4;
++            chestMarker = chestGo.AddComponent<Interactable>();   // 鍏堜簬 Chest锛欳hest.Awake 浼氬彇瀹冨仛 Hint
++            chestMarker.hint = "鐐瑰嚮寮€鍚疂绠?;
++            chest = chestGo.AddComponent<Chest>();
++            chest.lid = lid.transform;
++            chest.openDuration = 0f;                              // 浜嬩欢鍦?Interact 鍐呭悓姝ユ姏锛屽垽瀹氬彲閲嶅
++
++            // ---- 澶瑰叿锛氶棬锛堜笉璋?Interact锛岄伩鍏嶄紶閫佸共鎵板悗缁柇瑷€锛涙斁鍒拌繙澶勯伩鍏嶅奖鍝嶆彁绀鸿疆璇級 ----
++            doorGo = new GameObject("REFACTOR_ContractDoor");
++            doorGo.transform.position = unit.tx.position + new Vector3(200f, 0f, 200f);
++            var door = doorGo.AddComponent<DungeonDoor>();
++            door.interactRange = 3.5f;
++
++            // ---- 1. 涓変釜浜や簰鐩爣閮藉疄鐜版帴鍙ｏ紱Interactable 鏍囪鑳借В鏋愬埌鐩爣 ----
++            bool chestIsTarget = chest is IInteractionTarget;
++            bool rescueIsTarget = downed.rescue is IInteractionTarget;
++            bool doorIsTarget = door is IInteractionTarget;
++            bool markerResolves = chestMarker.Target() != null && (object)chestMarker.Target() == chest;
++            bool implementsOk = chestIsTarget && rescueIsTarget && doorIsTarget && markerResolves;
++            allPass &= implementsOk;
++            rows.Add(Dict("step", "implements", "chest", chestIsTarget, "downedRescue", rescueIsTarget,
++                          "dungeonDoor", doorIsTarget, "interactableMarkerResolves", markerResolves,
++                          "chestSource", "杩愯鏈熷す鍏凤紙鍦烘櫙鍐呮棤 Chest 瀹炰緥锛?,
++                          "doorSource", "杩愯鏈熷す鍏凤紙鍦烘櫙鍐呮棤 DungeonDoor 瀹炰緥锛?,
++                          "rescueSource", downed.name + " 鍦烘櫙瀹炰緥",
++                          "pass", implementsOk));
++
++            // ---- 2. 濂戠害鍙栧€硷細KeyInteractable / Priority ----
++            bool keyOk = !chest.KeyInteractable && !downed.rescue.KeyInteractable && door.KeyInteractable;
++            bool priorityOk = downed.rescue.Priority == InteractionPriority.Rescue &&
++                              chest.Priority == InteractionPriority.Default &&
++                              door.Priority == InteractionPriority.Default;
++            allPass &= keyOk && priorityOk;
++            rows.Add(Dict("step", "contractValues",
++                          "chestKeyInteractable", chest.KeyInteractable,
++                          "rescueKeyInteractable", downed.rescue.KeyInteractable,
++                          "doorKeyInteractable", door.KeyInteractable,
++                          "chestPriority", chest.Priority, "rescuePriority", downed.rescue.Priority,
++                          "doorPriority", door.Priority, "pass", keyOk && priorityOk));
++
++            // ---- 3. 瀹濈锛氬紑绠卞墠鍙氦浜?鈫?Interact 鈫?Opened 鎭板ソ涓€娆?鈫?涓嶅彲浜や簰锛涘啀 Interact 涓嶅啀瑙﹀彂 ----
++            Chest.Opened += onOpened;
++            bool availableBefore = chest.IsAvailable(unit.brain);
++            chest.Interact(unit.brain);
++            float waited = 0f;
++            while (openedCount == 0 && waited < 5f) { yield return null; waited += Time.deltaTime; }
++            int countAfterFirst = openedCount;
++            bool availableAfter = chest.IsAvailable(unit.brain);
++            chest.Interact(unit.brain);                           // 骞傜瓑锛氬凡寮€绠卞簲鏃犲壇浣滅敤
++            float waited2 = 0f;
++            while (waited2 < 0.5f) { yield return null; waited2 += Time.deltaTime; }
++            bool idempotent = openedCount == countAfterFirst;
++            bool chestOk = availableBefore && countAfterFirst == 1 && !availableAfter && idempotent;
++            allPass &= chestOk;
++            rows.Add(Dict("step", "chestContract", "availableBefore", availableBefore,
++                          "openedEventsAfterFirstInteract", countAfterFirst,
++                          "availableAfter", availableAfter, "openedEventsAfterSecondInteract", openedCount,
++                          "idempotent", idempotent, "waitSeconds", waited, "pass", chestOk));
++
++            // ---- 4. 闂細鍒濆鍙氦浜掞紝涓旀湰鏂█涓嶈Е鍙?Enter ----
++            bool doorAvailable = door.IsAvailable(unit.brain);
++            allPass &= doorAvailable;
++            rows.Add(Dict("step", "doorAvailability", "isAvailable", doorAvailable,
++                          "enteredByTest", false,
++                          "note", "鍙 IsAvailable锛屼笉璋冪敤 Interact锛岄伩鍏嶉粦灞忚繃鍦轰笌鍏ㄥ憳浼犻€佸共鎵板悗缁柇瑷€",
++                          "pass", doorAvailable));
++
++            // ---- 5. Runner.Ensure 澶嶇敤锛氫袱娆″悓涓€瀹炰緥锛屼笖缁勪欢鍙湁涓€涓?----
++            var runner1 = InteractionRunner.Ensure(unit.brain);
++            var runner2 = InteractionRunner.Ensure(unit.brain);
++            int runnerCount = unit.brain.GetComponents<InteractionRunner>().Length;
++            bool runnerOk = runner1 != null && runner1 == runner2 && runnerCount == 1;
++            allPass &= runnerOk;
++            rows.Add(Dict("step", "runnerEnsure", "sameInstance", runner1 != null && runner1 == runner2,
++                          "componentCount", runnerCount, "runtimeOnly", true, "pass", runnerOk));
++        }
++        finally
++        {
++            Chest.Opened -= onOpened;
++            if (chestGo != null) Destroy(chestGo);
++            if (doorGo != null) Destroy(doorGo);
++            if (chestItem != null) Destroy(chestItem);
++        }
++
++        _ev.Record(Id, Id,
++            "Chest/DownedRescue/DungeonDoor 閮藉疄鐜?IInteractionTarget锛汯eyInteractable 鍙湁闂ㄤ负 true銆佹晳鎻?Priority=Rescue锛? +
++            "瀹濈寮€绠卞墠 IsAvailable=true銆両nteract 鍚?Opened 鎭板ソ 1 娆′笖 IsAvailable=false銆侀噸澶?Interact 涓嶅啀瑙﹀彂锛? +
++            "闂ㄥ垵濮?IsAvailable=true 涓斾笉琚湰鏂█瑙﹀彂锛汭nteractionRunner.Ensure 涓ゆ杩斿洖鍚屼竴瀹炰緥涓斿彧鎸?1 涓粍浠?,
++            "allPass=" + allPass,
++            allPass, allPass ? "pass" : "product_fail", "production",
++            Dict("steps", rows,
++                 "fixture", "REFACTOR_ContractChest / REFACTOR_ContractDoor 涓鸿繍琛屾湡鍐呭瓨瀵硅薄锛屾柇瑷€缁撴潫鍓嶉攢姣侊紱涓嶅啓鍏ュ満鏅?,
++                 "note", "M3 鏂板绗?11 鏉★紱M0鈥揗2 鐨?10 鏉℃柇瑷€鍙ｅ緞鏈敼鍔?));
++
++        yield break;
++    }
++

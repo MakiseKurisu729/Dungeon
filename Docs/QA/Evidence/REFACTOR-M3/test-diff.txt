@@ -1,0 +1,40 @@
+REFACTOR-M3 / AC-6 —— 既有 10 条断言「口径零改动」的 diff 证据
+生成：2026-11-06（模式 B / MCP 会话内）
+基线：1961c93b（M2 收口）；比较对象：当前工作区 vs HEAD
+范围：Assets/_Project/Tests/REFACTOR/（只动了 REFACTOR 套件；Tests/** 其余文件未触碰）
+
+【汇总（实测）】
+  新增行 = 135
+  删除行 = 3
+  完整原始 diff 见同目录 test-diff-u0.txt（`git diff -U0 -- Assets/_Project/Tests/REFACTOR`，165 行，UTF-8 with BOM）
+
+【删除行全集（全部 3 行，逐条列出）】
+  1. -    public const string DefaultMilestone = "M2";
+     性质：TASK §2 明列的必改项（证据目录从 REFACTOR-M2 切到 REFACTOR-M3）。不是断言。
+  2. -/// 10 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+     性质：TASK §3 允许的“头注释”改动（10 条 → 11 条）。
+  3. -                "Refactor.RegistrySemantics", "Refactor.StateFacade"
+     性质：TASK §3 允许的“blocked 列表”改动（三角色缺失时把第 11 条 id 也标 blocked）。
+  除这 3 行外，diff 中不存在任何 '^-' 行 —— 即没有任何既有断言的函数体、期望值、阈值被删改。
+
+【既有 10 条断言 ID（保持不变）】
+  Party.PresentAndMove
+  Combat.MeleeHit
+  Combat.RangedShot
+  Skill.QW
+  Hit.InterruptAttack
+  Downed.Knockdown
+  Rescue.ChannelInterrupt
+  Chest.Interact
+  Refactor.RegistrySemantics
+  Refactor.StateFacade
+
+【本次唯一新增（全部为 '+' 行）】
+  第 11 条 Refactor.InteractionContract（AssertInteractionContract 方法 + Start() 里一行调用 + 头注释一行 + blocked id 一项）
+  断言内容：三个交互目标都实现 IInteractionTarget；KeyInteractable/Priority 取值；
+  宝箱 Opened 事件恰好一次且重复 Interact 幂等；门初始可交互且不被触发；InteractionRunner.Ensure 复用同一实例。
+
+【复现命令（仓库根目录）】
+  git diff -U0 -- Assets/_Project/Tests/REFACTOR | Out-File -Encoding utf8 Docs\QA\Evidence\REFACTOR-M3\test-diff-u0.txt
+  Select-String -Path Docs\QA\Evidence\REFACTOR-M3\test-diff-u0.txt -Pattern '^-[^-]'   # 应恰好 3 行
+  (Select-String -Path Docs\QA\Evidence\REFACTOR-M3\test-diff-u0.txt -Pattern '^\+[^+]').Count   # 135
