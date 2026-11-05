@@ -1,0 +1,19 @@
+{
+  "task": "REFACTOR",
+  "milestone": "M1",
+  "run": 1,
+  "startedAt": "2026-11-06 00:34:26.026",
+  "finishedAt": "2026-11-06 00:34:55.818",
+  "unityVersion": "2022.3.62f3c1",
+  "scene": "Assets/Scenes/DungeonWorld.unity",
+  "randomSeed": 20261107,
+  "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\REFACTOR-M1\\editor_run1\\REFACTOR_Assertions.jsonl",
+  "pass": 9,
+  "fail": 0,
+  "blocked": 0,
+  "infraFail": 0,
+  "observed": 0,
+  "head": "ed0cdc1759457ff55dd1265dcafc0a26d460d099",
+  "fixtureNote": "REFACTOR_Target_* / REFACTOR_Chest 为运行期内存对象，结束前销毁；不写入场景",
+  "exitReason": "completed"
+}

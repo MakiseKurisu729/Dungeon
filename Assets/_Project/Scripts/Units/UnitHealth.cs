@@ -36,7 +36,17 @@ public class UnitHealth : MonoBehaviour
         _colors = new Color[_renderers.Length];
         for (int i = 0; i < _renderers.Length; i++)
             _colors[i] = _renderers[i].material.color;
+
+        // ★ 单位注册（必须在 team 赋值之后）：全场扫描的唯一事实源，见 UnitRegistry
+        UnitRegistry.Register(this);
     }
+
+    void OnEnable() { UnitRegistry.SetActiveState(this, true); }
+
+    // 只维护“激活”标志，不注销：SetActive(false→true) 不能丢身份
+    void OnDisable() { UnitRegistry.SetActiveState(this, gameObject.activeInHierarchy); }
+
+    void OnDestroy() { UnitRegistry.Unregister(this); }
 
     void Update()
     {

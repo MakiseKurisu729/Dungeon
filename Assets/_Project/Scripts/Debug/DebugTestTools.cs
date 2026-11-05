@@ -29,7 +29,7 @@ public static class DebugTestTools
     public static void RecordSceneSpawnPoint()
     {
         _hasSpawnPoint = false;
-        foreach (var h in Object.FindObjectsByType<UnitHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (var h in UnitRegistry.All(true))
         {
             if (h == null || h.team != Team.Monster) continue;
             if (!h.name.StartsWith(SkeletonUnitName, System.StringComparison.Ordinal)) continue;
@@ -89,7 +89,7 @@ public static class DebugTestTools
     public static int ResetPlayers()
     {
         int revived = 0, healed = 0, manaRefilled = 0, cooldownReset = 0;
-        foreach (var h in Object.FindObjectsByType<UnitHealth>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (var h in UnitRegistry.All())
         {
             if (h == null || h.team != Team.Player) continue;
 
@@ -130,14 +130,19 @@ public static class DebugTestTools
 /// <summary>调试键位宿主：运行期自动创建（不进场景），负责轮询 F5/F9/F10 与场景重载回调。</summary>
 public class DebugTestToolsHost : MonoBehaviour
 {
+    /// <summary>运行期唯一宿主（DontDestroyOnLoad），替代 FindFirstObjectByType 的自举判重。</summary>
+    public static DebugTestToolsHost instance;
+
     void Awake()
     {
+        instance = this;
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDestroy()
     {
+        if (instance == this) instance = null;
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
@@ -164,7 +169,7 @@ public static class DebugTestToolsBootstrap
         // batchmode（SPEC01 自动化）不挂调试工具，避免与断言观测面互相干扰。
         if (Application.isBatchMode) return;
         if (SceneManager.GetActiveScene().name != DebugTestTools.SceneName) return;
-        if (Object.FindFirstObjectByType<DebugTestToolsHost>() != null) return;
+        if (DebugTestToolsHost.instance != null) return;
 
         var go = new GameObject("DebugTestTools");
         go.AddComponent<DebugTestToolsHost>();

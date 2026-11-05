@@ -16,7 +16,7 @@ using UnityEditor;
 /// 只读生产状态；测试自身唯一写入面为 Docs 证据、SessionState 退出码、
 /// 以及运行期内存夹具（结束前销毁）。
 ///
-/// 8 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+/// 9 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
 ///   1. Party.PresentAndMove       三职业存在 + 生产移动命令可移动
 ///   2. Combat.MeleeHit            骑士近战普攻命中，命中瞬间处于 AttackMelee
 ///   3. Combat.RangedShot          弓/法远程普攻发射，发射瞬间处于 Attack_Release
@@ -25,6 +25,7 @@ using UnityEditor;
 ///   6. Downed.Knockdown           致死 → Downed，AI/导航停用
 ///   7. Rescue.ChannelInterrupt    救援读条 → 受击打断 → 重新下令 → 救起
 ///   8. Chest.Interact             点击宝箱指令 → 走到范围 → 开盖 + 内容物现身
+///   9. Refactor.RegistrySemantics 单位注册表契约（未激活语义 / Nearest 与全场扫描同口径）
 /// </summary>
 public class REFACTOR_ProbeRunner : MonoBehaviour
 {
@@ -148,7 +149,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             string[] ids =
             {
                 "Party.PresentAndMove", "Combat.MeleeHit", "Combat.RangedShot", "Skill.QW",
-                "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact"
+                "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
+                "Refactor.RegistrySemantics"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -166,6 +168,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Downed.Knockdown", AssertKnockdown());
         yield return RunSafe("Rescue.ChannelInterrupt", AssertRescue());
         yield return RunSafe("Chest.Interact", AssertChest());
+        yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics());
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -799,6 +802,108 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         if (_chestOpenedField == null)
             _chestOpenedField = typeof(Chest).GetField("_opened", BindingFlags.Instance | BindingFlags.NonPublic);
         return _chestOpenedField != null && (bool)_chestOpenedField.GetValue(chest);
+    }
+
+    // ============================================================
+    // 9. Refactor.RegistrySemantics
+    // ============================================================
+    /// <summary>注册表契约（M1）：默认排除未激活、includeInactive 能取回、Nearest 与替换前的全场扫描同口径。</summary>
+    IEnumerator AssertRegistrySemantics()
+    {
+        const string Id = "Refactor.RegistrySemantics";
+        var rows = new List<object>();
+        bool allPass = true;
+
+        // ---- 1. OfTeam(Player, false) == 3 ----
+        int playerCount = UnitRegistry.OfTeam(Team.Player, false).Count;
+        bool countOk = playerCount == 3;
+        allPass &= countOk;
+        rows.Add(Dict("step", "OfTeam(Player,false)", "count", playerCount, "expected", 3, "pass", countOk));
+
+        // ---- 2. 临时停用一个玩家：All(false) 不含 / All(true) 含；恢复后重新含入 ----
+        UnitHealth probe = _players.Count > 0 ? _players[0].health : null;
+        int activeBefore = UnitRegistry.All(false).Count;
+        int anyBefore = UnitRegistry.All(true).Count;
+        int registeredBefore = UnitRegistry.Count;
+        bool hideOk = false, showOk = false, idOk = false;
+        UnitId probeId = UnitId.None;
+
+        if (probe != null && probe.gameObject.activeSelf)
+        {
+            idOk = UnitRegistry.TryGetId(probe, out probeId) && probeId.IsValid;
+            probe.gameObject.SetActive(false);
+            yield return null;   // 等 OnDisable 落地（引擎同帧内同步，这里多等一帧保证观测稳定）
+
+            bool hiddenFromActive = !Contains(UnitRegistry.All(false), probe);
+            bool presentInAny = Contains(UnitRegistry.All(true), probe);
+            hideOk = hiddenFromActive && presentInAny
+                     && UnitRegistry.All(false).Count == activeBefore - 1
+                     && UnitRegistry.All(true).Count == anyBefore
+                     && UnitRegistry.Count == registeredBefore;
+
+            probe.gameObject.SetActive(true);
+            yield return null;
+
+            showOk = Contains(UnitRegistry.All(false), probe)
+                     && UnitRegistry.All(false).Count == activeBefore
+                     && UnitRegistry.Find(probeId) == probe;
+        }
+        bool toggleOk = hideOk && showOk;
+        allPass &= toggleOk;
+        rows.Add(Dict("step", "SetActive(false/true)", "probe", probe != null ? probe.name : "null",
+                      "activeBefore", activeBefore, "anyBefore", anyBefore, "registeredBefore", registeredBefore,
+                      "hiddenFromAll(false)", hideOk, "backInAll(false)", showOk,
+                      "unitId", probeId.IsValid ? (object)probeId.Value : "None", "idResolved", idOk,
+                      "pass", toggleOk));
+
+        // ---- 3. Nearest 与「遍历 All(false) + 3D 距离最近」一致 ----
+        // 造一个运行期内存怪物夹具，保证候选集非空（其它怪物此刻被 SuppressMonsters 停用）
+        Vector3 center = probe != null ? probe.transform.position : Vector3.zero;
+        var probeMonster = CreateTarget("REFACTOR_Registry_Probe", center + new Vector3(2f, 0f, 0f));
+        yield return null;
+
+        const float range = 10f;
+        UnitHealth viaRegistry = UnitRegistry.Nearest(center, range, Team.Monster);
+        UnitHealth viaScan = null;
+        int candidates = 0;
+        float bestD = range;
+        foreach (var h in UnitRegistry.All(false))
+        {
+            if (h == null || h.team != Team.Monster) continue;
+            float d = Vector3.Distance(center, h.transform.position);
+            if (d < bestD) { bestD = d; viaScan = h; }
+            if (d < range) candidates++;
+        }
+
+        bool nearestOk = viaRegistry == viaScan;
+        bool nonEmpty = candidates >= 1;
+        bool foundProbe = viaRegistry != null && viaRegistry.gameObject == probeMonster;
+        allPass &= nearestOk && nonEmpty;
+        rows.Add(Dict("step", "Nearest vs All(false) 3D 扫描", "range", range,
+                      "registryResult", viaRegistry != null ? viaRegistry.name : "null",
+                      "scanResult", viaScan != null ? viaScan.name : "null",
+                      "candidatesInRange", candidates, "registryDistance", viaRegistry != null
+                          ? (object)Vector3.Distance(center, viaRegistry.transform.position) : null,
+                      "scanDistance", viaScan != null ? (object)Vector3.Distance(center, viaScan.transform.position) : null,
+                      "nearestEqualsScan", nearestOk, "nonEmpty", nonEmpty, "pickedFixture", foundProbe,
+                      "pass", nearestOk && nonEmpty));
+
+        _ev.Record(Id, Id,
+            "UnitRegistry 契约：OfTeam(Player,false)=3；SetActive(false) 后 All(false) 不含而 All(true) 含、恢复后重新含入；" +
+            "Nearest(center,10,Monster) 与遍历 All(false) + 3D 距离最近的结果一致",
+            "players=" + playerCount + "; toggle=" + toggleOk + "; nearestEqualsScan=" + nearestOk +
+            "; candidates=" + candidates,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            Dict("steps", rows, "count", UnitRegistry.Count,
+                 "note", "只验证 M1 契约语义；不改动 M0 的 8 条断言口径"));
+    }
+
+    static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)
+    {
+        if (list == null || unit == null) return false;
+        for (int i = 0; i < list.Count; i++)
+            if (list[i] == unit) return true;
+        return false;
     }
 
     // ============================================================

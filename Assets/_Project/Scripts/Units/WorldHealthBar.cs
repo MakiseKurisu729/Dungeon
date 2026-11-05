@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ public class WorldHealthBar : MonoBehaviour
     [InspectorName("敌人颜色")]
     public Color enemyColor = new Color(0.9f, 0.2f, 0.2f);
 
-    static UnitHealth[] _allUnits;
+    static IReadOnlyList<UnitHealth> _allUnits;
     static float _cacheTime;
     Visibility _visibility;   // 有 Visibility 时以它的隐身状态为准（防止本类把血条重新点亮）
 
@@ -52,7 +53,7 @@ public class WorldHealthBar : MonoBehaviour
         if (Time.time - _cacheTime > 0.25f)
         {
             _cacheTime = Time.time;
-            _allUnits = FindObjectsByType<UnitHealth>(FindObjectsSortMode.None);
+            _allUnits = UnitRegistry.All();
         }
         if (_allUnits == null) return false;
         foreach (var u in _allUnits)

@@ -29,9 +29,8 @@ public class InventoryUI : BasePanel
         instance = this;
         if (playerInv == null)
         {
-            foreach (var uh in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+            foreach (var uh in UnitRegistry.OfTeam(Team.Player))
             {
-                if (uh.team != Team.Player) continue;
                 playerInv = uh.GetComponent<Inventory>();
                 if (playerInv != null) break;
             }

@@ -38,9 +38,9 @@ public class Visibility : MonoBehaviour
 
     bool IsVisibleToAnyPlayer()
     {
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+        foreach (var h in UnitRegistry.OfTeam(Team.Player))
         {
-            if (h.dead || h.team != Team.Player) continue;
+            if (h.dead) continue;
             if (Vector3.Distance(transform.position, h.transform.position) > viewRadius) continue;
 
             Vector3 eye = transform.position + Vector3.up * 1.2f;

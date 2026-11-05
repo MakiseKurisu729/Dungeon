@@ -80,9 +80,9 @@ public class FogOfWar : MonoBehaviour
 
     void RevealTick()
     {
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+        foreach (var h in UnitRegistry.OfTeam(Team.Player))
         {
-            if (h.dead || h.team != Team.Player) continue;
+            if (h.dead) continue;
             RevealAround(transform.InverseTransformPoint(h.transform.position));
         }
     }

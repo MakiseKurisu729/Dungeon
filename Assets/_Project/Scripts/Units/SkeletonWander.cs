@@ -58,13 +58,7 @@ public class SkeletonWander : MonoBehaviour
 
     Transform NearestPlayer()
     {
-        UnitHealth best = null; float bd = aggroRange;
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
-        {
-            if (h.dead || h.team != Team.Player) continue;
-            float d = Vector3.Distance(transform.position, h.transform.position);
-            if (d < bd) { bd = d; best = h; }
-        }
+        UnitHealth best = UnitRegistry.Nearest(transform.position, aggroRange, Team.Player, h => !h.dead);
         return best != null ? best.transform : null;
     }
 }

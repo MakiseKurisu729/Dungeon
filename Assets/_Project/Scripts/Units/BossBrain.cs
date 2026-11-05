@@ -172,13 +172,8 @@ public class BossBrain : MonoBehaviour
 
     Transform FindNearestPlayer()
     {
-        UnitHealth best = null; float bd = stats != null ? stats.aggroRange : 25f;
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
-        {
-            if (h.dead || h.team != Team.Player) continue;
-            float d = Vector3.Distance(transform.position, h.transform.position);
-            if (d < bd) { bd = d; best = h; }
-        }
+        float range = stats != null ? stats.aggroRange : 25f;
+        UnitHealth best = UnitRegistry.Nearest(transform.position, range, Team.Player, h => !h.dead);
         return best != null ? best.transform : null;
     }
 

@@ -1,0 +1,102 @@
+REFACTOR-M1 / AC-5 evidence - git status and diff snapshot (read-only commands)
+generatedAt : 2026-11-06 00:49:28
+gitHead     : ed0cdc17
+note        : no git write operation was performed in this milestone (no add/commit/push/reset/checkout/stash).
+
+=== git status --porcelain ===
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Core/GameFlow.cs
+ M Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+ M Assets/_Project/Scripts/Debug/DebugTestTools.cs
+ M Assets/_Project/Scripts/Player/SelectionManager.cs
+ M Assets/_Project/Scripts/Player/SkillInputController.cs
+ M Assets/_Project/Scripts/System/DungeonDoor.cs
+ M Assets/_Project/Scripts/System/FogOfWar.cs
+ M Assets/_Project/Scripts/UI/InventoryUI.cs
+ M Assets/_Project/Scripts/Units/BossBrain.cs
+ M Assets/_Project/Scripts/Units/SkeletonWander.cs
+ M Assets/_Project/Scripts/Units/UnitBrain.cs
+ M Assets/_Project/Scripts/Units/UnitHealth.cs
+ M Assets/_Project/Scripts/Units/Visibility.cs
+ M Assets/_Project/Scripts/Units/WorldHealthBar.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Core/UnitId.cs
+?? Assets/_Project/Scripts/Core/UnitId.cs.meta
+?? Assets/_Project/Scripts/Core/UnitRegistry.cs
+?? Assets/_Project/Scripts/Core/UnitRegistry.cs.meta
+?? Docs/Handoff/REPORT_REFACTOR-M1.md
+?? Docs/Handoff/TASK_REFACTOR-M1.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M1/
+?? Docs/QA/Evidence/SPEC-01/editor_run24/
+?? Docs/QA/Evidence/SPEC-01/editor_run25/
+
+=== git diff --stat (tracked, unstaged) ===
+ Assembly-CSharp-Editor.csproj                      | 445 +++++++++++----------
+ Assembly-CSharp.csproj                             | 441 ++++++++++----------
+ Assets/_Project/Scripts/Core/GameFlow.cs           |   9 +-
+ .../_Project/Scripts/Debug/DebugCameraSwitcher.cs  |  13 +
+ Assets/_Project/Scripts/Debug/DebugTestTools.cs    |  11 +-
+ Assets/_Project/Scripts/Player/SelectionManager.cs |  27 +-
+ .../Scripts/Player/SkillInputController.cs         |   4 +-
+ Assets/_Project/Scripts/System/DungeonDoor.cs      |   6 +-
+ Assets/_Project/Scripts/System/FogOfWar.cs         |   4 +-
+ Assets/_Project/Scripts/UI/InventoryUI.cs          |   3 +-
+ Assets/_Project/Scripts/Units/BossBrain.cs         |   9 +-
+ Assets/_Project/Scripts/Units/SkeletonWander.cs    |   8 +-
+ Assets/_Project/Scripts/Units/UnitBrain.cs         |  11 +-
+ Assets/_Project/Scripts/Units/UnitHealth.cs        |  10 +
+ Assets/_Project/Scripts/Units/Visibility.cs        |   4 +-
+ Assets/_Project/Scripts/Units/WorldHealthBar.cs    |   5 +-
+ .../REFACTOR/Editor/REFACTOR_BatchAcceptance.cs    |   2 +-
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs | 109 ++++-
+ 18 files changed, 642 insertions(+), 479 deletions(-)
+
+=== git diff --numstat (tracked, unstaged) ===
+230	215	Assembly-CSharp-Editor.csproj
+231	210	Assembly-CSharp.csproj
+2	7	Assets/_Project/Scripts/Core/GameFlow.cs
+13	0	Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+8	3	Assets/_Project/Scripts/Debug/DebugTestTools.cs
+21	6	Assets/_Project/Scripts/Player/SelectionManager.cs
+2	2	Assets/_Project/Scripts/Player/SkillInputController.cs
+3	3	Assets/_Project/Scripts/System/DungeonDoor.cs
+2	2	Assets/_Project/Scripts/System/FogOfWar.cs
+1	2	Assets/_Project/Scripts/UI/InventoryUI.cs
+2	7	Assets/_Project/Scripts/Units/BossBrain.cs
+1	7	Assets/_Project/Scripts/Units/SkeletonWander.cs
+3	8	Assets/_Project/Scripts/Units/UnitBrain.cs
+10	0	Assets/_Project/Scripts/Units/UnitHealth.cs
+2	2	Assets/_Project/Scripts/Units/Visibility.cs
+3	2	Assets/_Project/Scripts/Units/WorldHealthBar.cs
+1	1	Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+107	2	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+
+=== git status --untracked-files=all for Assets/_Project/Scripts and Assets/_Project/Tests ===
+ M Assets/_Project/Scripts/Core/GameFlow.cs
+ M Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs
+ M Assets/_Project/Scripts/Debug/DebugTestTools.cs
+ M Assets/_Project/Scripts/Player/SelectionManager.cs
+ M Assets/_Project/Scripts/Player/SkillInputController.cs
+ M Assets/_Project/Scripts/System/DungeonDoor.cs
+ M Assets/_Project/Scripts/System/FogOfWar.cs
+ M Assets/_Project/Scripts/UI/InventoryUI.cs
+ M Assets/_Project/Scripts/Units/BossBrain.cs
+ M Assets/_Project/Scripts/Units/SkeletonWander.cs
+ M Assets/_Project/Scripts/Units/UnitBrain.cs
+ M Assets/_Project/Scripts/Units/UnitHealth.cs
+ M Assets/_Project/Scripts/Units/Visibility.cs
+ M Assets/_Project/Scripts/Units/WorldHealthBar.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Core/UnitId.cs
+?? Assets/_Project/Scripts/Core/UnitId.cs.meta
+?? Assets/_Project/Scripts/Core/UnitRegistry.cs
+?? Assets/_Project/Scripts/Core/UnitRegistry.cs.meta
+
+=== .meta created by Unity for the two new scripts ===
+Assets/_Project/Scripts/Core/UnitId.cs.meta  guid: 7b5053abca194de4faaf087c021db732
+Assets/_Project/Scripts/Core/UnitRegistry.cs.meta  guid: 002a52aa8d07ab8498a2a3c9ef505d82

@@ -9,6 +9,9 @@ using UnityEngine;
 /// </summary>
 public class DebugCameraSwitcher : MonoBehaviour
 {
+    /// <summary>场景内唯一实例（场景引用归资产所有者；这里只暴露运行时句柄，替代 FindObjectOfType）。</summary>
+    public static DebugCameraSwitcher instance;
+
     [InspectorName("相机")]
     public Transform cam;
     [InspectorName("注视目标")]
@@ -78,6 +81,16 @@ public class DebugCameraSwitcher : MonoBehaviour
 
     /// <summary>由选择系统注入：左键拖拽平移视角进行中（选中单位时替代 allowPan 的左键）。</summary>
     public bool LeftDragPan { set { _leftDragPan = value; } }
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this) instance = null;
+    }
 
     void Start()
     {

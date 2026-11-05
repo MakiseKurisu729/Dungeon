@@ -1,0 +1,60 @@
+REFACTOR-M1 / AC-1 evidence - Scripts/** FindObjects* call-site count
+generatedAt : 2026-11-06 00:42:16
+gitHead     : ed0cdc17
+scope       : Assets/_Project/Scripts/**/*.cs  (product scripts only; Assets/_Project/Tests/** is outside AC-1)
+regex       : FindObjectsByType|FindObjectsOfType|FindObjectOfType|FindFirstObjectByType|FindAnyObjectByType
+filter      : strip inline // to end-of-line (this also removes /// XML doc comments) BEFORE matching.
+              string literals and /* */ block comments are NOT stripped -> the filter can only
+              over-report, never hide a real call.
+
+=== A) Baseline call sites (ed0cdc17, git grep, comments NOT filtered) ===
+ed0cdc17:Assets/_Project/Scripts/Core/GameFlow.cs:33:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Core/GameFlow.cs:56:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Debug/DebugTestTools.cs:32:        foreach (var h in Object.FindObjectsByType<UnitHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Debug/DebugTestTools.cs:92:        foreach (var h in Object.FindObjectsByType<UnitHealth>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Debug/DebugTestTools.cs:167:        if (Object.FindFirstObjectByType<DebugTestToolsHost>() != null) return;
+ed0cdc17:Assets/_Project/Scripts/Player/SelectionManager.cs:29:        _cam = FindObjectOfType<DebugCameraSwitcher>();
+ed0cdc17:Assets/_Project/Scripts/Player/SelectionManager.cs:34:        foreach (var s in FindObjectsByType<Selectable>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Player/SkillInputController.cs:218:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/System/DungeonDoor.cs:33:            foreach (var uh in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/System/DungeonDoor.cs:43:            var cam = FindObjectOfType<DebugCameraSwitcher>();
+ed0cdc17:Assets/_Project/Scripts/System/FogOfWar.cs:83:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/UI/InventoryUI.cs:32:            foreach (var uh in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Units/BossBrain.cs:176:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Units/SkeletonWander.cs:62:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Units/UnitBrain.cs:75:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Units/Visibility.cs:41:        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+ed0cdc17:Assets/_Project/Scripts/Units/WorldHealthBar.cs:55:            _allUnits = FindObjectsByType<UnitHealth>(FindObjectsSortMode.None);
+baseline lines = 17
+
+=== B) Current raw hits (comments NOT filtered; proves only comments remain) ===
+Assets\_Project\Scripts\Core\UnitRegistry.cs:7 [COMMENT] /// <c>FindObjectsByType&lt;UnitHealth&gt;</c> 全场扫描（`Docs/01` §1.4 不变量 8）。
+Assets\_Project\Scripts\Debug\DebugCameraSwitcher.cs:12 [COMMENT] /// <summary>场景内唯一实例（场景引用归资产所有者；这里只暴露运行时句柄，替代 FindObjectOfType）。</summary>
+Assets\_Project\Scripts\Debug\DebugTestTools.cs:133 [COMMENT] /// <summary>运行期唯一宿主（DontDestroyOnLoad），替代 FindFirstObjectByType 的自举判重。</summary>
+Assets\_Project\Scripts\Player\SelectionManager.cs:26 [COMMENT] /// <summary>相机系统实例：Awake 先后顺序不保证，取不到时惰性重试（行为与 FindObjectOfType 一致）。</summary>
+current raw hit lines = 4
+
+=== C) Current call-site count (inline // comments stripped) ===
+(none)
+call-site count = 0  -> AC-1 expected 0 : PASS
+
+=== D) Post-change UnitRegistry usages (current line numbers) ===
+Assets\_Project\Scripts\Core\GameFlow.cs:33 return UnitRegistry.OfTeam(Team.Player).Count > 0;
+Assets\_Project\Scripts\Core\GameFlow.cs:52 foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets\_Project\Scripts\Debug\DebugTestTools.cs:32 foreach (var h in UnitRegistry.All(true))
+Assets\_Project\Scripts\Debug\DebugTestTools.cs:92 foreach (var h in UnitRegistry.All())
+Assets\_Project\Scripts\Player\SelectionManager.cs:45 foreach (var h in UnitRegistry.All())
+Assets\_Project\Scripts\Player\SkillInputController.cs:218 foreach (var h in UnitRegistry.OfTeam(Team.Monster))
+Assets\_Project\Scripts\System\DungeonDoor.cs:33 foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets\_Project\Scripts\System\FogOfWar.cs:83 foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets\_Project\Scripts\UI\InventoryUI.cs:32 foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets\_Project\Scripts\Units\BossBrain.cs:176 UnitHealth best = UnitRegistry.Nearest(transform.position, range, Team.Player, h => !h.dead);
+Assets\_Project\Scripts\Units\SkeletonWander.cs:61 UnitHealth best = UnitRegistry.Nearest(transform.position, aggroRange, Team.Player, h => !h.dead);
+Assets\_Project\Scripts\Units\UnitBrain.cs:75 UnitHealth best = UnitRegistry.Nearest(transform.position, range, enemyTeam, h => !h.dead);
+Assets\_Project\Scripts\Units\UnitHealth.cs:41 UnitRegistry.Register(this);
+Assets\_Project\Scripts\Units\UnitHealth.cs:44 void OnEnable() { UnitRegistry.SetActiveState(this, true); }
+Assets\_Project\Scripts\Units\UnitHealth.cs:47 void OnDisable() { UnitRegistry.SetActiveState(this, gameObject.activeInHierarchy); }
+Assets\_Project\Scripts\Units\UnitHealth.cs:49 void OnDestroy() { UnitRegistry.Unregister(this); }
+Assets\_Project\Scripts\Units\Visibility.cs:41 foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets\_Project\Scripts\Units\WorldHealthBar.cs:56 _allUnits = UnitRegistry.All();
+UnitRegistry usages = 18

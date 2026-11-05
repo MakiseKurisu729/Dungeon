@@ -23,16 +23,30 @@ public class SelectionManager : MonoBehaviour
 
     public bool MultiSelected { get { return _selected.Count > 1; } }
 
+    /// <summary>相机系统实例：Awake 先后顺序不保证，取不到时惰性重试（行为与 FindObjectOfType 一致）。</summary>
+    DebugCameraSwitcher Cam
+    {
+        get
+        {
+            if (_cam == null) _cam = DebugCameraSwitcher.instance;
+            return _cam;
+        }
+    }
+
     void Awake()
     {
         instance = this;
-        _cam = FindObjectOfType<DebugCameraSwitcher>();
+        _cam = DebugCameraSwitcher.instance;
     }
 
     void Start()
     {
-        foreach (var s in FindObjectsByType<Selectable>(FindObjectsSortMode.None))
-            Register(s);
+        // 单位注册表 = 唯一事实源（原为全场扫描 Selectable）；Selectable 与 UnitHealth 同物体/子物体
+        foreach (var h in UnitRegistry.All())
+        {
+            var s = h.GetComponentInChildren<Selectable>();
+            if (s != null) Register(s);
+        }
     }
 
     public void Register(Selectable s)
@@ -89,10 +103,11 @@ public class SelectionManager : MonoBehaviour
         if (_enemySelected != null && _enemySelected.dead)
             SelectEnemy(null);
 
-        if (_cam != null)
+        var cam = Cam;
+        if (cam != null)
         {
-            _cam.allowPan = true;   // 左键拖动平移常开；点击/拖动由 8px 阈值区分
-            if (Primary != null) _cam.SetFocus(Primary.transform);
+            cam.allowPan = true;   // 左键拖动平移常开；点击/拖动由 8px 阈值区分
+            if (Primary != null) cam.SetFocus(Primary.transform);
         }
     }
 

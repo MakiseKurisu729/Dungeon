@@ -30,11 +30,7 @@ public class GameFlow : MonoBehaviour
 
     static bool HasPlayerTeam()
     {
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
-        {
-            if (h != null && h.team == Team.Player) return true;
-        }
-        return false;
+        return UnitRegistry.OfTeam(Team.Player).Count > 0;
     }
 
     void Update()
@@ -53,9 +49,8 @@ public class GameFlow : MonoBehaviour
         if (!GameStarted) return;
 
         bool anyStanding = false;
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+        foreach (var h in UnitRegistry.OfTeam(Team.Player))
         {
-            if (h.team != Team.Player) continue;
             var dr = h.GetComponent<DownedRescue>();
             bool down = dr != null && dr.IsDown;
             if (!h.dead && !down) { anyStanding = true; break; }

@@ -215,8 +215,8 @@ public class SkillInputController : MonoBehaviour
         if (_cacheTimer > 0f) return;
         _cacheTimer = enemyCacheInterval;
         _enemyCache.Clear();
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
-            if (!h.dead && h.team == Team.Monster)
+        foreach (var h in UnitRegistry.OfTeam(Team.Monster))
+            if (!h.dead)
                 _enemyCache.Add(h);
     }
 }

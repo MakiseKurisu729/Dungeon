@@ -30,9 +30,9 @@ public class DungeonDoor : MonoBehaviour
         TransitionFader.Transition(() =>
         {
             int i = 0;
-            foreach (var uh in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
+            foreach (var uh in UnitRegistry.OfTeam(Team.Player))
             {
-                if (uh.team != Team.Player || uh.dead) continue;
+                if (uh.dead) continue;
                 Vector3 p = dungeonEntryPoint.position +
                             new Vector3((i % 2 == 0 ? -1.2f : 1.2f), 0, (i / 2) * 1.8f);
                 var agent = uh.GetComponent<NavMeshAgent>();
@@ -40,7 +40,7 @@ public class DungeonDoor : MonoBehaviour
                 uh.transform.position = p;
                 i++;
             }
-            var cam = FindObjectOfType<DebugCameraSwitcher>();
+            var cam = DebugCameraSwitcher.instance;
             if (cam != null && dungeonEntryPoint != null) cam.SetFocus(dungeonEntryPoint);
             var rig = Camera.main != null ? Camera.main.transform.root : null;
             if (rig != null && cameraPoint != null) rig.position = cameraPoint.position;

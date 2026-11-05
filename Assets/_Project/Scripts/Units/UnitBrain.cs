@@ -70,14 +70,9 @@ public abstract class UnitBrain : MonoBehaviour
     // ===== 共用能力 =====
     protected Transform FindNearestEnemy(float range)
     {
-        UnitHealth best = null;
-        float bestD = range;
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsSortMode.None))
-        {
-            if (h.dead || h.team == MyTeam) continue;
-            float d = Vector3.Distance(transform.position, h.transform.position);
-            if (d < bestD) { bestD = d; best = h; }
-        }
+        Team enemyTeam = MyTeam == Team.Player ? Team.Monster : Team.Player;
+        // 原实现：3D 距离（含 Y），d < range；不跳过 dead 会误选尸体，故沿用调用方口径
+        UnitHealth best = UnitRegistry.Nearest(transform.position, range, enemyTeam, h => !h.dead);
         return best != null ? best.transform : null;
     }
 
