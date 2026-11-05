@@ -32,6 +32,23 @@ public class SkillSystem : MonoBehaviour
         for (int i = 0; i < _cds.Length; i++) _cds[i] = default(Cooldown);
     }
 
+    /// <summary>施法速度倍率：取武器数值资产的 skillSpeed；无资产或非正值按 1（行为不变）。</summary>
+    float Speed
+    {
+        get
+        {
+            float v = sword != null && sword.stats != null ? sword.stats.skillSpeed : 1f;
+            return v > 0f ? v : 1f;
+        }
+    }
+
+    /// <summary>为某个效果组包本次施放上下文（触发器/状态名由效果自己声明，系统不认识具体技能）。</summary>
+    SkillCastContext ContextFor(int index, SkillEffectBase effect, Transform target)
+    {
+        return new SkillCastContext(index, effect.Trigger, effect.StateName, target, this,
+                                    GetComponent<UnitHealth>(), Speed);
+    }
+
     /// <summary>施放：验蓝验冷却 → 效果链。target 仅需要目标的技能用。</summary>
     public bool Cast(int index, Transform target)
     {
@@ -43,13 +60,13 @@ public class SkillSystem : MonoBehaviour
         // 先验效果可释放（CanCast），再扣蓝：施放失败不产生任何消耗，也不写冷却。
         foreach (var eff in s.effects)
         {
-            if (!eff.CanCast(this, target)) return false;
+            if (!eff.CanCast(ContextFor(index, eff, target))) return false;
         }
         if (!mana.Consume(s.manaCost)) { MessageFeed.SetMessage("蓝量不足"); return false; }
 
         foreach (var eff in s.effects)
         {
-            eff.Execute(this, target);
+            eff.Execute(ContextFor(index, eff, target));
         }
 
         _cds[index] = s.cooldown;

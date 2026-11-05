@@ -1,0 +1,26 @@
+REFACTOR-M4 / AC-7 evidence —— UnitStats.skillSpeed 默认 1、行为不变（Skill.QW 同参数对比）
+generatedAt=2026-11-06 02:19
+
+## 代码审查
+
+- `Assets/_Project/Scripts/Units/UnitStats.cs` 新增字段：
+  `public float skillSpeed = 1f;`（InspectorName「施法速度倍率」；追加在 attackSpeed 之后，未改名/未移动任何既有序列化字段）
+- 现有 UnitStats 资产未改动（`git status -- .asset` 为空）→ 反序列化缺字段时保留字段初始化值 1f。
+- 时长换算（全部是「除法」，Speed=1 时与原值逐字相同）：
+  - `BashEffect`：`hitAt = hitTime / ctx.Speed`、`totalAt = totalTime / ctx.Speed`
+  - `FireballEffect`：`delay = castDelay / ctx.Speed`、`p.duration = flightDuration / ctx.Speed`
+  - `SkillSystem.Speed`：`sword != null && sword.stats != null ? sword.stats.skillSpeed : 1f`，`<= 0` 按 1（因此 ctx.Speed 恒 > 0）
+- 动画 `SetTrigger(ctx.Trigger)` 仍在前摇开始处（BashRoutine 起手 / FireRoutine 之前），时机未挪到结算帧。
+
+## 时序实测（Skill.QW 断言，Q=BashEffect、W=HeavySlashEffect；同夹具、同参数）
+
+| run | Q.animEntrySeconds | Q.damageWaitSeconds | Q.damageApplied | Q.manaDelta | W.animEntrySeconds | W.swordTimer | W.manaDelta |
+|---|---|---|---|---|---|---|---|
+| M3 `editor_run1`（基线，skillSpeed 不存在） | 0.0539366 | 0.9316916 | 15 | 20 | 0.0546263 | 0 | 30 |
+| M4 `editor_run1` | 0.0536131 | 0.9311719 | 15 | 20 | 0.0535133 | 0 | 30 |
+| M4 `editor_run2` | 0.0539094 | 0.9319602 | 15 | 20 | 0.0551792 | 0 | 30 |
+| M4 `editor_run3` | 0.0525734 | 0.9314697 | 15 | 20 | 0.0532159 | 0 | 30 |
+
+- `damageWaitSeconds` = 夹具按 `bash.hitTime + 0.4f` 采样后的实测等待（含一帧粒度）；四次差异 ≤ 0.0008s，属帧粒度抖动，不是时长变化。
+- 伤害 15、蓝耗 20/30、W 的 swordTimer=0 均与 M3 完全一致 → `skillSpeed=1` 时行为不变。
+- Speed≠1 的加速路径不在验收范围内（无资产设置 ≠1，且本单禁止改 `.asset`），只由代码审查保证「除以 Speed」。

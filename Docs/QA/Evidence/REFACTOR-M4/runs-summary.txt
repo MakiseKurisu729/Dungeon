@@ -1,0 +1,35 @@
+REFACTOR-M4 / runs summary（模式 B：编辑器常开 + Tools/QA/In-Editor 菜单；未用 run_tests、未用 batchmode）
+generatedAt=2026-11-06 02:19
+Unity 2022.3.62f3c1 / 实例 Dungeon@4f5c34c82f31646e / 场景 Assets/Scenes/DungeonWorld.unity
+基线 HEAD（全部 run 的 Summary.head）= d02470c47c5016b2a5cd1190cde9b76b655a50ff（= d02470c4）
+
+## REFACTOR 套件（证据目录 Docs/QA/Evidence/REFACTOR-M4/<run>/）
+
+| 子目录 | startedAt | 断言数 | pass | fail | blocked | infra | ExitCode | 说明 |
+|---|---|---|---|---|---|---|---|---|
+| precheck_run1 | 2026-11-06 02:05:33 | 11 | 11 | 0 | 0 | 0 | 0 | 上下文改造后、新增断言前的一次性体检（Skills/Combat 未红；DefaultMilestone 已是 M4） |
+| attempt_run1  | 2026-11-06 02:10:24 | 15 | 14 | 1 | 0 | 0 | 2 | 修复轮 1 的现场：`Skill.InterruptAttack` 红（在 AttackMelee 起始帧施放 → 大脑继续自动普攻产生第二次 Slash 命中，且 Bash 在 0.6s 内未进入） |
+| editor_run1   | 2026-11-06 02:13:40 | 15 | 15 | 0 | 0 | 0 | 0 | 修复后第 1 次（AC-1） |
+| editor_run2   | 2026-11-06 02:14:32 | 15 | 15 | 0 | 0 | 0 | 0 | 第 2 次（AC-1） |
+| editor_run3   | 2026-11-06 02:15:29 | 15 | 15 | 0 | 0 | 0 | 0 | 第 3 次（AC-1） |
+
+- 3 次连续 run 的 15 条断言 id 与顺序完全一致（Assertions.jsonl 每次 15 行、distinct=15）：
+  Party.PresentAndMove / Combat.MeleeHit / Combat.RangedShot / Skill.QW /
+  Skill.InterruptAttack / Hit.InterruptSkill / Skill.InterruptInteract / Projectile.AimPoint /
+  Hit.InterruptAttack / Downed.Knockdown / Rescue.ChannelInterrupt / Chest.Interact /
+  Refactor.InteractionContract / Refactor.RegistrySemantics / Refactor.StateFacade
+- 每次 run 均有：`REFACTOR_Assertions.jsonl`、`REFACTOR_Summary_run1.json`、`REFACTOR_ExitCode_run1.txt`、`REFACTOR_Runs.jsonl`、`InEditorResult.txt`。
+  （证据写入器把 run 号固定为菜单注入的 `REFACTOR_RUN=1`，因此每个子目录内的文件名后缀都是 `_run1`；与 M0–M3 一致。）
+
+## SPEC01 套件（证据目录 Docs/QA/Evidence/SPEC-01/<run>/）
+
+| 子目录 | startedAt | 断言数 | pass | fail | blocked | infra | ExitCode |
+|---|---|---|---|---|---|---|---|
+| editor_run32 | 2026-11-06 02:16:17 | 12 | 12 | 0 | 0 | 0 | 0 |
+| editor_run33 | 2026-11-06 02:17:12 | 12 | 12 | 0 | 0 | 0 | 0 |
+
+## 未运行项（如实记录）
+
+- 未运行 DIAG / FND00B06（不在 M4 L1 口径内）。
+- 未使用 `run_tests`、未使用 batchmode；未重启 Unity。
+- 未做“人工目检”，目检项见 REPORT §7。

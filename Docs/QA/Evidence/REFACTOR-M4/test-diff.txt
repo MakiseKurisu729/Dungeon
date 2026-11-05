@@ -1,0 +1,41 @@
+REFACTOR-M4 / AC-6  evidence —— 测试套件 diff 审查
+generatedAt=2026-11-06 02:19
+
+## 结论
+
+- 改动范围：`Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs`（1 行）+ `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs`（新增 509 行 / 删除 8 行）。
+- 删除行全集 = 8 行，全部是**常量与注释**：
+  1. `public const string DefaultMilestone = "M3";` → `"M4"`（里程碑切换）
+  2-8. 头注释「11 条断言」标题 + 第 5~11 条列表（被「15 条断言 + 第 5~15 条」替换）
+- **既有 11 条断言的函数体、期望值、阈值、夹具参数零改动**：`git diff -U0` 中不含任何断言方法体内的 `-` 行。
+- 新增内容：4 条断言（`Skill.InterruptAttack` / `Hit.InterruptSkill` / `Skill.InterruptInteract` / `Projectile.AimPoint`）+ 4 个测试侧工具方法（`GetAttackTimer` / `RefillSkills` / `RestoreAgent` / `ComputeEndOf`）+ 1 个静态反射字段 `_attackTimerField` + 玩家缺失时 blocked id 数组补 4 项。
+
+## 复现命令
+
+```powershell
+git diff --numstat -- Assets/_Project/Tests/REFACTOR
+git diff -U0 -- Assets/_Project/Tests/REFACTOR      # 原始输出另存 test-diff-u0.txt
+```
+
+实测 numstat：
+
+```text
+1	1	Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+509	8	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+```
+
+## 删除行原文（UTF-8，行号对应 test-diff-u0.txt）
+
+```text
+6:  -    public const string DefaultMilestone = "M3";
+13: -/// 11 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+16: -///   5. Hit.InterruptAttack        普攻中受击 → 进入 Hit_A（打断）
+17: -///   6. Downed.Knockdown           致死 → Downed，AI/导航停用
+18: -///   7. Rescue.ChannelInterrupt    救援读条 → 受击打断 → 重新下令 → 救起
+19: -///   8. Chest.Interact             点击宝箱指令 → 走到范围 → 开盖 + 内容物现身
+20: -///   9. Refactor.RegistrySemantics 单位注册表契约（未激活语义 / Nearest 与全场扫描同口径）
+21: -///  10. Refactor.StateFacade       状态/流程门面（新旧 API 双向一致 / 事件恰好一次 / 暂停 timeScale）
+22: -///  11. Refactor.InteractionContract 交互契约（接口语义 / KeyInteractable / 开箱事件恰好一次 / Runner 复用）
+```
+
+> blocked id 数组那一段之所以没有删除行：新增的 2 行是**插入**，原有两行逐字保留（新的 4 条 id 插入在原 `"Hit.InterruptAttack", ...` 行之前）。

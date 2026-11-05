@@ -22,23 +22,30 @@ public class BashEffect : SkillEffectBase
     [InspectorName("击退时长")]
     public float knockDuration = 0.3f;
 
-    public override bool CanCast(SkillSystem caster, Transform target)
+    public override string Trigger { get { return "Bash"; } }
+    public override string StateName { get { return "Bash"; } }
+
+    public override bool CanCast(SkillCastContext ctx)
     {
+        var target = ctx.Target;
         if (target == null) { MessageFeed.SetMessage("盾击需要选择一个敌人目标"); return false; }
         var uh = target.GetComponent<UnitHealth>();
         if (uh == null || uh.dead) { MessageFeed.SetMessage("盾击需要选择一个敌人目标"); return false; }
-        Vector3 d = uh.transform.position - caster.transform.position; d.y = 0f;
+        Vector3 d = uh.transform.position - ctx.Caster.transform.position; d.y = 0f;
         if (d.magnitude > range) { MessageFeed.SetMessage("目标超出技能范围"); return false; }
         return true;
     }
 
-    public override void Execute(SkillSystem caster, Transform target)
+    public override void Execute(SkillCastContext ctx)
     {
-        caster.StartCoroutine(BashRoutine(caster, target));
+        ctx.Caster.StartCoroutine(BashRoutine(ctx));
     }
 
-    IEnumerator BashRoutine(SkillSystem caster, Transform target)
+    IEnumerator BashRoutine(SkillCastContext ctx)
     {
+        var caster = ctx.Caster;
+        var target = ctx.Target;
+
         // ★ 新增：施法即停（LoL 手感：放技能时不再移动，避免边跑边砸）
         var agent = caster.GetComponent<UnityEngine.AI.NavMeshAgent>();
         if (agent != null && agent.isOnNavMesh) { agent.isStopped = true; agent.ResetPath(); }
@@ -48,11 +55,13 @@ public class BashEffect : SkillEffectBase
         Vector3 d = target.position - caster.transform.position; d.y = 0f;
         caster.transform.rotation = Quaternion.LookRotation(d);
         var anim = caster.GetComponentInChildren<Animator>();
-        if (anim != null) anim.SetTrigger("Bash");
+        if (anim != null) anim.SetTrigger(ctx.Trigger);
 
-        // 前摇：等结算帧
+        // 前摇：等结算帧（时长按施法速度缩放；Speed=1 时与原值完全相同）
+        float hitAt = hitTime / ctx.Speed;
+        float totalAt = totalTime / ctx.Speed;
         float t = 0f;
-        while (t < hitTime) { t += Time.deltaTime; yield return null; }
+        while (t < hitAt) { t += Time.deltaTime; yield return null; }
 
         // 结算：伤害 + 击退 + 僵直
         var uh = target.GetComponent<UnitHealth>();
@@ -60,7 +69,7 @@ public class BashEffect : SkillEffectBase
         {
             float dmg = caster.sword != null ? caster.sword.GetRawDamage() : 10f;
             uh.TakeHit(dmg, 999f, DamageType.Blunt, uh.transform.position + Vector3.up * 0.6f,
-                       caster.GetComponent<UnitHealth>());
+                       ctx.CasterUnit);
             var brain = uh.GetComponent<MonsterBrain>();
             if (brain != null)
             {
@@ -70,6 +79,6 @@ public class BashEffect : SkillEffectBase
         }
 
         // 后摇：等动画收尾
-        while (t < totalTime) { t += Time.deltaTime; yield return null; }
+        while (t < totalAt) { t += Time.deltaTime; yield return null; }
     }
 }

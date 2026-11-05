@@ -22,4 +22,7 @@ public class UnitStats : ScriptableObject
     [InspectorName("攻速倍率")]
     [Tooltip("攻速倍率：1=正常，1.3=快30%")]
     public float attackSpeed = 1f;
+    [InspectorName("施法速度倍率")]
+    [Tooltip("施法速度倍率：1=正常（默认）；2=效果时长减半。时长 = 原值 / 倍率，动画触发器时机不变")]
+    public float skillSpeed = 1f;
 }

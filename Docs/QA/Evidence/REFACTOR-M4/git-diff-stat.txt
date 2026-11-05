@@ -1,0 +1,81 @@
+﻿REFACTOR-M4 / AC-5 evidence
+generatedAt=2026-11-06 02:18:59
+git rev-parse --short HEAD -> d02470c4
+
+--- git status --porcelain ---
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Combat/HeavySlashEffect.cs
+ M Assets/_Project/Scripts/Combat/Projectile.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectBase.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+ M Assets/_Project/Scripts/Combat/SkillEffects.cs
+ M Assets/_Project/Scripts/Units/SkillSystem.cs
+ M Assets/_Project/Scripts/Units/UnitStats.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Combat/SkillCastContext.cs
+?? Assets/_Project/Scripts/Combat/SkillCastContext.cs.meta
+?? Docs/Handoff/TASK_REFACTOR-M4.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M4/
+?? Docs/QA/Evidence/SPEC-01/editor_run32/
+?? Docs/QA/Evidence/SPEC-01/editor_run33/
+
+--- git diff --stat (tracked) ---
+ Assembly-CSharp-Editor.csproj                      | 445 +++++++++---------
+ Assembly-CSharp.csproj                             | 450 +++++++++---------
+ Assets/_Project/Scripts/Combat/HeavySlashEffect.cs |   6 +-
+ Assets/_Project/Scripts/Combat/Projectile.cs       |  19 +-
+ Assets/_Project/Scripts/Combat/SkillEffectBase.cs  |  10 +-
+ .../_Project/Scripts/Combat/SkillEffectFireball.cs |  27 +-
+ Assets/_Project/Scripts/Combat/SkillEffects.cs     |  29 +-
+ Assets/_Project/Scripts/Units/SkillSystem.cs       |  21 +-
+ Assets/_Project/Scripts/Units/UnitStats.cs         |   3 +
+ .../REFACTOR/Editor/REFACTOR_BatchAcceptance.cs    |   2 +-
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs | 517 ++++++++++++++++++++-
+ 11 files changed, 1066 insertions(+), 463 deletions(-)
+
+--- forbidden paths check (Assets/Scenes, Prefabs, *.asset, *.controller, Art, ProjectSettings, Packages, CURRENT.md, AGENTS.md) ---
+(empty = no changes)
+
+--- untracked dirs under Docs/QA/Evidence (this task) ---
+?? Docs/QA/Evidence/REFACTOR-M4/
+?? Docs/QA/Evidence/SPEC-01/editor_run32/
+?? Docs/QA/Evidence/SPEC-01/editor_run33/
+
+=== final snapshot (after the three documents were written) ===
+generatedAt=2026-11-06 02:24:15
+HEAD -> d02470c4
+
+--- git status --porcelain ---
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Combat/HeavySlashEffect.cs
+ M Assets/_Project/Scripts/Combat/Projectile.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectBase.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+ M Assets/_Project/Scripts/Combat/SkillEffects.cs
+ M Assets/_Project/Scripts/Units/SkillSystem.cs
+ M Assets/_Project/Scripts/Units/UnitStats.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Combat/SkillCastContext.cs
+?? Assets/_Project/Scripts/Combat/SkillCastContext.cs.meta
+?? Docs/Handoff/REPORT_REFACTOR-LONG-01.md
+?? Docs/Handoff/REPORT_REFACTOR-M4.md
+?? Docs/Handoff/TASK_REFACTOR-M4.md
+?? "Docs/Learning/REFACTOR-LONG-01_\350\256\262\347\250\277.md"
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M4/
+?? Docs/QA/Evidence/SPEC-01/editor_run32/
+?? Docs/QA/Evidence/SPEC-01/editor_run33/
+
+--- forbidden paths check (also includes Tests/SPEC01, Tests/DIAG, Tests/FND00B06) ---
+(empty = no changes)
+
+--- note ---
+Assembly-CSharp*.csproj were already dirty before this task (Unity regenerates them; only the new script entry was added).
+Docs/Handoff/TASK_REFACTOR-M4.md, Docs/QA/Evidence/DIAG-SKILL/editor_run3/, Docs/QA/Evidence/FND-00B-06/editor_run4/ were already present/dirty before this task (see the dispatch note).

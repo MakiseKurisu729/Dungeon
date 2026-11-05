@@ -6,10 +6,10 @@ public class HeavySlashEffect : SkillEffectBase
 {
     public HeavySlashEffect() { needTarget = false; }
 
-    public override bool CanCast(SkillSystem caster, Transform target) { return caster.sword != null; }
+    public override bool CanCast(SkillCastContext ctx) { return ctx.Caster.sword != null; }
 
-    public override void Execute(SkillSystem caster, Transform target)
+    public override void Execute(SkillCastContext ctx)
     {
-        caster.sword.DoSkillAttack();
+        ctx.Caster.sword.DoSkillAttack();
     }
 }

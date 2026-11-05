@@ -33,8 +33,25 @@ public class Projectile : MonoBehaviour
     protected virtual Vector3 ComputeEnd()
     {
         if (target != null && !target.dead)
-            return target.transform.position + Vector3.up * 0.6f;
+            return AimPoint(target);
         return _fallbackEnd;
+    }
+
+    /// <summary>瞄准点：目标所有 Renderer 的合并包围盒中心（不再写死 +0.6m 抬枪口）；
+    /// 目标没有 Renderer（纯逻辑单位）时回退到 transform.position。</summary>
+    static Vector3 AimPoint(UnitHealth unit)
+    {
+        var renderers = unit.GetComponentsInChildren<Renderer>();
+        bool found = false;
+        Bounds merged = default(Bounds);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            var r = renderers[i];
+            if (r == null) continue;
+            if (!found) { merged = r.bounds; found = true; }
+            else merged.Encapsulate(r.bounds);
+        }
+        return found ? merged.center : unit.transform.position;
     }
 
     protected virtual Vector3 ComputePosition(Vector3 end, float k)

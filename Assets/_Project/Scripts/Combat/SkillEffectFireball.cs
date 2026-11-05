@@ -21,32 +21,37 @@ public class FireballEffect : SkillEffectBase
     [InspectorName("爆炸半径")]
     public float explosionRadius = 2f;
 
-    public override bool CanCast(SkillSystem caster, Transform target)
+    public override bool CanCast(SkillCastContext ctx)
     {
+        var target = ctx.Target;
         if (target == null) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
         var uh = target.GetComponent<UnitHealth>();
         if (uh == null || uh.dead) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
-        Vector3 d = uh.transform.position - caster.transform.position; d.y = 0f;
+        Vector3 d = uh.transform.position - ctx.Caster.transform.position; d.y = 0f;
         if (d.magnitude > range) { MessageFeed.SetMessage("目标超出技能范围"); return false; }
         return true;
     }
 
-    public override void Execute(SkillSystem caster, Transform target)
+    public override void Execute(SkillCastContext ctx)
     {
-        var anim = caster.GetComponentInChildren<Animator>();
+        var anim = ctx.Caster.GetComponentInChildren<Animator>();
         if (anim != null)
         {
             anim.ResetTrigger("Interrupt");
-            anim.SetTrigger("Skill");
+            anim.SetTrigger(ctx.Trigger);
         }
-        caster.StartCoroutine(FireRoutine(caster, target));
+        ctx.Caster.StartCoroutine(FireRoutine(ctx));
     }
 
-    IEnumerator FireRoutine(SkillSystem caster, Transform target)
+    IEnumerator FireRoutine(SkillCastContext ctx)
     {
-        // 施法前摇：等动画抬手帧
+        var caster = ctx.Caster;
+        var target = ctx.Target;
+
+        // 施法前摇：等动画抬手帧（时长按施法速度缩放；Speed=1 时与原值完全相同）
+        float delay = castDelay / ctx.Speed;
         float t = 0f;
-        while (t < castDelay) { t += Time.deltaTime; yield return null; }
+        while (t < delay) { t += Time.deltaTime; yield return null; }
 
         var uh = target != null ? target.GetComponent<UnitHealth>() : null;
         if (uh == null || uh.dead || fireballPrefab == null) yield break;
@@ -58,10 +63,10 @@ public class FireballEffect : SkillEffectBase
         if (p != null)
         {
             p.target = uh;
-            p.source = caster.GetComponent<UnitHealth>();
+            p.source = ctx.CasterUnit;
             p.damage = damage;
             p.sharpness = 999f;                 // 法术必破防
-            p.duration = flightDuration;
+            p.duration = flightDuration / ctx.Speed;
             p.arc = 0.3f;
             p.explosionRadius = explosionRadius;
             p.Launch(fireballPrefab);

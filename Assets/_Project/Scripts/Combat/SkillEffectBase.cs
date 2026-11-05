@@ -12,6 +12,12 @@ public abstract class SkillEffectBase : ScriptableObject
     [InspectorName("范围")]
     public float range = 2.5f;
 
-    public abstract bool CanCast(SkillSystem caster, Transform target);
-    public abstract void Execute(SkillSystem caster, Transform target);
+    /// <summary>本效果写 Animator 的触发器名；默认 "Skill"，盾击等改写。</summary>
+    public virtual string Trigger { get { return "Skill"; } }
+
+    /// <summary>与 <see cref="Trigger"/> 对应的动画状态名（断言/等待用）。</summary>
+    public virtual string StateName { get { return "Skill"; } }
+
+    public abstract bool CanCast(SkillCastContext ctx);
+    public abstract void Execute(SkillCastContext ctx);
 }
