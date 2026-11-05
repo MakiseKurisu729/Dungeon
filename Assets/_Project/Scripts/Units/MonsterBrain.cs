@@ -95,8 +95,8 @@ public class MonsterBrain : UnitBrain
         _dead = true;
         StopAgent();
         enabled = false;
-        GameData.AddGold(10);
-        GameData.AddKill();
+        RunState.AddGold(10);
+        RunState.AddKill();
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
         if (_animator != null) _animator.SetTrigger(deathTrigger);
@@ -115,7 +115,7 @@ public class MonsterBrain : UnitBrain
     void Update()
     {
         if (_dead) return;
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
 
         if (_animator != null && !string.IsNullOrEmpty(speedParam))
             _animator.SetFloat(speedParam, agent != null ? new Vector3(agent.velocity.x, 0, agent.velocity.z).magnitude : 0f);

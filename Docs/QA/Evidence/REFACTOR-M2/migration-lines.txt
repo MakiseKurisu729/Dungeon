@@ -1,0 +1,55 @@
+REFACTOR-M2 migration map - current new-API call sites (file:line)
+Assets/_Project/Scripts/Combat/MeleeCombat.cs:139  dmgMult += (MetaState.Level - 1) * 0.25f;
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:26  if (target == null) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:28  if (uh == null || uh.dead) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:30  if (d.magnitude > range) { MessageFeed.SetMessage("目标超出技能范围"); return false; }
+Assets/_Project/Scripts/Combat/SkillEffects.cs:27  if (target == null) { MessageFeed.SetMessage("盾击需要选择一个敌人目标"); return false; }
+Assets/_Project/Scripts/Combat/SkillEffects.cs:29  if (uh == null || uh.dead) { MessageFeed.SetMessage("盾击需要选择一个敌人目标"); return false; }
+Assets/_Project/Scripts/Combat/SkillEffects.cs:31  if (d.magnitude > range) { MessageFeed.SetMessage("目标超出技能范围"); return false; }
+Assets/_Project/Scripts/Core/WaveSpawner.cs:39  MessageFeed.SetMessage(_waveIdx + 1 >= waves.Length
+Assets/_Project/Scripts/Core/WaveSpawner.cs:69  MessageFeed.SetMessage($"第 {_waveIdx + 1} 波！");
+Assets/_Project/Scripts/Player/PlayerCommandController.cs:23  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/SelectionManager.cs:77  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/SkillInputController.cs:43  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/SkillInputController.cs:99  MessageFeed.SetMessage("未选中敌人");   // 点空地=取消，但要说明原因
+Assets/_Project/Scripts/Player/SkillInputController.cs:113  MessageFeed.SetMessage("目标超出射程，正在接近");
+Assets/_Project/Scripts/Player/SkillInputController.cs:171  string before = MessageFeed.Message;
+Assets/_Project/Scripts/Player/SkillInputController.cs:173  if (MessageFeed.Message == before) MessageFeed.SetMessage("技能释放失败");
+Assets/_Project/Scripts/System/Chest.cs:73  if (item.goldValue > 0) RunState.AddGold(item.goldValue);
+Assets/_Project/Scripts/System/Chest.cs:74  if (_inv != null && _inv.items.Count == 0) MessageFeed.SetMessage("宝箱已取空");
+Assets/_Project/Scripts/System/DungeonDoor.cs:23  MessageFeed.SetMessage("按 F 进入地牢");
+Assets/_Project/Scripts/UI/CursorManager.cs:70  if (!string.IsNullOrEmpty(inter.hint)) MessageFeed.SetMessage(inter.hint);
+Assets/_Project/Scripts/UI/EscMenuPanel.cs:12  AppFlow.Pause();
+Assets/_Project/Scripts/UI/EscMenuPanel.cs:17  AppFlow.Resume();
+Assets/_Project/Scripts/UI/EscMenuPanel.cs:30  AppFlow.ReloadActiveScene();
+Assets/_Project/Scripts/UI/HUD.cs:20  goldText.text = $"金币：{RunState.Gold}（升级费用 {MetaState.LevelCost()}，按 U）";
+Assets/_Project/Scripts/UI/HUD.cs:22  levelText.text = $"等级：{MetaState.Level}  击杀：{RunState.Kills}";
+Assets/_Project/Scripts/UI/HUD.cs:26  if (MessageFeed.Message != _lastMessage)
+Assets/_Project/Scripts/UI/HUD.cs:28  _lastMessage = MessageFeed.Message;
+Assets/_Project/Scripts/UI/HUD.cs:46  if (MetaState.TryLevelUp(sw, uh))
+Assets/_Project/Scripts/UI/HUD.cs:47  MessageFeed.SetMessage($"升级！现在 {MetaState.Level} 级");
+Assets/_Project/Scripts/UI/HUD.cs:49  MessageFeed.SetMessage("金币不足！");
+Assets/_Project/Scripts/UI/InventoryUI.cs:123  else MessageFeed.SetMessage("背包已满！");
+Assets/_Project/Scripts/UI/InventoryUI.cs:132  RunState.AddGold(item.goldValue);
+Assets/_Project/Scripts/UI/InventoryUI.cs:133  MessageFeed.SetMessage($"使用{item.itemName}，+{item.goldValue} 金币");
+Assets/_Project/Scripts/UI/MainMenuPanel.cs:16  AppFlow.GameStarted = true;
+Assets/_Project/Scripts/UI/UIManager.cs:46  bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;
+Assets/_Project/Scripts/Units/BossBrain.cs:61  RunState.AddGold(50);
+Assets/_Project/Scripts/Units/BossBrain.cs:62  RunState.AddKill();
+Assets/_Project/Scripts/Units/BossBrain.cs:63  MessageFeed.SetMessage("Boss 已讨伐！宝箱解锁 +50 金币");
+Assets/_Project/Scripts/Units/BossBrain.cs:70  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/BossBrain.cs:80  MessageFeed.SetMessage("Boss 召唤了帮手！");
+Assets/_Project/Scripts/Units/CharacterBrain.cs:127  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/DownedRescue.cs:84  MessageFeed.SetMessage($"{gameObject.name} 倒下了！选中队友点击他进行救援");
+Assets/_Project/Scripts/Units/DownedRescue.cs:142  if (wasChanneling) MessageFeed.SetMessage("救援被打断，请重新下达救援指令");
+Assets/_Project/Scripts/Units/DownedRescue.cs:170  MessageFeed.SetMessage("救援中……受击或移动会打断！");
+Assets/_Project/Scripts/Units/DownedRescue.cs:182  if (AppFlow.IsPaused) { yield return null; continue; }
+Assets/_Project/Scripts/Units/DownedRescue.cs:262  MessageFeed.SetMessage(message);
+Assets/_Project/Scripts/Units/DownedRescue.cs:276  MessageFeed.SetMessage("队友救起来了！");
+Assets/_Project/Scripts/Units/MonsterBrain.cs:98  RunState.AddGold(10);
+Assets/_Project/Scripts/Units/MonsterBrain.cs:99  RunState.AddKill();
+Assets/_Project/Scripts/Units/MonsterBrain.cs:118  if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/SkillSystem.cs:40  if (!_cds[index].Ready) { MessageFeed.SetMessage($"{s.skillName} 冷却中"); return false; }
+Assets/_Project/Scripts/Units/SkillSystem.cs:41  if (mana == null) { MessageFeed.SetMessage("蓝量不足"); return false; }
+Assets/_Project/Scripts/Units/SkillSystem.cs:48  if (!mana.Consume(s.manaCost)) { MessageFeed.SetMessage("蓝量不足"); return false; }
+total = 53

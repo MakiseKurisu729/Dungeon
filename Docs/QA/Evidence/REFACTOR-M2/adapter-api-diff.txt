@@ -1,0 +1,79 @@
+AC-6 evidence - adapter API diff (M1 0a1a45d7 vs M2 working tree)
+task: REFACTOR-M2; generatedAt: 2026-11-06 01:16:55
+method: extract lines starting with 'public' from 'git show 0a1a45d7:<file>' and from the working tree; writability judged by member kind (field / property get+set / property get-only / method).
+
+=== Assets/_Project/Scripts/Core/GameData.cs ===
+--- HEAD (0a1a45d7) public members: 11
+  public static class GameData
+  public static int gold = 0;
+  public static int level = 1;
+  public static int kills = 0;
+  public static string message = "";
+  public static event System.Action OnChanged;
+  public static void AddGold(int g) { gold += g; OnChanged?.Invoke(); }
+  public static void AddKill() { kills++; }
+  public static void SetMessage(string m) { message = m; OnChanged?.Invoke(); }
+  public static int LevelCost() { return 50 * level; }
+  public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)
+--- WORKING TREE public members: 11
+  public static class GameData
+  public static int gold { get { return RunState.Gold; } set { RunState.Gold = value; } }
+  public static int level { get { return MetaState.Level; } set { MetaState.Level = value; } }
+  public static int kills { get { return RunState.Kills; } set { RunState.Kills = value; } }
+  public static string message { get { return MessageFeed.Message; } set { MessageFeed.Message = value; } }
+  public static event System.Action OnChanged
+  public static void AddGold(int g) { RunState.AddGold(g); MessageFeed.RaiseChanged(); }
+  public static void AddKill() { RunState.AddKill(); }
+  public static void SetMessage(string m) { MessageFeed.SetMessage(m); }
+  public static int LevelCost() { return MetaState.LevelCost(); }
+  public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh) { return MetaState.TryLevelUp(sw, uh); }
+
+=== Assets/_Project/Scripts/Core/GameFlow.cs ===
+--- HEAD (0a1a45d7) public members: 4
+  public class GameFlow : MonoBehaviour
+  public static GameFlow instance;
+  public static bool GameStarted;
+  public bool IsWiped { get; private set; }
+--- WORKING TREE public members: 4
+  public class GameFlow : MonoBehaviour
+  public static GameFlow instance;
+  public static bool GameStarted { get { return AppFlow.GameStarted; } set { AppFlow.GameStarted = value; } }
+  public bool IsWiped { get { return RunFlow.IsWiped; } }
+
+=== Assets/_Project/Scripts/Core/PauseManager.cs ===
+--- HEAD (0a1a45d7) public members: 5
+  public class PauseManager : MonoBehaviour
+  public static PauseManager instance;
+  public bool IsPaused { get; private set; }
+  public void Pause()
+  public void Resume()
+--- WORKING TREE public members: 5
+  public class PauseManager : MonoBehaviour
+  public static PauseManager instance;
+  public bool IsPaused { get { return AppFlow.IsPaused; } }
+  public void Pause()
+  public void Resume()
+
+=== member-level contract check (TASK §2 / AC-6) ===
+GameData.gold      HEAD: public static int field (read/write)          M2: public static int property get+set -> RunState.Gold        writable: YES
+GameData.level     HEAD: public static int field                      M2: public static int property get+set -> MetaState.Level      writable: YES
+GameData.kills     HEAD: public static int field                      M2: public static int property get+set -> RunState.Kills       writable: YES
+GameData.message   HEAD: public static string field                   M2: public static string property get+set -> MessageFeed.Message writable: YES
+GameData.OnChanged HEAD: public static event Action                   M2: public static event Action with add/remove -> MessageFeed.Changed subscribe/unsubscribe: YES
+GameData.AddGold/AddKill/SetMessage/LevelCost/TryLevelUp  HEAD: static methods  M2: same signatures, forward-only
+GameFlow.instance       HEAD: public static GameFlow field                  M2: unchanged (assigned in Awake)
+GameFlow.GameStarted    HEAD: public static bool field                     M2: public static bool property get+set -> AppFlow.GameStarted   writable: YES
+GameFlow.IsWiped        HEAD: public instance bool property get; private set  M2: public instance bool property get-only -> RunFlow.IsWiped  external writability: none (unchanged from outside)
+PauseManager.instance   HEAD: public static PauseManager field              M2: unchanged (assigned in Awake)
+PauseManager.IsPaused   HEAD: public instance bool property get; private set M2: public instance bool property get-only -> AppFlow.IsPaused  external writability: none (unchanged from outside)
+PauseManager.Pause/Resume  HEAD: public instance void methods             M2: same signatures, forward to AppFlow
+
+=== compile-visible proof that test references were NOT touched ===
+git diff --numstat -- Assets/_Project/Tests:
+1	1	Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+133	2	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+git status --porcelain -- Assets/_Project/Tests:
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+
+SPEC01 / FND02A / FND00B / DIAG probes still reference GameData.*, GameFlow.GameStarted, GameFlow.instance.IsWiped, PauseManager.instance.IsPaused unchanged and still compile; the full editor compile in this milestone reported 0 errors (see editor_run1..4).

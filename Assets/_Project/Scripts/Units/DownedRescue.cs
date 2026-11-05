@@ -81,7 +81,7 @@ public class DownedRescue : MonoBehaviour
         // 致死一击会先排入 Hit 触发器（CharacterBrain.OnDamaged）；不先清掉，AnyState→Hit_A 会在 Downed 之后
         // 把倒地动作抢走，导致站着不动却已倒地。
         if (animator != null) { animator.ResetTrigger("Hit"); animator.SetTrigger(dieTrigger); }
-        GameData.SetMessage($"{gameObject.name} 倒下了！选中队友点击他进行救援");
+        MessageFeed.SetMessage($"{gameObject.name} 倒下了！选中队友点击他进行救援");
     }
 
     void OnDestroy() { AllDowned.Remove(this); }
@@ -139,7 +139,7 @@ public class DownedRescue : MonoBehaviour
         _channeling = false;
         _rescuer = null;
         _channelBlockUntil = Time.time + InterruptCooldown;
-        if (wasChanneling) GameData.SetMessage("救援被打断，请重新下达救援指令");
+        if (wasChanneling) MessageFeed.SetMessage("救援被打断，请重新下达救援指令");
     }
 
     IEnumerator RescueRoutine(UnitHealth rescuer)
@@ -167,7 +167,7 @@ public class DownedRescue : MonoBehaviour
         _channeling = true;
         var rAnim = rescuer.GetComponentInChildren<Animator>();
         _rescuerAnim = rAnim;
-        GameData.SetMessage("救援中……受击或移动会打断！");
+        MessageFeed.SetMessage("救援中……受击或移动会打断！");
 
         bool interrupted = false;
         System.Action<DamageInfo> onHit = _ => interrupted = true;
@@ -179,7 +179,7 @@ public class DownedRescue : MonoBehaviour
             while (t < rescueTime)
             {
                 if (interrupted || !IsDown || rescuer.dead) break;
-                if (PauseManager.instance != null && PauseManager.instance.IsPaused) { yield return null; continue; }
+                if (AppFlow.IsPaused) { yield return null; continue; }
                 if (!InRange(rescuer, 1f)) break;      // 出界按中断处理
                 PushInteract(rAnim, false);            // 读条循环：Interact 播完/掉出就重发
                 t += Time.deltaTime;
@@ -259,7 +259,7 @@ public class DownedRescue : MonoBehaviour
         _rescuer = null;
         _routine = null;
         _channelBlockUntil = Time.time + InterruptCooldown;
-        GameData.SetMessage(message);
+        MessageFeed.SetMessage(message);
     }
 
     void Revive()
@@ -273,7 +273,7 @@ public class DownedRescue : MonoBehaviour
         if (animator != null) animator.SetTrigger(reviveTrigger);
         if (brain != null) brain.enabled = false;
         StartCoroutine(RestoreBrain());
-        GameData.SetMessage("队友救起来了！");
+        MessageFeed.SetMessage("队友救起来了！");
     }
 
     IEnumerator RestoreBrain()

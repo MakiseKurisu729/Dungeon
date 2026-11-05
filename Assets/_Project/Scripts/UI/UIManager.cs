@@ -43,8 +43,7 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        bool gameOn = GameFlow.GameStarted
-                      && (GameFlow.instance == null || !GameFlow.instance.IsWiped);
+        bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

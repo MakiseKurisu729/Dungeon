@@ -40,7 +40,7 @@ public class SkillInputController : MonoBehaviour
     void Update()
     {
         _cacheTimer -= Time.deltaTime;
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
         if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
 
         var ss = PrimarySkillSystem();
@@ -96,7 +96,7 @@ public class SkillInputController : MonoBehaviour
                 var targetHealth = PickEnemyAt(Input.mousePosition);
                 if (targetHealth == null)
                 {
-                    GameData.SetMessage("未选中敌人");   // 点空地=取消，但要说明原因
+                    MessageFeed.SetMessage("未选中敌人");   // 点空地=取消，但要说明原因
                     Cancel();
                     return;
                 }
@@ -110,7 +110,7 @@ public class SkillInputController : MonoBehaviour
                 else
                 {
                     // ★ 范围外：走向目标，进入范围自动放
-                    GameData.SetMessage("目标超出射程，正在接近");
+                    MessageFeed.SetMessage("目标超出射程，正在接近");
                     _chase = true;
                     _pendingCaster = ss;
                     _pendingTarget = targetHealth.transform;
@@ -168,9 +168,9 @@ public class SkillInputController : MonoBehaviour
     /// <summary>施放并补一条失败提示：Cast 自身已写消息（冷却/蓝量）时保留，未写时补“技能释放失败”。</summary>
     void CastWithFeedback(SkillSystem caster, int index, Transform target)
     {
-        string before = GameData.message;
+        string before = MessageFeed.Message;
         if (caster.Cast(index, target)) return;
-        if (GameData.message == before) GameData.SetMessage("技能释放失败");
+        if (MessageFeed.Message == before) MessageFeed.SetMessage("技能释放失败");
     }
 
     /// <summary>屏幕坐标（像素）→ 最近存活敌人（Monster）；点击选敌的唯一入口。</summary>

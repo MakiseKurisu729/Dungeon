@@ -17,15 +17,15 @@ public class HUD : MonoBehaviour
     void Update()
     {
         if (goldText != null)
-            goldText.text = $"金币：{GameData.gold}（升级费用 {GameData.LevelCost()}，按 U）";
+            goldText.text = $"金币：{RunState.Gold}（升级费用 {MetaState.LevelCost()}，按 U）";
         if (levelText != null)
-            levelText.text = $"等级：{GameData.level}  击杀：{GameData.kills}";
+            levelText.text = $"等级：{MetaState.Level}  击杀：{RunState.Kills}";
 
         if (messageText != null)
         {
-            if (GameData.message != _lastMessage)
+            if (MessageFeed.Message != _lastMessage)
             {
-                _lastMessage = GameData.message;
+                _lastMessage = MessageFeed.Message;
                 _messageTimer = 2.5f;
                 messageText.text = _lastMessage;
             }
@@ -43,10 +43,10 @@ public class HUD : MonoBehaviour
             var uh = root != null ? root.GetComponent<UnitHealth>() : null;
             var sw = root != null ? root.GetComponent<MeleeCombat>() : null;
 
-            if (GameData.TryLevelUp(sw, uh))
-                GameData.SetMessage($"升级！现在 {GameData.level} 级");
+            if (MetaState.TryLevelUp(sw, uh))
+                MessageFeed.SetMessage($"升级！现在 {MetaState.Level} 级");
             else
-                GameData.SetMessage("金币不足！");
+                MessageFeed.SetMessage("金币不足！");
         }
     }
 }

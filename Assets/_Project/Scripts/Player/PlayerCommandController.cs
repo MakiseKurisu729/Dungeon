@@ -20,7 +20,7 @@ public class PlayerCommandController : MonoBehaviour
     void Update()
     {
         if (_brain == null || _brain.agent == null) return;
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
         if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
 
         if (Input.GetMouseButtonDown(1))

@@ -67,7 +67,7 @@ public class CursorManager : MonoBehaviour
             if (interactCursor != null)
             {
                 Apply(interactCursor, interactHotspot, interactColor);
-                if (!string.IsNullOrEmpty(inter.hint)) GameData.SetMessage(inter.hint);
+                if (!string.IsNullOrEmpty(inter.hint)) MessageFeed.SetMessage(inter.hint);
             }
             else
             {

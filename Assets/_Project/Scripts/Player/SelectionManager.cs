@@ -74,7 +74,7 @@ public class SelectionManager : MonoBehaviour
 
     void Update()
     {
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
 
         for (int i = 0; i < 4; i++)
         {

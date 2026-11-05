@@ -1,29 +1,23 @@
-using UnityEngine;
-
-/// <summary>局内静态数据：金币/等级/击杀/消息。static 字段跨场景保留。</summary>
+/// <summary>【薄的适配层】旧 GameData API：全部转发到 RunState（金币/击杀）、MetaState（等级/升级）、MessageFeed（消息）。
+/// 新代码请直接用 RunState / MetaState / MessageFeed；本类只为测试与未迁移引用保留，签名与可写性与重构前一致。</summary>
 public static class GameData
 {
-    public static int gold = 0;
-    public static int level = 1;
-    public static int kills = 0;
-    public static string message = "";
+    public static int gold { get { return RunState.Gold; } set { RunState.Gold = value; } }
+    public static int level { get { return MetaState.Level; } set { MetaState.Level = value; } }
+    public static int kills { get { return RunState.Kills; } set { RunState.Kills = value; } }
+    public static string message { get { return MessageFeed.Message; } set { MessageFeed.Message = value; } }
 
-    public static event System.Action OnChanged;
-
-    public static void AddGold(int g) { gold += g; OnChanged?.Invoke(); }
-    public static void AddKill() { kills++; }
-    public static void SetMessage(string m) { message = m; OnChanged?.Invoke(); }
-
-    public static int LevelCost() { return 50 * level; }
-
-    public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)
+    public static event System.Action OnChanged
     {
-        if (gold < LevelCost()) return false;
-        gold -= LevelCost();
-        level++;
-        if (sw != null) sw.dmgMult += 0.25f;
-        if (uh != null) uh.AddMaxHp(20f);
-        OnChanged?.Invoke();
-        return true;
+        add { MessageFeed.Changed += value; }
+        remove { MessageFeed.Changed -= value; }
     }
+
+    public static void AddGold(int g) { RunState.AddGold(g); MessageFeed.RaiseChanged(); }
+    public static void AddKill() { RunState.AddKill(); }
+    public static void SetMessage(string m) { MessageFeed.SetMessage(m); }
+
+    public static int LevelCost() { return MetaState.LevelCost(); }
+
+    public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh) { return MetaState.TryLevelUp(sw, uh); }
 }

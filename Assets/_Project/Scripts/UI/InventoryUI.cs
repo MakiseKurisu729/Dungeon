@@ -120,7 +120,7 @@ public class InventoryUI : BasePanel
                 if (_chest != null) _chest.Take(item);
                 Refresh();
             }
-            else GameData.SetMessage("背包已满！");
+            else MessageFeed.SetMessage("背包已满！");
         }
         else
         {
@@ -129,8 +129,8 @@ public class InventoryUI : BasePanel
             var item = playerInv.items[index];
             if (item == null || item.goldValue <= 0) return;
             playerInv.RemoveAt(index);
-            GameData.AddGold(item.goldValue);
-            GameData.SetMessage($"使用{item.itemName}，+{item.goldValue} 金币");
+            RunState.AddGold(item.goldValue);
+            MessageFeed.SetMessage($"使用{item.itemName}，+{item.goldValue} 金币");
             Refresh();
         }
     }

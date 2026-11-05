@@ -58,16 +58,16 @@ public class BossBrain : MonoBehaviour
         if (col != null) col.enabled = false;
         enabled = false;
         if (rewardChest != null) rewardChest.SetActive(true);   // ★ 宝箱解锁
-        GameData.AddGold(50);
-        GameData.AddKill();
-        GameData.SetMessage("Boss 已讨伐！宝箱解锁 +50 金币");
+        RunState.AddGold(50);
+        RunState.AddKill();
+        MessageFeed.SetMessage("Boss 已讨伐！宝箱解锁 +50 金币");
         Destroy(gameObject, 2.5f);
     }
 
     void Update()
     {
         if (health == null || health.dead) return;
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
         if (animator != null && !string.IsNullOrEmpty(speedParam))
             animator.SetFloat(speedParam, _agent.velocity.magnitude);
 
@@ -77,7 +77,7 @@ public class BossBrain : MonoBehaviour
             _summoned = true;
             foreach (var s in sleepingMinions)
                 if (s != null) s.WakeUp();
-            GameData.SetMessage("Boss 召唤了帮手！");
+            MessageFeed.SetMessage("Boss 召唤了帮手！");
         }
 
         if (_windingUp) { TickWindup(); return; }

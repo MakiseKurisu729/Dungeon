@@ -1,0 +1,164 @@
+AC-5 / AC-6 evidence - git working-tree snapshot (FINAL, generated after all runs + report)
+task: REFACTOR-M2; generatedAt: 2026-11-06 01:21:44
+HEAD: 0a1a45d7fe57f94d9432a0e597b615c7dcde47ca (docs/fnd-00-baseline)
+
+=== 1. git status --porcelain -uall ===
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Scripts/Combat/MeleeCombat.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+ M Assets/_Project/Scripts/Combat/SkillEffects.cs
+ M Assets/_Project/Scripts/Core/GameData.cs
+ M Assets/_Project/Scripts/Core/GameFlow.cs
+ M Assets/_Project/Scripts/Core/PauseManager.cs
+ M Assets/_Project/Scripts/Core/WaveSpawner.cs
+ M Assets/_Project/Scripts/Player/PlayerCommandController.cs
+ M Assets/_Project/Scripts/Player/SelectionManager.cs
+ M Assets/_Project/Scripts/Player/SkillInputController.cs
+ M Assets/_Project/Scripts/System/Chest.cs
+ M Assets/_Project/Scripts/System/DungeonDoor.cs
+ M Assets/_Project/Scripts/UI/CursorManager.cs
+ M Assets/_Project/Scripts/UI/EscMenuPanel.cs
+ M Assets/_Project/Scripts/UI/HUD.cs
+ M Assets/_Project/Scripts/UI/InventoryUI.cs
+ M Assets/_Project/Scripts/UI/MainMenuPanel.cs
+ M Assets/_Project/Scripts/UI/UIManager.cs
+ M Assets/_Project/Scripts/Units/BossBrain.cs
+ M Assets/_Project/Scripts/Units/CharacterBrain.cs
+ M Assets/_Project/Scripts/Units/DownedRescue.cs
+ M Assets/_Project/Scripts/Units/MonsterBrain.cs
+ M Assets/_Project/Scripts/Units/SkillSystem.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+?? Assets/_Project/Scripts/Core/AppFlow.cs
+?? Assets/_Project/Scripts/Core/AppFlow.cs.meta
+?? Assets/_Project/Scripts/Core/MessageFeed.cs
+?? Assets/_Project/Scripts/Core/MessageFeed.cs.meta
+?? Assets/_Project/Scripts/Core/MetaState.cs
+?? Assets/_Project/Scripts/Core/MetaState.cs.meta
+?? Assets/_Project/Scripts/Core/RunFlow.cs
+?? Assets/_Project/Scripts/Core/RunFlow.cs.meta
+?? Assets/_Project/Scripts/Core/RunState.cs
+?? Assets/_Project/Scripts/Core/RunState.cs.meta
+?? Docs/Handoff/REPORT_REFACTOR-M2.md
+?? Docs/Handoff/TASK_REFACTOR-M2.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/DIAG_Assertions.jsonl
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/DIAG_ExitCode.txt
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/DIAG_Summary.json
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/InEditorResult.txt
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/06_Assertions.jsonl
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/06_ExitCode_run1.txt
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/06_Summary_run1.json
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/InEditorResult.txt
+?? Docs/QA/Evidence/REFACTOR-M2/adapter-api-diff.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run1/InEditorResult.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run1/REFACTOR_Assertions.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run1/REFACTOR_ExitCode_run1.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run1/REFACTOR_Runs.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run1/REFACTOR_Summary_run1.json
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run2/InEditorResult.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run2/REFACTOR_Assertions.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run2/REFACTOR_ExitCode_run1.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run2/REFACTOR_Runs.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run2/REFACTOR_Summary_run1.json
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run3/InEditorResult.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run3/REFACTOR_Assertions.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run3/REFACTOR_ExitCode_run1.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run3/REFACTOR_Runs.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run3/REFACTOR_Summary_run1.json
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run4/InEditorResult.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run4/REFACTOR_Assertions.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run4/REFACTOR_ExitCode_run1.txt
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run4/REFACTOR_Runs.jsonl
+?? Docs/QA/Evidence/REFACTOR-M2/editor_run4/REFACTOR_Summary_run1.json
+?? Docs/QA/Evidence/REFACTOR-M2/git-diff-stat.txt
+?? Docs/QA/Evidence/REFACTOR-M2/grep-legacy-state.txt
+?? Docs/QA/Evidence/REFACTOR-M2/migration-lines.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run26/InEditorResult.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run26/SPEC01_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run26/SPEC01_ExitCode_run1.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run26/SPEC01_Runs.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run26/SPEC01_Summary_run1.json
+?? Docs/QA/Evidence/SPEC-01/editor_run27/InEditorResult.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run27/SPEC01_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run27/SPEC01_ExitCode_run1.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run27/SPEC01_Runs.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run27/SPEC01_Summary_run1.json
+?? Docs/QA/Evidence/SPEC-01/editor_run28/InEditorResult.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run28/SPEC01_Assertions.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run28/SPEC01_ExitCode_run1.txt
+?? Docs/QA/Evidence/SPEC-01/editor_run28/SPEC01_Runs.jsonl
+?? Docs/QA/Evidence/SPEC-01/editor_run28/SPEC01_Summary_run1.json
+
+=== 2. git diff --stat (tracked modifications only) ===
+ Assembly-CSharp-Editor.csproj                      | 445 ++++++++++----------
+ Assembly-CSharp.csproj                             | 446 +++++++++++----------
+ Assets/_Project/Scripts/Combat/MeleeCombat.cs      |   2 +-
+ .../_Project/Scripts/Combat/SkillEffectFireball.cs |   6 +-
+ Assets/_Project/Scripts/Combat/SkillEffects.cs     |   6 +-
+ Assets/_Project/Scripts/Core/GameData.cs           |  40 +-
+ Assets/_Project/Scripts/Core/GameFlow.cs           |  54 +--
+ Assets/_Project/Scripts/Core/PauseManager.cs       |  15 +-
+ Assets/_Project/Scripts/Core/WaveSpawner.cs        |   4 +-
+ .../Scripts/Player/PlayerCommandController.cs      |   2 +-
+ Assets/_Project/Scripts/Player/SelectionManager.cs |   2 +-
+ .../Scripts/Player/SkillInputController.cs         |  10 +-
+ Assets/_Project/Scripts/System/Chest.cs            |   4 +-
+ Assets/_Project/Scripts/System/DungeonDoor.cs      |   2 +-
+ Assets/_Project/Scripts/UI/CursorManager.cs        |   2 +-
+ Assets/_Project/Scripts/UI/EscMenuPanel.cs         |  10 +-
+ Assets/_Project/Scripts/UI/HUD.cs                  |  14 +-
+ Assets/_Project/Scripts/UI/InventoryUI.cs          |   6 +-
+ Assets/_Project/Scripts/UI/MainMenuPanel.cs        |   2 +-
+ Assets/_Project/Scripts/UI/UIManager.cs            |   3 +-
+ Assets/_Project/Scripts/Units/BossBrain.cs         |  10 +-
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    |   2 +-
+ Assets/_Project/Scripts/Units/DownedRescue.cs      |  12 +-
+ Assets/_Project/Scripts/Units/MonsterBrain.cs      |   6 +-
+ Assets/_Project/Scripts/Units/SkillSystem.cs       |   6 +-
+ .../REFACTOR/Editor/REFACTOR_BatchAcceptance.cs    |   2 +-
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs | 135 ++++++-
+ 27 files changed, 687 insertions(+), 561 deletions(-)
+
+=== 3. git diff --numstat ===
+230	215	Assembly-CSharp-Editor.csproj
+236	210	Assembly-CSharp.csproj
+1	1	Assets/_Project/Scripts/Combat/MeleeCombat.cs
+3	3	Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+3	3	Assets/_Project/Scripts/Combat/SkillEffects.cs
+17	23	Assets/_Project/Scripts/Core/GameData.cs
+8	46	Assets/_Project/Scripts/Core/GameFlow.cs
+7	8	Assets/_Project/Scripts/Core/PauseManager.cs
+2	2	Assets/_Project/Scripts/Core/WaveSpawner.cs
+1	1	Assets/_Project/Scripts/Player/PlayerCommandController.cs
+1	1	Assets/_Project/Scripts/Player/SelectionManager.cs
+5	5	Assets/_Project/Scripts/Player/SkillInputController.cs
+2	2	Assets/_Project/Scripts/System/Chest.cs
+1	1	Assets/_Project/Scripts/System/DungeonDoor.cs
+1	1	Assets/_Project/Scripts/UI/CursorManager.cs
+5	5	Assets/_Project/Scripts/UI/EscMenuPanel.cs
+7	7	Assets/_Project/Scripts/UI/HUD.cs
+3	3	Assets/_Project/Scripts/UI/InventoryUI.cs
+1	1	Assets/_Project/Scripts/UI/MainMenuPanel.cs
+1	2	Assets/_Project/Scripts/UI/UIManager.cs
+5	5	Assets/_Project/Scripts/Units/BossBrain.cs
+1	1	Assets/_Project/Scripts/Units/CharacterBrain.cs
+6	6	Assets/_Project/Scripts/Units/DownedRescue.cs
+3	3	Assets/_Project/Scripts/Units/MonsterBrain.cs
+3	3	Assets/_Project/Scripts/Units/SkillSystem.cs
+1	1	Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+133	2	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+
+=== 4. new script files + Unity-generated .meta guid ===
+Assets/_Project/Scripts/Core/RunState.cs -> guid: f31958360234a4a498ff304819e05c77  (lines=16)
+Assets/_Project/Scripts/Core/MetaState.cs -> guid: 0718957e03005b846bc527bcb59f907b  (lines=23)
+Assets/_Project/Scripts/Core/MessageFeed.cs -> guid: 8f521009eb0b6824b80b3ce008718e12  (lines=16)
+Assets/_Project/Scripts/Core/AppFlow.cs -> guid: 751c122de265e4b4d895458e2338874f  (lines=43)
+Assets/_Project/Scripts/Core/RunFlow.cs -> guid: 55adeea62a637da49a102a3952c7590a  (lines=54)
+
+=== 5. expected vs actual classification ===
+entries.total = 86
+entries.expected = 86
+entries.unexpected = 0
+UNEXPECTED: (none)
+note: Assembly-CSharp*.csproj (Unity regenerates) + DIAG-SKILL/editor_run3 + FND-00B-06/editor_run4 + Docs/Handoff/TASK_REFACTOR-M2.md were already dirty/untracked at dispatch time (pre-existing, not touched by this milestone).

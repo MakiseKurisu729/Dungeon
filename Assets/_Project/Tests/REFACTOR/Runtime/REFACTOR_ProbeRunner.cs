@@ -16,7 +16,7 @@ using UnityEditor;
 /// 只读生产状态；测试自身唯一写入面为 Docs 证据、SessionState 退出码、
 /// 以及运行期内存夹具（结束前销毁）。
 ///
-/// 9 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+/// 10 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
 ///   1. Party.PresentAndMove       三职业存在 + 生产移动命令可移动
 ///   2. Combat.MeleeHit            骑士近战普攻命中，命中瞬间处于 AttackMelee
 ///   3. Combat.RangedShot          弓/法远程普攻发射，发射瞬间处于 Attack_Release
@@ -26,6 +26,7 @@ using UnityEditor;
 ///   7. Rescue.ChannelInterrupt    救援读条 → 受击打断 → 重新下令 → 救起
 ///   8. Chest.Interact             点击宝箱指令 → 走到范围 → 开盖 + 内容物现身
 ///   9. Refactor.RegistrySemantics 单位注册表契约（未激活语义 / Nearest 与全场扫描同口径）
+///  10. Refactor.StateFacade       状态/流程门面（新旧 API 双向一致 / 事件恰好一次 / 暂停 timeScale）
 /// </summary>
 public class REFACTOR_ProbeRunner : MonoBehaviour
 {
@@ -150,7 +151,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 "Party.PresentAndMove", "Combat.MeleeHit", "Combat.RangedShot", "Skill.QW",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
-                "Refactor.RegistrySemantics"
+                "Refactor.RegistrySemantics", "Refactor.StateFacade"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -169,6 +170,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Rescue.ChannelInterrupt", AssertRescue());
         yield return RunSafe("Chest.Interact", AssertChest());
         yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics());
+        yield return RunSafe("Refactor.StateFacade", AssertStateFacade());
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -896,6 +898,135 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             allPass, allPass ? "pass" : "product_fail", "production",
             Dict("steps", rows, "count", UnitRegistry.Count,
                  "note", "只验证 M1 契约语义；不改动 M0 的 8 条断言口径"));
+    }
+
+    // ============================================================
+    // 10. Refactor.StateFacade
+    // ============================================================
+    /// <summary>状态/流程门面（M2）：RunState/MetaState/MessageFeed/AppFlow/RunFlow 与旧 GameData/GameFlow/PauseManager
+    /// 双向一致；Changed 恰好触发一次且退订后不再触发；Pause/Resume 与 timeScale 对齐。所有写入在结束前还原。</summary>
+    IEnumerator AssertStateFacade()
+    {
+        const string Id = "Refactor.StateFacade";
+        var rows = new List<object>();
+        bool allPass = true;
+
+        // 原值（结束前全部还原，避免污染收尾与后续观察）
+        int goldBefore = RunState.Gold;
+        int levelBefore = MetaState.Level;
+        string messageBefore = MessageFeed.Message;
+        bool gameStartedBefore = AppFlow.GameStarted;
+        bool pausedBefore = AppFlow.IsPaused;
+
+        bool goldOk = false, levelOk = false, messageEventOk = false;
+        bool startedOk = false, wipedOk = false, pauseOk = false;
+        bool restoredOk = false;
+        int changed = 0;
+
+        try
+        {
+            // ---- 1. 金币：新 → 旧；旧 → 新 ----
+            RunState.Gold = 7;
+            bool goldForward = GameData.gold == 7;
+            GameData.gold = 3;
+            bool goldBackward = RunState.Gold == 3;
+            goldOk = goldForward && goldBackward;
+            allPass &= goldOk;
+            rows.Add(Dict("step", "RunState.Gold <-> GameData.gold",
+                          "newToOld", goldForward, "oldToNew", goldBackward, "pass", goldOk));
+
+            // ---- 2. 等级 + 升级费用 ----
+            MetaState.Level = 4;
+            bool levelForward = GameData.level == 4;
+            GameData.level = 6;
+            bool levelBackward = MetaState.Level == 6;
+            int metaCost = MetaState.LevelCost();
+            int legacyCost = GameData.LevelCost();
+            bool costOk = metaCost == 50 * MetaState.Level && metaCost == legacyCost;
+            levelOk = levelForward && levelBackward && costOk;
+            allPass &= levelOk;
+            rows.Add(Dict("step", "MetaState.Level <-> GameData.level; LevelCost",
+                          "newToOld", levelForward, "oldToNew", levelBackward,
+                          "level", MetaState.Level, "metaCost", metaCost, "legacyCost", legacyCost,
+                          "costOk", costOk, "pass", levelOk));
+
+            // ---- 3. 消息：旧读新写；订阅后恰好触发一次；退订后不再增加 ----
+            System.Action onChanged = () => { changed++; };
+            MessageFeed.Changed += onChanged;
+            MessageFeed.SetMessage("REFACTOR_STATE_PROBE");
+            bool messageOk = GameData.message == "REFACTOR_STATE_PROBE";
+            int afterFirst = changed;
+            MessageFeed.Changed -= onChanged;
+            MessageFeed.SetMessage("REFACTOR_STATE_PROBE");
+            int afterUnsubscribe = changed;
+            messageEventOk = messageOk && afterFirst == 1 && afterUnsubscribe == afterFirst;
+            allPass &= messageEventOk;
+            rows.Add(Dict("step", "MessageFeed.SetMessage -> GameData.message + Changed",
+                          "messageOk", messageOk, "changedAfterFirst", afterFirst,
+                          "changedAfterUnsubscribe", afterUnsubscribe, "pass", messageEventOk));
+
+            // ---- 4. 开局标志：双向一致（写入后立刻还原，且全程同帧，不影响 RunFlow.Tick） ----
+            AppFlow.GameStarted = true;
+            bool startedForward = GameFlow.GameStarted;
+            GameFlow.GameStarted = false;
+            bool startedBackward = !AppFlow.GameStarted;
+            AppFlow.GameStarted = gameStartedBefore;
+            startedOk = startedForward && startedBackward && AppFlow.GameStarted == gameStartedBefore;
+            allPass &= startedOk;
+            rows.Add(Dict("step", "AppFlow.GameStarted <-> GameFlow.GameStarted",
+                          "newToOld", startedForward, "oldToNew", startedBackward,
+                          "restoredTo", gameStartedBefore, "pass", startedOk));
+
+            // ---- 5. 团灭标志：实例视图与静态视图一致 ----
+            bool instanceExists = GameFlow.instance != null;
+            wipedOk = instanceExists && RunFlow.IsWiped == GameFlow.instance.IsWiped;
+            allPass &= wipedOk;
+            rows.Add(Dict("step", "RunFlow.IsWiped == GameFlow.instance.IsWiped",
+                          "instanceExists", instanceExists, "runFlow", RunFlow.IsWiped,
+                          "legacy", instanceExists ? (object)GameFlow.instance.IsWiped : null, "pass", wipedOk));
+
+            // ---- 6. 暂停/恢复：IsPaused 与 timeScale 同步（同帧完成，结束后 timeScale==1） ----
+            AppFlow.Pause();
+            bool pauseEntered = PauseManager.instance != null && PauseManager.instance.IsPaused
+                                && Time.timeScale == 0f;
+            AppFlow.Resume();
+            bool pauseLeft = PauseManager.instance != null && !PauseManager.instance.IsPaused
+                             && Time.timeScale == 1f;
+            pauseOk = pauseEntered && pauseLeft;
+            allPass &= pauseOk;
+            rows.Add(Dict("step", "AppFlow.Pause/Resume -> PauseManager.IsPaused + Time.timeScale",
+                          "onPause", pauseEntered, "onResume", pauseLeft, "timeScale", Time.timeScale,
+                          "pass", pauseOk));
+        }
+        finally
+        {
+            RunState.Gold = goldBefore;
+            MetaState.Level = levelBefore;
+            MessageFeed.Message = messageBefore;
+            AppFlow.GameStarted = gameStartedBefore;
+            AppFlow.Resume();   // IsPaused=false; 结束时保证 Time.timeScale == 1
+
+            restoredOk = RunState.Gold == goldBefore && MetaState.Level == levelBefore &&
+                         MessageFeed.Message == messageBefore && AppFlow.GameStarted == gameStartedBefore &&
+                         Time.timeScale == 1f;
+            allPass &= restoredOk;
+            rows.Add(Dict("step", "restore", "gold", RunState.Gold, "level", MetaState.Level,
+                          "message", MessageFeed.Message, "gameStarted", AppFlow.GameStarted,
+                          "isPaused", AppFlow.IsPaused, "timeScale", Time.timeScale,
+                          "pausedBefore", pausedBefore, "pass", restoredOk));
+        }
+
+        _ev.Record(Id, Id,
+            "状态/流程门面：RunState/MetaState/MessageFeed/AppFlow/RunFlow 与旧 GameData/GameFlow/PauseManager 双向一致；" +
+            "Changed 订阅后恰好触发一次、退订后不再触发；Pause -> IsPaused=true 且 timeScale=0，Resume -> false 且 1（结束 timeScale=1）",
+            "gold=" + goldOk + "; level=" + levelOk + "; messageEvent=" + messageEventOk +
+            "; gameStarted=" + startedOk + "; wiped=" + wipedOk + "; pause=" + pauseOk +
+            "; restored=" + restoredOk,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            Dict("steps", rows, "changedEvents", changed,
+                 "note", "M2 新增第 10 条；M0/M1 的 9 条断言口径未改动；所有写入已在 finally 还原"));
+
+        yield break;
     }
 
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)

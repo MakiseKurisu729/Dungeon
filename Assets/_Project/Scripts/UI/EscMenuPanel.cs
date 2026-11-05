@@ -9,12 +9,12 @@ public class EscMenuPanel : BasePanel
 {
     protected override void OnOpen(object userData)
     {
-        if (PauseManager.instance != null) PauseManager.instance.Pause();
+        AppFlow.Pause();
     }
 
     protected override void OnClose()
     {
-        if (PauseManager.instance != null) PauseManager.instance.Resume();
+        AppFlow.Resume();
     }
 
     // 按钮 OnClick 挂这些
@@ -25,9 +25,9 @@ public class EscMenuPanel : BasePanel
 
     public void OnClickRestart()
     {
-        GameFlow.GameStarted = false;
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // 原三行（GameStarted=false / timeScale=1 / LoadScene）收编到 AppFlow，
+        // 并额外复位静态的 IsPaused（场景重载后旧 PauseManager 实例消失，等价于新场景 IsPaused=false）。
+        AppFlow.ReloadActiveScene();
     }
 
     public void OnClickQuitToMenu()

@@ -124,7 +124,7 @@ public class CharacterBrain : UnitBrain
     void Update()
     {
         if (agent == null || combat == null) return;
-        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+        if (AppFlow.IsPaused) return;
 
         bool wasMoving = _moving;
         _moving = ExecutingMove;

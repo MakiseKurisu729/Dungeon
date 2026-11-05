@@ -23,11 +23,11 @@ public class FireballEffect : SkillEffectBase
 
     public override bool CanCast(SkillSystem caster, Transform target)
     {
-        if (target == null) { GameData.SetMessage("火球需要选择一个敌人目标"); return false; }
+        if (target == null) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
         var uh = target.GetComponent<UnitHealth>();
-        if (uh == null || uh.dead) { GameData.SetMessage("火球需要选择一个敌人目标"); return false; }
+        if (uh == null || uh.dead) { MessageFeed.SetMessage("火球需要选择一个敌人目标"); return false; }
         Vector3 d = uh.transform.position - caster.transform.position; d.y = 0f;
-        if (d.magnitude > range) { GameData.SetMessage("目标超出技能范围"); return false; }
+        if (d.magnitude > range) { MessageFeed.SetMessage("目标超出技能范围"); return false; }
         return true;
     }
 

@@ -1,0 +1,84 @@
+AC-1 evidence - legacy state/flow references in Assets/_Project/Scripts/**/*.cs
+task: REFACTOR-M2
+generatedAt: 2026-11-06 01:13:04
+baselineCommit: 0a1a45d7fe57f94d9432a0e597b615c7dcde47ca
+regex: GameData\.|PauseManager\.instance|GameFlow\.GameStarted|GameFlow\.instance
+scope: Assets/_Project/Scripts (recursive, *.cs)
+excludedFiles: Assets/_Project/Scripts/Core/GameData.cs, Core/GameFlow.cs, Core/PauseManager.cs (the three adapter layers)
+note: baseline = 'git grep -n -E <regex> 0a1a45d7 -- Assets/_Project/Scripts' (output prefixed by revision); current = Select-String over the working tree.
+
+=== A. BASELINE @ 0a1a45d7 ===
+0a1a45d7:Assets/_Project/Scripts/Combat/MeleeCombat.cs:139:        dmgMult += (GameData.level - 1) * 0.25f;
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:26:        if (target == null) { GameData.SetMessage("火球需要选择一个敌人目标"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:28:        if (uh == null || uh.dead) { GameData.SetMessage("火球需要选择一个敌人目标"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffectFireball.cs:30:        if (d.magnitude > range) { GameData.SetMessage("目标超出技能范围"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffects.cs:27:        if (target == null) { GameData.SetMessage("盾击需要选择一个敌人目标"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffects.cs:29:        if (uh == null || uh.dead) { GameData.SetMessage("盾击需要选择一个敌人目标"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Combat/SkillEffects.cs:31:        if (d.magnitude > range) { GameData.SetMessage("目标超出技能范围"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Core/GameFlow.cs:42:                GameFlow.GameStarted = false;
+0a1a45d7:Assets/_Project/Scripts/Core/GameFlow.cs:62:            GameData.SetMessage("全队覆没！按 R 重来");
+0a1a45d7:Assets/_Project/Scripts/Core/WaveSpawner.cs:39:            GameData.SetMessage(_waveIdx + 1 >= waves.Length
+0a1a45d7:Assets/_Project/Scripts/Core/WaveSpawner.cs:69:        GameData.SetMessage($"第 {_waveIdx + 1} 波！");
+0a1a45d7:Assets/_Project/Scripts/Player/PlayerCommandController.cs:23:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Player/SelectionManager.cs:77:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Player/SkillInputController.cs:43:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Player/SkillInputController.cs:99:                    GameData.SetMessage("未选中敌人");   // 点空地=取消，但要说明原因
+0a1a45d7:Assets/_Project/Scripts/Player/SkillInputController.cs:113:                    GameData.SetMessage("目标超出射程，正在接近");
+0a1a45d7:Assets/_Project/Scripts/Player/SkillInputController.cs:171:        string before = GameData.message;
+0a1a45d7:Assets/_Project/Scripts/Player/SkillInputController.cs:173:        if (GameData.message == before) GameData.SetMessage("技能释放失败");
+0a1a45d7:Assets/_Project/Scripts/System/Chest.cs:73:        if (item.goldValue > 0) GameData.AddGold(item.goldValue);
+0a1a45d7:Assets/_Project/Scripts/System/Chest.cs:74:        if (_inv != null && _inv.items.Count == 0) GameData.SetMessage("宝箱已取空");
+0a1a45d7:Assets/_Project/Scripts/System/DungeonDoor.cs:23:        GameData.SetMessage("按 F 进入地牢");
+0a1a45d7:Assets/_Project/Scripts/UI/CursorManager.cs:70:                if (!string.IsNullOrEmpty(inter.hint)) GameData.SetMessage(inter.hint);
+0a1a45d7:Assets/_Project/Scripts/UI/EscMenuPanel.cs:12:        if (PauseManager.instance != null) PauseManager.instance.Pause();
+0a1a45d7:Assets/_Project/Scripts/UI/EscMenuPanel.cs:17:        if (PauseManager.instance != null) PauseManager.instance.Resume();
+0a1a45d7:Assets/_Project/Scripts/UI/EscMenuPanel.cs:28:        GameFlow.GameStarted = false;
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:20:            goldText.text = $"金币：{GameData.gold}（升级费用 {GameData.LevelCost()}，按 U）";
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:22:            levelText.text = $"等级：{GameData.level}  击杀：{GameData.kills}";
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:26:            if (GameData.message != _lastMessage)
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:28:                _lastMessage = GameData.message;
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:46:            if (GameData.TryLevelUp(sw, uh))
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:47:                GameData.SetMessage($"升级！现在 {GameData.level} 级");
+0a1a45d7:Assets/_Project/Scripts/UI/HUD.cs:49:                GameData.SetMessage("金币不足！");
+0a1a45d7:Assets/_Project/Scripts/UI/InventoryUI.cs:123:            else GameData.SetMessage("背包已满！");
+0a1a45d7:Assets/_Project/Scripts/UI/InventoryUI.cs:132:            GameData.AddGold(item.goldValue);
+0a1a45d7:Assets/_Project/Scripts/UI/InventoryUI.cs:133:            GameData.SetMessage($"使用{item.itemName}，+{item.goldValue} 金币");
+0a1a45d7:Assets/_Project/Scripts/UI/MainMenuPanel.cs:16:        GameFlow.GameStarted = true;
+0a1a45d7:Assets/_Project/Scripts/UI/UIManager.cs:46:        bool gameOn = GameFlow.GameStarted
+0a1a45d7:Assets/_Project/Scripts/UI/UIManager.cs:47:                      && (GameFlow.instance == null || !GameFlow.instance.IsWiped);
+0a1a45d7:Assets/_Project/Scripts/Units/BossBrain.cs:61:        GameData.AddGold(50);
+0a1a45d7:Assets/_Project/Scripts/Units/BossBrain.cs:62:        GameData.AddKill();
+0a1a45d7:Assets/_Project/Scripts/Units/BossBrain.cs:63:        GameData.SetMessage("Boss 已讨伐！宝箱解锁 +50 金币");
+0a1a45d7:Assets/_Project/Scripts/Units/BossBrain.cs:70:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Units/BossBrain.cs:80:            GameData.SetMessage("Boss 召唤了帮手！");
+0a1a45d7:Assets/_Project/Scripts/Units/CharacterBrain.cs:127:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:84:        GameData.SetMessage($"{gameObject.name} 倒下了！选中队友点击他进行救援");
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:142:        if (wasChanneling) GameData.SetMessage("救援被打断，请重新下达救援指令");
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:170:        GameData.SetMessage("救援中……受击或移动会打断！");
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:182:                if (PauseManager.instance != null && PauseManager.instance.IsPaused) { yield return null; continue; }
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:262:        GameData.SetMessage(message);
+0a1a45d7:Assets/_Project/Scripts/Units/DownedRescue.cs:276:        GameData.SetMessage("队友救起来了！");
+0a1a45d7:Assets/_Project/Scripts/Units/MonsterBrain.cs:98:        GameData.AddGold(10);
+0a1a45d7:Assets/_Project/Scripts/Units/MonsterBrain.cs:99:        GameData.AddKill();
+0a1a45d7:Assets/_Project/Scripts/Units/MonsterBrain.cs:118:        if (PauseManager.instance != null && PauseManager.instance.IsPaused) return;
+0a1a45d7:Assets/_Project/Scripts/Units/SkillSystem.cs:40:        if (!_cds[index].Ready) { GameData.SetMessage($"{s.skillName} 冷却中"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Units/SkillSystem.cs:41:        if (mana == null) { GameData.SetMessage("蓝量不足"); return false; }
+0a1a45d7:Assets/_Project/Scripts/Units/SkillSystem.cs:48:        if (!mana.Consume(s.manaCost)) { GameData.SetMessage("蓝量不足"); return false; }
+A.count.lines = 56
+A.count.files = 21
+A.files = Assets/_Project/Scripts/Combat/MeleeCombat.cs; Assets/_Project/Scripts/Combat/SkillEffectFireball.cs; Assets/_Project/Scripts/Combat/SkillEffects.cs; Assets/_Project/Scripts/Core/GameFlow.cs; Assets/_Project/Scripts/Core/WaveSpawner.cs; Assets/_Project/Scripts/Player/PlayerCommandController.cs; Assets/_Project/Scripts/Player/SelectionManager.cs; Assets/_Project/Scripts/Player/SkillInputController.cs; Assets/_Project/Scripts/System/Chest.cs; Assets/_Project/Scripts/System/DungeonDoor.cs; Assets/_Project/Scripts/UI/CursorManager.cs; Assets/_Project/Scripts/UI/EscMenuPanel.cs; Assets/_Project/Scripts/UI/HUD.cs; Assets/_Project/Scripts/UI/InventoryUI.cs; Assets/_Project/Scripts/UI/MainMenuPanel.cs; Assets/_Project/Scripts/UI/UIManager.cs; Assets/_Project/Scripts/Units/BossBrain.cs; Assets/_Project/Scripts/Units/CharacterBrain.cs; Assets/_Project/Scripts/Units/DownedRescue.cs; Assets/_Project/Scripts/Units/MonsterBrain.cs; Assets/_Project/Scripts/Units/SkillSystem.cs
+
+=== B. CURRENT - all files (incl. adapters; includes /// doc comments) ===
+B.count.lines = 1
+Assets\_Project\Scripts\Core\PauseManager.cs:4: /// 【薄的适配层】时间看门人：保留 PauseManager.instance / IsPaused / Pause / Resume，
+
+=== C. CURRENT - excluding the 3 adapter files (AC-1 requirement) ===
+C.count.lines = 0
+C.verdict = PASS (0 call sites)
+
+=== D. CURRENT - new-contract usage counts (per new class, Scripts only, excluding adapters) ===
+RunState\. = 10
+MetaState\. = 5
+MessageFeed\. = 33
+AppFlow\. = 17
+RunFlow\. = 1

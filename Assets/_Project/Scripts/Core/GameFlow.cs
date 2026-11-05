@@ -1,14 +1,14 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-/// <summary>队伍级流程：实时统计"仍站立的玩家数"，全员倒地 → 团灭冻结，R 重开。
-/// 倒地表现/救援由 DownedRescue 负责（挂各单位上），本类不再管倒地动作。</summary>
+/// <summary>【薄的适配层】队伍级流程宿主：保留场景组件与旧的静态/实例入口，逻辑全部转发到 AppFlow / RunFlow。
+/// 原职责已拆分：场景·暂停·重开见 AppFlow，团灭判定与 R 重开见 RunFlow。
+/// 倒地表现/救援仍由 DownedRescue 负责。</summary>
 public class GameFlow : MonoBehaviour
 {
     public static GameFlow instance;
-    public static bool GameStarted;
+    public static bool GameStarted { get { return AppFlow.GameStarted; } set { AppFlow.GameStarted = value; } }
 
-    public bool IsWiped { get; private set; }
+    public bool IsWiped { get { return RunFlow.IsWiped; } }
 
     void Awake()
     {
@@ -17,49 +17,11 @@ public class GameFlow : MonoBehaviour
 
     void Start()
     {
-        GameStarted = false;
-
-        // ★ 产品自动开局：本场景存在可操作队伍时直接进入局内（无主菜单步骤）。
-        // 只有存在 team==Player 的 UnitHealth 才开局，避免无队伍场景（如 Playground）被误判团灭。
-        if (HasPlayerTeam())
-        {
-            GameStarted = true;
-            Time.timeScale = 1f;
-        }
-    }
-
-    static bool HasPlayerTeam()
-    {
-        return UnitRegistry.OfTeam(Team.Player).Count > 0;
+        RunFlow.EnterScene();
     }
 
     void Update()
     {
-        if (IsWiped)
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                GameFlow.GameStarted = false;
-                Time.timeScale = 1f;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            return;
-        }
-
-        if (!GameStarted) return;
-
-        bool anyStanding = false;
-        foreach (var h in UnitRegistry.OfTeam(Team.Player))
-        {
-            var dr = h.GetComponent<DownedRescue>();
-            bool down = dr != null && dr.IsDown;
-            if (!h.dead && !down) { anyStanding = true; break; }
-        }
-        if (!anyStanding)
-        {
-            IsWiped = true;
-            Time.timeScale = 0f;
-            GameData.SetMessage("全队覆没！按 R 重来");
-        }
+        RunFlow.Tick();
     }
 }

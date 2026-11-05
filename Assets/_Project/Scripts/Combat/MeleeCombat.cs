@@ -136,7 +136,7 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
 
     void Start()
     {
-        dmgMult += (GameData.level - 1) * 0.25f;
+        dmgMult += (MetaState.Level - 1) * 0.25f;
         if (sword != null) sword.gameObject.SetActive(true);
         if (shield != null) shield.gameObject.SetActive(true);
     }

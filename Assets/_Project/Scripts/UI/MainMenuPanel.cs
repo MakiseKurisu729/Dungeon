@@ -13,7 +13,7 @@ public class MainMenuPanel : BasePanel
     protected override void OnClose()
     {
         Time.timeScale = 1f;
-        GameFlow.GameStarted = true;
+        AppFlow.GameStarted = true;
     }
 
     // 按钮 OnClick 挂这个

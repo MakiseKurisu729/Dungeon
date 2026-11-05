@@ -70,7 +70,7 @@ public class Chest : MonoBehaviour
         {
             if (ci.data == item) { Destroy(ci.gameObject); break; }
         }
-        if (item.goldValue > 0) GameData.AddGold(item.goldValue);
-        if (_inv != null && _inv.items.Count == 0) GameData.SetMessage("宝箱已取空");
+        if (item.goldValue > 0) RunState.AddGold(item.goldValue);
+        if (_inv != null && _inv.items.Count == 0) MessageFeed.SetMessage("宝箱已取空");
     }
 }

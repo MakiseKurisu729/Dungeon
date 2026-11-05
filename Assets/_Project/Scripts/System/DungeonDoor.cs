@@ -20,7 +20,7 @@ public class DungeonDoor : MonoBehaviour
         var t = SelectionManager.instance.Primary.transform;
         if (Vector3.Distance(t.position, transform.position) > interactRange) return;
 
-        GameData.SetMessage("按 F 进入地牢");
+        MessageFeed.SetMessage("按 F 进入地牢");
         if (Input.GetKeyDown(KeyCode.F)) Enter();
     }
 

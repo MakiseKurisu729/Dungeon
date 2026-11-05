@@ -36,7 +36,7 @@ public class WaveSpawner : MonoBehaviour
         if (_timer < 0f)
         {
             _timer = waveDelay;
-            GameData.SetMessage(_waveIdx + 1 >= waves.Length
+            MessageFeed.SetMessage(_waveIdx + 1 >= waves.Length
                 ? "胜利！地牢已清空！"
                 : $"第 {_waveIdx + 2} 波即将来临……");
         }
@@ -66,6 +66,6 @@ public class WaveSpawner : MonoBehaviour
             if (uh != null && hpMul != 1f) uh.ScaleMaxHp(hpMul);
             if (uh != null) _alive.Add(uh);
         }
-        GameData.SetMessage($"第 {_waveIdx + 1} 波！");
+        MessageFeed.SetMessage($"第 {_waveIdx + 1} 波！");
     }
 }
