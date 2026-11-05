@@ -38,18 +38,24 @@ if (SkillInputController.instance != null && SkillInputController.IsTargeting)
 ### 2.1 控制器（`PlayerBase.controller`，所有者改）
 
 - 删除 `Bash`、`Skill` 两个状态与同名参数。
-- 新增 `Q`、`W`、`E`、`R` 四个状态，Trigger 同名（`Q/W/E/R`）。
+- 新增 `Q`、`W`、`E`、`R` **四个子状态机（Sub-State Machine）**，Trigger 同名（`Q/W/E/R`）。
+  - 每个子状态机内部按"段"组织，例如 `Q`：`Q_1 → Q_2 → ... → Q_n`；每段一个状态、一条 Clip。
+  - 单段技能 = 子状态机里只有一个状态；多段技能（拉弓→放箭、蓄力→释放、连段）直接加段，不改外层结构。
 - 过渡：
-  - `AnyState → Q/W/E/R`：`Has Exit Time = 0`、`Interruption Source = Current State`、`Can Transition To Self = 0`、过渡时长 0.05。
-  - `Q/W/E/R → Locomotion`：`Has Exit Time = 1`、`Exit Time = 1`（播完回待机）。
-- 保留 `Locomotion / AttackMelee / Attack_Draw / Attack_Release / Hit_A / Downed / Rise / Interact`。
-- 四个状态使用**占位 Clip**（建议同一段空/极短 Clip），真正的动作交给覆盖器。
+  - `AnyState → Q/W/E/R`（进入子状态机首段）：`Has Exit Time = 0`、`Interruption Source = Current State`、`Can Transition To Self = 0`、过渡时长 0.05。
+  - 子状态机末段 → `Locomotion`：`Has Exit Time = 1`、`Exit Time = 1`。
+  - 段间过渡：由所有者按动作设计（可 Has Exit Time，也可用 trigger/参数）。
+- 保留 `Locomotion / AttackMelee / AttackRange / Hit_A / Downed / Rise / Interact`。
+- 各段使用**占位 Clip**（建议同一段空/极短 Clip），真正的动作交给覆盖器。
+
+> 为什么用子状态机：一个 State 只能装一个 Motion，装不下两条顺序 Clip；子状态机是"一个块"、内部可放多段，正好覆盖"拉弓→放箭"和未来的多段技能。
 
 ### 2.2 覆盖器（`OC_Knight / OC_Archer / OC_Mage`，所有者改）
 
-- 每个覆盖器把 Q/W/E/R 四个占位 Clip 映射到该角色的技能动作切片。
+- 每个覆盖器把 Q/W/E/R **每个段**的占位 Clip 映射到该角色的动作切片。
+- 槽位 = 一组 Clip（`SlotClipSet`）；单段槽 1 条，多段槽 N 条。
 - 通用动画器不再出现任何角色专属动作；换角色只改覆盖器。
-- 这套文件已经存在（`Assets/_Project/Art/Animations/OC_*.overrideController`），只是当前覆盖项里没有"技能槽"概念。
+- 这套文件已经存在（`Assets/_Project/Art/Animations/OC_*.overrideController`），只是当前覆盖项里没有"技能槽/段"概念。
 
 ### 2.3 槽位 = 动画通道（代码）
 
@@ -65,16 +71,16 @@ if (SkillInputController.instance != null && SkillInputController.IsTargeting)
 - 换技能 = 改 `SkillData` 槽位 + 调 `SetSlotClip`；不需要重建整个控制器。
 - 注意：`AnimatorOverrideController` 是资产实例，运行时修改会影响共享该 override 的所有实例；若将来同角色多单位各自不同技能，需要每个实例克隆一份 override（届时再评估）。
 
-### 2.5 远程攻击单状态化（新决策：合并 `Attack_Draw` + `Attack_Release`）
+### 2.5 远程攻击：用子状态机收口（新决策：不烘 Clip）
 
-**结论：可以合并，推荐在阶段 2 与 QWER 一起做。**
+**结论：保留 `Ranged_Bow_Draw` / `Ranged_Bow_Release` 两条独立 Clip，用 `AttackRange` 子状态机包起来；不烘 Clip。**
 
-- 依据：`RangedCombat.Update` 本来就是按动画 `normalizedTime` 轮询发射窗口（`releaseWindowStart/End`），两个状态只是历史拆分；前摇/后摇是**同一个 Clip 内的两个阶段**，不需要两个状态。
-- 单状态做法：`AttackRange` 一个状态 + 一个完整"拉弓→放箭→收招"Clip；发射时刻 = 该状态 `normalizedTime ∈ [releaseWindowStart, releaseWindowEnd]`。
-- 代码改动：`RangedCombat` 增加显式单状态模式——`drawStateName` 留空时，直接读 `releaseStateName` 的**原始** `normalizedTime` 与窗口比较（不再走 `releasePoint` 映射）；`IsAttackAnimPlaying` 同步。
-- 技能远程（弓箭手技能）：同理，槽位状态 `Q` 用完整"拉弓→放箭"Clip；新增 `RangedSkillEffect`（或复用 Fireball 的时序），在归一化窗口生成箭矢，不再需要两个状态。
-- 影响：`SPEC01` 的 `Clock.RangedOneShotPerCycle`、`Attack.DualPathUnified` 要从"draw→release"口径改为"单状态窗口"；`FND00B06` 的 `RequiredStates` 去掉 `Attack_Draw`。这类测试改写放在阶段 2 同批完成。
-- 风险：两个远程角色（弓手/法师）的发射窗口要重新标定一次；箭矢/法术的命中时序仍按窗口，不受各角色剪辑长度影响。
+- 原因：一个 State 只能装一个 Clip；两条 Clip 是同一个动作的前/后段，子状态机正好承载，且不损失接缝的 0.15s 过渡。
+- 结构：`AttackRange` 子状态机内 `Draw → Release`；外部仍是一个入口（触发器 `AttackRange`），`RangedCombat` 继续按段名读 `normalizedTime`。
+- 技能远程（弓箭手技能）：槽位 `Q` 子状态机内同样放 `Draw → Release`（或更多段）；新增 `RangedSkillEffect` 在释放段的归一化窗口生成箭矢。
+- 代码改动：`RangedCombat` 支持"段名列表"（如 `drawStateName` / `releaseStateName` 保持，增加 `segmentStateNames` 供多段技能）；发射窗口仍按释放段 `normalizedTime`。
+- 影响：`SPEC01` 的 `Clock.RangedOneShotPerCycle`、`Attack.DualPathUnified` 保持"draw→release"口径但状态名改为子状态机内的段名；`FND00B06` 的 `RequiredStates` 需要同步。测试改写放阶段 2 同批。
+- 风险：段间过渡/相位由所有者按动作调；代码只认段名与窗口，不再假设"两状态"。
 
 ## 3. 改动清单
 

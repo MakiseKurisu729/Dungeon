@@ -1,0 +1,22 @@
+---
+name: Feature Spec
+description: 【大脑】为一个新 feature 写 spec（TASK 三节 + AC 表）。触发词：写 spec、开新功能、新需求、立 TASK。
+---
+
+## 触发
+
+用户提出新功能 / 新需求，或说“写 spec”“开新功能”“立个 TASK”。
+
+## 步骤
+
+1. 读 `Docs/Specs/constitution.md`（mission / scope / tech stack）与 `Docs/02` 的当前里程碑；只读到能判断“在不在范围内”为止。
+2. 先列**歧义与缺项**（≤5 条），能自行判定的直接写假设，判不了的写进工单“信息不足”并提问。
+3. 套 `Docs/Handoff/TASK_TEMPLATE.md` 写三节：§1 需求（R-1..n + 不在范围）→ §2 方案（A/B + 取舍 + 数据流 + 影响面）→ §3 验证（AC 表：Given/When/Then + 断言 ID + 证据路径）。
+4. 自检：每条 AC 可断言、有断言 ID、有证据路径；§2 有至少两个方案；§4 写清绝不触碰与熔断。
+5. 交所有者审 spec（只审需求 / 取舍 / AC），批准后才派单。
+
+## 规则
+
+- 硬约束见 `AGENTS.md`，模板与 AC/讲稿细则见 `Docs/Handoff/workflow-rules.md` §1、§2。
+- 不复制 `00`/`01`/`02` 的正文，只引用编号与节号。
+- 信息不足就停，不猜需求、不扩大范围。

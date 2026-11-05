@@ -1,81 +1,48 @@
-# CURRENT — 当前交接入口
+# CURRENT — 当前状态指针
 
-> 最后更新：2026-11-05（**SPEC-01 已收口 `Done`**：目检 3/3 全过、外部顾问复核两份 REPORT 通过、【大脑】终审通过；返工子单 SPEC-01.1 一并闭合。FND-02B 仍 `In Review`，待 V02B-1/2/3 人工目检 + 外部顾问复核 + 终审）
-> 新会话从这里开始，不要复制设计文档或聊天记录到这里。
+> 最后更新：2026-11-05
+> 新会话：读本文件 → 打开“当前 feature”的 TASK → 按“阶段”继续。**不要翻旧聊天。**
+> 规则见 `AGENTS.md`；目标/范围见 `Docs/Specs/constitution.md`。
 
 ## 基线
 
 | 项 | 值 |
 |---|---|
-| 当前分支 | `docs/fnd-00-baseline` |
-| FND-00A 起始提交 | `e1e197dca373636a130c161b73246d8a373acc7f` |
-| FND-00B-01R 证据提交 | `af07ddb1130bf23e82847c99183ef86c850f5cc0` |
-| FND-00B-01R 文档改判提交 | `28bdaced`（复审指定短 SHA） |
-| FND-00B-03 验收提交 | `bf21b78dd5e41c80697c333c4f891f10f3852405` |
-| 当前 Unity | `2022.3.62f3c1` |
-| 目标 Unity | `6.3 LTS`（**尚未迁移**） |
+| 分支 | `docs/fnd-00-baseline` |
+| HEAD | `1bec9c93`（技能修复批次） |
+| Unity | `2022.3.62f3c1`（目标 6.3，未迁移） |
 
-## 任务状态
+## 未提交批次
 
-- **FND-01 NavMesh 诊断与修复 — `Done`。**
-  - 工单：`Docs/Handoff/TASK_FND-01_NavMesh诊断与修复.md`
-  - 验收结论：2026-11-03 **用户人工验收通过**；Unity 内真实右键移动正常。
-  - FND-00B 第 2 项已按自动化证据和该人工结论改判通过；原失败记录保留，其他项不连带改判。
-- FND-00A 建立文档与事实基线 — **已完成**（`Done`，K3.1 独立审查通过）。
-- **FND-00B 现有行为验收 — `Done`，2026-11-04【大脑】复审通过并收口。**
-  - 主任务：`Docs/Handoff/TASK_FND-00B_现有行为验收.md`；QA：`Docs/QA/FND-00B_现有行为验收.md`。
-  - 最终统计：**通过 4｜部分通过 1｜失败 5｜未测试 1**；第 10 项目标登记不计入统计。
-  - 第 4 项普攻通过、第 6 项动画失败均有连续两次断言；第 11 项已登记无入口/待实现差距，QA 保持未测试。
-  - 补验工单：`Docs/Handoff/TASK_FND-00B-06_普攻与动画补验.md`（已执行并复审通过；两个 `.csproj` 经用户追认纳入本次提交，V06-1 待目检）。
-  - `TASK_FND-00B-02_移动验收.md` 已作废、未执行，由 03 吸收。
-- **FND-02 重构与最小可玩原型 — `In Progress`（FND-02A `Done`；FND-02B 工单 `Ready`，待阶段 1 只读影响面确认）。**
-  - 规划：`Docs/Handoff/TASK_FND-02_重构与最小可玩原型规划.md`。
-  - **FND-02A MVP 产品启动与固定遭遇装配 — `Done`**（2026-11-04 终审收口：自动断言连续 2 次 7/7 通过、V02A-1 人工目检通过、外部顾问复核通过；工单 `Docs/Handoff/TASK_FND-02A_MVP产品启动与固定遭遇装配.md`，报告 `Docs/Handoff/REPORT_FND-02A.md`）。
-  - **FND-02B 玩家动画机整备与攻击时钟对齐 — `In Review`**（提案 `Docs/Handoff/PROPOSAL_FND-02B.md` `Approved`；正式工单 `Docs/Handoff/TASK_FND-02B_玩家动画机整备与攻击时钟对齐.md`，高风险。阶段 1 三项已批准；阶段 2 已执行：red 有效、green run1~run3 全 7/7 通过，报告 `Docs/Handoff/REPORT_FND-02B.md`。**OC 换 Clip 未执行**：缺"角色→Clip/GUID"映射，信息不足，待用户补映射后单独派单。未 Done，待 V02B-1/2/3 人工目检 + 外部顾问复核 +【大脑】终审）。
-  - MVP：走图 → 遇怪 → 普攻战斗 → 宝箱 → 团灭结束 → `R` 重来；不做大爆炸重写。
-   - **SPEC-01 动画机单段攻击与飘字系统 — `Done`**（所有者定案→工单 `Docs/Handoff/TASK_SPEC-01_动画机单段攻击与飘字系统.md`，高风险。开工前置：所有者手动完成基座/OC 资产改动；决策三"资产管辖权归所有者、执行者资产只读"新规已入工单，待下次文档批次写入 AGENTS.md「Do not」与事实基线 §8）。2026-11-05 **终审通过**：`S01-1`/`S01-2`/`S01-3` 目检全过、外部顾问复核 `REPORT_SPEC-01`＋`REPORT_SPEC-01.1` 全过；断言链完整（SPEC-01 red 3 fail → green 7/7×3；SPEC-01.1 red 仅 `UI.SpawnAnchor` fail → green 8/8×2）；`S01-2` 出生点由返工子单 SPEC-01.1 闭合；飘字样式定稿**恶意不息版**，原神草案作废。
-  - **SPEC-01.1 飘字出生点修复 — `Done`**（`S01-2` 目检未过返工，中风险；工单 `Docs/Handoff/TASK_SPEC-01.1_飘字出生点修复.md`；根因＝实例 `anchorMin/Max=(0,0)` 与画布中心系 local 坐标错配，系统性左下偏移半屏；修复＝`DamageNumber.cs:259` 一处锚点改 `(0.5,0.5)`，生产 diff +3 行；red 仅 `UI.SpawnAnchor` product_fail（实测偏移恰 400px＝半屏）→ green×2 均 8/8 pass、距离≈0；报告 `Docs/Handoff/REPORT_SPEC-01.1.md`。2026-11-05 **终审通过并闭合**（`S01.1-1` 目检通过、外部顾问复核通过），作为 SPEC-01 返工子单一并收口）。
-  - **SPEC-01-CLEANUP 收口尾巴清理 — `In Progress`**（长任务模式三步夜间批，低风险；工单 `Docs/Handoff/TASK_SPEC-01-CLEANUP.md`；Step1 `SwordSwing`→`MeleeCombat`／Step2 FND00B06 硬编码对齐＋FND02B 过时 UI 断言（方案 A 删除）／Step3 API 文档同步；回滚锚 `7cf874f7`；**代码侧已落地**：`SwordSwing`→`MeleeCombat`（guid 未变）、FND00B06 两处硬编码对齐、FND02B 删除过时 UI 断言、API 文档同步；`SPEC01` 8/8 绿、`FND02B` 无新增红；**待决策**：FND02B 3 条过时断言（1D/单段口径）＋FND00B06 2 红（均基线既有）；**收尾单 `TASK_SPEC-01-CLEANUP-2` 已执行**：FND02B 套件整体退役（3×8 覆盖对照确认无独有）、FND00B06 `Animation.Attack` 转绿（单段 `AttackMelee` 口径）、`Animation.Hit` 冻结待所有者编辑器验证；SPEC01 8/8、FND00B06 11 pass/1 fail（冻结）/2 observed；**未 Done**（待目检清单）。
-  - 前三草案：FND-02A 产品启动与固定遭遇（`Done`） → FND-02B 普攻/伤害/基础动画（`Ready`） → FND-02C 宝箱装配与真实交互；后续另派团灭重来与总验收。
-  - 2026-11-04 修订：A～C 草案均补“架构依据／类型”；§4.3 新增 SD-01～SD-04 结构债清单，按依赖排序并回链工单（SD-01 已随 FND-02A 解除）。
-  - 生产改动前置：FND-00B 已收口，仍须逐单授权。
+- **文档批次（WF-02 + WF-03）**：`AGENTS.md`、`workflow-rules.md`、`Docs/Specs/`、`Docs/Learning/`、`TASK/REPORT_TEMPLATE`、两个新 skill、`Docs/README`、`03/05` 归档、`ADR-0003`。待所有者 GitHub Desktop 提交。
+- **所有者测试改动**：`DungeonWorld.unity`（骷髅移到 z=15.8、旋转 180°）、`PlayerBase.controller`（Bash/Skill 速度参数）、两个 `.csproj`。待所有者决定提交或保留。
+- 提交时把文档批次与 `Assets/` 改动分开。
 
-| 批次 | 状态 | 批末复审结论 |
-|---|---|---|
-| FND-02A MVP 产品启动与固定遭遇装配 | `Done`（双重终审通过） | red 有效；green 连续 2 次 7/7 通过；V02A-1 人工目检通过（表现层 6 条缺陷转入 FND-02B）；外部顾问认可 `CursorManager` 陈旧绑定登记项 |
-| FND-02B 玩家动画机整备与攻击时钟对齐 | 已执行，**待目检＋顾问＋终审**（未 Done） | red 1 pass/6 product_fail 有效（infra=0）；green run1~run3 连续 7/7 通过且数据一致；diff 范围＝批准的 1 `.controller`＋6 脚本（OC 换 Clip 信息不足未执行）；报告 `REPORT_FND-02B.md` |
-| FND-00B-06 普攻与动画补验 | 已复审通过，FND-00B 收口 | 两次各 14 条断言一致：普攻通过、动画失败；REPORT 缺项已补正；两个 `.csproj` 经用户追认纳入提交，V06-1 待目检 |
-| FND-00B-03 操作与战斗表现 | 已复审，待补验 | 第 2 项改判通过；第 3、5 项保持失败且不因 NavMesh 连带复验；第 4、6 项保持未测试并列入补验 |
-| FND-00B-04 场景交互与救援 | 已完成并登记 | 宝箱未装配；迷雾部分通过且生产遮罩缺失；救援现状通过。V04-1 记录“未见遮罩”，未填细项标待目检 |
-| WF-01 工作流加固 | 已完成，待用户审阅提交 | 流程规则批次（非玩法）：AGENTS.md §4.1–4.5 与执行者协议、事实基线 §8、`workflow-rules.md`、`opencode.json`、`.opencode/skills/` 三个 Skill、`.opencode/agents/executor.md`；任务书 `Docs/Handoff/WF-01_工作流加固任务书.md`。已派旧工单（含 FND-00B-06）不追溯 N≥3 |
-| WF-01 收官（模型与钱包路由） | 已完成，待用户审阅提交 | Zen Opus 退役为“仅高风险终审”；日常大脑切换为 K3.1 主会话 + Flash 子代理（`opencode-go/deepseek-v4.1-flash`）模式；Flash 关思考已回滚（引发工具调用循环）；钱包路由见事实基线 §8。FND-00B-06 两次试派单均在阶段 1 中止，未改文件，仍 `Ready` |
-| FND-00B-05 流程与未实现项观察 | 已完成并登记 | 传送无入口；团灭产品链未触发；怪物零生成/零遭遇，原因未确认。V05-1 记录无法测试团灭，未填画面细项标待目检 |
+## 当前 feature
 
-- 第 10 项救援目标仍是目标差距登记，不执行、不计入测试统计。
-- 前置检查继续采用：**“工单文件自身与 Docs/Handoff/、Docs/QA/ 下新增文件不计入工作区脏检查”**；其他脏项仍须记录并交用户处理。
+- **无进行中 feature。**
+- **下一步**：`SKILL-TOOLS-01` — 调试键位（F5 生成骷髅 / F9 重载 Play / F10 重置玩家）+ SPEC01 动态遭遇基线。状态 `Ready`。
+- **再下一步**：`SKILL-ANIM-01` — 瞄准态攻击指针 + 点击反馈（SPEC01 12/12）。
+- **再下一步**：`SKILL-ANIM-02` — Q/W/E/R 子状态机 + 远程 `AttackRange` 子状态机（高风险，资产由所有者改，ADR-0003 已记录）。
+
+## 阶段与已知事实
+
+- 技能修复批次已提交：Q 输入组件、W 拆分、扣蓝顺序、Hit 夹具；SPEC01 10/10×3、FND00B06 12 pass/0 fail。
+- 场景骷髅被所有者移到 `z=15.8` 用于手动测试；`SPEC01 Regression.FND02A` 仍写死 `(-2.72,0,-12)`，因此 `SKILL-TOOLS-01` 要改成动态位置 + 相对接近。
+- 工作流已对齐 SDD：TASK 三节（需求/方案/验证 AC 表）→ 审 spec → 实现 → AC 验收 → 讲稿 → 提交 → Replan。
+
+## 已收口
+
+- `FND-00B`、`FND-01`、`FND-02A`、`SPEC-01`、`SPEC-01.1`、`SPEC-DIAG-SKILL`（技能输入 / W 拆分 / 扣蓝 / Hit 夹具）。
+- `FND-02B` 仍 `In Review`（历史批次，优先级低于当前技能线；待 V02B 目检 + 顾问 + 终审）。
 
 ## 当前边界
 
-- FND-01 的修复授权已结束；本次只改判、登记和规划，未授权修 Bug、装配场景或重构代码。
-- FND-00B 不把“未生成或怪物无法移动”写成原因结论；未填目检细项不得由 AI 补写。
-- FND-02 草案不等于实施许可；禁止大爆炸重写、目录迁移、安装新包、Unity 6.3 迁移及任务外 Unity 资产修改。
-- 执行者 Unity 操作前置与隔离副本规则以根目录 `AGENTS.md` 的“会话角色协议”为准。
-
-## 事实入口
-
-`Docs/00_项目事实基线.md`
-
-## 当前风险
-
-- 第 4 项通过、第 6 项失败已有两次证据；V06-1 待目检，不得由 AI 补写。两个 `.csproj` 自动改动已经用户追认，后续同类变化按事实基线 §8 隐含延伸规则处理。
-- 镜头与技能保持失败；迷雾遮罩缺失、宝箱未装配、传送无入口、团灭产品链未触发均为已登记差距。
-- 场景怪物 0、生成器 0、20s 新增 0；原因未确认，不得写成“未生成或怪物无法移动”的根因结论。
-- V04-1/V05-1 的记录状态已回填，但未填画面细项仍标待目检，不补造证据。
-- FND-02 若扩大为全系统重构会偏离 MVP；生产改动必须逐单审查。
-- 旧文档与根目录旧 `docx` 不作为当前事实或开工依据。
+- 场景、预制体、Animator、`.asset` 归所有者；AI 只出清单。
+- 不装包、不迁移 Unity 6.3、不修改任务外文件。
+- 资产改动与文档批次分开提交。
 
 ## 下一会话第一件事
 
-1. 用户完成 V02B-1/2/3 人工目检（`Docs/QA/Evidence/FND-02B/02B_人工目检.md` 仅留“待目检”，严禁代填）。
-2. 用户送外部顾问复核 REPORT_FND-02B.md 完整 diff，随后【大脑】终审；三项全过才可标记 FND-02B `Done`。
-3. 若需执行“OC 换 Clip”，由用户提供“角色 → Clip 资产路径/GUID”映射后单独派单；无映射则正式放弃该项并登记。
+1. 提交文档批次（标题/正文由大脑给）。
+2. 派 `SKILL-TOOLS-01`；完成后跑 `SKILL-ANIM-01`。
