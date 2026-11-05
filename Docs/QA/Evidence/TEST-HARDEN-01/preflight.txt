@@ -1,0 +1,30 @@
+﻿TEST-HARDEN-01 / AC-1 Harden.Preflight - Unity Editor.log excerpt
+source: C:\Users\lll\AppData\Local\Unity\Editor\Editor.log
+scenario: DIAG_BatchAcceptance.cs touched (compile in flight) -> menu Tools/QA/In-Editor/SPEC01 clicked immediately
+
+=== around line 30684 ===
+	PostProcessAllAssets: 33.968ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.932ms
+	UnloadStreamsBegin: 0.103ms
+	PersistCurrentRevisions: 0.435ms
+	UnloadStreamsEnd: 0.094ms
+	GenerateScriptTypeHashes: 14.643ms
+	Untracked: 1376.678ms
+[QA][INEDITOR] preflight ok (waited=11.5s)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+
+=== around line 31501 ===
+	PostProcessAllAssets: 31.520ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.714ms
+	UnloadStreamsBegin: 0.445ms
+	PersistCurrentRevisions: 0.456ms
+	UnloadStreamsEnd: 0.122ms
+	GenerateScriptTypeHashes: 4.520ms
+	Untracked: 1322.549ms
+[QA][INEDITOR] preflight ok (waited=11.7s)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+
+[reload/timeout/abort] [QA][INEDITOR] preflight re-armed after reload; task=SPEC01
+[reload/timeout/abort] [QA][INEDITOR] preflight re-armed after reload; task=SPEC01

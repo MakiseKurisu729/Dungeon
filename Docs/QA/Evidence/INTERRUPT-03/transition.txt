@@ -1,0 +1,46 @@
+﻿INTERRUPT-03 / AC-1 transition readback
+unity=2022.3.62f3c1  (read via UnityEditor API, not hand-edited YAML)
+file=Assets/_Project/Art/Animations/PlayerBase.controller, layer=Base Layer
+
+[Locomotion -> AttackMelee]  BEFORE / AFTER
+  m_InterruptionSource : None(0) -> Destination(2)
+  m_TransitionDuration : 0.25        (unchanged; TASK/dispatch said 0.15, actual asset value is 0.25)
+  m_ExitTime           : 0.73214287   (unchanged)
+  m_HasExitTime        : False        (unchanged)
+  m_HasFixedDuration   : True         (unchanged)
+  m_OrderedInterruption: True         (unchanged)
+  m_CanTransitionToSelf: True         (unchanged)
+  conditions           : [If:AttackMelee] (unchanged, single transition)
+
+[all Locomotion transitions after change]
+  Locomotion -> Interact   dur=0.1  exitT=0.7321429 hasExit=False isrc=None        cond=[If:Interact]
+  Locomotion -> Attack_Draw dur=0.15 exitT=0.7321429 hasExit=False isrc=None        cond=[If:AttackRange]
+  Locomotion -> Skill       dur=0.05 exitT=0.7321429 hasExit=False isrc=None        cond=[If:Skill]
+  Locomotion -> Bash        dur=0.05 exitT=0.7321429 hasExit=False isrc=None        cond=[If:Bash]
+  Locomotion -> AttackMelee dur=0.25 exitT=0.7321429 hasExit=False isrc=Destination cond=[If:AttackMelee]   <== changed field only
+  Locomotion -> Hit_A       dur=0.05 exitT=0.7321429 hasExit=False isrc=None        cond=[If:Hit]
+
+[git diff -- Assets/_Project/Art/Animations/PlayerBase.controller]
+@@ -578,7 +578,7 @@ AnimatorStateTransition:
+   m_ExitTime: 0.73214287
+   m_HasExitTime: 0
+   m_HasFixedDuration: 1
+-  m_InterruptionSource: 0
++  m_InterruptionSource: 2
+   m_OrderedInterruption: 1
+   m_CanTransitionToSelf: 1
+@@ -1366,7 +1366,7 @@ AnimatorStateMachine:
+   - serializedVersion: 1
+     m_State: {fileID: -8672175783515049069}
+-    m_Position: {x: 80, y: 1050, z: 0}
++    m_Position: {x: 80, y: 1020, z: 0}
+
+[side effect note]
+  Unity re-serialised the Rise state node y=1050 -> 1020 on SaveAssets. Functional fields untouched.
+  Attempt to write 1050 back via AnimatorStateMachine API was re-normalised to 1020 by Unity on save.
+  Cosmetic graph layout only; owner may ignore this hunk or nudge the node in the Animator window.
+
+[Skeleton.controller audit (AC-4 premise)]
+  params: Speed, AttackMelee, AttackRanged, Hit, Interrupt, Die, AttackSpeed
+  -> "Interrupt" DOES exist (contradicts TASK/dispatch premise "Skeleton.controller has no Interrupt parameter")
+  transitions conditioned on Interrupt: Attack_Melee -> Locomotion, Shoot -> Locomotion

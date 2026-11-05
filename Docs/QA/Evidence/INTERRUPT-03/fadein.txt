@@ -1,0 +1,230 @@
+INTERRUPT-03 / AC-2 Interrupt.FadeInWindow  driver=MCP execute_code, play mode, EditorApplication.update tick
+unity=2022.3.62f3c1 scene=DungeonWorld
+[PRE] Locomotion->AttackMelee isrc=Destination dur=0.25 exitT=0.7321429 hasExit=False
+unit=Knight_Unit target=Mage_Unit dummy (revived, maxHp+10000, team=Player) -> no auto-acquire; other brains+agents disabled
+assert: move within fade-in -> current=Locomotion && !IsInTransition within 0.15s, target hp unchanged through move+1.5s
+[SETUP] target=Mage(maxHp+10000,team=Player); move dest=home+20m; ordered target cleared before each order; assert<=0.15s
+--- run=1 moveAt=0.05s hpStart=15070
+    [0.010s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [288.253s] cur=Locomotion next=AttackMelee it=True norm=0.047 timer=0.046 hp=15070
+    [MOVE] attackTimer=0.050 cur=Locomotion next=AttackMelee norm=0.052 inTransition=True
+    [0.048s] cur=Locomotion next=Locomotion it=True norm=0.057 timer=-1.000 hp=15070
+    [0.101s] cur=Locomotion next=Locomotion it=True norm=0.057 timer=-1.000 hp=15070
+    [SETTLE] 0.106s
+    [0.155s] cur=Locomotion next=- it=False norm=0.146 timer=-1.000 hp=15070
+    [0.205s] cur=Locomotion next=- it=False norm=0.198 timer=-1.000 hp=15070
+    [0.257s] cur=Locomotion next=- it=False norm=0.252 timer=-1.000 hp=15070
+    [0.307s] cur=Locomotion next=- it=False norm=0.307 timer=-1.000 hp=15070
+    [0.358s] cur=Locomotion next=- it=False norm=0.364 timer=-1.000 hp=15070
+    [0.413s] cur=Locomotion next=- it=False norm=0.428 timer=-1.000 hp=15070
+    [0.466s] cur=Locomotion next=- it=False norm=0.491 timer=-1.000 hp=15070
+    [0.516s] cur=Locomotion next=- it=False norm=0.554 timer=-1.000 hp=15070
+    [0.571s] cur=Locomotion next=- it=False norm=0.622 timer=-1.000 hp=15070
+    [0.626s] cur=Locomotion next=- it=False norm=0.691 timer=-1.000 hp=15070
+    [0.677s] cur=Locomotion next=- it=False norm=0.755 timer=-1.000 hp=15070
+    [0.729s] cur=Locomotion next=- it=False norm=0.820 timer=-1.000 hp=15070
+    [0.782s] cur=Locomotion next=- it=False norm=0.886 timer=-1.000 hp=15070
+    [0.835s] cur=Locomotion next=- it=False norm=0.952 timer=-1.000 hp=15070
+    [0.888s] cur=Locomotion next=- it=False norm=1.018 timer=-1.000 hp=15070
+    [0.942s] cur=Locomotion next=- it=False norm=1.086 timer=-1.000 hp=15070
+    [0.993s] cur=Locomotion next=- it=False norm=1.149 timer=-1.000 hp=15070
+    [1.046s] cur=Locomotion next=- it=False norm=1.216 timer=-1.000 hp=15070
+    [1.097s] cur=Locomotion next=- it=False norm=1.279 timer=-1.000 hp=15070
+    [1.149s] cur=Locomotion next=- it=False norm=1.344 timer=-1.000 hp=15070
+    [1.201s] cur=Locomotion next=- it=False norm=1.409 timer=-1.000 hp=15070
+    [1.254s] cur=Locomotion next=- it=False norm=1.476 timer=-1.000 hp=15070
+    [1.305s] cur=Locomotion next=- it=False norm=1.540 timer=-1.000 hp=15070
+    [1.359s] cur=Locomotion next=- it=False norm=1.607 timer=-1.000 hp=15070
+    [1.411s] cur=Locomotion next=- it=False norm=1.672 timer=-1.000 hp=15070
+    [1.465s] cur=Locomotion next=- it=False norm=1.739 timer=-1.000 hp=15070
+
+  [RESULT] run=1 moveAt=0.05s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.106s hp=15070->15070 damaged=False verdict=PASS
+--- run=2 moveAt=0.05s hpStart=15070
+    [0.005s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [2.158s] cur=Locomotion next=AttackMelee it=True norm=0.048 timer=0.047 hp=15070
+    [MOVE] attackTimer=0.051 cur=Locomotion next=AttackMelee norm=0.052 inTransition=True
+    [0.048s] cur=Locomotion next=Locomotion it=True norm=0.055 timer=-1.000 hp=15070
+    [0.100s] cur=Locomotion next=Locomotion it=True norm=0.055 timer=-1.000 hp=15070
+    [SETTLE] 0.104s
+    [0.152s] cur=Locomotion next=- it=False norm=0.145 timer=-1.000 hp=15070
+    [0.203s] cur=Locomotion next=- it=False norm=0.197 timer=-1.000 hp=15070
+    [0.253s] cur=Locomotion next=- it=False norm=0.251 timer=-1.000 hp=15070
+    [0.303s] cur=Locomotion next=- it=False norm=0.305 timer=-1.000 hp=15070
+    [0.356s] cur=Locomotion next=- it=False norm=0.364 timer=-1.000 hp=15070
+    [0.406s] cur=Locomotion next=- it=False norm=0.422 timer=-1.000 hp=15070
+    [0.458s] cur=Locomotion next=- it=False norm=0.484 timer=-1.000 hp=15070
+    [0.509s] cur=Locomotion next=- it=False norm=0.547 timer=-1.000 hp=15070
+    [0.560s] cur=Locomotion next=- it=False norm=0.610 timer=-1.000 hp=15070
+    [0.611s] cur=Locomotion next=- it=False norm=0.675 timer=-1.000 hp=15070
+    [0.665s] cur=Locomotion next=- it=False norm=0.742 timer=-1.000 hp=15070
+    [0.717s] cur=Locomotion next=- it=False norm=0.806 timer=-1.000 hp=15070
+    [0.768s] cur=Locomotion next=- it=False norm=0.871 timer=-1.000 hp=15070
+    [0.818s] cur=Locomotion next=- it=False norm=0.934 timer=-1.000 hp=15070
+    [0.871s] cur=Locomotion next=- it=False norm=0.999 timer=-1.000 hp=15070
+    [0.925s] cur=Locomotion next=- it=False norm=1.066 timer=-1.000 hp=15070
+    [0.976s] cur=Locomotion next=- it=False norm=1.130 timer=-1.000 hp=15070
+    [1.026s] cur=Locomotion next=- it=False norm=1.193 timer=-1.000 hp=15070
+    [1.083s] cur=Locomotion next=- it=False norm=1.264 timer=-1.000 hp=15070
+    [1.135s] cur=Locomotion next=- it=False norm=1.329 timer=-1.000 hp=15070
+    [1.189s] cur=Locomotion next=- it=False norm=1.397 timer=-1.000 hp=15070
+    [1.241s] cur=Locomotion next=- it=False norm=1.462 timer=-1.000 hp=15070
+    [1.295s] cur=Locomotion next=- it=False norm=1.530 timer=-1.000 hp=15070
+    [1.348s] cur=Locomotion next=- it=False norm=1.596 timer=-1.000 hp=15070
+    [1.400s] cur=Locomotion next=- it=False norm=1.661 timer=-1.000 hp=15070
+    [1.454s] cur=Locomotion next=- it=False norm=1.728 timer=-1.000 hp=15070
+
+  [RESULT] run=2 moveAt=0.05s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.104s hp=15070->15070 damaged=False verdict=PASS
+--- run=3 moveAt=0.05s hpStart=15070
+    [0.005s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [2.164s] cur=Locomotion next=AttackMelee it=True norm=0.050 timer=0.049 hp=15070
+    [MOVE] attackTimer=0.053 cur=Locomotion next=AttackMelee norm=0.055 inTransition=True
+    [0.049s] cur=Locomotion next=Locomotion it=True norm=0.058 timer=-1.000 hp=15070
+    [0.100s] cur=Locomotion next=Locomotion it=True norm=0.058 timer=-1.000 hp=15070
+    [SETTLE] 0.104s
+    [0.150s] cur=Locomotion next=- it=False norm=0.143 timer=-1.000 hp=15070
+    [0.201s] cur=Locomotion next=- it=False norm=0.195 timer=-1.000 hp=15070
+    [0.255s] cur=Locomotion next=- it=False norm=0.252 timer=-1.000 hp=15070
+    [0.308s] cur=Locomotion next=- it=False norm=0.309 timer=-1.000 hp=15070
+    [0.359s] cur=Locomotion next=- it=False norm=0.366 timer=-1.000 hp=15070
+    [0.409s] cur=Locomotion next=- it=False norm=0.425 timer=-1.000 hp=15070
+    [0.462s] cur=Locomotion next=- it=False norm=0.488 timer=-1.000 hp=15070
+    [0.512s] cur=Locomotion next=- it=False norm=0.550 timer=-1.000 hp=15070
+    [0.563s] cur=Locomotion next=- it=False norm=0.613 timer=-1.000 hp=15070
+    [0.613s] cur=Locomotion next=- it=False norm=0.676 timer=-1.000 hp=15070
+    [0.665s] cur=Locomotion next=- it=False norm=0.741 timer=-1.000 hp=15070
+    [0.715s] cur=Locomotion next=- it=False norm=0.803 timer=-1.000 hp=15070
+    [0.768s] cur=Locomotion next=- it=False norm=0.870 timer=-1.000 hp=15070
+    [0.821s] cur=Locomotion next=- it=False norm=0.936 timer=-1.000 hp=15070
+    [0.873s] cur=Locomotion next=- it=False norm=1.001 timer=-1.000 hp=15070
+    [0.927s] cur=Locomotion next=- it=False norm=1.068 timer=-1.000 hp=15070
+    [0.977s] cur=Locomotion next=- it=False norm=1.132 timer=-1.000 hp=15070
+    [1.031s] cur=Locomotion next=- it=False norm=1.199 timer=-1.000 hp=15070
+    [1.085s] cur=Locomotion next=- it=False norm=1.266 timer=-1.000 hp=15070
+    [1.138s] cur=Locomotion next=- it=False norm=1.332 timer=-1.000 hp=15070
+    [1.190s] cur=Locomotion next=- it=False norm=1.398 timer=-1.000 hp=15070
+    [1.241s] cur=Locomotion next=- it=False norm=1.461 timer=-1.000 hp=15070
+    [1.293s] cur=Locomotion next=- it=False norm=1.526 timer=-1.000 hp=15070
+    [1.345s] cur=Locomotion next=- it=False norm=1.591 timer=-1.000 hp=15070
+    [1.397s] cur=Locomotion next=- it=False norm=1.656 timer=-1.000 hp=15070
+    [1.448s] cur=Locomotion next=- it=False norm=1.720 timer=-1.000 hp=15070
+    [1.499s] cur=Locomotion next=- it=False norm=1.784 timer=-1.000 hp=15070
+
+  [RESULT] run=3 moveAt=0.05s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.104s hp=15070->15070 damaged=False verdict=PASS
+--- run=4 moveAt=0.10s hpStart=15070
+    [0.005s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [2.163s] cur=Locomotion next=AttackMelee it=True norm=0.051 timer=0.049 hp=15070
+    [2.213s] cur=Locomotion next=AttackMelee it=True norm=0.098 timer=0.100 hp=15070
+    [MOVE] attackTimer=0.103 cur=Locomotion next=AttackMelee norm=0.101 inTransition=True
+    [0.047s] cur=Locomotion next=Locomotion it=True norm=0.105 timer=-1.000 hp=15070
+    [0.098s] cur=Locomotion next=Locomotion it=True norm=0.105 timer=-1.000 hp=15070
+    [SETTLE] 0.106s
+    [0.149s] cur=Locomotion next=- it=False norm=0.141 timer=-1.000 hp=15070
+    [0.202s] cur=Locomotion next=- it=False norm=0.196 timer=-1.000 hp=15070
+    [0.256s] cur=Locomotion next=- it=False norm=0.253 timer=-1.000 hp=15070
+    [0.306s] cur=Locomotion next=- it=False norm=0.308 timer=-1.000 hp=15070
+    [0.357s] cur=Locomotion next=- it=False norm=0.364 timer=-1.000 hp=15070
+    [0.407s] cur=Locomotion next=- it=False norm=0.422 timer=-1.000 hp=15070
+    [0.461s] cur=Locomotion next=- it=False norm=0.487 timer=-1.000 hp=15070
+    [0.514s] cur=Locomotion next=- it=False norm=0.553 timer=-1.000 hp=15070
+    [0.565s] cur=Locomotion next=- it=False norm=0.617 timer=-1.000 hp=15070
+    [0.615s] cur=Locomotion next=- it=False norm=0.679 timer=-1.000 hp=15070
+    [0.668s] cur=Locomotion next=- it=False norm=0.745 timer=-1.000 hp=15070
+    [0.719s] cur=Locomotion next=- it=False norm=0.808 timer=-1.000 hp=15070
+    [0.772s] cur=Locomotion next=- it=False norm=0.875 timer=-1.000 hp=15070
+    [0.825s] cur=Locomotion next=- it=False norm=0.942 timer=-1.000 hp=15070
+    [0.876s] cur=Locomotion next=- it=False norm=1.005 timer=-1.000 hp=15070
+    [0.929s] cur=Locomotion next=- it=False norm=1.071 timer=-1.000 hp=15070
+    [0.983s] cur=Locomotion next=- it=False norm=1.139 timer=-1.000 hp=15070
+    [1.034s] cur=Locomotion next=- it=False norm=1.202 timer=-1.000 hp=15070
+    [1.087s] cur=Locomotion next=- it=False norm=1.268 timer=-1.000 hp=15070
+    [1.137s] cur=Locomotion next=- it=False norm=1.332 timer=-1.000 hp=15070
+    [1.188s] cur=Locomotion next=- it=False norm=1.395 timer=-1.000 hp=15070
+    [1.241s] cur=Locomotion next=- it=False norm=1.462 timer=-1.000 hp=15070
+    [1.292s] cur=Locomotion next=- it=False norm=1.525 timer=-1.000 hp=15070
+    [1.343s] cur=Locomotion next=- it=False norm=1.589 timer=-1.000 hp=15070
+    [1.396s] cur=Locomotion next=- it=False norm=1.655 timer=-1.000 hp=15070
+    [1.450s] cur=Locomotion next=- it=False norm=1.723 timer=-1.000 hp=15070
+    [1.503s] cur=Locomotion next=- it=False norm=1.789 timer=-1.000 hp=15070
+
+  [RESULT] run=4 moveAt=0.10s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.106s hp=15070->15070 damaged=False verdict=PASS
+--- run=5 moveAt=0.10s hpStart=15070
+    [0.005s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [2.165s] cur=Locomotion next=AttackMelee it=True norm=0.049 timer=0.049 hp=15070
+    [2.216s] cur=Locomotion next=AttackMelee it=True norm=0.098 timer=0.101 hp=15070
+    [MOVE] attackTimer=0.101 cur=Locomotion next=AttackMelee norm=0.098 inTransition=True
+    [0.052s] cur=Locomotion next=Locomotion it=True norm=0.102 timer=-1.000 hp=15070
+    [0.103s] cur=Locomotion next=Locomotion it=True norm=0.102 timer=-1.000 hp=15070
+    [SETTLE] 0.107s
+    [0.153s] cur=Locomotion next=- it=False norm=0.146 timer=-1.000 hp=15070
+    [0.205s] cur=Locomotion next=- it=False norm=0.199 timer=-1.000 hp=15070
+    [0.255s] cur=Locomotion next=- it=False norm=0.252 timer=-1.000 hp=15070
+    [0.308s] cur=Locomotion next=- it=False norm=0.310 timer=-1.000 hp=15070
+    [0.359s] cur=Locomotion next=- it=False norm=0.367 timer=-1.000 hp=15070
+    [0.413s] cur=Locomotion next=- it=False norm=0.429 timer=-1.000 hp=15070
+    [0.465s] cur=Locomotion next=- it=False norm=0.493 timer=-1.000 hp=15070
+    [0.517s] cur=Locomotion next=- it=False norm=0.556 timer=-1.000 hp=15070
+    [0.569s] cur=Locomotion next=- it=False norm=0.621 timer=-1.000 hp=15070
+    [0.621s] cur=Locomotion next=- it=False norm=0.687 timer=-1.000 hp=15070
+    [0.672s] cur=Locomotion next=- it=False norm=0.750 timer=-1.000 hp=15070
+    [0.725s] cur=Locomotion next=- it=False norm=0.816 timer=-1.000 hp=15070
+    [0.779s] cur=Locomotion next=- it=False norm=0.884 timer=-1.000 hp=15070
+    [0.832s] cur=Locomotion next=- it=False norm=0.950 timer=-1.000 hp=15070
+    [0.885s] cur=Locomotion next=- it=False norm=1.017 timer=-1.000 hp=15070
+    [0.936s] cur=Locomotion next=- it=False norm=1.080 timer=-1.000 hp=15070
+    [0.986s] cur=Locomotion next=- it=False norm=1.143 timer=-1.000 hp=15070
+    [1.038s] cur=Locomotion next=- it=False norm=1.207 timer=-1.000 hp=15070
+    [1.089s] cur=Locomotion next=- it=False norm=1.272 timer=-1.000 hp=15070
+    [1.143s] cur=Locomotion next=- it=False norm=1.339 timer=-1.000 hp=15070
+    [1.195s] cur=Locomotion next=- it=False norm=1.404 timer=-1.000 hp=15070
+    [1.248s] cur=Locomotion next=- it=False norm=1.470 timer=-1.000 hp=15070
+    [1.300s] cur=Locomotion next=- it=False norm=1.536 timer=-1.000 hp=15070
+    [1.352s] cur=Locomotion next=- it=False norm=1.601 timer=-1.000 hp=15070
+    [1.404s] cur=Locomotion next=- it=False norm=1.665 timer=-1.000 hp=15070
+    [1.457s] cur=Locomotion next=- it=False norm=1.732 timer=-1.000 hp=15070
+
+  [RESULT] run=5 moveAt=0.10s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.107s hp=15070->15070 damaged=False verdict=PASS
+--- run=6 moveAt=0.10s hpStart=15070
+    [0.004s] cur=Locomotion next=- it=False norm=0.000 timer=-1.000 hp=15070
+    [ORDER] CommandAttack
+    [2.158s] cur=Locomotion next=AttackMelee it=True norm=0.050 timer=0.048 hp=15070
+    [2.209s] cur=Locomotion next=AttackMelee it=True norm=0.097 timer=0.099 hp=15070
+    [MOVE] attackTimer=0.103 cur=Locomotion next=AttackMelee norm=0.101 inTransition=True
+    [0.050s] cur=Locomotion next=Locomotion it=True norm=0.104 timer=-1.000 hp=15070
+    [0.101s] cur=Locomotion next=Locomotion it=True norm=0.104 timer=-1.000 hp=15070
+    [SETTLE] 0.105s
+    [0.153s] cur=Locomotion next=- it=False norm=0.145 timer=-1.000 hp=15070
+    [0.204s] cur=Locomotion next=- it=False norm=0.197 timer=-1.000 hp=15070
+    [0.257s] cur=Locomotion next=- it=False norm=0.254 timer=-1.000 hp=15070
+    [0.310s] cur=Locomotion next=- it=False norm=0.312 timer=-1.000 hp=15070
+    [0.364s] cur=Locomotion next=- it=False norm=0.372 timer=-1.000 hp=15070
+    [0.414s] cur=Locomotion next=- it=False norm=0.431 timer=-1.000 hp=15070
+    [0.465s] cur=Locomotion next=- it=False norm=0.491 timer=-1.000 hp=15070
+    [0.519s] cur=Locomotion next=- it=False norm=0.558 timer=-1.000 hp=15070
+    [0.569s] cur=Locomotion next=- it=False norm=0.621 timer=-1.000 hp=15070
+    [0.621s] cur=Locomotion next=- it=False norm=0.687 timer=-1.000 hp=15070
+    [0.672s] cur=Locomotion next=- it=False norm=0.750 timer=-1.000 hp=15070
+    [0.725s] cur=Locomotion next=- it=False norm=0.817 timer=-1.000 hp=15070
+    [0.775s] cur=Locomotion next=- it=False norm=0.879 timer=-1.000 hp=15070
+    [0.829s] cur=Locomotion next=- it=False norm=0.947 timer=-1.000 hp=15070
+    [0.883s] cur=Locomotion next=- it=False norm=1.014 timer=-1.000 hp=15070
+    [0.934s] cur=Locomotion next=- it=False norm=1.078 timer=-1.000 hp=15070
+    [0.986s] cur=Locomotion next=- it=False norm=1.143 timer=-1.000 hp=15070
+    [1.036s] cur=Locomotion next=- it=False norm=1.205 timer=-1.000 hp=15070
+    [1.087s] cur=Locomotion next=- it=False norm=1.269 timer=-1.000 hp=15070
+    [1.139s] cur=Locomotion next=- it=False norm=1.334 timer=-1.000 hp=15070
+    [1.193s] cur=Locomotion next=- it=False norm=1.401 timer=-1.000 hp=15070
+    [1.245s] cur=Locomotion next=- it=False norm=1.466 timer=-1.000 hp=15070
+    [1.298s] cur=Locomotion next=- it=False norm=1.533 timer=-1.000 hp=15070
+    [1.352s] cur=Locomotion next=- it=False norm=1.600 timer=-1.000 hp=15070
+    [1.403s] cur=Locomotion next=- it=False norm=1.664 timer=-1.000 hp=15070
+    [1.456s] cur=Locomotion next=- it=False norm=1.730 timer=-1.000 hp=15070
+
+  [RESULT] run=6 moveAt=0.10s stateBefore=Locomotion/AttackMelee inTransitionAtMove=True settle=0.105s hp=15070->15070 damaged=False verdict=PASS
+[FINISH] all runs done
+SUMMARY pass=6/6 done=6
+DONE

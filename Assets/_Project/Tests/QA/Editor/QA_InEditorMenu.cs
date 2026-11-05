@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -24,6 +25,18 @@ public static class QA_InEditorMenu
     /// <summary>已接管 runInBackground 的标记：保证还原只做一次，且回滚值确实被记录过。</summary>
     public const string SessionRunInBackgroundArmedKey = "QA.PrevRunInBackground.Armed";
     public const string DefaultSubdir = "editor_run1";
+
+    /// <summary>preflight 的待执行任务（SessionState 跨域重载存活，重载后自动重新布线）。</summary>
+    public const string PreflightTaskKey = "QA.Preflight.Task";
+    public const string PreflightStartKey = "QA.Preflight.StartedAt";
+
+    const double PreflightTimeoutSeconds = 120.0;   // R-1：超过 120s 未稳定即放弃
+    const double PreflightPollSeconds = 0.2;        // 每 200ms 重查一次
+
+    static double _lastPollAt = -1.0;
+    static int _stableSamples;
+    static bool _preflightArmed;
+    static PropertyInfo _isDomainReloadPendingProp;
 
     /// <summary>需要在收尾时清空的套件环境变量（AC-8：不污染后续 batch）。</summary>
     static readonly string[] SuiteEnvKeys =
@@ -55,10 +68,167 @@ public static class QA_InEditorMenu
         Run("DIAG");
     }
 
-    /// <summary>菜单驱动入口：task ∈ SPEC01 / FND00B06 / DIAG。</summary>
+    /// <summary>
+    /// 菜单驱动入口：task ∈ SPEC01 / FND00B06 / DIAG。
+    /// R-1：先刷新资产库，再非阻塞轮询到“编译/资产刷新/域重载都结束且连续 2 次成立”才进 Play；
+    /// 超过 120s 未稳定则写 InEditorResult(code=3, reason=preflight-timeout) 并放弃。
+    /// </summary>
     public static void Run(string task)
     {
-        if (!PassGate(task)) return;
+        if (!GateForLaunch(task)) return;
+
+        AssetDatabase.Refresh();
+
+        SessionState.SetString(PreflightTaskKey, task);
+        SessionState.SetFloat(PreflightStartKey, (float)EditorApplication.timeSinceStartup);
+        _stableSamples = 0;
+        _lastPollAt = -1.0;
+        ArmPreflight();
+    }
+
+    /// <summary>
+    /// RECOVERY ONLY（MCP 桥未自动连接时用 -executeMethod 手动拉起；不参与探针逻辑）：
+    /// 设置 AutoStartOnLoad 并反射调用 MCPForUnity 的 TransportManager.StartAsync(Http)。
+    /// </summary>
+    public static void RecoverMcpBridge()
+    {
+        try
+        {
+            EditorPrefs.SetBool("MCPForUnity.AutoStartOnLoad", true);
+
+            System.Reflection.Assembly asm = null;
+            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (a.GetName().Name == "MCPForUnity.Editor") { asm = a; break; }
+            }
+            if (asm == null) { Debug.LogError("[QA][RECOVERY] MCPForUnity.Editor not loaded"); return; }
+
+            var locator = asm.GetType("MCPForUnity.Editor.Services.MCPServiceLocator");
+            var tm = locator.GetProperty("TransportManager").GetValue(null, null);
+            var modeType = asm.GetType("MCPForUnity.Editor.Services.Transport.TransportMode");
+            object http = Enum.Parse(modeType, "Http");
+            var start = tm.GetType().GetMethod("StartAsync");
+            var task = (System.Threading.Tasks.Task)start.Invoke(tm, new object[] { http });
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (!task.IsCompleted && sw.ElapsedMilliseconds < 20000)
+            {
+                System.Threading.Thread.Sleep(50);
+            }
+            bool ok = task.IsCompleted && !task.IsFaulted && !task.IsCanceled && (bool)task.GetType().GetProperty("Result").GetValue(task, null);
+            Debug.Log("[QA][RECOVERY] mcp bridge start completed=" + task.IsCompleted + " success=" + ok);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("[QA][RECOVERY] " + e);
+        }
+    }
+
+    /// <summary>
+    /// 域重载后自动重新布线 preflight：静态字段会丢，但 SessionState 里的 task 还在。
+    /// </summary>
+    [InitializeOnLoadMethod]
+    static void ReArmPreflightAfterReload()
+    {
+        string task = SessionState.GetString(PreflightTaskKey, string.Empty);
+        if (string.IsNullOrEmpty(task)) return;
+
+        _stableSamples = 0;
+        _lastPollAt = -1.0;
+        ArmPreflight();
+        Debug.Log("[QA][INEDITOR] preflight re-armed after reload; task=" + task);
+    }
+
+    static void ArmPreflight()
+    {
+        if (_preflightArmed) return;
+        _preflightArmed = true;
+        EditorApplication.update -= PreflightTick;
+        EditorApplication.update += PreflightTick;
+    }
+
+    static void DisarmPreflight()
+    {
+        if (_preflightArmed)
+        {
+            EditorApplication.update -= PreflightTick;
+            _preflightArmed = false;
+        }
+        SessionState.EraseString(PreflightTaskKey);
+        SessionState.EraseFloat(PreflightStartKey);
+    }
+
+    static void PreflightTick()
+    {
+        string task = SessionState.GetString(PreflightTaskKey, string.Empty);
+        if (string.IsNullOrEmpty(task))
+        {
+            DisarmPreflight();
+            return;
+        }
+
+        double startAt = SessionState.GetFloat(PreflightStartKey, (float)EditorApplication.timeSinceStartup);
+        double elapsed = EditorApplication.timeSinceStartup - startAt;
+
+        if (elapsed > PreflightTimeoutSeconds)
+        {
+            DisarmPreflight();
+            ClearSuiteEnvironment();
+            string subdir = NextSubdir(task);
+            WriteResultFile(task, 3, subdir, "preflight-timeout");
+            Debug.LogError("[QA][INEDITOR] preflight timeout task=" + task +
+                           "; waited=" + elapsed.ToString("0.0") + "s" +
+                           "; isCompiling=" + EditorApplication.isCompiling +
+                           "; isUpdating=" + EditorApplication.isUpdating);
+            return;
+        }
+
+        if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            DisarmPreflight();
+            Debug.LogWarning("[QA][INEDITOR] preflight aborted task=" + task + " reason=enteredPlaymode");
+            return;
+        }
+
+        // 每 200ms 才采样一次，避免一帧内连点 2 次造成“连续 2 次”失真。
+        double sincePoll = _lastPollAt < 0.0 ? double.MaxValue : EditorApplication.timeSinceStartup - _lastPollAt;
+        if (sincePoll < PreflightPollSeconds) return;
+        _lastPollAt = EditorApplication.timeSinceStartup;
+
+        if (IsEditorStable()) _stableSamples++;
+        else _stableSamples = 0;
+
+        if (_stableSamples < 2) return;
+
+        DisarmPreflight();
+        Debug.Log("[QA][INEDITOR] preflight ok (waited=" + elapsed.ToString("0.0") + "s)");
+        Proceed(task);
+    }
+
+    /// <summary>编译中 / 资产刷新中 / 域重载挂起，三者任一都视为未稳定。</summary>
+    static bool IsEditorStable()
+    {
+        return !EditorApplication.isCompiling
+            && !EditorApplication.isUpdating
+            && !IsDomainReloadPending();
+    }
+
+    /// <summary>Unity 内部属性；不同版本可能不存在，取不到按 false 处理（真正的重载会体现为 isCompiling）。</summary>
+    static bool IsDomainReloadPending()
+    {
+        if (_isDomainReloadPendingProp == null)
+        {
+            _isDomainReloadPendingProp = typeof(EditorApplication).GetProperty(
+                "isDomainReloadPending", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+        if (_isDomainReloadPendingProp == null) return false;
+        try { return (bool)_isDomainReloadPendingProp.GetValue(null, null); }
+        catch { return false; }
+    }
+
+    static void Proceed(string task)
+    {
+        if (!GateForLaunch(task)) return;
 
         SessionState.SetBool(SessionActiveKey, true);
         SessionState.SetString(SessionTaskKey, task);
@@ -133,6 +303,14 @@ public static class QA_InEditorMenu
     /// </summary>
     public static bool TryFinish(string task, int code)
     {
+        return TryFinish(task, code, null);
+    }
+
+    /// <summary>
+    /// 同上，额外把失败原因写进 InEditorResult.txt 的 reason 字段（看门狗 / preflight 用）。
+    /// </summary>
+    public static bool TryFinish(string task, int code, string reason)
+    {
         if (!SessionState.GetBool(SessionActiveKey, false)) return false;
         string active = SessionState.GetString(SessionTaskKey, string.Empty);
         if (!string.Equals(active, task, StringComparison.Ordinal)) return false;
@@ -141,6 +319,22 @@ public static class QA_InEditorMenu
         if (string.IsNullOrEmpty(subdir)) subdir = DefaultSubdir;
         subdir = subdir.Trim();
 
+        WriteResultFile(task, code, subdir, reason);
+
+        ResetFlags();
+        // 收尾还原 runInBackground：只回滚到“原本为 false”的情形，不关掉用户自己打开的设置。
+        RestoreRunInBackground();
+
+        Debug.Log("[QA][INEDITOR] done task=" + task + " code=" + code +
+                  (string.IsNullOrEmpty(reason) ? string.Empty : " reason=" + reason));
+        return true;
+    }
+
+    /// <summary>
+    /// 唯一的落盘实现：Code / reason / 环境快照 / 证据子目录。preflight 失败与看门狗都走这里。
+    /// </summary>
+    static void WriteResultFile(string task, int code, string subdir, string reason)
+    {
         try
         {
             string dir = Path.Combine(EvidenceRoot(task), subdir);
@@ -152,6 +346,7 @@ public static class QA_InEditorMenu
             var sb = new StringBuilder();
             sb.Append("task=").Append(task).Append('\n');
             sb.Append("code=").Append(code).Append('\n');
+            if (!string.IsNullOrEmpty(reason)) sb.Append("reason=").Append(reason).Append('\n');
             sb.Append("finishedAt=").Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")).Append('\n');
             sb.Append("unityVersion=").Append(Application.unityVersion).Append('\n');
             sb.Append("scenario=in-editor").Append('\n');
@@ -167,30 +362,14 @@ public static class QA_InEditorMenu
             Debug.LogError("[QA][INEDITOR] write result failed task=" + task + "; err=" + e);
             ClearSuiteEnvironment();
         }
-        finally
-        {
-            ResetFlags();
-            // 收尾还原 runInBackground：只回滚到“原本为 false”的情形，不关掉用户自己打开的设置。
-            RestoreRunInBackground();
-        }
-
-        Debug.Log("[QA][INEDITOR] done task=" + task + " code=" + code);
-        return true;
     }
 
-    /// <summary>R-6 闸门：编译中 / 资源刷新中 / 播放态（含将进入 Play）/ 场景有未保存修改，一律拒绝。</summary>
-    static bool PassGate(string task)
+    /// <summary>
+    /// 进 Play 前的硬闸门：播放态与脏场景仍然直接拒绝（不代替所有者保存）。
+    /// 编译中/资产刷新中**不再拒绝**——由 preflight 轮询等待（R-1 / AC-1）。
+    /// </summary>
+    static bool GateForLaunch(string task)
     {
-        if (EditorApplication.isCompiling)
-        {
-            Refuse(task, "isCompiling=true");
-            return false;
-        }
-        if (EditorApplication.isUpdating)
-        {
-            Refuse(task, "isUpdating=true");
-            return false;
-        }
         if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
         {
             Refuse(task, "playmode:isPlaying=" + EditorApplication.isPlaying +

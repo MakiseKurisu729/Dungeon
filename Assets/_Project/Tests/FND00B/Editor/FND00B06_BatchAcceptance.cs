@@ -56,6 +56,14 @@ public static class FND00B06_Boot
     public const string StartedKey = "FND00B06.Started";
     public const string FinishedKey = "FND00B06.Finished";
     public const string ExitCodeKey = "FND00B06.ExitCode";
+    public const string RunnerNameKey = "FND00B06.RunnerName";
+    public const string PlayStartedAtKey = "FND00B06.PlayStartedAt";
+
+    const float RunnerLostGraceSeconds = 3f;
+    const float FirstStartGraceSeconds = 10f;
+
+    static GameObject _runner;
+    static float _missingSince = -1f;
 
     [InitializeOnLoadMethod]
     static void Boot()
@@ -71,6 +79,7 @@ public static class FND00B06_Boot
                   "; started=" + SessionState.GetBool(StartedKey, false) +
                   "; finished=" + SessionState.GetBool(FinishedKey, false));
 
+        _missingSince = -1f;
         if (Application.isPlaying) TryStartRunner();
     }
 
@@ -79,6 +88,8 @@ public static class FND00B06_Boot
         Debug.Log("[FND00B06] playModeStateChanged=" + change);
         if (change == PlayModeStateChange.EnteredPlayMode)
         {
+            SessionState.SetFloat(PlayStartedAtKey, Time.realtimeSinceStartup);
+            if (ClearStaleRunFlags()) return;
             TryStartRunner();
         }
         else if (change == PlayModeStateChange.EnteredEditMode && SessionState.GetBool(FinishedKey, false))
@@ -87,25 +98,99 @@ public static class FND00B06_Boot
         }
     }
 
-    /// <summary>BatchMode 下 playModeStateChanged 可能不可靠，用编辑器 update 兜底。</summary>
+    /// <summary>
+    /// 上一轮中断留下的 Started/Active 标记 + 已销毁的 runner：在新一轮 EnterPlayMode 清掉，
+    /// 不能让历史标记驱动本轮看门狗（否则会误判并退出编辑器）。
+    /// </summary>
+    static bool ClearStaleRunFlags()
+    {
+        if (!SessionState.GetBool(StartedKey, false)) return false;
+        if (RunnerAlive()) return false;
+
+        Debug.LogWarning("[FND00B06] stale run flags cleared (previous play session had no runner)");
+        SessionState.SetBool(StartedKey, false);
+        SessionState.SetBool(FinishedKey, false);
+        SessionState.SetBool(ActiveKey, false);
+        SessionState.EraseString(RunnerNameKey);
+        _runner = null;
+        _missingSince = -1f;
+        return true;
+    }
+
+    /// <summary>BatchMode 下 playModeStateChanged 可能不可靠，用编辑器 update 兜底；同处挂 runner 丢失看门狗。</summary>
     static void Tick()
     {
+        if (!SessionState.GetBool(ActiveKey, false)) return;
+
         if (SessionState.GetBool(FinishedKey, false))
         {
             if (!Application.isPlaying) ExitWithCode();
             return;
         }
-        if (Application.isPlaying && !SessionState.GetBool(StartedKey, false))
+
+        if (!Application.isPlaying) return;
+
+        float now = Time.realtimeSinceStartup;
+
+        if (!SessionState.GetBool(StartedKey, false))
         {
+            float playStartedAt = SessionState.GetFloat(PlayStartedAtKey, now);
+            if (now - playStartedAt >= FirstStartGraceSeconds)
+            {
+                WatchdogFail("runner never created within " + FirstStartGraceSeconds + "s after entering play");
+                return;
+            }
             Debug.Log("[FND00B06] tick fallback: isPlaying=true, starting runner");
             TryStartRunner();
+            return;
         }
+
+        if (RunnerAlive())
+        {
+            _missingSince = -1f;
+            return;
+        }
+
+        if (_missingSince < 0f)
+        {
+            _missingSince = now;
+            Debug.LogWarning("[FND00B06][WATCHDOG] runner missing; counting down " + RunnerLostGraceSeconds + "s");
+        }
+        else if (now - _missingSince >= RunnerLostGraceSeconds)
+        {
+            WatchdogFail("runner missing >= " + RunnerLostGraceSeconds + "s");
+        }
+    }
+
+    static bool RunnerAlive()
+    {
+        if (_runner != null) return true;
+        string name = SessionState.GetString(RunnerNameKey, string.Empty);
+        if (string.IsNullOrEmpty(name)) return true;
+        return GameObject.Find(name) != null;
+    }
+
+    static void WatchdogFail(string why)
+    {
+        Debug.LogError("[FND00B06][WATCHDOG] " + why + " -> code=3 reason=runner-lost-domain-reload");
+        if (QA_InEditorMenu.TryFinish("FND00B06", 3, "runner-lost-domain-reload"))
+        {
+            EditorApplication.isPlaying = false;
+            Debug.Log("[FND00B06][WATCHDOG] left play mode; editor kept alive");
+            return;
+        }
+        EditorApplication.Exit(3);
     }
 
     static void ExitWithCode()
     {
         int code = SessionState.GetInt(ExitCodeKey, 3);
         SessionState.SetBool(FinishedKey, false);
+        SessionState.SetBool(StartedKey, false);
+        SessionState.SetBool(ActiveKey, false);
+        SessionState.EraseString(RunnerNameKey);
+        _runner = null;
+        _missingSince = -1f;
         Debug.Log("[FND00B06] batchmode exit " + code);
         if (QA_InEditorMenu.TryFinish("FND00B06", code)) return;
         EditorApplication.Exit(code);
@@ -115,10 +200,14 @@ public static class FND00B06_Boot
     {
         if (SessionState.GetBool(StartedKey, false)) return;
         SessionState.SetBool(StartedKey, true);
+        SessionState.SetFloat(PlayStartedAtKey, Time.realtimeSinceStartup);
 
         var go = new GameObject("FND00B06_Runner");
         UnityEngine.Object.DontDestroyOnLoad(go);
         go.AddComponent<FND00B06_ProbeRunner>();
+        _runner = go;
+        SessionState.SetString(RunnerNameKey, go.name);
+        _missingSince = -1f;
         Debug.Log("[FND00B06] play-mode runner created");
     }
 }

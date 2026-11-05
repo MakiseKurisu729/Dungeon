@@ -1,0 +1,33 @@
+INTERRUPT-03 / AC-4 Monster.NoPhantomTrigger
+unity=2022.3.62f3c1 scene=DungeonWorld
+driver=MCP execute_code, play mode (raw per-tick log: monster_console_raw.txt)
+
+setup
+  Knight brain + MeleeCombat disabled (player is a passive target)
+  Skeleton_Warrior revived/healed, MonsterBrain + NavMeshAgent enabled at 1.5m
+  console cleared by Enter Play (Clear on Play), read via read_console
+
+timeline
+  [ATK1]    monster attack started (attackTrigger set), atkTimer 0 -> >0
+  [CANCEL]  player pulled 25m -> dist=23.50 (> AttackRange*1.6) -> MonsterBrain.CancelAttack -> atkTimer=-1
+  [ATK2]    player returned to 1.5m; after cooldown attack started again (atkTimer>0)
+  attack1StartCount=1  attack2StartCount=1  cancelObserved=true
+
+console check (probe window)
+  read_console types=[warning|error] filter_text="Interrupt" -> 0 entries
+  read_console types=[all] (window) -> 0 entries containing "Parameter 'Interrupt'"
+
+control (proves the console detector works)
+  anim.SetTrigger("NoSuchParamXYZ") -> console got: "Parameter 'NoSuchParamXYZ' does not exist."
+  anim.SetTrigger("Interrupt") on Skeleton_Warrior -> no warning
+
+[premise correction - IMPORTANT]
+  TASK INTERRUPT-03 R-4 / dispatch said: Skeleton.controller has no "Interrupt" parameter, so
+  MonsterBrain.CancelAttack's SetTrigger("Interrupt") only produced a warning each time.
+  Readback of Assets/_Project/Art/Animations/Skeleton.controller shows:
+    params = Speed, AttackMelee, AttackRanged, Hit, Interrupt, Die, AttackSpeed
+    Interrupt-conditioned transitions: Attack_Melee -> Locomotion, Shoot -> Locomotion
+  => the line was NOT warning-producing and WAS functional (it cancels the monster swing visually).
+  The line was deleted per the explicit instruction; behaviour delta is reported in REPORT section 7.
+
+verdict: AC-4 counters pass (no phantom warning; monster can attack again), premise does not hold.

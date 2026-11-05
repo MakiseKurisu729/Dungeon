@@ -1,0 +1,29 @@
+INTERRUPT-03 animator-isolated probe (brain+melee+agent disabled)
+unity=2022.3.62f3c1 controller=OC_Knight
+runs: AttackMelee trigger, then Interrupt trigger after 0.05/0.05/0.10/0.10s (fade-in), then 2 steady (norm>=0.20)
+--- run=1 delay=0.05
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.052 Interrupt at cur=Locomotion next=AttackMelee inTrans=True
+  settle=0.108s (<=0.15 pass=True)
+--- run=2 delay=0.05
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.053 Interrupt at cur=Locomotion next=AttackMelee inTrans=True
+  settle=0.106s (<=0.15 pass=True)
+--- run=3 delay=0.1
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.101 Interrupt at cur=Locomotion next=AttackMelee inTrans=True
+  settle=0.103s (<=0.15 pass=True)
+--- run=4 delay=0.1
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.100 Interrupt at cur=Locomotion next=AttackMelee inTrans=True
+  settle=0.106s (<=0.15 pass=True)
+--- run=5 delay=-1
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.256 steady Interrupt at norm=0.237
+  settle=0.106s (<=0.15 pass=True)
+--- run=6 delay=-1
+  t=0.000 start AttackMelee trigger (was Locomotion/-)
+  t=0.257 steady Interrupt at norm=0.236
+  settle=0.103s (<=0.15 pass=True)
+SUMMARY pass=6/6
+DONE
