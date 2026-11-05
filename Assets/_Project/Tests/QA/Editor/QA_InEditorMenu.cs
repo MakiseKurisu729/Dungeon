@@ -47,6 +47,8 @@ public static class QA_InEditorMenu
         "FND00B06_RUN",
         "DIAG_RUN",
         "DIAG_MODE",
+        "REFACTOR_RUN",
+        "REFACTOR_MILESTONE",
         EvidenceSubdirEnv
     };
 
@@ -66,6 +68,12 @@ public static class QA_InEditorMenu
     public static void RunDIAG()
     {
         Run("DIAG");
+    }
+
+    [MenuItem("Tools/QA/In-Editor/REFACTOR", false, 103)]
+    public static void RunREFACTOR()
+    {
+        Run("REFACTOR");
     }
 
     /// <summary>
@@ -235,6 +243,9 @@ public static class QA_InEditorMenu
 
         // 先清掉上一次可能残留的套件变量，再按套件注入，避免跨套件污染。
         ClearSuiteEnvironment();
+        // REFACTOR 的里程碑决定证据目录（REFACTOR-M0..M4）：必须在 NextSubdir 之前注入。
+        if (task == "REFACTOR")
+            Environment.SetEnvironmentVariable("REFACTOR_MILESTONE", REFACTOR_BatchAcceptance.DefaultMilestone);
         string subdir = NextSubdir(task);   // editor_run1 / editor_run2 / … 递增，不覆盖历史证据
         Environment.SetEnvironmentVariable(EvidenceSubdirEnv, subdir);
 
@@ -251,6 +262,10 @@ public static class QA_InEditorMenu
         {
             Environment.SetEnvironmentVariable("DIAG_MODE", "probe");
             Environment.SetEnvironmentVariable("DIAG_RUN", "1");
+        }
+        else if (task == "REFACTOR")
+        {
+            Environment.SetEnvironmentVariable("REFACTOR_RUN", "1");
         }
         else
         {
@@ -280,6 +295,9 @@ public static class QA_InEditorMenu
                     break;
                 case "FND00B06":
                     FND00B06_BatchAcceptance.Run();
+                    break;
+                case "REFACTOR":
+                    REFACTOR_BatchAcceptance.Run();
                     break;
                 default:
                     DIAG_BatchAcceptance.Run();
@@ -453,10 +471,18 @@ public static class QA_InEditorMenu
         string folder;
         if (task == "SPEC01") folder = "SPEC-01";
         else if (task == "FND00B06") folder = "FND-00B-06";
+        else if (task == "REFACTOR") folder = "REFACTOR-" + RefactorMilestone();
         else folder = "DIAG-SKILL";
 
         string root = Directory.GetParent(Application.dataPath).FullName;
         return Path.Combine(root, "Docs", "QA", "Evidence", folder);
+    }
+
+    /// <summary>REFACTOR 证据目录用的里程碑号：环境变量优先，缺省取套件默认值。</summary>
+    static string RefactorMilestone()
+    {
+        string m = Environment.GetEnvironmentVariable("REFACTOR_MILESTONE");
+        return string.IsNullOrEmpty(m) ? REFACTOR_BatchAcceptance.DefaultMilestone : m.Trim();
     }
 
     /// <summary>
