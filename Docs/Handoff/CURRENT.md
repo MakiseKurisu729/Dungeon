@@ -43,9 +43,15 @@
 - **`DOWNED-01` — 倒地不播动作 — `Review`（根因：致死那一击的 `Hit` 触发器在 64ms 后抢走 `Downed`；修法 `OnDowned` 里先 `ResetTrigger("Hit")`；3 次复现 + Archer/Mage 通过）**
 - **`INTERRUPT-01` — 移动打断普攻/交互、技能免疫 — `Review`（新增 `AttackMelee/Interact → Locomotion` 的 `Interrupt` 过渡；`CancelAttack` 与 `RangedCombat` 的无条件触发器删除；AC-1 入场淡入窗口最坏 0.30s 待裁决）**
 - **`RESCUE-01` — 救援指令化 — `Review`（hover 救援图标 → 点击下令 → 走进范围 → 循环读条 → 受击/移动打断且需重新下令；AC-1~8 全过；资产改动经所有者批准）**
-  - 讲稿：`Docs/Learning/RESCUE-01_讲稿.md`（AI 初稿，待所有者改写）。
+  - 讲稿：`Docs/Learning/RESCUE-01_讲稿.md`（AI 完整稿，所有者按需批注，不需改写）。
   - 未决：`interactCursor` 观感、倒地者仍可被选中（R-8 要求保持）、同帧打断动画尾 0.208s。
-- **`SKILL-ANIM-02` — Q/W/E/R 子状态机与攻击打断 — `InProgress`（Phase A 已完成，Phase B 未开）**
+- **`INTERRUPT-02` — 过渡布局 / 远程前后摇打断 / 技能指令锁 — `Review`**
+  - A 布局：控制器三列重排（80/520/1000），`AnyState` 移到 (300,600)；七条目检状态进出线 0 穿块，仍有 3 条估算穿块（`AnyState→Q` 穿 `Bash`、`AnyState→E` 穿 `Skill`、`Rise↔Locomotion` 同列互穿）待目检。
+  - B 远程：新增 `Attack_Draw/Attack_Release → Locomotion`（`Interrupt`），弓箭手/法师各 3 次实测 0.104–0.113s 回 `Locomotion`、弹丸 0、伤害 0。
+  - C 技能锁：`CharacterBrain.InSkillState()` 覆盖 `Bash/Skill/Q_1..R_1`，锁 `CommandMove/CommandAttack/CommandInteract`；Q/W 各 3 次 `destDelta=0`、伤害照常、结束后恢复。
+  - **计划外改动（待所有者裁决）**：`Locomotion→Bash` 的 `hasExitTime` 由 1 改 0（否则 Q 起手要等 73% 循环，0.3–0.8s 内移动仍生效）。全文件唯一一处 `m_HasExitTime` 改动。
+  - 证据：`Docs/QA/Evidence/INTERRUPT-02/`；SPEC01 `editor_run17` 12/0。
+- **`SKILL-ANIM-02` — Q/W/E/R 子状态机与攻击打断 — `InProgress`（Phase A 完成，Phase B 未开）**
   - Spec：`Docs/Handoff/TASK_SKILL-ANIM-02.md`（四条决策已并入）。
   - Phase A 已完成：`PlayerBase.controller` 新增 `Q/W/E/R` Trigger + `SkillSpeed`(Float,默认1)、四个子状态机（`Q_1/W_1/E_1/R_1`，占位 Clip=`Bash`/`Skill`）、`AnyState→Hit_A/Q/W/E/R`（`If`、`HasExitTime=0`、`Source`、`Ordered`、`CanSelf=0`、0.05s）；`Bash`/`Skill` 保留，`AttackRange` 未动。
   - 定点验证：未按 Q 时三角色常驻 `Locomotion`；`Knight.SetTrigger("Q")` → 0.058s 进 `Q_1`，1.172s 回 `Locomotion`；SPEC01 编辑器内仍 12/0。
@@ -80,3 +86,10 @@
    - `INTERRUPT-01` AC-1 入场淡入窗口最坏 0.30s（是否放宽 AC 到 0.35s，或改既有 `Locomotion→AttackMelee` 的 `InterruptionSource`）。
    - `MonsterBrain.cs:112` 有与 `RangedCombat` 同类的无条件 `Interrupt`（怪物控制器用），本轮未在授权内。
    - `REPORT_TEST-MCP-01` §7 第 5/6 条（Play 中域重载丢 runner）建议另立小单。
+
+## 待规划（未排期，所有者要求先讨论不动手）
+
+- **选中拾取（PICK 系列）**：目标“指针落在模型上就选中”，不再只认脚底圈。已定方向：用**当前姿态的包围盒**做 OBB 射线检测 + 障碍遮挡射线 + 最近优先；将来若要“视觉=命中”，升级为跟随姿态的 `HitProxy` 胶囊，让选中/近战/子弹共用一份体积。
+- **命中体积一致性（HITBOX 系列，高风险）**：现状是子弹**无碰撞检测**、直接朝“根节点+0.6m”飞行到点结算；近战与选中打的是**静止胶囊** `CharacterController`。若要“看着打空就不该掉血”，需要 `HitProxy` + 改近战掩码 + 改子弹瞄准点，并写 ADR。
+- **选中交互规则（已定，待实现）**：左键点已选中角色 = 取消选中；左键点地板 = **保留角色选中**、仅清空敌方目标；未来 UI 角色图标：左键选、右键取消。
+- 所有者计划先处理完当前任务，再单独讨论代码库重构。

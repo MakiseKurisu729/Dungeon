@@ -31,7 +31,7 @@
 ```
 目标 → 大脑写 TASK（三节：需求 / 方案 / 验证）→ 所有者审 spec（需求、方案取舍、AC）
 → 派单（TASK 路径 + 风险等级 + 只读边界）→ 执行（red → green → 证据 → REPORT）
-→ 大脑按 AC 表验收 → 学习讲稿（AI 初稿 + 所有者改写）→ 用户目检 + GitHub Desktop 提交
+→ 大脑按 AC 表验收 → 学习讲稿（AI 写完整稿，所有者按需批注/提问）→ 用户目检 + GitHub Desktop 提交
 → 用户标 Done → Replan（下一个 feature）
 ```
 

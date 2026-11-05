@@ -1,0 +1,3 @@
+prev=False
+set=true for play-mode drive (restored after tests)
+restored: prevRunInBackground=False -> set false

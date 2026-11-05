@@ -1,0 +1,78 @@
+=== INTERRUPT-02 / C3: Skill.UnlockAfter ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+flow: wait natural skill exit -> +0.10s CommandMove(+2m) -> assert destination updated + character actually moves + CommandAttack accepted (no residual lock)
+isolation: same as C1 (player brains disabled, monster dummy)
+
+--- Knight/Q(盾击) -> unlock  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.011s] cur=Locomotion next=Bash norm=0.820
+  [0.064s] cur=Bash next=- norm=0.049
+  [0.830s] cur=Bash next=Locomotion norm=0.768
+  [0.979s] cur=Locomotion next=- norm=0.142
+  [SKILL-END] back to Locomotion at +1.356s
+  [+1.459s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.503s after unlock move] pos=(-1.78, 0.08, -0.02) distToTarget=1.065 state=Locomotion vel=(3.42, 0.00, -0.10) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] Q(盾击) run=1 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.048 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+--- Knight/Q(盾击) -> unlock  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=Bash norm=0.148
+  [0.056s] cur=Bash next=- norm=0.049
+  [0.823s] cur=Bash next=Locomotion norm=0.768
+  [0.971s] cur=Locomotion next=- norm=0.141
+  [SKILL-END] back to Locomotion at +1.359s
+  [+1.463s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.500s after unlock move] pos=(-1.79, 0.08, -0.02) distToTarget=1.074 state=Locomotion vel=(3.42, 0.00, -0.10) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] Q(盾击) run=2 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.058 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+--- Knight/Q(盾击) -> unlock  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.005s] cur=Locomotion next=Bash norm=0.156
+  [0.059s] cur=Bash next=- norm=0.051
+  [0.825s] cur=Bash next=Locomotion norm=0.769
+  [0.975s] cur=Locomotion next=- norm=0.143
+  [SKILL-END] back to Locomotion at +1.357s
+  [+1.460s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.503s after unlock move] pos=(-1.78, 0.08, -0.02) distToTarget=1.064 state=Locomotion vel=(3.44, 0.00, -0.09) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] Q(盾击) run=3 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.043 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+--- Knight/W(跳劈) -> unlock  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.006s] cur=Locomotion next=Skill norm=0.160
+  [0.058s] cur=Skill next=- norm=0.039
+  [1.090s] cur=Skill next=Locomotion norm=0.813
+  [1.242s] cur=Locomotion next=- norm=0.142
+  [SKILL-END] back to Locomotion at +1.357s
+  [+1.459s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.502s after unlock move] pos=(-1.79, 0.08, -0.02) distToTarget=1.066 state=Locomotion vel=(3.43, 0.00, -0.13) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] W(跳劈) run=1 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.053 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+--- Knight/W(跳劈) -> unlock  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.005s] cur=Locomotion next=Skill norm=0.898
+  [0.058s] cur=Skill next=- norm=0.040
+  [1.093s] cur=Skill next=Locomotion norm=0.816
+  [1.241s] cur=Locomotion next=- norm=0.144
+  [SKILL-END] back to Locomotion at +1.357s
+  [+1.459s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.503s after unlock move] pos=(-1.78, 0.08, -0.02) distToTarget=1.064 state=Locomotion vel=(3.44, 0.00, -0.11) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] W(跳劈) run=2 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.049 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+--- Knight/W(跳劈) -> unlock  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=Skill norm=0.902
+  [0.054s] cur=Skill next=- norm=0.038
+  [1.089s] cur=Skill next=Locomotion norm=0.814
+  [1.240s] cur=Locomotion next=- norm=0.143
+  [SKILL-END] back to Locomotion at +1.354s
+  [+1.455s] stateAtUnlock=Locomotion isStopped=False destBefore=(-2.72, 0.08, 0.00) target=(-0.72, 0.08, 0.00) destAfter=(-0.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000 = accepted)
+  [+0.501s after unlock move] pos=(-1.79, 0.08, -0.02) distToTarget=1.072 state=Locomotion vel=(3.42, 0.00, -0.14) isStopped=False
+  [CONTROL] CommandAttack after unlock accepted=True orderedTarget=Skeleton_Warrior
+  [RESULT] W(跳劈) run=3 unlockDestDelta=0.0000 distToTargetAfter0.5s=1.054 isStoppedAtUnlock=False attackAccepted=True verdict=PASS
+
+=== END ===

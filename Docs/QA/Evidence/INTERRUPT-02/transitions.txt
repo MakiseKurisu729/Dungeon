@@ -1,0 +1,58 @@
+# PlayerBase.controller  Base Layer  (read back from Unity 2022.3.62f3c1, 2026-11-05 22:03:48)
+# Transitions marked [NEW INTERRUPT-02] were added by this task; all others pre-existed.
+defaultState=Locomotion  anyStatePosition=(300.00, 600.00, 0.00)  entryPosition=(50.00, 120.00, 0.00)  exitPosition=(800.00, 120.00, 0.00)
+
+[states] name | position | clip | clipLength
+  Locomotion       pos=(80, 620, 0)  clip=(blend tree) len=-
+  Hit_A            pos=(520, 770, 0)  clip=Hit_A len=0.667
+  Interact         pos=(520, 920, 0)  clip=Interact len=1.300
+  Rise             pos=(80, 1050, 0)  clip=Lie_StandUp len=2.333
+  Downed           pos=(80, 900, 0)  clip=Death_A len=0.800
+  Attack_Release   pos=(520, 320, 0)  clip=Ranged_Bow_Release len=1.333
+  Attack_Draw      pos=(520, 170, 0)  clip=Ranged_Bow_Draw len=1.333
+  Bash             pos=(520, 470, 0)  clip=Melee_Block_Attack len=1.067
+  Skill            pos=(520, 620, 0)  clip=Melee_1H_Attack_Jump_Chop len=1.333
+  AttackMelee      pos=(520, 20, 0)  clip=Chop len=4.333
+
+[sub state machines] name | position | default
+  Q    pos=(1000, 120, 0) default=Q_1 substatePos=(300, 40, 0)
+  W    pos=(1000, 380, 0) default=W_1 substatePos=(300, 40, 0)
+  E    pos=(1000, 640, 0) default=E_1 substatePos=(300, 40, 0)
+  R    pos=(1000, 900, 0) default=R_1 substatePos=(300, 40, 0)
+
+[any state transitions]  exit=hasExitTime exitT=exitTime dur=duration isrc=interruptionSource ordered self
+  AnyState-> Downed     exit=False exitT=0.75 dur=0.1 isrc=None ordered=True self=False cond=[Die If]
+  AnyState-> Hit_A      exit=False exitT=0 dur=0.05 isrc=Source ordered=True self=False cond=[Hit If]
+  AnyState-> [machine]Q exit=False exitT=0 dur=0.05 isrc=Source ordered=True self=False cond=[Q If]
+  AnyState-> [machine]W exit=False exitT=0 dur=0.05 isrc=Source ordered=True self=False cond=[W If]
+  AnyState-> [machine]E exit=False exitT=0 dur=0.05 isrc=Source ordered=True self=False cond=[E If]
+  AnyState-> [machine]R exit=False exitT=0 dur=0.05 isrc=Source ordered=True self=False cond=[R If]
+
+[state transitions]
+  Locomotion      -> Interact   exit=False exitT=0.7321429 dur=0.1 isrc=None ordered=True self=True cond=[Interact If]
+  Locomotion      -> Attack_Draw exit=False exitT=0.7321429 dur=0.15 isrc=None ordered=True self=True cond=[AttackRange If]
+  Locomotion      -> Skill      exit=False exitT=0.7321429 dur=0.05 isrc=None ordered=True self=True cond=[Skill If]
+  Locomotion      -> Bash       exit=False exitT=0.7321429 dur=0.05 isrc=None ordered=True self=True cond=[Bash If]
+  Locomotion      -> AttackMelee exit=False exitT=0.7321429 dur=0.25 isrc=None ordered=True self=True cond=[AttackMelee If]
+  Locomotion      -> Hit_A      exit=False exitT=0.7321429 dur=0.05 isrc=None ordered=True self=True cond=[Hit If]
+  Hit_A           -> Locomotion exit=True exitT=0.625 dur=0.1 isrc=None ordered=True self=True cond=
+  Interact        -> Locomotion exit=True exitT=0.8076923 dur=0.1 isrc=None ordered=True self=True cond=
+  Interact        -> Locomotion exit=False exitT=0 dur=0.1 isrc=Source ordered=True self=False cond=[Interrupt If]   <== Interrupt trigger
+  Rise            -> Locomotion exit=True exitT=0.8928571 dur=0.2 isrc=None ordered=True self=True cond=
+  Downed          -> Rise       exit=False exitT=0.6875 dur=0.1 isrc=None ordered=True self=True cond=[Revive If]
+  Attack_Release  -> Locomotion exit=True exitT=0.8125 dur=0.15 isrc=None ordered=True self=True cond=
+  Attack_Release  -> Locomotion exit=False exitT=0 dur=0.1 isrc=Source ordered=True self=False cond=[Interrupt If]   <== Interrupt trigger
+  Attack_Draw     -> Attack_Release exit=True exitT=0.8125 dur=0.15 isrc=None ordered=True self=True cond=
+  Attack_Draw     -> Locomotion exit=False exitT=0 dur=0.1 isrc=Source ordered=True self=False cond=[Interrupt If]   <== Interrupt trigger
+  Bash            -> Locomotion exit=True exitT=0.765625 dur=0.15 isrc=None ordered=True self=True cond=
+  Skill           -> Locomotion exit=True exitT=0.8125 dur=0.15 isrc=None ordered=True self=True cond=
+  AttackMelee     -> Locomotion exit=True exitT=0.75 dur=0.1 isrc=None ordered=True self=True cond=
+  AttackMelee     -> Locomotion exit=False exitT=0 dur=0.1 isrc=Source ordered=True self=False cond=[Interrupt If]   <== Interrupt trigger
+
+[sub machine transitions]
+  Q_1-> Locomotion exit=True exitT=1 dur=0.1
+  W_1-> Locomotion exit=True exitT=1 dur=0.1
+  E_1-> Locomotion exit=True exitT=1 dur=0.1
+  R_1-> Locomotion exit=True exitT=1 dur=0.1
+
+[parameters] SpeedZ:Float, SpeedX:Float, Grounded:Bool, AttackSpeed:Float, AttackRange:Trigger, Skill:Trigger, Bash:Trigger, Interrupt:Trigger, Interact:Trigger, Die:Trigger, Revive:Trigger, Hit:Trigger, Jump:Trigger, AttackMelee:Trigger, Q:Trigger, W:Trigger, E:Trigger, R:Trigger, SkillSpeed:Float

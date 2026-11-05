@@ -1,0 +1,78 @@
+=== INTERRUPT-02 / C1: Skill.LockMove ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+code: CharacterBrain.InSkillState() = IsSkillState(GetCurrentAnimatorStateInfo(0)) [Q_1/W_1/E_1/R_1/Bash/Skill] gates OnCommandMove / CommandAttack / CommandInteract
+asset: Locomotion->Bash 与 Locomotion->Skill 的 hasExitTime 已置 false（原 Bash=true exitTime=0.732 导致技能动画延迟起手）
+isolation: ALL CharacterBrain.enabled=false (test calls brain.CommandMove/CommandAttack/CommandInteract directly = same entry the input layer uses); MonsterBrain+agent disabled
+knight skills: Q=盾击 BashEffect(total=1.067s hit=0.53s) W=跳劈 HeavySlashEffect(Skill state 1.333s, hit window norm 0.5~0.7)
+flow: Cast -> +0.10s CommandMove(+4m) -> assert destination unchanged / still in skill state / damage still lands
+
+--- Knight/Q(盾击) -> CommandMove  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=80.0 cd=6.00 hp=20060.0
+  [0.006s] cur=Locomotion next=- norm=0.768
+  [MOVE +0.104s] stateAtMove=Locomotion destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 4.00) destDelta=4.0000 (expect 0.0000)
+  [0.878s] cur=Locomotion next=Bash norm=0.734
+  [0.929s] cur=Bash next=- norm=0.048
+  [+1.353s] state=Bash posDrift=3.748 hpNow=20045.0 hpDrop=15.0 destNow=(2.12, 0.08, 0.00)
+  [1.695s] cur=Bash next=Locomotion norm=0.767
+  [1.845s] cur=Locomotion next=- norm=0.165
+  [SKILL-END] back to Locomotion at +1.845s
+  [RESULT] Q(盾击) run=1 castOk=True stateAtMove=Locomotion inSkillStateAtMove=False destDeltaAfterMove=4.0000 hpDrop=15.0 driftAfterSkill=5.367 skillEndedNaturally=True verdict=FAIL
+
+--- Knight/Q(盾击) -> CommandMove  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=80.0 cd=6.00 hp=20060.0
+  [0.004s] cur=Locomotion next=- norm=0.797
+  [MOVE +0.100s] stateAtMove=Locomotion destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 4.00) destDelta=4.0000 (expect 0.0000)
+  [0.852s] cur=Locomotion next=Bash norm=0.733
+  [0.903s] cur=Bash next=- norm=0.048
+  [+1.354s] state=Bash posDrift=3.765 hpNow=20045.0 hpDrop=15.0 destNow=(2.12, 0.08, 0.00)
+  [1.670s] cur=Bash next=Locomotion norm=0.767
+  [1.821s] cur=Locomotion next=- norm=0.168
+  [SKILL-END] back to Locomotion at +1.821s
+  [RESULT] Q(盾击) run=2 castOk=True stateAtMove=Locomotion inSkillStateAtMove=False destDeltaAfterMove=4.0000 hpDrop=15.0 driftAfterSkill=5.363 skillEndedNaturally=True verdict=FAIL
+
+--- Knight/Q(盾击) -> CommandMove  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=80.0 cd=6.00 hp=20060.0
+  [0.004s] cur=Locomotion next=- norm=0.803
+  [MOVE +0.100s] stateAtMove=Locomotion destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 4.00) destDelta=4.0000 (expect 0.0000)
+  [0.850s] cur=Locomotion next=Bash norm=0.736
+  [0.897s] cur=Bash next=- norm=0.047
+  [+1.354s] state=Bash posDrift=3.762 hpNow=20045.0 hpDrop=15.0 destNow=(2.12, 0.08, 0.00)
+  [1.664s] cur=Bash next=Locomotion norm=0.767
+  [1.814s] cur=Locomotion next=- norm=0.165
+  [SKILL-END] back to Locomotion at +1.814s
+  [RESULT] Q(盾击) run=3 castOk=True stateAtMove=Locomotion inSkillStateAtMove=False destDeltaAfterMove=4.0000 hpDrop=15.0 driftAfterSkill=5.353 skillEndedNaturally=True verdict=FAIL
+
+--- Knight/W(跳劈) -> CommandMove  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=70.0 cd=6.00 hp=20060.0
+  [0.004s] cur=Locomotion next=Skill norm=0.799
+  [0.054s] cur=Skill next=- norm=0.038
+  [MOVE +0.100s] stateAtMove=Skill destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000)
+  [1.089s] cur=Skill next=Locomotion norm=0.814
+  [1.238s] cur=Locomotion next=- norm=0.142
+  [+1.353s] state=Locomotion posDrift=0.000 hpNow=20030.0 hpDrop=30.0 destNow=(-2.72, 0.08, 0.00)
+  [SKILL-END] back to Locomotion at +1.356s
+  [RESULT] W(跳劈) run=1 castOk=True stateAtMove=Skill inSkillStateAtMove=True destDeltaAfterMove=0.0000 hpDrop=30.0 driftAfterSkill=0.988 skillEndedNaturally=True verdict=PASS
+
+--- Knight/W(跳劈) -> CommandMove  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=70.0 cd=6.00 hp=20060.0
+  [0.005s] cur=Locomotion next=Skill norm=0.903
+  [0.058s] cur=Skill next=- norm=0.040
+  [MOVE +0.101s] stateAtMove=Skill destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000)
+  [1.092s] cur=Skill next=Locomotion norm=0.815
+  [1.246s] cur=Locomotion next=- norm=0.148
+  [+1.353s] state=Locomotion posDrift=0.000 hpNow=20030.0 hpDrop=30.0 destNow=(-2.72, 0.08, 0.00)
+  [SKILL-END] back to Locomotion at +1.358s
+  [RESULT] W(跳劈) run=2 castOk=True stateAtMove=Skill inSkillStateAtMove=True destDeltaAfterMove=0.0000 hpDrop=30.0 driftAfterSkill=0.994 skillEndedNaturally=True verdict=PASS
+
+--- Knight/W(跳劈) -> CommandMove  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True manaBefore=100.0 manaAfter=70.0 cd=6.00 hp=20060.0
+  [0.004s] cur=Locomotion next=Skill norm=0.905
+  [0.054s] cur=Skill next=- norm=0.038
+  [MOVE +0.102s] stateAtMove=Skill destBefore=(-2.72, 0.08, 0.00) destAfter=(-2.72, 0.08, 0.00) destDelta=0.0000 (expect 0.0000)
+  [1.091s] cur=Skill next=Locomotion norm=0.815
+  [1.239s] cur=Locomotion next=- norm=0.142
+  [+1.354s] state=Locomotion posDrift=0.000 hpNow=20030.0 hpDrop=30.0 destNow=(-2.72, 0.08, 0.00)
+  [SKILL-END] back to Locomotion at +1.358s
+  [RESULT] W(跳劈) run=3 castOk=True stateAtMove=Skill inSkillStateAtMove=True destDeltaAfterMove=0.0000 hpDrop=30.0 driftAfterSkill=0.987 skillEndedNaturally=True verdict=PASS
+
+=== END ===

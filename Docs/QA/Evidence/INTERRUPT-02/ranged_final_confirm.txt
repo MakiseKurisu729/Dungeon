@@ -1,0 +1,74 @@
+=== INTERRUPT-02 / B final confirmation (controller after Locomotion->Bash/Skill hasExitTime=false) ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+purpose: one Attack_Draw and one Attack_Release interruption per ranged class on the FINAL asset state, plus CONTROL runs
+isolation: ALL CharacterBrain.enabled=false; MonsterBrain+agent disabled; monster maxHp+5000
+
+--- Archer/Draw-move hp=10060.0
+  AutoAttack
+  [0.005s] cur=Locomotion next=Attack_Draw
+  [0.155s] cur=Attack_Draw next=-
+  [MOVE] stateBefore=Attack_Draw norm=0.339
+  [0.161s] cur=Attack_Draw next=Locomotion
+  [0.265s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.110s
+  [RESULT] Archer/Draw-move moveToLoco=0.110 projPeak=0 hpDelta=0.0 verdict=PASS
+
+--- Mage/Draw-move hp=10060.0
+  AutoAttack
+  [0.004s] cur=Locomotion next=Attack_Draw
+  [0.156s] cur=Attack_Draw next=-
+  [MOVE] stateBefore=Attack_Draw norm=0.301
+  [0.800s] cur=Attack_Draw next=Locomotion
+  [0.903s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.109s
+  [RESULT] Mage/Draw-move moveToLoco=0.109 projPeak=0 hpDelta=0.0 verdict=PASS
+
+--- Archer/Release-move hp=10060.0
+  AutoAttack
+  [0.004s] cur=Locomotion next=Attack_Draw
+  [0.158s] cur=Attack_Draw next=-
+  [0.369s] cur=Attack_Draw next=Attack_Release
+  [0.516s] cur=Attack_Release next=-
+  [MOVE] stateBefore=Attack_Release norm=0.339
+  [0.521s] cur=Attack_Release next=Locomotion
+  [0.625s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.109s
+  [RESULT] Archer/Release-move moveToLoco=0.109 projPeak=0 hpDelta=0.0 verdict=PASS
+
+--- Mage/Release-move hp=10060.0
+  AutoAttack
+  [0.003s] cur=Locomotion next=Attack_Draw
+  [0.155s] cur=Attack_Draw next=-
+  [2.136s] cur=Attack_Draw next=Attack_Release
+  [2.286s] cur=Attack_Release next=-
+  [MOVE] stateBefore=Attack_Release norm=0.129
+  [2.290s] cur=Attack_Release next=Locomotion
+  [2.391s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.104s
+  [RESULT] Mage/Release-move moveToLoco=0.104 projPeak=0 hpDelta=0.0 verdict=PASS
+
+--- Archer/Draw (CONTROL) hp=10060.0
+  AutoAttack
+  [0.003s] cur=Locomotion next=Attack_Draw
+  [0.156s] cur=Attack_Draw next=-
+  [CONTROL] at Attack_Draw norm=0.343 (no move)
+  [0.365s] cur=Attack_Draw next=Attack_Release
+  [0.517s] cur=Attack_Release next=-
+  [0.729s] cur=Attack_Release next=Locomotion
+  [0.878s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.722s
+  [RESULT] Archer/Draw CONTROL moveToLoco=0.722 projPeak=1 hpDelta=12.0 verdict=PASS
+
+--- Mage/Release (CONTROL) hp=10060.0
+  AutoAttack
+  [0.004s] cur=Locomotion next=Attack_Draw
+  [0.157s] cur=Attack_Draw next=-
+  [2.140s] cur=Attack_Draw next=Attack_Release
+  [2.290s] cur=Attack_Release next=-
+  [CONTROL] at Attack_Release norm=0.131 (no move)
+  [3.087s] cur=Attack_Release next=Locomotion
+  [3.239s] cur=Locomotion next=-
+  [LOCO] moveToLoco=0.949s
+  [RESULT] Mage/Release CONTROL moveToLoco=0.949 projPeak=1 hpDelta=16.0 verdict=PASS
+
+=== END ===

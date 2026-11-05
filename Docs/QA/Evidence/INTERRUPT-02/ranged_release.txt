@@ -1,0 +1,105 @@
+=== INTERRUPT-02 / B2: Attack_Release + move -> Locomotion, damage not settled ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+controller: Attack_Release->Locomotion [Interrupt If] dur=0.1 isrc=Source ordered=True self=False (same params as AttackMelee/Interact/Attack_Draw)
+isolation: ALL CharacterBrain.enabled=false; MonsterBrain+agent disabled; monster maxHp+5000 (adjacent to the shooter, 1.2m)
+
+flow: RangedCombat.AutoAttack -> wait draw->release transition done, state==Attack_Release (norm~0) -> CommandMove(+3m) -> sample 1.6s
+control: identical attack without the move command (proves the release window does fire and deal damage)
+
+--- Archer/Attack_Release run=1 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 0.00) monster=(0.85, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.443
+  [0.157s] cur=Attack_Draw next=- norm=0.345
+  [0.370s] cur=Attack_Draw next=Attack_Release norm=0.823
+  [0.516s] cur=Attack_Release next=- norm=0.339
+  [MOVE] at t=0.516s stateBefore=Attack_Release norm=0.339 -> CharacterBrain.CommandMove(+3m z)
+  [0.519s] cur=Attack_Release next=Locomotion norm=0.347
+  [0.621s] cur=Locomotion next=- norm=0.098
+  [LOCO] back to Locomotion at t=0.621s (moveToLoco=0.106s)
+  [RESULT] Archer/Attack_Release run=1 moveToLoco=0.106s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Archer/Attack_Release run=2 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 0.00) monster=(0.85, 0.08, 1.20)
+  [0.006s] cur=Locomotion next=Attack_Draw norm=0.815
+  [0.160s] cur=Attack_Draw next=- norm=0.345
+  [0.368s] cur=Attack_Draw next=Attack_Release norm=0.815
+  [0.518s] cur=Attack_Release next=- norm=0.340
+  [MOVE] at t=0.518s stateBefore=Attack_Release norm=0.340 -> CharacterBrain.CommandMove(+3m z)
+  [0.522s] cur=Attack_Release next=Locomotion norm=0.349
+  [0.626s] cur=Locomotion next=- norm=0.099
+  [LOCO] back to Locomotion at t=0.626s (moveToLoco=0.108s)
+  [RESULT] Archer/Attack_Release run=2 moveToLoco=0.108s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Archer/Attack_Release run=3 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 0.00) monster=(0.85, 0.08, 1.20)
+  [0.003s] cur=Locomotion next=Attack_Draw norm=0.809
+  [0.156s] cur=Attack_Draw next=- norm=0.342
+  [0.369s] cur=Attack_Draw next=Attack_Release norm=0.823
+  [0.517s] cur=Attack_Release next=- norm=0.343
+  [MOVE] at t=0.517s stateBefore=Attack_Release norm=0.343 -> CharacterBrain.CommandMove(+3m z)
+  [0.522s] cur=Attack_Release next=Locomotion norm=0.355
+  [0.623s] cur=Locomotion next=- norm=0.096
+  [LOCO] back to Locomotion at t=0.623s (moveToLoco=0.106s)
+  [RESULT] Archer/Attack_Release run=3 moveToLoco=0.106s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Mage/Attack_Release run=1 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 0.00) monster=(3.22, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.380
+  [0.156s] cur=Attack_Draw next=- norm=0.058
+  [2.140s] cur=Attack_Draw next=Attack_Release norm=0.814
+  [2.290s] cur=Attack_Release next=- norm=0.132
+  [MOVE] at t=2.290s stateBefore=Attack_Release norm=0.132 -> CharacterBrain.CommandMove(+3m z)
+  [2.295s] cur=Attack_Release next=Locomotion norm=0.135
+  [2.396s] cur=Locomotion next=- norm=0.097
+  [LOCO] back to Locomotion at t=2.396s (moveToLoco=0.105s)
+  [RESULT] Mage/Attack_Release run=1 moveToLoco=0.105s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Mage/Attack_Release run=2 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 0.00) monster=(3.22, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.114
+  [0.155s] cur=Attack_Draw next=- norm=0.058
+  [2.140s] cur=Attack_Draw next=Attack_Release norm=0.814
+  [2.289s] cur=Attack_Release next=- norm=0.130
+  [MOVE] at t=2.289s stateBefore=Attack_Release norm=0.130 -> CharacterBrain.CommandMove(+3m z)
+  [2.294s] cur=Attack_Release next=Locomotion norm=0.135
+  [2.395s] cur=Locomotion next=- norm=0.097
+  [LOCO] back to Locomotion at t=2.395s (moveToLoco=0.106s)
+  [RESULT] Mage/Attack_Release run=2 moveToLoco=0.106s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Mage/Attack_Release run=3 --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 0.00) monster=(3.22, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.114
+  [0.154s] cur=Attack_Draw next=- norm=0.057
+  [2.140s] cur=Attack_Draw next=Attack_Release norm=0.814
+  [2.288s] cur=Attack_Release next=- norm=0.130
+  [MOVE] at t=2.288s stateBefore=Attack_Release norm=0.130 -> CharacterBrain.CommandMove(+3m z)
+  [2.291s] cur=Attack_Release next=Locomotion norm=0.132
+  [2.393s] cur=Locomotion next=- norm=0.098
+  [LOCO] back to Locomotion at t=2.393s (moveToLoco=0.106s)
+  [RESULT] Mage/Attack_Release run=3 moveToLoco=0.106s projPeak=0 hpBefore=10060.0 hpAfter=10060.0 hpDelta=0.0 finalState=Locomotion verdict=PASS
+
+--- Archer/Attack_Release run=1 (CONTROL no-move) --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 0.00) monster=(0.85, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.579
+  [0.156s] cur=Attack_Draw next=- norm=0.342
+  [0.368s] cur=Attack_Draw next=Attack_Release norm=0.820
+  [0.517s] cur=Attack_Release next=- norm=0.341
+  [CONTROL] reached Attack_Release norm=0.341, no move command issued
+  [0.729s] cur=Attack_Release next=Locomotion norm=0.819
+  [0.877s] cur=Locomotion next=- norm=0.141
+  [LOCO] back to Locomotion at t=0.877s (moveToLoco=0.360s)
+  [RESULT] Archer/Attack_Release run=1 CONTROL moveToLoco=0.360s projPeak=1 hpBefore=10060.0 hpAfter=10048.0 hpDelta=12.0 finalState=Locomotion verdict=PASS
+
+--- Mage/Attack_Release run=1 (CONTROL no-move) --- hp=10060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 0.00) monster=(3.22, 0.08, 1.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.406
+  [0.156s] cur=Attack_Draw next=- norm=0.058
+  [2.138s] cur=Attack_Draw next=Attack_Release norm=0.813
+  [2.287s] cur=Attack_Release next=- norm=0.129
+  [CONTROL] reached Attack_Release norm=0.129, no move command issued
+  [3.088s] cur=Attack_Release next=Locomotion norm=0.815
+  [3.236s] cur=Locomotion next=- norm=0.142
+  [LOCO] back to Locomotion at t=3.236s (moveToLoco=0.949s)
+  [RESULT] Mage/Attack_Release run=1 CONTROL moveToLoco=0.949s projPeak=1 hpBefore=10060.0 hpAfter=10044.0 hpDelta=16.0 finalState=Locomotion verdict=PASS
+
+=== END ===

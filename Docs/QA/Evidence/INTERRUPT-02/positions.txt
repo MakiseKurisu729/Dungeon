@@ -1,0 +1,63 @@
+=== INTERRUPT-02 / A: PlayerBase.controller Base Layer 布局 ===
+读回来源：Unity 2022.3.62f3c1，AnimatorStateMachine.position / anyStatePosition（编辑器 API 读回，非手改 YAML）
+读回时间：2026-11-05 22:03
+
+[实际坐标（读回）]
+  Locomotion       (80, 620)
+  AttackMelee      (520, 20)
+  Attack_Draw      (520, 170)
+  Attack_Release   (520, 320)
+  Bash             (520, 470)
+  Skill            (520, 620)
+  Hit_A            (520, 770)
+  Interact         (520, 920)
+  Downed           (80, 900)
+  Rise             (80, 1050)
+  Q (子机)         (1000, 120)
+  W (子机)         (1000, 380)
+  E (子机)         (1000, 640)
+  R (子机)         (1000, 900)
+  Q_1/W_1/E_1/R_1  (300, 40)（各自子机内，未改）
+  AnyState         (300, 600)
+  Entry            (50, 120)（未改）
+  Exit             (800, 120)（未改）
+
+[与工单 §2A 目标表的差异（2 处，均为「不穿块」服务）]
+1. AnyState：工单建议 (520, -160)。实测该位置会让 AnyState->Hit_A 变成沿 x=520 的竖直长线，
+   从 y=-160 直下到 770，**穿过 AttackMelee / Attack_Draw / Attack_Release / Bash / Skill 五个状态块**。
+   改为 (300, 600)（col1 与 col2 之间的空走廊、Locomotion 行左侧），AnyState->Hit_A / AnyState->Downed 变成斜线，
+   只走空走廊与 Downed 列外侧。
+   注：`AnimatorStateMachine.anyStatePosition` 实际是公开可写属性，不需要工单预期的 `SerializedObject` 反射；
+   已用该属性写入并 AssetDatabase.SaveAssets()。
+2. AnyState 纵向位置最终取 (300, 600) 而非 (300, 620)：620 会让 Skill->Locomotion 这条横线穿过 AnyState 节点本身。
+
+[连线穿块分析（估算）]
+说明：Unity 不暴露节点像素尺寸，下面按 Animator 默认尺寸估算——状态块 170x48、子机 210x64、AnyState 200x40，
+连线按「节点中心→节点中心」求交（Unity 实际连的是边框，误差约 ±15px）。因此**最终以所有者目检为准**，
+本表只用于说明「哪些线最可能仍穿块」。
+  AnyState -> Downed          : 无
+  AnyState -> Hit_A           : 无
+  AnyState -> Q               : 穿过 Bash
+  AnyState -> W               : 无
+  AnyState -> E               : 穿过 Skill
+  AnyState -> R               : 无
+  AttackMelee -> Locomotion   : 无
+  Attack_Draw -> Locomotion   : 无（INTERRUPT-02 新增线）
+  Attack_Release -> Locomotion: 无（INTERRUPT-02 新增线）
+  Bash -> Locomotion          : 无
+  Skill -> Locomotion         : 无
+  Hit_A -> Locomotion         : 无
+  Interact -> Locomotion      : 无
+  Downed -> Locomotion        : 无
+  Rise -> Locomotion          : 穿过 Downed（col1 三者同列，几何上不可避免）
+  Locomotion -> Rise          : 穿过 Downed
+  Locomotion -> Downed        : 穿过 Downed 自身（同列，属预期）
+
+[AC-1 结论]
+  ● 七个目检状态（AttackMelee / Attack_Draw / Attack_Release / Bash / Skill / Hit_A / Interact）
+    的 `X->Locomotion` 线与 `AnyState->X` 线，在估算模型下**均不穿过任何状态块**。
+  ● 仍穿块且需要所有者定夺的连线（未改过渡条件/时长来迁就视觉）：
+      - AnyState -> Q   穿过 Bash
+      - AnyState -> E   穿过 Skill
+      - Rise -> Locomotion / Locomotion -> Rise 穿过 Downed（col1 同列固有）
+  ● 目检状态：AC-1 属编辑器渲染产物，无 API 可断言，**待所有者目检确认**。

@@ -1,0 +1,26 @@
+﻿### git status --porcelain
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Art/Animations/PlayerBase.controller
+ M Assets/_Project/Scripts/Units/CharacterBrain.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/workflow-rules.md
+?? Docs/Handoff/TASK_INTERRUPT-02.md
+?? Docs/QA/Evidence/INTERRUPT-02/
+?? Docs/QA/Evidence/SPEC-01/editor_run16/
+
+### git diff --stat
+ AGENTS.md                                          |   2 +-
+ Assembly-CSharp-Editor.csproj                      | 444 +++++++++++----------
+ Assembly-CSharp.csproj                             | 437 ++++++++++----------
+ .../_Project/Art/Animations/PlayerBase.controller  | 134 +++++--
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    |  31 +-
+ Docs/Handoff/CURRENT.md                            |   2 +-
+ Docs/Handoff/workflow-rules.md                     |   2 +-
+ 7 files changed, 579 insertions(+), 473 deletions(-)
+
+### note
+1) 本单只写了两个文件：Assets/_Project/Art/Animations/PlayerBase.controller、Assets/_Project/Scripts/Units/CharacterBrain.cs（+ 本证据目录 + REPORT）。
+2) AGENTS.md / Assembly-CSharp*.csproj / Docs/Handoff/CURRENT.md / Docs/Handoff/workflow-rules.md 在本单开工前即处于已修改状态（TASK §0 基线 = 9e0b7515 + 未提交的第二轮批次），非本单改动。文件时间戳：AGENTS.md / CURRENT.md / workflow-rules.md = 21:10，csproj = 16:22 / 18:07，均早于本单开工（21:35）。CharacterBrain.cs = 21:43，controller = 22:04。
+3) ProjectSettings/、Packages/、场景、预制体、.asset、OC_* 无改动（git status 校验为空）。

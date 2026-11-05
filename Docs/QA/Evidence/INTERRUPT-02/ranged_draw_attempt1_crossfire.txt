@@ -1,0 +1,91 @@
+=== INTERRUPT-02 / B: RangedCombat Attack_Draw + move ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+setup: players CharacterBrain.enabled=false (isolate RangedCombat.AutoAttack + CharacterBrain.CommandMove); MonsterBrain/MonsterAgent disabled; monster maxHp+5000
+controller: Attack_Draw->Locomotion [Interrupt If] dur=0.1 isrc=Source ordered=True self=False
+flow: AutoAttack -> wait Attack_Draw norm>=0.30 -> brain.CommandMove(+3m) -> sample states/projectiles/hp for 1.6s
+control: same attack, no move command (proves the attack does fire when not interrupted)
+
+--- Archer/Attack_Draw run=1 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 0.00) monster=(0.85, 0.08, 1.20)
+  [0.000s] cur=Locomotion next=- norm=0.019
+  [0.020s] cur=Locomotion next=Attack_Draw norm=0.038
+  [0.173s] cur=Attack_Draw next=- norm=0.344
+  [MOVE] at t=0.173s stateBefore=Attack_Draw norm=0.344 -> CommandMove(+3m z)
+  [0.180s] cur=Attack_Draw next=Locomotion norm=0.360
+  [0.285s] cur=Locomotion next=- norm=0.102
+  [LOCO] back to Locomotion at t=0.285s (moveToLoco=0.113s)
+  [RESULT] Archer/Attack_Draw run=1 moveToLoco=0.113s projPeak=0 hpBefore=5060.0 hpAfter=5060.0 hpDelta=0.0 finalState=Locomotion
+
+--- Archer/Attack_Draw run=2 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 3.00) monster=(0.85, 0.08, 4.20)
+  [0.005s] cur=Locomotion next=Attack_Draw norm=0.132
+  [0.159s] cur=Attack_Draw next=- norm=0.345
+  [MOVE] at t=0.159s stateBefore=Attack_Draw norm=0.345 -> CommandMove(+3m z)
+  [0.163s] cur=Attack_Draw next=Locomotion norm=0.354
+  [0.266s] cur=Locomotion next=- norm=0.100
+  [LOCO] back to Locomotion at t=0.266s (moveToLoco=0.107s)
+  [RESULT] Archer/Attack_Draw run=2 moveToLoco=0.107s projPeak=1 hpBefore=5060.0 hpAfter=5044.0 hpDelta=16.0 finalState=Locomotion
+
+--- Archer/Attack_Draw run=3 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 6.00) monster=(0.85, 0.08, 7.20)
+  [0.005s] cur=Locomotion next=Attack_Draw norm=0.149
+  [0.156s] cur=Attack_Draw next=- norm=0.340
+  [MOVE] at t=0.156s stateBefore=Attack_Draw norm=0.340 -> CommandMove(+3m z)
+  [0.160s] cur=Attack_Draw next=Locomotion norm=0.349
+  [0.263s] cur=Locomotion next=- norm=0.099
+  [LOCO] back to Locomotion at t=0.263s (moveToLoco=0.107s)
+  [RESULT] Archer/Attack_Draw run=3 moveToLoco=0.107s projPeak=1 hpBefore=5060.0 hpAfter=5044.0 hpDelta=16.0 finalState=Locomotion
+
+--- Mage/Attack_Draw run=1 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 0.00) monster=(2.84, 0.08, 1.14)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.145
+  [0.157s] cur=Attack_Draw next=- norm=0.058
+  [MOVE] at t=0.792s stateBefore=Attack_Draw norm=0.300 -> CommandMove(+3m z)
+  [0.796s] cur=Attack_Draw next=Locomotion norm=0.302
+  [0.897s] cur=Locomotion next=- norm=0.097
+  [LOCO] back to Locomotion at t=0.897s (moveToLoco=0.105s)
+  [RESULT] Mage/Attack_Draw run=1 moveToLoco=0.105s projPeak=0 hpBefore=5060.0 hpAfter=5060.0 hpDelta=0.0 finalState=Locomotion
+
+--- Mage/Attack_Draw run=2 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 3.00) monster=(3.22, 0.08, 4.20)
+  [0.005s] cur=Locomotion next=Attack_Draw norm=0.553
+  [0.157s] cur=Attack_Draw next=- norm=0.058
+  [MOVE] at t=0.794s stateBefore=Attack_Draw norm=0.301 -> CommandMove(+3m z)
+  [0.798s] cur=Attack_Draw next=Locomotion norm=0.302
+  [0.901s] cur=Locomotion next=- norm=0.099
+  [LOCO] back to Locomotion at t=0.901s (moveToLoco=0.107s)
+  [RESULT] Mage/Attack_Draw run=2 moveToLoco=0.107s projPeak=0 hpBefore=5060.0 hpAfter=5060.0 hpDelta=0.0 finalState=Locomotion
+
+--- Mage/Attack_Draw run=3 --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 6.00) monster=(3.22, 0.08, 7.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.549
+  [0.157s] cur=Attack_Draw next=- norm=0.058
+  [MOVE] at t=0.792s stateBefore=Attack_Draw norm=0.300 -> CommandMove(+3m z)
+  [0.796s] cur=Attack_Draw next=Locomotion norm=0.302
+  [0.901s] cur=Locomotion next=- norm=0.100
+  [LOCO] back to Locomotion at t=0.901s (moveToLoco=0.108s)
+  [RESULT] Mage/Attack_Draw run=3 moveToLoco=0.108s projPeak=0 hpBefore=5060.0 hpAfter=5060.0 hpDelta=0.0 finalState=Locomotion
+
+--- Archer/Attack_Draw run=1 (CONTROL no-move) --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(0.85, 0.08, 9.00) monster=(0.85, 0.08, 10.20)
+  [0.005s] cur=Locomotion next=Attack_Draw norm=0.260
+  [0.156s] cur=Attack_Draw next=- norm=0.340
+  [CONTROL] reach draw norm>=0.30, no move command issued
+  [0.368s] cur=Attack_Draw next=Attack_Release norm=0.817
+  [0.517s] cur=Attack_Release next=- norm=0.341
+  [0.731s] cur=Attack_Release next=Locomotion norm=0.821
+  [0.877s] cur=Locomotion next=- norm=0.141
+  [RESULT] Archer/Attack_Draw run=1 CONTROL moveToLoco=n/as projPeak=1 hpBefore=5060.0 hpAfter=5048.0 hpDelta=12.0 finalState=Locomotion
+
+--- Mage/Attack_Draw run=1 (CONTROL no-move) --- hp=5060.0 anim=Locomotion
+  attackStart AutoAttack: player=(3.22, 0.08, 9.00) monster=(3.22, 0.08, 10.20)
+  [0.004s] cur=Locomotion next=Attack_Draw norm=0.496
+  [0.155s] cur=Attack_Draw next=- norm=0.057
+  [CONTROL] reach draw norm>=0.30, no move command issued
+  [2.139s] cur=Attack_Draw next=Attack_Release norm=0.813
+  [2.290s] cur=Attack_Release next=- norm=0.131
+  [3.088s] cur=Attack_Release next=Locomotion norm=0.815
+  [3.236s] cur=Locomotion next=- norm=0.142
+  [RESULT] Mage/Attack_Draw run=1 CONTROL moveToLoco=n/as projPeak=1 hpBefore=5060.0 hpAfter=5044.0 hpDelta=16.0 finalState=Locomotion
+
+=== END ===

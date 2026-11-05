@@ -1,0 +1,63 @@
+=== INTERRUPT-02 / C2: Skill.LockOther ===
+unity=2022.3.62f3c1 scene=DungeonWorld
+flow: Cast -> +0.10s CommandAttack(mage) + CommandInteract(mage) -> assert _orderedTarget unchanged / _pendingInteract null / Animator never enters Interact
+isolation: same as C1 (player brains disabled, monster dummy)
+
+--- Knight/Q(盾击) -> CommandAttack/CommandInteract  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.006s] cur=Locomotion next=- norm=0.768
+  [+0.104s] stateAtCmd=Locomotion orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Mage_Unit pendingInteractAfterCommandInteract=Mage_Unit (Interactable) targetKept=False
+  [0.878s] cur=Locomotion next=Bash norm=0.734
+  [0.929s] cur=Bash next=- norm=0.048
+  [1.695s] cur=Bash next=Locomotion norm=0.767
+  [1.845s] cur=Locomotion next=- norm=0.165
+  [RESULT] Q(盾击) run=1 targetKept=False pendingInteractNull=False sawInteractState=False verdict=FAIL
+
+--- Knight/Q(盾击) -> CommandAttack/CommandInteract  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=- norm=0.797
+  [+0.100s] stateAtCmd=Locomotion orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Mage_Unit pendingInteractAfterCommandInteract=Mage_Unit (Interactable) targetKept=False
+  [0.852s] cur=Locomotion next=Bash norm=0.733
+  [0.903s] cur=Bash next=- norm=0.048
+  [1.670s] cur=Bash next=Locomotion norm=0.767
+  [1.821s] cur=Locomotion next=- norm=0.168
+  [RESULT] Q(盾击) run=2 targetKept=False pendingInteractNull=False sawInteractState=False verdict=FAIL
+
+--- Knight/Q(盾击) -> CommandAttack/CommandInteract  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=- norm=0.803
+  [+0.100s] stateAtCmd=Locomotion orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Mage_Unit pendingInteractAfterCommandInteract=Mage_Unit (Interactable) targetKept=False
+  [0.850s] cur=Locomotion next=Bash norm=0.736
+  [0.897s] cur=Bash next=- norm=0.047
+  [1.664s] cur=Bash next=Locomotion norm=0.767
+  [1.814s] cur=Locomotion next=- norm=0.165
+  [RESULT] Q(盾击) run=3 targetKept=False pendingInteractNull=False sawInteractState=False verdict=FAIL
+
+--- Knight/W(跳劈) -> CommandAttack/CommandInteract  run=1 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=Skill norm=0.799
+  [0.054s] cur=Skill next=- norm=0.038
+  [+0.100s] stateAtCmd=Skill orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Skeleton_Warrior pendingInteractAfterCommandInteract=null targetKept=True
+  [1.089s] cur=Skill next=Locomotion norm=0.814
+  [1.238s] cur=Locomotion next=- norm=0.142
+  [RESULT] W(跳劈) run=1 targetKept=True pendingInteractNull=True sawInteractState=False verdict=PASS
+
+--- Knight/W(跳劈) -> CommandAttack/CommandInteract  run=2 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.005s] cur=Locomotion next=Skill norm=0.903
+  [0.058s] cur=Skill next=- norm=0.040
+  [+0.101s] stateAtCmd=Skill orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Skeleton_Warrior pendingInteractAfterCommandInteract=null targetKept=True
+  [1.092s] cur=Skill next=Locomotion norm=0.815
+  [1.246s] cur=Locomotion next=- norm=0.148
+  [RESULT] W(跳劈) run=2 targetKept=True pendingInteractNull=True sawInteractState=False verdict=PASS
+
+--- Knight/W(跳劈) -> CommandAttack/CommandInteract  run=3 ---
+  [CAST] t0 stateAtCast=Locomotion castOk=True cd=6.00
+  [0.004s] cur=Locomotion next=Skill norm=0.905
+  [0.054s] cur=Skill next=- norm=0.038
+  [+0.102s] stateAtCmd=Skill orderedBefore=Skeleton_Warrior orderedAfterCommandAttack(mage)=Skeleton_Warrior pendingInteractAfterCommandInteract=null targetKept=True
+  [1.091s] cur=Skill next=Locomotion norm=0.815
+  [1.239s] cur=Locomotion next=- norm=0.142
+  [RESULT] W(跳劈) run=3 targetKept=True pendingInteractNull=True sawInteractState=False verdict=PASS
+
+=== END ===
