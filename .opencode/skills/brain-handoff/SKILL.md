@@ -9,12 +9,12 @@ description: 【大脑】新会话开场、读档与汇报进度。触发词：�
 
 ## 步骤
 
-1. 一次性按顺序读完：`AGENTS.md`（已注入则跳过）→ `Docs/00_项目事实基线.md` → `Docs/Handoff/CURRENT.md` → CURRENT 指定的当前任务包与最近 REPORT。不分多轮小步读，不做全仓扫描。
-2. 只读核对 `git rev-parse --abbrev-ref HEAD` / `git rev-parse HEAD` 与 CURRENT 基线是否一致（禁止一切 git 写操作）。
+1. 一次性按顺序读完：`AGENTS.md`（已注入则跳过）→ `Docs/00_项目事实基线.md` → `Docs/交接/当前状态.md` → 当前状态文件指定的当前任务包与最近 REPORT。不分多轮小步读，不做全仓扫描。
+2. 只读核对 `git rev-parse --abbrev-ref HEAD` / `git rev-parse HEAD` 与当前状态文件的基线是否一致（禁止一切 git 写操作）。
 3. 汇报（≤300 字）：分支与 HEAD、任务状态、未决风险、“下一会话第一件事”、建议的最小下一步。
-4. 用户确认后再写工单：`Docs/Handoff/TASK_XXX.md`，要求见 `Docs/Handoff/workflow-rules.md` §1（自包含、边界、验收、证据路径、回滚锚、风险等级）。
+4. 用户确认后再写工单：`Docs/交接/TASK_XXX.md`，要求见 `Docs/交接/工作流规则.md` §1（自包含、边界、验收、证据路径、回滚锚、风险等级）。
 
 ## 规则
 
-- 规则见 `AGENTS.md`（权限 §1、停止 §6、Do not §11），模板见 `Docs/Handoff/workflow-rules.md`。
-- 基线与仓库不一致 / CURRENT 未给准确任务路径 / 文档间矛盾 → 停下报告，不猜、不带矛盾继续。
+- 规则见 `AGENTS.md`（权限 §1、停止 §6、Do not §11），模板见 `Docs/交接/工作流规则.md`。
+- 基线与仓库不一致 / 当前状态文件未给准确任务路径 / 文档间矛盾 → 停下报告，不猜、不带矛盾继续。
