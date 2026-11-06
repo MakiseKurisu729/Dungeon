@@ -119,6 +119,8 @@
 
 ## 7. 未决项
 
+> 本小节为**阶段 A 记录**（保留追溯）；整单终态未决项见 §E.7，已全部在 B/C/D/E 阶段处置。
+
 1. **未合并项及原因**（去重纪律要求的“单列”）
    - `SkillCastFixture.CreateTarget(Vector3)` 未并入 `QaFixtures.CreateTarget(name,pos,showDamageNumber)`：前者 `maxHp=1000`、固定 `showDamageNumber=false`、并把结果存进自己的 `TargetGo`/`Target`/`TargetStats` 字段参与 `Dispose()`；后者 `maxHp=100000`、按参数、无宿主字段。**不同边界，不可证明等价**，故留在 `SkillCastFixture` 内（该文件只是被移动）。
    - `SPEC01_ProbeRunner.GetHead()`（读 `SessionState` 缓存）与 `SPEC01_BatchAcceptance.GitHead()`（真 `git` 进程）未合并成“一个语义”：两者数据来源与时刻不同。现以 `QaScene.GetHead(sessionKey)` 参数化承载，默认（`sessionKey=null`）保留 `git` 语义，断言层传 key 保留缓存语义（见 §3.6）。**若大脑认为应二选一，请在阶段 B 前裁决**，我不自行取舍。
@@ -130,6 +132,8 @@
 6. Canonical 证据目录新增了 5 个 `editor_runN` 子目录（菜单自动递增的产物，属“只追加”）；阶段 E 的 AC-4 描述里“Docs 侧只有 …”需要把这批新增目录算进去。
 
 ## 8. 建议提交
+
+> 本小节为**阶段 A 建议**；整单提交建议见 §E.8，实际提交为 `e7ab53f1` / `a1619aff` / `e3ad251c` / `5df13b1a` / `5159b59a`（大脑执行，未 push）。
 
 ```text
 test(qa): 建立 Qa 公共层并迁移 SPEC01（阶段 A，断言零变化）

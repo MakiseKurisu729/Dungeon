@@ -10,7 +10,7 @@
 | 项 | 值 |
 |---|---|
 | 分支 | `docs/fnd-00-baseline` |
-| HEAD | `896e7450`（REFACTOR-LONG-01 M4；M0–M4 已本地提交，未 push） |
+| HEAD | `5159b59a`（QA-REFACTOR-01 A–E 已本地提交，未 push） |
 | Unity | `2022.3.62f3c1`（目标 6.3，未迁移） |
 
 ## 未提交批次
@@ -24,6 +24,15 @@
 - 已提交：`9e0b7515`（TEST-MCP-01 + Phase A + WF-05 规则）。
 
 ## 当前 feature
+
+- **`QA-REFACTOR-01` — 测试代码分层重构 — `Review`（AC-1~6、8~10 全过；AC-7 结构 8/8 等价，L2 域重载未触发）**
+  - Spec：`Docs/Handoff/TASK_QA-REFACTOR-01.md`（AC-1..10）；报告：`Docs/Handoff/REPORT_QA-REFACTOR-01.md`；证据：`Docs/QA/Evidence/QA-REFACTOR-01/`；讲稿：`Docs/Learning/QA-REFACTOR-01_讲稿.md`。
+  - 提交：`e7ab53f1`（A 核心+SPEC01）、`a1619aff`（B REFACTOR）、`e3ad251c`（C FND00B06）、`5df13b1a`（D DIAG）、`5159b59a`（E Launcher+文档）。
+  - 结果：四套件各连跑 2 次 —— SPEC01 12/0、REFACTOR 16/0、FND00B06 12/0+observed2、DIAG 6/1（已知红 `Diag.Input.FirstExit` 不变）；断言 ID、`expected` 字面量、证据文件名/键序逐字符未漂移。
+  - 结构：`Tests/QA/{Runtime,Editor}/` 收敛为 `IQaSink`/`QaEvidence`(+Spec)/`QaJson`/`QaWait`/`QaFixtures`/`QaScene`/`QaLauncher`/`SkillCastFixture`；四套件只留断言与编排，`*_Evidence` 变 32–38 行适配器，4 个 `*_Boot` 合并为 1 个 `QaLauncher`（376 行）。
+  - 新文档：`Docs/06_测试架构与验收分层.md`（六节）；`Docs/01` §14.1 +1 行指针；`Assets/_Project/Tests/QaTestTemplate.md`。
+  - **未决（所有者侧）**：L2「Play 中触发域重载」需改编辑器 Play 期间脚本重载策略才能真跑，本机 3 次注入均被延迟到退出 Play 后编译，已留 `l2_domainreload/` 现场。
+  - **注意**：本单 5 个提交与所有者同期未提交的 `DOC-INFRA-01`/`OPS-01`/`REBASELINE-DOC` 改动**已在文件级隔离**；`Docs/01` 只提交了本单那 1 行，所有者的 §14.4 段落仍在其工作区未提交。
 
 - **`REFACTOR-LONG-01`（第二阶段）— `InProgress`（M0–M4 + `SKILL-CLOSE-01` 已收口，下一步 M4.5 = 所有者做）**
   - 计划/缺口/顺序：`Docs/Handoff/PLAN_REFACTOR-PHASE2.md`（来源：上游计划书 §12）。
@@ -86,10 +95,11 @@
 
 ## 下一会话第一件事
 
-1. 所有者在 Unity 里目检本轮：`Tools/QA/In-Editor/SPEC01 (green)` 跑一次、拖视角、倒地/救援走一遍、看 `interactCursor` 图标观感。
-2. 所有者回复 **“批准 Phase B”** → 执行者改 `SkillSystem`/`SkillEffectBase`/`SkillEffects`/`SkillEffectFireball`/`MeleeCombat`/`UnitStats` + 测试，用 `Tools/QA/In-Editor/*` 跑 SPEC01 ×3 + FND00B06。
-3. 所有者拖 `OC_Knight/Archer/Mage` 的 Q/W Clip（`Q_1`/`W_1`），拖完再补一次目检。
-4. 待裁决：
+1. **目检 `QA-REFACTOR-01`**：`Tools/QA/In-Editor/` 四个菜单各点 1 次（应得 12/0、16/0、12/0+2obs、6/1），翻一眼 `Docs/06_测试架构与验收分层.md` 与 `Assets/_Project/Tests/QaTestTemplate.md`；如需补 L2 域重载，先把编辑器 Play 期间脚本重载策略改成「Recompile And Continue Playing」再让大脑派单。
+2. 所有者在 Unity 里目检本轮：`Tools/QA/In-Editor/SPEC01 (green)` 跑一次、拖视角、倒地/救援走一遍、看 `interactCursor` 图标观感。
+3. 所有者回复 **“批准 Phase B”** → 执行者改 `SkillSystem`/`SkillEffectBase`/`SkillEffects`/`SkillEffectFireball`/`MeleeCombat`/`UnitStats` + 测试，用 `Tools/QA/In-Editor/*` 跑 SPEC01 ×3 + FND00B06。
+4. 所有者拖 `OC_Knight/Archer/Mage` 的 Q/W Clip（`Q_1`/`W_1`），拖完再补一次目检。
+5. 待裁决：
    - `INTERRUPT-01` AC-1 入场淡入窗口最坏 0.30s（是否放宽 AC 到 0.35s，或改既有 `Locomotion→AttackMelee` 的 `InterruptionSource`）。
    - `MonsterBrain.cs:112` 有与 `RangedCombat` 同类的无条件 `Interrupt`（怪物控制器用），本轮未在授权内。
    - `REPORT_TEST-MCP-01` §7 第 5/6 条（Play 中域重载丢 runner）建议另立小单。
