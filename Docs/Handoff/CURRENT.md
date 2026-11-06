@@ -25,12 +25,12 @@
 
 ## 当前 feature
 
-- **`REFACTOR-LONG-01`（第二阶段）— `InProgress`（M0–M4 已收口，当前 `SKILL-CLOSE-01`）**
+- **`REFACTOR-LONG-01`（第二阶段）— `InProgress`（M0–M4 + `SKILL-CLOSE-01` 已收口，下一步 M4.5 = 所有者做）**
   - 计划/缺口/顺序：`Docs/Handoff/PLAN_REFACTOR-PHASE2.md`（来源：上游计划书 §12）。
-  - 已提交：M0 `ed0cdc17`、M1 `0a1a45d7`、M2 `1961c93b`、M3 `d02470c4`、M4 `896e7450`（未 push）；护栏 = `Tools/QA/In-Editor/REFACTOR`（15 条）+ `SPEC01 (green)`（12 条）。
-  - 当前任务：`SKILL-CLOSE-01`（A 槽位映射 `Q/Q_1`、`W/W_1`…；B 新增 `Scripts/Units/UnitMotion.cs` 运动锁；C 补跑 DIAG ×1 并提交 `REFACTOR-M4/editor_run4`）。TASK：`Docs/Handoff/TASK_SKILL-CLOSE-01.md`。
-  - **待裁决**：`PLAN_REFACTOR-PHASE2.md` §5 —— A 项会让 4 条既有断言（`SPEC01 Skill.CastSmoke`、`REFACTOR Skill.QW / Skill.InterruptAttack / Skill.InterruptInteract`）的期望状态从 `Bash`/`Skill` 变成 `Q_1`/`W_1`，与「不改旧断言」冲突。
-  - 之后：所有者做 M4.5 预制体基座（`PlayerUnit_Base` → 三职业逐个迁），再 M6（池化/事件/面板）→ M5（AI 拆分）。
+  - 已提交：M0 `ed0cdc17`、M1 `0a1a45d7`、M2 `1961c93b`、M3 `d02470c4`、M4 `896e7450`、`SKILL-CLOSE-01` `f9472f4f`（均未 push）；护栏 = `Tools/QA/In-Editor/REFACTOR`（16 条）+ `SPEC01 (green)`（12 条）+ `DIAG`（6/1，已知红 `Diag.Input.FirstExit`）。
+  - `SKILL-CLOSE-01` 结果：Q/W/E/R 按槽位播 `Q_1/W_1/E_1/R_1`；新增 `Scripts/Units/UnitMotion.cs` 运动锁；`PlayerBase.controller` 已删 `Bash`/`Skill` 状态、过渡与参数（所有者批准）；4 条断言只改期望状态名。报告：`Docs/Handoff/REPORT_SKILL-CLOSE-01.md`。
+  - **下一步（所有者）**：M4.5 预制体基座，材料见 `Docs/Handoff/MAT_M4.5_组件归属与迁移清单.md`。
+  - 之后：M6（池化/事件/面板）→ M5（AI 拆分）。
 - **`WF-04` — 接入 Unity MCP — `Done`（连通验证通过）**
   - 包：`com.coplaydev.unity-mcp@10.0.0`（OpenUPM）。
   - 服务：`HTTPLocal`、`http://127.0.0.1:8080`，`Session Active (Dungeon)`；`initialize` 正常。
