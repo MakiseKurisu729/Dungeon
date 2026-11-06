@@ -1,0 +1,66 @@
+diff --git a/Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs b/Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+index 27c95276..02320839 100644
+--- a/Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
++++ b/Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+@@ -321 +321 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-                    Dict("expectedState", "Bash", "damage", "hitTime 后靶掉血"),
++                    Dict("expectedState", "Q_1", "damage", "hitTime 后靶掉血"),
+@@ -327 +327 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, r);
++            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, r);
+@@ -337 +337 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-                     "targetDamage", "== MeleeCombat.GetRawDamage()", "animState", "Bash（≤0.5s）"),
++                     "targetDamage", "== MeleeCombat.GetRawDamage()", "animState", "Q_1（≤0.5s）"),
+@@ -385 +385 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-                    Dict("expectedState", "Skill", "swordTimer", ">=0"),
++                    Dict("expectedState", "W_1", "swordTimer", ">=0"),
+@@ -391 +391 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-            yield return fx.Cast(1, null, "Skill", 0.5f, r);
++            yield return fx.Cast(1, null, "W_1", 0.5f, r);
+@@ -401 +401 @@ public class DIAG_ProbeRunner : MonoBehaviour
+-                     "swordTimer", ">=0（反射 _timer，证明效果已执行）", "animState", "Skill（≤0.5s）"),
++                     "swordTimer", ">=0（反射 _timer，证明效果已执行）", "animState", "W_1（≤0.5s）"),
+diff --git a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+index bbdefb35..179008bd 100644
+--- a/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
++++ b/Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+@@ -40 +40 @@ public class FND00B06_ProbeRunner : MonoBehaviour
+-        " Locomotion", "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Bash", "Skill"
++        " Locomotion", "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Q_1", "W_1", "E_1", "R_1"
+diff --git a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+index f1624f22..b9d3d0c5 100644
+--- a/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
++++ b/Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+@@ -1269,2 +1269,2 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-            // ② Q 行为不变（防 Bash 回归）
+-            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
++            // ② Q 行为不变（防技能槽回归）
++            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, q);
+@@ -1280 +1280 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-            yield return fx.Cast(1, null, "Skill", 0.5f, w);
++            yield return fx.Cast(1, null, "W_1", 0.5f, w);
+@@ -1306 +1306 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-        _ev.Record("Skill", "Skill.CastSmoke",
++        _ev.Record("Skill.CastSmoke", "Skill.CastSmoke",
+@@ -1308,2 +1308,2 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-                 "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Bash",
+-                 "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 Skill",
++                 "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Q_1",
++                 "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 W_1",
+@@ -1387 +1387 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-        _ev.Record("Skill", "Skill.InputWired",
++        _ev.Record("Skill.InputWired", "Skill.InputWired",
+@@ -1923,2 +1923,4 @@ public class SPEC01_ProbeRunner : MonoBehaviour
+-        if (st.IsName("Skill")) return "Skill";
+-        if (st.IsName("Bash")) return "Bash";
++        if (st.IsName("Q_1")) return "Q_1";
++        if (st.IsName("W_1")) return "W_1";
++        if (st.IsName("E_1")) return "E_1";
++        if (st.IsName("R_1")) return "R_1";
+diff --git a/Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs b/Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
+index 89e76be7..e2870e25 100644
+--- a/Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
++++ b/Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
+@@ -348 +348 @@ public class SkillCastFixture : IDisposable
+-        string[] known = { "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Bash", "Skill", "Interact", "Downed", "Rise" };
++        string[] known = { "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Q_1", "W_1", "E_1", "R_1", "Interact", "Downed", "Rise" };

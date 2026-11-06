@@ -318,13 +318,13 @@ public class DIAG_ProbeRunner : MonoBehaviour
             if (!fx.PrepareLocomotion)
             {
                 _ev.BlockedAssertion("Diag.CastChain.Q", "Diag.CastChain.Q",
-                    Dict("expectedState", "Bash", "damage", "hitTime 后靶掉血"),
+                    Dict("expectedState", "Q_1", "damage", "hitTime 后靶掉血"),
                     "夹具未能进入 Locomotion（preState=" + fx.PrepareState + "）",
                     Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
                 yield break;
             }
 
-            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, r);
+            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, r);
 
             bool manaOk = Mathf.Abs(r.manaDelta - 20f) < 0.01f;
             bool cdOk = r.cdRemaining > 0f && Mathf.Abs(r.cdRemaining - 6f) <= 0.05f;
@@ -334,7 +334,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
 
             _ev.Record("Diag.CastChain.Q", "Diag.CastChain.Q",
                 Dict("castReturn", true, "manaDelta", 20f, "cdRemaining", ">0 且≈6",
-                     "targetDamage", "== MeleeCombat.GetRawDamage()", "animState", "Bash（≤0.5s）"),
+                     "targetDamage", "== MeleeCombat.GetRawDamage()", "animState", "Q_1（≤0.5s）"),
                 r.Data(),
                 _qPass, _qPass ? "pass" : "product_fail", "production",
                 Dict("slot", 0,
@@ -382,13 +382,13 @@ public class DIAG_ProbeRunner : MonoBehaviour
             if (!fx.PrepareLocomotion)
             {
                 _ev.BlockedAssertion("Diag.CastChain.W", "Diag.CastChain.W",
-                    Dict("expectedState", "Skill", "swordTimer", ">=0"),
+                    Dict("expectedState", "W_1", "swordTimer", ">=0"),
                     "夹具未能进入 Locomotion（preState=" + fx.PrepareState + "）",
                     Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
                 yield break;
             }
 
-            yield return fx.Cast(1, null, "Skill", 0.5f, r);
+            yield return fx.Cast(1, null, "W_1", 0.5f, r);
 
             bool manaOk = Mathf.Abs(r.manaDelta - 30f) < 0.01f;
             bool cdOk = r.cdRemaining > 0f;
@@ -398,7 +398,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
 
             _ev.Record("Diag.CastChain.W", "Diag.CastChain.W",
                 Dict("castReturn", true, "manaDelta", 30f, "cdRemaining", ">0",
-                     "swordTimer", ">=0（反射 _timer，证明效果已执行）", "animState", "Skill（≤0.5s）"),
+                     "swordTimer", ">=0（反射 _timer，证明效果已执行）", "animState", "W_1（≤0.5s）"),
                 r.Data(),
                 _wPass, _wPass ? "pass" : "product_fail", "production",
                 Dict("slot", 1,

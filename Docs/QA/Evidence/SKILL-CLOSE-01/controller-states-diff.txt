@@ -1,0 +1,17 @@
+# Controller diff: before -> after (PowerShell Compare-Object, CaseSensitive)
+# REMOVED = present only in before; ADDED = present only in after
+# counts: removed=10; added=2
+# expected: 2 PARAM (Bash,Skill) + 2 STATE + 4 TRANS removed; only exportedAt/PARAMS-count lines added
+
+ADDED   | # exportedAt=2026-11-06 09:34:54.747
+ADDED   | PARAMS count=17
+REMOVED | # exportedAt=2026-11-06 09:29:53.146
+REMOVED | PARAMS count=19
+REMOVED | PARAM Bash | type=Trigger | default=0/False/0
+REMOVED | PARAM Skill | type=Trigger | default=0/False/0
+REMOVED |   STATE Base Layer/Bash | motion=Melee_Block_Attack | speed=1 | writeDefault=True
+REMOVED |   STATE Base Layer/Skill | motion=Melee_1H_Attack_Jump_Chop | speed=1 | writeDefault=True
+REMOVED |   TRANS Base Layer/Bash -> Locomotion | exitTime=True:0.7656 | duration=0.15 | conditions=none
+REMOVED |   TRANS Base Layer/Locomotion -> Bash | exitTime=False:0.7321 | duration=0.05 | conditions=Bash If 0
+REMOVED |   TRANS Base Layer/Locomotion -> Skill | exitTime=False:0.7321 | duration=0.05 | conditions=Skill If 0
+REMOVED |   TRANS Base Layer/Skill -> Locomotion | exitTime=True:0.8125 | duration=0.15 | conditions=none

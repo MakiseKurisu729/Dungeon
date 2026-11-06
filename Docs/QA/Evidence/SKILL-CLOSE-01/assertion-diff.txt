@@ -1,0 +1,54 @@
+# 4 条既有断言的「期望状态名」改动（改前 / 改后）
+# 批准：所有者 2026-11-06（见 TASK_SKILL-CLOSE-01.md §0 资产改动批准记录 / §1 D-3）
+# 口径：只改期望状态名 Bash→Q_1、Skill→W_1；阈值/时长/伤害/蓝耗/冷却/位移容差等数字一字未动。
+# 原始 diff：assertion-diff-raw-tests.txt（git diff -U0，byte 直出，含本 4 条与同批同步的映射表/DIAG）
+
+## 1) SPEC01 — Skill.CastSmoke（Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs）
+改前：
+    yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
+    yield return fx.Cast(1, null, "Skill", 0.5f, w);
+改后：
+    yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, q);
+    yield return fx.Cast(1, null, "W_1", 0.5f, w);
+未动：animTimeout `0.5f`、`q.manaDelta-20f`、`q.cdRemaining-6f`、`damageApplied-expectedDamage`、`animEntrySeconds<=0.5f`、W 的 `-30f`/`swordTimer>=0`。
+
+## 2) REFACTOR — Skill.QW（Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs）
+改前：
+    yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
+    yield return fx.Cast(1, null, "Skill", 0.5f, w);
+改后：
+    yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, q);
+    yield return fx.Cast(1, null, "W_1", 0.5f, w);
+未动：`animEntrySeconds <= 0.6f`、`manaDelta-20f`、`manaDelta-30f`、`effectType` 期望（BashEffect / HeavySlashEffect）。
+
+## 3) REFACTOR — Skill.InterruptAttack（同一文件）
+改前：
+    if (StateName(knight.animator) == "Bash") { bashEntered = true; bashWait = w; break; }
+    if (StateName(knight.animator) == "Bash")
+改后：
+    if (StateName(knight.animator) == "Q_1") { bashEntered = true; bashWait = w; break; }
+    if (StateName(knight.animator) == "Q_1")
+同一条的两处 BlockedAssertion 描述文字同步 Bash→Q_1。
+未动：`bashWait <= 0.6f`、`attackTimerAfterCast < 0f`、`slashHits == slashHitsBeforeCast`、宽限观察 `1.5f`、覆盖窗口 `0.8f`。
+
+## 4) REFACTOR — Skill.InterruptInteract（同一文件）
+改前：
+    if (StateName(knight.animator) == "Bash") { inBash = true; bashWait = t; break; }
+    if (st != "Bash" && st != "Skill") { skillEnded = true; break; }
+改后：
+    if (StateName(knight.animator) == "Q_1") { inBash = true; bashWait = t; break; }
+    if (!IsSkillStateName(st)) { skillEnded = true; break; }
+未动：`movedDuringSkill < 0.05f`、`hold 0.25f`、`e < 4f`、`back 3f` / `0.25f` 的收尾位移容差。
+
+## 同批「状态名映射/列表」同步（非断言口径，D-3 允许）
+- REFACTOR `StateName()`：`IsName("Skill")/"Skill"`、`IsName("Bash")/"Bash"` → `Q_1/W_1/E_1/R_1` 四条。
+- SPEC01 `StateName()`：同上。
+- SPEC01 `SkillCastFixture.State().known`：`"Bash","Skill"` → `"Q_1","W_1","E_1","R_1"`。
+- FND00B06 `KnownStates`：同上（+E_1/R_1）。
+- DIAG 两处 `expectedState` / `Cast(...)`：`Bash→Q_1`、`Skill→W_1`（TASK §2 第 2 步已列）。
+- SPEC01 `_ev.Record("Skill", ...)` 两处的 QA 分组键改为与断言 ID 同名（`Skill.CastSmoke` / `Skill.InputWired`），
+  与同文件其余 9 条 `_ev.Record(assertId, assertId, ...)` 一致；只为让 `"Skill"` 字面量计数归零，不涉及任何期望值。
+
+## 结论
+本单唯一的口径变更就是「期望状态名」4 处（Bash→Q_1、Skill→W_1），已在 TASK §0 获所有者 2026-11-06 批准；
+其余改动均为映射表/列表补齐与描述文字同步，无阈值、无时长、无伤害/蓝耗/冷却数字变化。

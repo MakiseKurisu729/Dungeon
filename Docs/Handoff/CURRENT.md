@@ -1,7 +1,8 @@
 # CURRENT — 当前状态指针
 
-> 最后更新：2026-11-05
+> 最后更新：2026-11-06
 > 新会话：读本文件 → 打开“当前 feature”的 TASK → 按“阶段”继续。**不要翻旧聊天。**
+> 阶段二计划：`Docs/Handoff/PLAN_REFACTOR-PHASE2.md`。
 > 规则见 `AGENTS.md`；目标/范围见 `Docs/Specs/constitution.md`。
 
 ## 基线
@@ -9,7 +10,7 @@
 | 项 | 值 |
 |---|---|
 | 分支 | `docs/fnd-00-baseline` |
-| HEAD | `6872348b`（WF-04 接入 Unity MCP） |
+| HEAD | `896e7450`（REFACTOR-LONG-01 M4；M0–M4 已本地提交，未 push） |
 | Unity | `2022.3.62f3c1`（目标 6.3，未迁移） |
 
 ## 未提交批次
@@ -24,6 +25,12 @@
 
 ## 当前 feature
 
+- **`REFACTOR-LONG-01`（第二阶段）— `InProgress`（M0–M4 已收口，当前 `SKILL-CLOSE-01`）**
+  - 计划/缺口/顺序：`Docs/Handoff/PLAN_REFACTOR-PHASE2.md`（来源：上游计划书 §12）。
+  - 已提交：M0 `ed0cdc17`、M1 `0a1a45d7`、M2 `1961c93b`、M3 `d02470c4`、M4 `896e7450`（未 push）；护栏 = `Tools/QA/In-Editor/REFACTOR`（15 条）+ `SPEC01 (green)`（12 条）。
+  - 当前任务：`SKILL-CLOSE-01`（A 槽位映射 `Q/Q_1`、`W/W_1`…；B 新增 `Scripts/Units/UnitMotion.cs` 运动锁；C 补跑 DIAG ×1 并提交 `REFACTOR-M4/editor_run4`）。TASK：`Docs/Handoff/TASK_SKILL-CLOSE-01.md`。
+  - **待裁决**：`PLAN_REFACTOR-PHASE2.md` §5 —— A 项会让 4 条既有断言（`SPEC01 Skill.CastSmoke`、`REFACTOR Skill.QW / Skill.InterruptAttack / Skill.InterruptInteract`）的期望状态从 `Bash`/`Skill` 变成 `Q_1`/`W_1`，与「不改旧断言」冲突。
+  - 之后：所有者做 M4.5 预制体基座（`PlayerUnit_Base` → 三职业逐个迁），再 M6（池化/事件/面板）→ M5（AI 拆分）。
 - **`WF-04` — 接入 Unity MCP — `Done`（连通验证通过）**
   - 包：`com.coplaydev.unity-mcp@10.0.0`（OpenUPM）。
   - 服务：`HTTPLocal`、`http://127.0.0.1:8080`，`Session Active (Dungeon)`；`initialize` 正常。

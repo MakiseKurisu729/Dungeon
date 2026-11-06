@@ -1,0 +1,55 @@
+ Assembly-CSharp-Editor.csproj                      | 445 ++++++++++----------
+ Assembly-CSharp.csproj                             | 451 +++++++++++----------
+ .../_Project/Art/Animations/PlayerBase.controller  | 170 --------
+ Assets/_Project/Scripts/Combat/HeavySlashEffect.cs |   2 +-
+ Assets/_Project/Scripts/Combat/MeleeCombat.cs      |  41 +-
+ Assets/_Project/Scripts/Combat/SkillEffectBase.cs  |   8 +-
+ Assets/_Project/Scripts/Combat/SkillEffects.cs     |  66 +--
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    |  17 +-
+ Assets/_Project/Scripts/Units/DownedRescue.cs      |   6 +
+ Assets/_Project/Scripts/Units/SkillSystem.cs       |  28 +-
+ .../Tests/DIAG/Runtime/DIAG_ProbeRunner.cs         |  12 +-
+ .../Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs   |   2 +-
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs | 302 +++++++++++++-
+ .../Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs     |  20 +-
+ .../Tests/SPEC01/Runtime/SkillCastFixture.cs       |   2 +-
+ Docs/Handoff/CURRENT.md                            |  11 +-
+ Docs/Handoff/REPORT_REFACTOR-LONG-01.md            |  12 +-
+ 17 files changed, 904 insertions(+), 691 deletions(-)
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Art/Animations/PlayerBase.controller
+ M Assets/_Project/Scripts/Combat/HeavySlashEffect.cs
+ M Assets/_Project/Scripts/Combat/MeleeCombat.cs
+ M Assets/_Project/Scripts/Combat/SkillEffectBase.cs
+ M Assets/_Project/Scripts/Combat/SkillEffects.cs
+ M Assets/_Project/Scripts/Units/CharacterBrain.cs
+ M Assets/_Project/Scripts/Units/DownedRescue.cs
+ M Assets/_Project/Scripts/Units/SkillSystem.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+ M Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+ M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
+ M Docs/Handoff/CURRENT.md
+ M Docs/Handoff/REPORT_REFACTOR-LONG-01.md
+?? Assets/_Project/Scripts/Units/UnitMotion.cs
+?? Assets/_Project/Scripts/Units/UnitMotion.cs.meta
+?? Docs/Handoff/PLAN_REFACTOR-PHASE2.md
+?? Docs/Handoff/REPORT_SKILL-CLOSE-01.md
+?? Docs/Handoff/TASK_SKILL-CLOSE-01.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run3/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run4/
+?? Docs/QA/Evidence/FND-00B-06/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run10/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run4/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run5/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run6/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run7/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run8/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run9/
+?? Docs/QA/Evidence/SKILL-CLOSE-01/
+?? Docs/QA/Evidence/SPEC-01/editor_run34/
+?? Docs/QA/Evidence/SPEC-01/editor_run35/
+?? Docs/QA/Evidence/SPEC-01/editor_run36/
+?? Docs/QA/Evidence/SPEC-01/editor_run37/

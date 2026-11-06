@@ -10,6 +10,6 @@ public class HeavySlashEffect : SkillEffectBase
 
     public override void Execute(SkillCastContext ctx)
     {
-        ctx.Caster.sword.DoSkillAttack();
+        ctx.Caster.sword.DoSkillAttack(ctx.Trigger, ctx.StateName);
     }
 }

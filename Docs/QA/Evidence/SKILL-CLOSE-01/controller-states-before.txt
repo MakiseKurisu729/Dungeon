@@ -1,0 +1,73 @@
+# PlayerBase.controller snapshot
+# path=Assets/_Project/Art/Animations/PlayerBase.controller
+# unity=2022.3.62f3c1
+# exportedAt=2026-11-06 09:29:53.146
+PARAMS count=19
+PARAM AttackMelee | type=Trigger | default=0/False/0
+PARAM AttackRange | type=Trigger | default=0/False/0
+PARAM AttackSpeed | type=Float | default=0/False/0
+PARAM Bash | type=Trigger | default=0/False/0
+PARAM Die | type=Trigger | default=0/False/0
+PARAM E | type=Trigger | default=0/False/0
+PARAM Grounded | type=Bool | default=0/False/0
+PARAM Hit | type=Trigger | default=0/False/0
+PARAM Interact | type=Trigger | default=0/False/0
+PARAM Interrupt | type=Trigger | default=0/False/0
+PARAM Jump | type=Trigger | default=0/False/0
+PARAM Q | type=Trigger | default=0/False/0
+PARAM R | type=Trigger | default=0/False/0
+PARAM Revive | type=Trigger | default=0/False/0
+PARAM Skill | type=Trigger | default=0/False/0
+PARAM SkillSpeed | type=Float | default=1/False/0
+PARAM SpeedX | type=Float | default=0/False/0
+PARAM SpeedZ | type=Float | default=0/False/0
+PARAM W | type=Trigger | default=0/False/0
+LAYER 0 name=Base Layer weight=0
+  ANYTRANS Base Layer -> Downed | duration=0.1 | conditions=Die If 0
+  ANYTRANS Base Layer -> Hit_A | duration=0.05 | conditions=Hit If 0
+  ANYTRANS Base Layer -> SM:E | duration=0.05 | conditions=E If 0
+  ANYTRANS Base Layer -> SM:Q | duration=0.05 | conditions=Q If 0
+  ANYTRANS Base Layer -> SM:R | duration=0.05 | conditions=R If 0
+  ANYTRANS Base Layer -> SM:W | duration=0.05 | conditions=W If 0
+  STATE Base Layer/AttackMelee | motion=Chop | speed=1 | writeDefault=True
+  STATE Base Layer/Attack_Draw | motion=Ranged_Bow_Draw | speed=1 | writeDefault=True
+  STATE Base Layer/Attack_Release | motion=Ranged_Bow_Release | speed=1 | writeDefault=True
+  STATE Base Layer/Bash | motion=Melee_Block_Attack | speed=1 | writeDefault=True
+  STATE Base Layer/Downed | motion=Death_A | speed=1 | writeDefault=True
+  STATE Base Layer/E/E_1 | motion=Melee_Block_Attack | speed=1 | writeDefault=True
+  STATE Base Layer/Hit_A | motion=Hit_A | speed=1 | writeDefault=True
+  STATE Base Layer/Interact | motion=Interact | speed=1 | writeDefault=True
+  STATE Base Layer/Locomotion | motion=Blend Tree | speed=1 | writeDefault=True
+  STATE Base Layer/Q/Q_1 | motion=Melee_Block_Attack | speed=1 | writeDefault=True
+  STATE Base Layer/R/R_1 | motion=Melee_1H_Attack_Jump_Chop | speed=1 | writeDefault=True
+  STATE Base Layer/Rise | motion=Lie_StandUp | speed=1 | writeDefault=True
+  STATE Base Layer/Skill | motion=Melee_1H_Attack_Jump_Chop | speed=1 | writeDefault=True
+  STATE Base Layer/W/W_1 | motion=Melee_1H_Attack_Jump_Chop | speed=1 | writeDefault=True
+  SUBSM Base Layer
+  SUBSM Base Layer/E
+  SUBSM Base Layer/Q
+  SUBSM Base Layer/R
+  SUBSM Base Layer/W
+  TRANS Base Layer/AttackMelee -> Locomotion | exitTime=False:0 | duration=0.1 | conditions=Interrupt If 0
+  TRANS Base Layer/AttackMelee -> Locomotion | exitTime=True:0.75 | duration=0.1 | conditions=none
+  TRANS Base Layer/Attack_Draw -> Attack_Release | exitTime=True:0.8125 | duration=0.15 | conditions=none
+  TRANS Base Layer/Attack_Draw -> Locomotion | exitTime=False:0 | duration=0.1 | conditions=Interrupt If 0
+  TRANS Base Layer/Attack_Release -> Locomotion | exitTime=False:0 | duration=0.1 | conditions=Interrupt If 0
+  TRANS Base Layer/Attack_Release -> Locomotion | exitTime=True:0.8125 | duration=0.15 | conditions=none
+  TRANS Base Layer/Bash -> Locomotion | exitTime=True:0.7656 | duration=0.15 | conditions=none
+  TRANS Base Layer/Downed -> Rise | exitTime=False:0.6875 | duration=0.1 | conditions=Revive If 0
+  TRANS Base Layer/E/E_1 -> Locomotion | exitTime=True:1 | duration=0.1 | conditions=none
+  TRANS Base Layer/Hit_A -> Locomotion | exitTime=True:0.625 | duration=0.1 | conditions=none
+  TRANS Base Layer/Interact -> Locomotion | exitTime=False:0 | duration=0.1 | conditions=Interrupt If 0
+  TRANS Base Layer/Interact -> Locomotion | exitTime=True:0.8077 | duration=0.1 | conditions=none
+  TRANS Base Layer/Locomotion -> AttackMelee | exitTime=False:0.7321 | duration=0.25 | conditions=AttackMelee If 0
+  TRANS Base Layer/Locomotion -> Attack_Draw | exitTime=False:0.7321 | duration=0.15 | conditions=AttackRange If 0
+  TRANS Base Layer/Locomotion -> Bash | exitTime=False:0.7321 | duration=0.05 | conditions=Bash If 0
+  TRANS Base Layer/Locomotion -> Hit_A | exitTime=False:0.7321 | duration=0.05 | conditions=Hit If 0
+  TRANS Base Layer/Locomotion -> Interact | exitTime=False:0.7321 | duration=0.1 | conditions=Interact If 0
+  TRANS Base Layer/Locomotion -> Skill | exitTime=False:0.7321 | duration=0.05 | conditions=Skill If 0
+  TRANS Base Layer/Q/Q_1 -> Locomotion | exitTime=True:1 | duration=0.1 | conditions=none
+  TRANS Base Layer/R/R_1 -> Locomotion | exitTime=True:1 | duration=0.1 | conditions=none
+  TRANS Base Layer/Rise -> Locomotion | exitTime=True:0.8929 | duration=0.2 | conditions=none
+  TRANS Base Layer/Skill -> Locomotion | exitTime=True:0.8125 | duration=0.15 | conditions=none
+  TRANS Base Layer/W/W_1 -> Locomotion | exitTime=True:1 | duration=0.1 | conditions=none

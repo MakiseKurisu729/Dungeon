@@ -1,0 +1,44 @@
+# D-2 / AC-7 证据：`"Bash"` / `"Skill"` 字符串字面量清扫
+# 范围：Assets/_Project/Scripts/**、Assets/_Project/Tests/**（DIAG 在 Tests/DIAG 下，已含）
+# 采集时间：2026-11-06（第二轮回跑之后）
+# 采集工具：ripgrep（rg.exe 14.x，随 Tuanjie 工具链自带）
+
+## 1. 命令（PowerShell，UTF-8 控制台）
+#   注意：不能直接用 -e '"Bash"' —— Windows 命令行会把内部双引号吃掉，导致 rg 收到裸 Bash/Skill，
+#   把 SkillSystem / BashEffect 这类类名也匹配进来。这里用正则转义 \x22 表示双引号：
+rg -n --no-heading -e '\x22Bash\x22' -e '\x22Skill\x22' --glob '*.cs' Assets/_Project/Scripts Assets/_Project/Tests
+
+## 2. 原始输出（未过滤，共 1 行）
+（见本文件末尾「原始输出」段，由上面命令直接追加）
+
+## 3. 过滤方式与结论
+| 步骤 | 命中数 | 说明 |
+|---|---|---|
+| 原始 grep（上面命令） | 1 | 命中的唯一一行是**注释**：`Scripts/Combat/SkillCastContext.cs:12` 的 `/// <summary>… Animator 触发器名（"Skill" / "Bash"）…` |
+| 排除注释行（`//`、`///`、`/* */`） | 0 | AC-7 明确「注释不计」；该行是文档注释，不影响运行时行为 |
+| **代码字符串字面量** | **0** | 达标 |
+
+## 4. 清理前 → 清理后（本单清掉的运行时代码字面量）
+| 文件 | 清理前 | 清理后 |
+|---|---|---|
+| `Scripts/Units/SkillSystem.cs` | 无字面量（`effect.Trigger/StateName` 透传） | 槽位表 `("Q","Q_1")…("R","R_1")` |
+| `Scripts/Combat/SkillEffectBase.cs` | `Trigger/StateName` 默认返回 `"Skill"` | 默认返回 `null`（= 用槽位表） |
+| `Scripts/Combat/SkillEffects.cs`（BashEffect） | `override Trigger/StateName` 返回 `"Bash"` | 两个 override 删除 |
+| `Scripts/Combat/MeleeCombat.cs` | `skillStateName = "Skill"`；`ResetTrigger("Skill")`；`SetTrigger("Skill")` | `skillStateName = "W_1"`、新增 `skillTrigger = "W"`；`ResetTrigger(_skillTrigger)`（本次实际用过的触发器）；`SetTrigger(trigger)`（调用方传入） |
+| `Scripts/Units/CharacterBrain.cs` | `IsSkillState` 含 `IsName("Skill")`/`IsName("Bash")` | 只判 `Q_1/W_1/E_1/R_1` |
+| `Tests/REFACTOR/**` | 4 条断言 + `StateName()` 映射用 `"Bash"`/`"Skill"` | 改 `Q_1`/`W_1` + 映射补 `Q_1..R_1` |
+| `Tests/SPEC01/**` | 2 条断言 + `StateName()` + `SkillCastFixture.known` | 同上（+ `Q_1..R_1`） |
+| `Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs` | `KnownStates` 含 `"Bash","Skill"` | 换成 `"Q_1","W_1","E_1","R_1"` |
+| `Tests/DIAG/Runtime/DIAG_ProbeRunner.cs` | 2 处 `expectedState` + 2 处 `Cast(...)` 期望名 | `Q_1` / `W_1` |
+
+## 5. 不计入的两类
+1. **注释**：`Scripts/Combat/SkillCastContext.cs:12`（未在本单允许改动清单内，未改；建议后续单把注释改成「槽位触发器」）。
+2. **类名 / 文件名 / 资产菜单名**（TASK §1 明确不算）：`BashEffect`、`SkillSystem`、`SkillEffectBase`、`SkillCastFixture`、
+   `[CreateAssetMenu("Dungeon/Skill Effects/Bash")]`、`BashRoutine` 等。
+3. 临时控制器工具 `Tests/QA/Editor/SKILL_CLOSE_01_ControllerTool.cs` 内含 `new HashSet<string>{"Bash","Skill"}`，
+   该文件是 TASK §1 许可的一次性工具，**运行后已连同 .meta 删除**（`git status` 中不存在），不计入仓库字面量。
+
+## 原始输出
+>Assets/_Project/Scripts\Combat\SkillCastContext.cs:12:    /// <summary>本次施放要写的 Animator 触发器名（"Skill" / "Bash"）。</summary>
+
+# 命中行数 = 1；其中注释行 = 1；代码字符串字面量 = 0

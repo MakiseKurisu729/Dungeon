@@ -1,0 +1,32 @@
+# 《资产改动清单》（AGENTS.md §3.3 例外通道 / TASK_SKILL-CLOSE-01 §0）
+
+## 批准记录（原话抄录）
+- **谁批准**：所有者
+- **时间**：2026-11-06
+- **批准内容**（TASK §0 原文）：「所有者 2026-11-06：① 授权修改 4 条断言的**期望状态名**（阈值与其它数字不动）；
+  ② 授权删除 `PlayerBase.controller` 的 `Bash`/`Skill` 状态、`Locomotion→Bash`/`Locomotion→Skill` 过渡、`Bash`/`Skill` 触发器；
+  ③ 授权清扫代码/测试/DIAG 里的旧字符串」。追加第 4 步 D 的原话摘要：「这是资产改动，所有者已批准。」
+- **大脑复核结论**（TASK §0 原文）：复核通过；`SkillSpeed`、`Q_1/W_1/E_1/R_1`、`Hit_A/Locomotion/Attack*` 在「不许碰」清单内，由前后导出 diff 兜底。
+
+## 资产改动
+
+| 项 | 内容 |
+|---|---|
+| 文件 | `Assets/_Project/Art/Animations/PlayerBase.controller`（唯一被改的资产） |
+| 字段/对象 1 | 状态 `Base Layer/Bash`（motion=Melee_Block_Attack）→ **删除** |
+| 字段/对象 2 | 状态 `Base Layer/Skill`（motion=Melee_1H_Attack_Jump_Chop）→ **删除** |
+| 字段/对象 3 | 过渡 `Locomotion → Bash`（trigger=Bash, exitTime=0.7321, duration=0.05）→ **删除** |
+| 字段/对象 4 | 过渡 `Locomotion → Skill`（trigger=Skill, exitTime=0.7321, duration=0.05）→ **删除** |
+| 字段/对象 5 | 过渡 `Bash → Locomotion`、`Skill → Locomotion`（随源状态删除一并消失）→ **删除** |
+| 字段/对象 6 | 参数 `Bash`（Trigger）、`Skill`（Trigger）→ **删除**（参数总数 19 → 17） |
+| 理由 | Q/W/E/R 已由 `AnyState→SM:Q/W/E/R`（trigger Q/W/E/R）驱动，代码侧槽位表输出 `Q_1/W_1/E_1/R_1`；旧 `Bash`/`Skill` 是同一动作的第二套表达，留着会让 M4.5 拖 Clip 时拖错状态 |
+| 执行手段 | 经 Unity 编辑器：一次性菜单工具 `Tests/QA/Editor/SKILL_CLOSE_01_ControllerTool.cs`（`AnimatorController.RemoveState / RemoveTransition / RemoveParameter`），**未手改 YAML**；工具跑完连同 `.meta` 已删除 |
+| 读回验证 | 工具内自检 `removed states=2; transitions=2; parameters=2` + `self-check PASS; states=12; params=17`；随后再导出一份快照并与改前快照 diff（`controller-states-{before,after,diff}.txt`） |
+| 回滚方式 | 仅所有者执行：`git checkout 896e7450 -- Assets/_Project/Art/Animations/PlayerBase.controller` |
+| 影响面 | ① 运行时：Animator 不再有 `Bash`/`Skill` 触发器与状态；代码里已无任何 `SetTrigger("Bash"/"Skill")`/`IsName(...)` 引用（见 grep 证据）。② 断言：REFACTOR 16 条、SPEC01 12 条在改动后**两轮全绿**。③ 未波及：`SkillSpeed` 参数、`Q_1/W_1/E_1/R_1`、`Hit_A`、`Downed`、`Rise`、`Interact`、`AttackMelee/Attack_Draw/Attack_Release`、`Locomotion`、所有 `AnyState` 过渡、所有子状态机结构、任何 `OC_*.overrideController`（零改动） |
+| 前后 diff 结论 | `REMOVED` 10 行 = 2 PARAM + 2 STATE + 4 TRANS + 2 元信息行（exportedAt / PARAMS count）；`ADDED` 2 行 = 新的 exportedAt 与 `PARAMS count=17`。**无任何其它节点增删或改值**。 |
+
+## 未改动的资产（复核用）
+- `Assets/_Project/Art/**` 其它文件：**零改动**（`git status` 只列出 `PlayerBase.controller`）
+- 任何 `.prefab` / `.unity` / `.asset` / `*.overrideController`：**零改动**
+- `ProjectSettings/**`、`Packages/**`：**零改动**

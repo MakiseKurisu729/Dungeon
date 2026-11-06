@@ -1266,8 +1266,8 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                                Mathf.Abs(failed.cdRemaining) < 0.0001f &&
                                string.IsNullOrEmpty(failed.exception);
 
-            // ② Q 行为不变（防 Bash 回归）
-            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
+            // ② Q 行为不变（防技能槽回归）
+            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, q);
             bool qType = q.effectType == "BashEffect";
             bool qMana = Mathf.Abs(q.manaDelta - 20f) < 0.01f;
             bool qCd = q.cdRemaining > 0f && Mathf.Abs(q.cdRemaining - 6f) <= 0.05f;
@@ -1277,7 +1277,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
 
             // ③ W 类型正确（W_Slash_Effect 必须解析为 HeavySlashEffect，而不是同文件里的 BashEffect）
             yield return fx.EnsureLocomotion(3f);
-            yield return fx.Cast(1, null, "Skill", 0.5f, w);
+            yield return fx.Cast(1, null, "W_1", 0.5f, w);
             bool wType = w.effectType == "HeavySlashEffect";
             bool wMana = Mathf.Abs(w.manaDelta - 30f) < 0.01f;
             bool wCd = w.cdRemaining > 0f;
@@ -1303,10 +1303,10 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             failed.slotName, q.slotName, w.slotName, e2.slotName, r2.slotName
         };
 
-        _ev.Record("Skill", "Skill.CastSmoke",
+        _ev.Record("Skill.CastSmoke", "Skill.CastSmoke",
             Dict("失败施放", "Cast(0,null) false；manaDelta=0；CdRemaining=0；无异常",
-                 "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Bash",
-                 "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 Skill",
+                 "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Q_1",
+                 "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 W_1",
                  "E/R", "Cast(2/3) false；蓝不变；无异常"),
             Dict("failedCastReturn", failed.castReturn,
                  "manaDeltaFailed", failed.manaDelta,
@@ -1384,7 +1384,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
 
         bool pass = controllerCount == 1 && refOk && keysOk;
-        _ev.Record("Skill", "Skill.InputWired",
+        _ev.Record("Skill.InputWired", "Skill.InputWired",
             Dict("controllerCount", 1, "indicatorPointsToSceneIndicator", true, "skillKeys", "Q,W,E,R"),
             Dict("controllerCount", controllerCount, "indicatorPointsToSceneIndicator", refOk,
                  "indicator", indicatorName, "skillKeys", keys, "indicatorCount", inds.Length),
@@ -1920,8 +1920,10 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         if (st.IsName(AttackDraw)) return AttackDraw;
         if (st.IsName(AttackRelease)) return AttackRelease;
         if (st.IsName(HitA)) return HitA;
-        if (st.IsName("Skill")) return "Skill";
-        if (st.IsName("Bash")) return "Bash";
+        if (st.IsName("Q_1")) return "Q_1";
+        if (st.IsName("W_1")) return "W_1";
+        if (st.IsName("E_1")) return "E_1";
+        if (st.IsName("R_1")) return "R_1";
         if (st.IsName("Interact")) return "Interact";
         if (st.IsName("Downed")) return "Downed";
         if (st.IsName("Rise")) return "Rise";

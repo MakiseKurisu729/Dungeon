@@ -17,6 +17,7 @@ public class CharacterBrain : UnitBrain
     InteractionRunner _runner;
     bool _moving;
     UnitHealth _health;
+    bool _wasInSkill;      // 上一帧是否处于技能状态（离开时解除运动锁）
 
     protected override Team MyTeam { get { return Team.Player; } }
 
@@ -84,7 +85,7 @@ public class CharacterBrain : UnitBrain
         if (InSkillState()) { ClearMove(); return; }
 
         // 指令打断：普攻（近战单段 / 远程前摇·释放）/交互让位给移动。
-        // 过渡“进入”技能的瞬间（current 还是 Locomotion、next 已是 Skill/Bash）不能算可打断，
+        // 过渡“进入”技能的瞬间（current 还是 Locomotion、next 已是 Q_1/W_1/E_1/R_1）不能算可打断，
         // 否则 CancelAttack 会把刚起手的技能一起收掉。
         if (!InSkillAnim())
         {
@@ -122,7 +123,7 @@ public class CharacterBrain : UnitBrain
         return IsSkillState(unitAnimator.GetCurrentAnimatorStateInfo(0));
     }
 
-    /// <summary>技能动画进行中（含入场过渡）：Skill/Bash 与 Q/W/E/R 子状态。移动指令不打断技能。</summary>
+    /// <summary>技能动画进行中（含入场过渡）：Q/W/E/R 四个子状态。移动指令不打断技能。</summary>
     bool InSkillAnim()
     {
         if (unitAnimator == null) return false;
@@ -130,16 +131,22 @@ public class CharacterBrain : UnitBrain
         return unitAnimator.IsInTransition(0) && IsSkillState(unitAnimator.GetNextAnimatorStateInfo(0));
     }
 
+    /// <summary>技能状态名（与 SkillSystem 的槽位表一一对应：0..3 = Q_1/W_1/E_1/R_1）。</summary>
     static bool IsSkillState(AnimatorStateInfo st)
     {
-        return st.IsName("Skill") || st.IsName("Bash")
-            || st.IsName("Q_1") || st.IsName("W_1") || st.IsName("E_1") || st.IsName("R_1");
+        return st.IsName("Q_1") || st.IsName("W_1") || st.IsName("E_1") || st.IsName("R_1");
     }
 
     void Update()
     {
         if (agent == null || combat == null) return;
         if (AppFlow.IsPaused) return;
+
+        // 离开技能状态的那一帧解除运动锁：技能协程正常收尾会自己 End，
+        // 这里兜住「被打断 / 过渡打断 / 协程未走到 finally」等路径（End 幂等）。
+        bool inSkill = InSkillState();
+        if (_wasInSkill && !inSkill) UnitMotion.End(agent);
+        _wasInSkill = inSkill;
 
         bool wasMoving = _moving;
         _moving = ExecutingMove;
@@ -152,7 +159,7 @@ public class CharacterBrain : UnitBrain
         if (_moving) return;
 
         // 技能期间不做追击/普攻决策：技能锁不允许任何指令（含自动追击）改变 destination
-        if (InSkillState()) return;
+        if (inSkill) return;
 
         if (_orderedTarget != null)
         {

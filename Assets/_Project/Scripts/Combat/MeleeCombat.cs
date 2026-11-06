@@ -59,7 +59,11 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
     [Tooltip("攻击释放状态名：命中窗口按此状态的 normalizedTime 判定")]
     public string releaseStateName = "Attack_Release";
     [InspectorName("技能状态名")]
-    public string skillStateName = "Skill";
+    [Tooltip("无参 DoSkillAttack() 的兜底技能状态名；带参重载由技能效果传 ctx.StateName")]
+    public string skillStateName = "W_1";
+    [InspectorName("技能触发器名")]
+    [Tooltip("无参 DoSkillAttack() 的兜底触发器；带参重载由技能效果传 ctx.Trigger")]
+    public string skillTrigger = "W";
     [InspectorName("攻击动画层")]
     [Tooltip("攻击动画所在层；越界时运行时收敛到合法层")]
     public int attackLayer = 0;
@@ -99,6 +103,8 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
     float _sharpness, _radiusMult = 1f;
     Transform _target;               // ★ 单体模式：发起攻击时锁定的目标
     bool _sawAttackAnim;             // 本次攻击是否已进入过攻击动画（用于动画结束收招）
+    string _skillTrigger;            // 本次技能实际用过的触发器（ResetTrigger 只清它，不写死旧名）
+    string _skillState;              // 本次技能实际使用的状态名（命中窗口读取用；空=用字段兜底）
 
     // 攻击动画兜底上限：正常由动画状态驱动收招，此值只防动画卡死导致 _timer 永不结束
     const float MaxAttackSeconds = 10f;
@@ -190,6 +196,12 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         }
     }
 
+    /// <summary>技能动画的状态名：本次实际使用值优先，空则用资产字段（兼容旧配置）。</summary>
+    string EffectiveSkillState
+    {
+        get { return string.IsNullOrEmpty(_skillState) ? skillStateName : _skillState; }
+    }
+
     /// <summary>
     /// 读取攻击动画进度：返回命中窗口状态的 normalizedTime；
     /// playing=是否仍处于攻击/技能动画（前摇也算，用于延长代码计时）；返回 -1 表示尚未进入释放状态。
@@ -199,7 +211,8 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         playing = false;
         if (_animator == null) return -1f;
         var st = _animator.GetCurrentAnimatorStateInfo(AnimLayer);
-        if (!string.IsNullOrEmpty(skillStateName) && st.IsName(skillStateName))
+        string skillState = EffectiveSkillState;
+        if (!string.IsNullOrEmpty(skillState) && st.IsName(skillState))
         {
             playing = true;
             return st.normalizedTime % 1f;
@@ -234,13 +247,14 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         if (!string.IsNullOrEmpty(drawStateName) && st.IsName(drawStateName)) return true;
         if (!string.IsNullOrEmpty(hitStateName) && st.IsName(hitStateName)) return true;
         if (!string.IsNullOrEmpty(releaseStateName) && st.IsName(releaseStateName)) return true;
-        if (!string.IsNullOrEmpty(skillStateName) && st.IsName(skillStateName)) return true;
+        string skillState = EffectiveSkillState;
+        if (!string.IsNullOrEmpty(skillState) && st.IsName(skillState)) return true;
         if (!string.IsNullOrEmpty(attackStateName) && st.IsName(attackStateName)) return true;
         return false;
     }
 
     // 单体：锁定大脑/玩家指定的目标；扫掠：窗口内群体（原逻辑）
-    public void AutoAttack(Transform target) { DoAttack(false, target); }
+    public void AutoAttack(Transform target) { DoAttack(false, target, attackTrigger, null); }
 
     public void CancelAttack()
     {
@@ -249,12 +263,21 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         if (_animator != null)
         {
             _animator.ResetTrigger(attackTrigger);
-            _animator.ResetTrigger("Skill");
+            // 只清「本次实际用过的技能触发器」：写死旧名会在控制器换名后留下误触发
+            if (!string.IsNullOrEmpty(_skillTrigger)) _animator.ResetTrigger(_skillTrigger);
         }
     }
 
     // 技能斩强制结束普攻再放；技能斩永远走扫掠（技能=AOE）
-    public void DoSkillAttack() { _timer = -1f; DoAttack(true, null); }
+    // 无参重载只作兼容兜底：触发器/状态名取资产字段（skillTrigger / skillStateName）。
+    public void DoSkillAttack() { DoSkillAttack(skillTrigger, skillStateName); }
+
+    /// <summary>带参技能斩：动画触发器/状态名由调用方给（技能效果传 <c>ctx.Trigger</c> / <c>ctx.StateName</c>）。</summary>
+    public void DoSkillAttack(string trigger, string stateName)
+    {
+        _timer = -1f;
+        DoAttack(true, null, trigger, stateName);
+    }
 
     public float GetRawDamage()
     {
@@ -262,13 +285,15 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         return baseDamage * (1f + strengthBase * strengthDamageFactor) * dmgMult;
     }
 
-    void DoAttack(bool skill, Transform target)
+    void DoAttack(bool skill, Transform target, string trigger, string stateName)
     {
         if (_timer >= 0f) return;
         // 上一段攻击动画尚未回落时不抢起手，避免用旧释放进度提前结算
         if (!skill && IsAttackAnimPlaying()) return;
         _isSkill = skill;
         _target = target;
+        _skillTrigger = skill ? trigger : null;
+        _skillState = skill ? stateName : null;
         _sharpness = (weapon != null ? weapon.sharpness : 8f) + (skill ? 5f : 0f);
         _radiusMult = skill ? 1.6f : 1f;
         _curLen = (skill ? skillLen : attackLen) / SpeedMult;
@@ -277,7 +302,7 @@ public class MeleeCombat : MonoBehaviour, ICharacterCombat
         {
             _animator.ResetTrigger("Interrupt");
             _animator.ResetTrigger(attackTrigger);
-            _animator.SetTrigger(skill ? "Skill" : attackTrigger);
+            if (!string.IsNullOrEmpty(trigger)) _animator.SetTrigger(trigger);
         }
 
         _prevHilt = sword.position;

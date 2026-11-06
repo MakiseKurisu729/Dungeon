@@ -15,6 +15,13 @@ public class SkillSystem : MonoBehaviour
     [Tooltip("Q/W/E/R，空槽留空")]
     public SkillData[] skills = new SkillData[4];
 
+    /// <summary>槽位 → (Animator 触发器, 动画状态名)：0..3 = Q/W/E/R，对应 PlayerBase.controller 的四个子状态机。
+    /// 效果不再声明动画名，槽位即真相；越界槽位返回 (null, null) 由效果兜底。</summary>
+    static readonly (string trigger, string stateName)[] SlotAnim =
+    {
+        ("Q", "Q_1"), ("W", "W_1"), ("E", "E_1"), ("R", "R_1")
+    };
+
     readonly Cooldown[] _cds = new Cooldown[4];
 
     void Awake()
@@ -42,10 +49,27 @@ public class SkillSystem : MonoBehaviour
         }
     }
 
-    /// <summary>为某个效果组包本次施放上下文（触发器/状态名由效果自己声明，系统不认识具体技能）。</summary>
+    /// <summary>槽位对应的动画：越界返回 (null, null)。</summary>
+    static void AnimFor(int index, out string trigger, out string stateName)
+    {
+        if (index >= 0 && index < SlotAnim.Length)
+        {
+            trigger = SlotAnim[index].trigger;
+            stateName = SlotAnim[index].stateName;
+            return;
+        }
+        trigger = null;
+        stateName = null;
+    }
+
+    /// <summary>为某个效果组包本次施放上下文（触发器/状态名按槽位查表；效果显式声明时以效果为准）。</summary>
     SkillCastContext ContextFor(int index, SkillEffectBase effect, Transform target)
     {
-        return new SkillCastContext(index, effect.Trigger, effect.StateName, target, this,
+        string trigger, stateName;
+        AnimFor(index, out trigger, out stateName);
+        if (!string.IsNullOrEmpty(effect.Trigger)) trigger = effect.Trigger;
+        if (!string.IsNullOrEmpty(effect.StateName)) stateName = effect.StateName;
+        return new SkillCastContext(index, trigger, stateName, target, this,
                                     GetComponent<UnitHealth>(), Speed);
     }
 

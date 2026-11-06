@@ -22,9 +22,6 @@ public class BashEffect : SkillEffectBase
     [InspectorName("击退时长")]
     public float knockDuration = 0.3f;
 
-    public override string Trigger { get { return "Bash"; } }
-    public override string StateName { get { return "Bash"; } }
-
     public override bool CanCast(SkillCastContext ctx)
     {
         var target = ctx.Target;
@@ -46,39 +43,46 @@ public class BashEffect : SkillEffectBase
         var caster = ctx.Caster;
         var target = ctx.Target;
 
-        // ★ 新增：施法即停（LoL 手感：放技能时不再移动，避免边跑边砸）
+        // 施法即停（LoL 手感：放技能时不再移动，避免边跑边砸）；锁在单位上，任意结束路径都会 End
         var agent = caster.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        if (agent != null && agent.isOnNavMesh) { agent.isStopped = true; agent.ResetPath(); }
-
-        // 出招：收掉普攻（防双重判定）→ 面向目标 → 触发动画
-        if (caster.sword != null) caster.sword.CancelAttack();
-        Vector3 d = target.position - caster.transform.position; d.y = 0f;
-        caster.transform.rotation = Quaternion.LookRotation(d);
-        var anim = caster.GetComponentInChildren<Animator>();
-        if (anim != null) anim.SetTrigger(ctx.Trigger);
-
-        // 前摇：等结算帧（时长按施法速度缩放；Speed=1 时与原值完全相同）
-        float hitAt = hitTime / ctx.Speed;
-        float totalAt = totalTime / ctx.Speed;
-        float t = 0f;
-        while (t < hitAt) { t += Time.deltaTime; yield return null; }
-
-        // 结算：伤害 + 击退 + 僵直
-        var uh = target.GetComponent<UnitHealth>();
-        if (uh != null && !uh.dead)
+        UnitMotion.Begin(agent);
+        try
         {
-            float dmg = caster.sword != null ? caster.sword.GetRawDamage() : 10f;
-            uh.TakeHit(dmg, 999f, DamageType.Blunt, uh.transform.position + Vector3.up * 0.6f,
-                       ctx.CasterUnit);
-            var brain = uh.GetComponent<MonsterBrain>();
-            if (brain != null)
-            {
-                Vector3 dir = uh.transform.position - caster.transform.position; dir.y = 0f;
-                brain.ForceHit(dir, stagger, knockDist, knockDuration);
-            }
-        }
+            // 出招：收掉普攻（防双重判定）→ 面向目标 → 触发动画
+            if (caster.sword != null) caster.sword.CancelAttack();
+            Vector3 d = target.position - caster.transform.position; d.y = 0f;
+            caster.transform.rotation = Quaternion.LookRotation(d);
+            var anim = caster.GetComponentInChildren<Animator>();
+            if (anim != null) anim.SetTrigger(ctx.Trigger);
 
-        // 后摇：等动画收尾
-        while (t < totalAt) { t += Time.deltaTime; yield return null; }
+            // 前摇：等结算帧（时长按施法速度缩放；Speed=1 时与原值完全相同）
+            float hitAt = hitTime / ctx.Speed;
+            float totalAt = totalTime / ctx.Speed;
+            float t = 0f;
+            while (t < hitAt) { t += Time.deltaTime; yield return null; }
+
+            // 结算：伤害 + 击退 + 僵直
+            var uh = target.GetComponent<UnitHealth>();
+            if (uh != null && !uh.dead)
+            {
+                float dmg = caster.sword != null ? caster.sword.GetRawDamage() : 10f;
+                uh.TakeHit(dmg, 999f, DamageType.Blunt, uh.transform.position + Vector3.up * 0.6f,
+                           ctx.CasterUnit);
+                var brain = uh.GetComponent<MonsterBrain>();
+                if (brain != null)
+                {
+                    Vector3 dir = uh.transform.position - caster.transform.position; dir.y = 0f;
+                    brain.ForceHit(dir, stagger, knockDist, knockDuration);
+                }
+            }
+
+            // 后摇：等动画收尾
+            while (t < totalAt) { t += Time.deltaTime; yield return null; }
+        }
+        finally
+        {
+            // 正常收尾 / 抛异常 / 协程被终止：都回到「可动」
+            UnitMotion.End(agent);
+        }
     }
 }

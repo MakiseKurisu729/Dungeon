@@ -37,7 +37,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
 
     static readonly string[] KnownStates =
     {
-        " Locomotion", "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Bash", "Skill"
+        " Locomotion", "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Downed", "Rise", "Interact", "Q_1", "W_1", "E_1", "R_1"
     };
     static readonly string[] AttackStates = { "AttackMelee" };
     static readonly string[] RequiredStates = { "Locomotion", "Attack_Draw", "Hit_A", "Downed", "Rise" };

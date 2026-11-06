@@ -345,7 +345,7 @@ public class SkillCastFixture : IDisposable
     {
         if (Animator == null) return "no_animator";
         var st = Animator.GetCurrentAnimatorStateInfo(0);
-        string[] known = { "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Bash", "Skill", "Interact", "Downed", "Rise" };
+        string[] known = { "Locomotion", "AttackMelee", "Attack_Draw", "Attack_Release", "Hit_A", "Q_1", "W_1", "E_1", "R_1", "Interact", "Downed", "Rise" };
         for (int i = 0; i < known.Length; i++)
             if (st.IsName(known[i])) return known[i];
         return "Other:" + st.shortNameHash;

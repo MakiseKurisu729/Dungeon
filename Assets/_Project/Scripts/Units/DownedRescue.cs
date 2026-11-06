@@ -75,6 +75,8 @@ public class DownedRescue : MonoBehaviour, IInteractionTarget
         IsDown = true;
         AllDowned.Add(this);
         if (brain != null) brain.enabled = false;
+        // 倒地前可能还在技能里（运动锁未解）：先解除再停用导航，避免复活后仍被 isStopped 卡住
+        UnitMotion.End(agent);
         if (agent != null) { if (agent.hasPath) agent.ResetPath(); agent.enabled = false; }
         var sel = GetComponentInChildren<Selectable>();
         if (sel != null) sel.SetSelected(false);
@@ -85,6 +87,9 @@ public class DownedRescue : MonoBehaviour, IInteractionTarget
     }
 
     void OnDestroy() { AllDowned.Remove(this); }
+
+    /// <summary>被销毁/停用：解除运动锁记录，避免静态表残留（单位被回收进池后重新启用时不会带着旧锁）。</summary>
+    void OnDisable() { UnitMotion.End(agent); }
 
     // ===== IInteractionTarget =====
 
@@ -291,6 +296,7 @@ public class DownedRescue : MonoBehaviour, IInteractionTarget
         AllDowned.Remove(this);
         health.Revive(reviveHp);
         if (agent != null) agent.enabled = true;
+        UnitMotion.End(agent);      // 复活即解锁：技能/倒地期间留下的 isStopped 不得带起身后
         if (animator != null) animator.SetTrigger(reviveTrigger);
         if (brain != null) brain.enabled = false;
         StartCoroutine(RestoreBrain());

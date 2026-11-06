@@ -12,11 +12,11 @@ public abstract class SkillEffectBase : ScriptableObject
     [InspectorName("范围")]
     public float range = 2.5f;
 
-    /// <summary>本效果写 Animator 的触发器名；默认 "Skill"，盾击等改写。</summary>
-    public virtual string Trigger { get { return "Skill"; } }
+    /// <summary>本效果要写的 Animator 触发器名；默认 null = 用 SkillSystem 的槽位表（Q/W/E/R）。</summary>
+    public virtual string Trigger { get { return null; } }
 
-    /// <summary>与 <see cref="Trigger"/> 对应的动画状态名（断言/等待用）。</summary>
-    public virtual string StateName { get { return "Skill"; } }
+    /// <summary>与 <see cref="Trigger"/> 对应的动画状态名（断言/等待用）；默认 null = 用槽位表。</summary>
+    public virtual string StateName { get { return null; } }
 
     public abstract bool CanCast(SkillCastContext ctx);
     public abstract void Execute(SkillCastContext ctx);

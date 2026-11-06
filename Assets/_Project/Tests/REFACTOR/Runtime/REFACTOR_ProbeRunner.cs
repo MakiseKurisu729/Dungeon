@@ -16,12 +16,12 @@ using UnityEditor;
 /// 只读生产状态；测试自身唯一写入面为 Docs 证据、SessionState 退出码、
 /// 以及运行期内存夹具（结束前销毁）。
 ///
-/// 15 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+/// 16 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
 ///   1. Party.PresentAndMove       三职业存在 + 生产移动命令可移动
 ///   2. Combat.MeleeHit            骑士近战普攻命中，命中瞬间处于 AttackMelee
 ///   3. Combat.RangedShot          弓/法远程普攻发射，发射瞬间处于 Attack_Release
 ///   4. Skill.QW                   Q/W 经 SkillSystem.Cast 生效（类型/蓝耗/动画）
-///   5. Skill.InterruptAttack      普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Bash
+///   5. Skill.InterruptAttack      普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1
 ///   6. Hit.InterruptSkill         施放 W 后受击 → ≤0.5s 进入 Hit_A 且未死
 ///   7. Skill.InterruptInteract    技能期间交互指令无效（无待办/不位移），技能后可下单
 ///   8. Projectile.AimPoint        子弹落点 = 目标渲染包围盒中心；无 Renderer 回退 position
@@ -32,6 +32,7 @@ using UnityEditor;
 ///  13. Refactor.RegistrySemantics 单位注册表契约（未激活语义 / Nearest 与全场扫描同口径）
 ///  14. Refactor.StateFacade       状态/流程门面（新旧 API 双向一致 / 事件恰好一次 / 暂停 timeScale）
 ///  15. Refactor.InteractionContract 交互契约（接口语义 / KeyInteractable / 开箱事件恰好一次 / Runner 复用）
+///  16. Skill.MotionUnlocked       运动锁复位（技能结束 / 被打断 / 倒地复活三条路径后 isStopped==false 且能移动）
 /// </summary>
 public class REFACTOR_ProbeRunner : MonoBehaviour
 {
@@ -158,7 +159,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 "Party.PresentAndMove", "Combat.MeleeHit", "Combat.RangedShot", "Skill.QW",
                 "Skill.InterruptAttack", "Hit.InterruptSkill", "Skill.InterruptInteract", "Projectile.AimPoint",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
-                "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract"
+                "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract",
+                "Skill.MotionUnlocked"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -183,6 +185,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Refactor.InteractionContract", AssertInteractionContract());
         yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics());
         yield return RunSafe("Refactor.StateFacade", AssertStateFacade());
+        yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked());
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -484,13 +487,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 yield break;
             }
 
-            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Bash", 0.5f, q);
+            yield return fx.Cast(0, fx.Target != null ? fx.Target.transform : null, "Q_1", 0.5f, q);
             qPass = q.castReturn && q.effectType == "BashEffect" &&
                     Mathf.Abs(q.manaDelta - 20f) < 0.01f &&
                     q.damageObserved && q.animEntered && q.animEntrySeconds >= 0f && q.animEntrySeconds <= 0.6f;
 
             yield return fx.EnsureLocomotion(3f);
-            yield return fx.Cast(1, null, "Skill", 0.5f, w);
+            yield return fx.Cast(1, null, "W_1", 0.5f, w);
             wPass = w.castReturn && w.effectType == "HeavySlashEffect" &&
                     Mathf.Abs(w.manaDelta - 30f) < 0.01f &&
                     w.swordTimer >= 0f && w.animEntered && w.animEntrySeconds >= 0f && w.animEntrySeconds <= 0.6f;
@@ -502,7 +505,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
         bool pass = qPass && wPass;
         _ev.Record(Id, Id,
-            "Q（BashEffect，-20 蓝，命中掉血，≤0.6s 进入 Bash）与 W（HeavySlashEffect，-30 蓝，起手技能斩，≤0.6s 进入 Skill）均经 SkillSystem.Cast 生效",
+            "Q（BashEffect，-20 蓝，命中掉血，≤0.6s 进入 Q_1）与 W（HeavySlashEffect，-30 蓝，起手技能斩，≤0.6s 进入 W_1）均经 SkillSystem.Cast 生效",
             "qPass=" + qPass + "; wPass=" + wPass +
             "; qType=" + q.effectType + "; wType=" + w.effectType +
             "; qManaDelta=" + F(q.manaDelta) + "; wManaDelta=" + F(w.manaDelta),
@@ -525,13 +528,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         if (knight == null || knight.brain == null || knight.health == null ||
             knight.skills == null || knight.sword == null)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Bash",
+            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
                 "缺少 Knight_Unit 或 SkillSystem/MeleeCombat", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Bash",
+            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
                 "骑士已倒地", null);
             yield break;
         }
@@ -595,7 +598,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 float w = 0f;
                 while (w < 0.6f)
                 {
-                    if (StateName(knight.animator) == "Bash") { bashEntered = true; bashWait = w; break; }
+                    if (StateName(knight.animator) == "Q_1") { bashEntered = true; bashWait = w; break; }
                     yield return null;
                     w += Time.deltaTime;
                 }
@@ -606,7 +609,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     float w2 = 0f;
                     while (w2 < 1.5f)
                     {
-                        if (StateName(knight.animator) == "Bash")
+                        if (StateName(knight.animator) == "Q_1")
                         { bashEnteredLater = true; bashActualWait = w + w2; break; }
                         yield return null;
                         w2 += Time.deltaTime;
@@ -636,7 +639,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     bashEntered && bashWait >= 0f && bashWait <= 0.6f && noSecondHit;
         _ev.Record(Id, Id,
             "骑士在 AttackMelee 出招中（窗口已过、仍在收招）立即 SkillSystem.Cast(0,Q)：Cast 返回 true，" +
-            "MeleeCombat 攻击计时被收(-1)，普攻不再产生第二次 Slash 命中，且 ≤0.6s 进入 Bash（盾击 Blunt 命中照常结算）",
+            "MeleeCombat 攻击计时被收(-1)，普攻不再产生第二次 Slash 命中，且 ≤0.6s 进入 Q_1（盾击 Blunt 命中照常结算）",
             "attacking=" + attacking + "; normAtCast=" + F(attackNormAtCast) + "; cast=" + castOk +
             "; attackTimerAfterCast=" + F(attackTimerAfterCast) +
             "; bash=" + bashEntered + "(" + F(bashWait) + "s)" +
@@ -649,8 +652,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                  "bashEnteredLater", bashEnteredLater, "bashActualWaitSeconds", bashActualWait,
                  "slashHitsBeforeCast", slashHitsBeforeCast, "slashHitsAfterCast", slashHits,
                  "bluntHitsAfterCast", bluntHits,
-                 "note", "PlayerBase.controller 的 Bash 触发过渡只挂在 Locomotion 状态（Locomotion→Bash），" +
-                         "故出招中施放时 Bash 会在 AttackMelee 收招后进入；本断言在命中窗口之后立即施放，覆盖“第一下已结算、不许有第二下”"));
+                 "note", "PlayerBase.controller 的 Q 触发过渡只挂在 Locomotion 状态（Locomotion→Q），" +
+                         "故出招中施放时 Q_1 会在 AttackMelee 收招后进入；本断言在命中窗口之后立即施放，覆盖“第一下已结算、不许有第二下”"));
     }
 
     // ============================================================
@@ -788,7 +791,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             var runner = InteractionRunner.Ensure(knight.brain);
             knight.brain.CancelPendingInteract();
 
-            // ---- 1. 进入 Bash ----
+            // ---- 1. 进入 Q_1 ----
             RefillSkills(knight);
             castOk = knight.skills.Cast(0, _target.transform);     // 生产入口
             float t = 0f;
@@ -796,7 +799,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 yield return null;
                 t += Time.deltaTime;
-                if (StateName(knight.animator) == "Bash") { inBash = true; bashWait = t; break; }
+                if (StateName(knight.animator) == "Q_1") { inBash = true; bashWait = t; break; }
             }
 
             // ---- 2. 技能期间下交互指令：不应产生待办，也不应朝宝箱位移 ----
@@ -814,7 +817,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 yield return null;
                 e += Time.deltaTime;
                 string st = StateName(knight.animator);
-                if (st != "Bash" && st != "Skill") { skillEnded = true; break; }
+                if (!IsSkillStateName(st)) { skillEnded = true; break; }
             }
 
             knight.brain.CommandInteract(marker);
@@ -841,10 +844,10 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             rows.Add(Dict("step", "interactAfterSkill", "skillEnded", skillEnded,
                           "hasPending", pendingAfterSkill, "pass", skillEnded && pendingAfterSkill));
             rows.Add(Dict("step", "cleanup", "returnMoveMeters", returnMoveDistance,
-                          "note", "BashEffect 会把 NavMeshAgent.isStopped 置 true（既有产品行为，本单未改）；收尾恢复可动并回原位"));
+                          "note", "技能期间的运动锁由 UnitMotion 负责（施法即停），收尾恢复可动并回原位"));
 
             _ev.Record(Id, Id,
-                "SkillSystem.Cast(0,Q) 进入 Bash 后对同一单位 CommandInteract(宝箱夹具)：InteractionRunner.HasPending=false 且 0.25s 内不位移；" +
+                "SkillSystem.Cast(0,Q) 进入 Q_1 后对同一单位 CommandInteract(宝箱夹具)：InteractionRunner.HasPending=false 且 0.25s 内不位移；" +
                 "技能结束后再次 CommandInteract 能产生 HasPending=true",
                 "cast=" + castOk + "; bash=" + inBash + "; pendingDuring=" + pendingDuringSkill +
                 "; moved=" + F(movedDuringSkill) + "m; skillEnded=" + skillEnded +
@@ -1645,12 +1648,269 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield break;
     }
 
+    // ============================================================
+    // SKILL-CLOSE-01. Skill.MotionUnlocked（第 16 条）
+    // ============================================================
+    /// <summary>运动锁（UnitMotion）必须从三条路径复位：
+    /// ① 技能正常收尾（Q → 离开技能状态回 Locomotion）；
+    /// ② 技能被受击打断（W 后 0.1s 受 1 点伤害；另补 Q —— 只有 BashEffect 会加锁，W 不加，故 Q 才是「锁着被打断」）；
+    /// ③ 倒地 → 复活。
+    /// 每条都断言 agent.isStopped==false 且 UnitMotion.IsHeld==false；最后下一次移动指令证明真的能走。
+    /// 复活走产品私有入口 DownedRescue.Revive（反射调用，与既有套件读私有字段同一惯例），不重跑 3s 读条。</summary>
+    IEnumerator AssertMotionUnlocked()
+    {
+        const string Id = "Skill.MotionUnlocked";
+        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        if (knight == null || knight.brain == null || knight.health == null ||
+            knight.skills == null || knight.brain.agent == null || knight.rescue == null)
+        {
+            _ev.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
+                "缺少 Knight_Unit 或 SkillSystem/NavMeshAgent/DownedRescue", null);
+            yield break;
+        }
+        if (knight.health.dead)
+        {
+            _ev.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
+                "骑士已倒地", null);
+            yield break;
+        }
+
+        var agent = knight.brain.agent;
+        MethodInfo reviveMethod = typeof(DownedRescue).GetMethod("Revive",
+            BindingFlags.Instance | BindingFlags.NonPublic);
+        if (reviveMethod == null)
+        {
+            _ev.InfraFailure(Id, Id, "取不到 DownedRescue.Revive（产品私有入口被改名？）", "");
+            yield break;
+        }
+
+        var rows = new List<object>();
+        bool qCast = false, qLeftSkill = false, qUnlocked = false, qNotHeld = false, qLockObserved = false;
+        float qSkillSeconds = -1f;
+        bool wCast = false, wHitApplied = false, wHitEntered = false, wUnlocked = false;
+        float wUnlockSeconds = -1f;
+        bool qbCast = false, qbLockObserved = false, qbUnlocked = false;
+        float qbUnlockSeconds = -1f;
+        bool downed = false, revived = false, reviveUnlocked = false, reviveNotHeld = false;
+        bool lockClearedOnDown = false;
+        bool moveOk = false, moveNotHeld = false;
+        float moveDistance = -1f, moveSeconds = -1f;
+
+        try
+        {
+            // 前置复位：上一条（救援）把骑士留在 1 血，先用生产 API 回满，避免受击直接致死
+            knight.brain.enabled = true;
+            knight.brain.CancelPendingInteract();
+            knight.brain.CommandAttack(null);
+            var combat0 = knight.brain.combat as ICharacterCombat;
+            if (combat0 != null) combat0.CancelAttack();
+            knight.health.HealFull();
+            yield return WaitState(knight, Locomotion, 6f);
+
+            _target = CreateTarget("REFACTOR_Target_MotionUnlocked",
+                                   knight.tx.position + knight.tx.forward * 1.8f);
+            if (_target == null)
+            {
+                _ev.InfraFailure(Id, Id, "运动锁靶夹具创建失败", "");
+                yield break;
+            }
+
+            // ---- 1. Q 正常收尾：离开技能状态 → 锁必须解掉 ----
+            RefillSkills(knight);
+            qCast = knight.skills.Cast(0, _target.transform);
+            {
+                float t = 0f;
+                bool entered = false;
+                while (t < 6f)
+                {
+                    yield return null;
+                    t += Time.deltaTime;
+                    string s = StateName(knight.animator);
+                    if (IsSkillStateName(s))
+                    {
+                        entered = true;
+                        if (UnitMotion.IsHeld(agent)) qLockObserved = true;
+                    }
+                    else if (entered && s == Locomotion)
+                    {
+                        qLeftSkill = true;
+                        qSkillSeconds = t;
+                        break;
+                    }
+                }
+            }
+            yield return null;
+            yield return null;
+            qUnlocked = !agent.isStopped;
+            qNotHeld = !UnitMotion.IsHeld(agent);
+            rows.Add(Dict("step", "1-normalEnd", "castReturn", qCast, "leftSkill", qLeftSkill,
+                          "skillSeconds", qSkillSeconds, "lockObservedDuringSkill", qLockObserved,
+                          "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
+                          "pass", qCast && qLeftSkill && qUnlocked && qNotHeld));
+
+            // ---- 2. W + 受击打断（工单口径；W 走 HeavySlashEffect，不加锁，验证「不残留锁」） ----
+            RefillSkills(knight);
+            wCast = knight.skills.Cast(1, null);
+            float pre = 0f;
+            while (pre < 0.1f) { yield return null; pre += Time.deltaTime; }
+            float wHpBefore = knight.health.hp;
+            knight.health.TakeHit(1f, 999f, DamageType.Blunt, knight.tx.position + Vector3.up, null);
+            wHitApplied = Mathf.Abs(wHpBefore - knight.health.hp - 1f) < 0.01f;
+            {
+                float h = 0f;
+                while (h < 0.5f)
+                {
+                    yield return null;
+                    h += Time.deltaTime;
+                    if (StateName(knight.animator) == HitA) { wHitEntered = true; break; }
+                }
+                float u = 0f;
+                while (u < 2f)
+                {
+                    if (!agent.isStopped && !UnitMotion.IsHeld(agent)) { wUnlocked = true; wUnlockSeconds = u; break; }
+                    yield return null;
+                    u += Time.deltaTime;
+                }
+            }
+            rows.Add(Dict("step", "2a-w-then-hit", "castReturn", wCast, "hitApplied", wHitApplied,
+                          "enteredHit_A", wHitEntered, "unlockedWithin2s", wUnlocked,
+                          "unlockSeconds", wUnlockSeconds,
+                          "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
+                          "pass", wCast && wHitApplied && wUnlocked));
+
+            // ---- 2b. Q（唯一加锁的技能）+ 受击打断：锁着的时候被打断也必须解锁 ----
+            yield return WaitState(knight, Locomotion, 6f);
+            RefillSkills(knight);
+            qbCast = knight.skills.Cast(0, _target.transform);
+            {
+                float l = 0f;
+                while (l < 0.4f)
+                {
+                    if (UnitMotion.IsHeld(agent)) { qbLockObserved = true; break; }
+                    yield return null;
+                    l += Time.deltaTime;
+                }
+                knight.health.TakeHit(1f, 999f, DamageType.Blunt, knight.tx.position + Vector3.up, null);
+                float u = 0f;
+                while (u < 2f)
+                {
+                    if (!agent.isStopped && !UnitMotion.IsHeld(agent)) { qbUnlocked = true; qbUnlockSeconds = u; break; }
+                    yield return null;
+                    u += Time.deltaTime;
+                }
+            }
+            rows.Add(Dict("step", "2b-q-then-hit", "castReturn", qbCast, "lockObserved", qbLockObserved,
+                          "unlockedWithin2s", qbUnlocked, "unlockSeconds", qbUnlockSeconds,
+                          "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
+                          "pass", qbCast && qbLockObserved && qbUnlocked));
+
+            // ---- 3. 倒地 → 复活：倒地清锁，复活后必须可动 ----
+            yield return WaitState(knight, Locomotion, 6f);
+            knight.health.ApplyDamage(knight.health.maxHp * 4f, knight.tx.position + Vector3.up);
+            {
+                float d = 0f;
+                while (d < 3f)
+                {
+                    yield return null;
+                    d += Time.deltaTime;
+                    if (knight.rescue.IsDown) { downed = true; break; }
+                }
+                lockClearedOnDown = downed && !UnitMotion.IsHeld(agent);
+                if (downed) reviveMethod.Invoke(knight.rescue, null);
+                float r = 0f;
+                while (r < 5f)
+                {
+                    yield return null;
+                    r += Time.deltaTime;
+                    if (!knight.rescue.IsDown && agent.enabled && agent.isOnNavMesh) { revived = true; break; }
+                }
+                yield return null;
+                reviveUnlocked = revived && !agent.isStopped;
+                reviveNotHeld = !UnitMotion.IsHeld(agent);
+            }
+            rows.Add(Dict("step", "3-down-then-revive", "downed", downed, "lockClearedOnDown", lockClearedOnDown,
+                          "revived", revived, "agentIsStopped", agent.isStopped,
+                          "isHeld", UnitMotion.IsHeld(agent),
+                          "pass", downed && lockClearedOnDown && revived && reviveUnlocked && reviveNotHeld));
+
+            // ---- 4. 真的能走：下一次移动指令必须产生位移 ----
+            {
+                float b = 0f;
+                while (b < 5f && (knight.brain == null || !knight.brain.enabled))
+                { yield return null; b += Time.deltaTime; }
+
+                Vector3 from = knight.tx.position;
+                Vector3 dest = from + knight.tx.forward * 3f;
+                NavMeshHit navHit;
+                if (NavMesh.SamplePosition(dest, out navHit, 3f, NavMesh.AllAreas)) dest = navHit.position;
+                knight.brain.CommandMove(dest);
+
+                float mt = 0f;
+                float best = 0f;
+                while (mt < 4f)
+                {
+                    yield return null;
+                    mt += Time.deltaTime;
+                    float dd = Vector3.Distance(from, knight.tx.position);
+                    if (dd > best) best = dd;
+                    if (dd >= 0.5f) break;
+                }
+                moveDistance = best;
+                moveSeconds = mt;
+                moveOk = best > 0.1f;
+                moveNotHeld = !UnitMotion.IsHeld(agent);
+            }
+            rows.Add(Dict("step", "4-canMove", "movedMeters", moveDistance, "seconds", moveSeconds,
+                          "isHeld", UnitMotion.IsHeld(agent),
+                          "pass", moveOk && moveNotHeld));
+        }
+        finally
+        {
+            knight.brain.CommandAttack(null);
+            var combat = knight.brain.combat as ICharacterCombat;
+            if (combat != null) combat.CancelAttack();
+            knight.brain.CancelPendingInteract();
+            RestoreAgent(knight);
+            knight.health.HealFull();      // 夹具复位：复活后只有 reviveHp(1)，给后续/重跑留干净状态
+            DestroyTarget();
+        }
+
+        bool pass = qCast && qLeftSkill && qUnlocked && qNotHeld &&
+                    wCast && wHitApplied && wUnlocked &&
+                    qbCast && qbLockObserved && qbUnlocked &&
+                    downed && lockClearedOnDown && revived && reviveUnlocked && reviveNotHeld &&
+                    moveOk && moveNotHeld;
+        _ev.Record(Id, Id,
+            "运动锁复位：① Q 正常收尾（离开技能状态回 Locomotion）② W/Q 施放后受击打断 ③ 倒地 → 复活 —— " +
+            "三条路径后 agent.isStopped==false 且 UnitMotion.IsHeld==false；最后下一次移动指令位移 > 0.1m",
+            "qCast=" + qCast + "; qLeftSkill=" + qLeftSkill + "(" + F(qSkillSeconds) + "s)" +
+            "; qUnlocked=" + qUnlocked + "; qNotHeld=" + qNotHeld + "; qLockSeen=" + qLockObserved +
+            "; wCast=" + wCast + "; wHit=" + wHitApplied + "; wUnlocked=" + wUnlocked +
+            "; qbLockSeen=" + qbLockObserved + "; qbUnlocked=" + qbUnlocked +
+            "; downed=" + downed + "; revived=" + revived + "; reviveUnlocked=" + reviveUnlocked +
+            "; moveMeters=" + F(moveDistance),
+            pass, pass ? "pass" : "product_fail", "production",
+            Dict("steps", rows,
+                 "entry", "SkillSystem.Cast(0/1) → BashEffect/HeavySlashEffect → UnitMotion.Begin/End；" +
+                          "UnitHealth.TakeHit/ApplyDamage → DownedRescue.OnDowned；DownedRescue.Revive（反射私有入口）",
+                 "note", "W 走 HeavySlashEffect 不加运动锁，故 2a 验证「不残留锁」，2b 用唯一加锁的 Q 验证「锁着被打断也能解锁」；" +
+                         "复活不重跑 3s 读条以免拉长套件（本套件既有惯例是反射读产品私有成员）"));
+
+        yield break;
+    }
+
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)
     {
         if (list == null || unit == null) return false;
         for (int i = 0; i < list.Count; i++)
             if (list[i] == unit) return true;
         return false;
+    }
+
+    /// <summary>技能状态名判定（与本套件 StateName 的映射一致）。</summary>
+    static bool IsSkillStateName(string s)
+    {
+        return s == "Q_1" || s == "W_1" || s == "E_1" || s == "R_1";
     }
 
     // ============================================================
@@ -1890,8 +2150,10 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         if (st.IsName("Attack_Draw")) return "Attack_Draw";
         if (st.IsName(AttackRelease)) return AttackRelease;
         if (st.IsName(HitA)) return HitA;
-        if (st.IsName("Skill")) return "Skill";
-        if (st.IsName("Bash")) return "Bash";
+        if (st.IsName("Q_1")) return "Q_1";
+        if (st.IsName("W_1")) return "W_1";
+        if (st.IsName("E_1")) return "E_1";
+        if (st.IsName("R_1")) return "R_1";
         if (st.IsName("Interact")) return "Interact";
         if (st.IsName(Downed)) return Downed;
         if (st.IsName("Rise")) return "Rise";
