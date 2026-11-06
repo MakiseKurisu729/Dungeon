@@ -1,0 +1,14 @@
+﻿# retry1 删后目录清单（2026-11-07 01:14:27)
+Units|dir_exists=False|meta_exists=False
+Combat|dir_exists=False|meta_exists=False
+Player|dir_exists=False|meta_exists=False
+System|dir_exists=False|meta_exists=False
+Items|dir_exists=False|meta_exists=False
+Framework|dir_exists=False|meta_exists=False
+Debug|dir_exists=False|meta_exists=False
+Monster|dir_exists=False|meta_exists=False
+
+dirs_left=App,Content,Core,Editor,Gameplay,UI
+scripts_root_files=App.meta,Content.meta,Core.meta,Editor.meta,Gameplay.meta,UI.meta
+cs_count=77
+tests_cs_count=30
