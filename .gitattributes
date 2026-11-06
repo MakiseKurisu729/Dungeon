@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Unity YAML 三方合并（需本机配置 merge.unityyamlmerge.driver，命令见 Docs/QA/Evidence/OPS-01/）
+*.unity merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.asset merge=unityyamlmerge

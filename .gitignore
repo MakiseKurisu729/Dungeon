@@ -31,3 +31,7 @@
 # 崩溃报告
 sysinfo.txt
 *.stackdump
+
+# Unity 自动生成的 IDE 工程文件（由 Unity 重新生成，不入库）
+*.csproj
+*.sln

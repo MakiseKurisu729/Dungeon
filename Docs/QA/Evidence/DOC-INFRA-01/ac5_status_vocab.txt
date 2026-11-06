@@ -1,0 +1,25 @@
+﻿rows=18 col9=status col10=schedule
+OPS-01	已批准	阶段 0
+OPS-02	已批准	阶段 0
+OPS-03	已批准	阶段 0
+OPS-04	已批准（待写入 `workflow-rules`）	阶段 0（写入 `workflow-rules`）
+ENG-01	待排期	M7
+ENG-02	待排期	M7（ENG-01 之后）
+TEST-01	进行中	阶段 1
+TEST-02	待排期	M7 之后
+TEST-03	待排期	阶段 1
+INPUT-01	待排期	阶段 2
+SAVE-01	待排期	阶段 2
+ASSET-01	待排期	阶段 2
+LOG-01	待排期	阶段 2
+ADDR-01	暂缓	触发条件满足时
+NO-01	暂缓	条件触发
+NO-02	不做	—
+NO-03	不做	—
+NO-04	不做	—
+count[已批准]=3
+count[已批准（待写入 `workflow-rules`）]=1
+count[待排期]=8
+count[进行中]=1
+count[暂缓]=2
+count[不做]=3

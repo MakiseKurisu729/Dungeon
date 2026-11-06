@@ -1,0 +1,60 @@
+OPS-01 证据：四段内容核对
+========================================
+核对时间：2026-11-06
+方式：只读核对（read / grep / git check-ignore / git check-attr），未执行任何 git 写操作。
+
+--- [1] .editorconfig（仓库根，全文，新建） ---
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,asmdef}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+--- [2] .gitattributes（全文，原 2 行 + 追加 4 行） ---
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Unity YAML 三方合并（需本机配置 merge.unityyamlmerge.driver，命令见 Docs/QA/Evidence/OPS-01/）
+*.unity merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.asset merge=unityyamlmerge
+
+生效校验：
+$ git check-attr merge -- Assets/Scenes/Test.unity Assets/Prefabs/x.prefab Assets/x.asset Assets/x.json
+Assets/Scenes/Test.unity: merge: unityyamlmerge
+Assets/Prefabs/x.prefab: merge: unityyamlmerge
+Assets/x.asset: merge: unityyamlmerge
+Assets/x.json: merge: unspecified
+
+--- [3] .gitignore（尾部追加 3 行，现 37 行） ---
+35: # Unity 自动生成的 IDE 工程文件（由 Unity 重新生成，不入库）
+36: *.csproj
+37: *.sln
+
+生效校验：
+$ git check-ignore --no-index -v Assembly-CSharp.csproj Assembly-CSharp-Editor.csproj Dungeon.sln
+.gitignore:36:*.csproj	Assembly-CSharp.csproj
+.gitignore:36:*.csproj	Assembly-CSharp-Editor.csproj
+.gitignore:37:*.sln	Dungeon.sln
+
+注意：忽略规则对已跟踪文件无效，三个文件目前仍被跟踪，需所有者执行 git rm --cached（见 OWNER-COMMANDS.txt）。
+
+--- [4] Docs/Handoff/workflow-rules.md 新增「## 11. 上下文与预算」（第 341-346 行） ---
+## 11. 上下文与预算
+
+- **主会话阈值 70%**：上下文占用达 70% 后，必须等**下一次里程碑收口**（一单验收 + 交接写完）再停止并写交接，不得硬撑到耗尽。
+- **子代理阈值 60%**：到点即收尾，把结论与证据交回主会话，不继续扩面。
+- **禁止里程碑中途停**：不得因上下文不足在里程碑中途中断；正确做法是缩短单轮范围、提前收口，而不是留半成品。
+- **修复轮次上限**：每单常规 1 轮、高风险 2 轮；与 `TASK_INTERRUPT-*` / `TASK_RESCUE-*` 单的轮次上限一致。超限按 §7 停止条件处理（转 RESCUE 或回大脑重写 TASK），不得原地反复试。
+
+插入位置：原「## 10. Done 门槛」之后、「## 附录 A. 模型与钱包路由」之前，未改动原有内容。

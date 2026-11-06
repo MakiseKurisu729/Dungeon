@@ -141,6 +141,7 @@
 | `Docs/01_总体架构与内容生产规范.md` | 目标架构 + 架构不变量 |
 | `Docs/02_Unity63迁移及毕业设计实施计划.md` | 迁移与实施计划（里程碑 / Roadmap 唯一来源） |
 | `Docs/04_可复用资产与编辑器工具设计清单.md` | 资产与工具清单 |
+| `Docs/07_工程规范与基础设施.md` | 工程规范、基础设施缺口、排期与暂缓项 |
 | `Docs/Specs/constitution.md` | 1 页索引：Mission / Scope / Tech stack；只在 Replan 更新 |
 | `Docs/Decisions/ADR-*.md` | 决策留痕（改不变量必写） |
 | `Docs/Handoff/workflow-rules.md` | 细则：TASK/REPORT/证据/提交/前置/风险/讲稿/Replan/Done |

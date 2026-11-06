@@ -1,0 +1,50 @@
+﻿ M .gitattributes
+ M .gitignore
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M "Docs/01_\346\200\273\344\275\223\346\236\266\346\236\204\344\270\216\345\206\205\345\256\271\347\224\237\344\272\247\350\247\204\350\214\203.md"
+ M "Docs/02_Unity63\350\277\201\347\247\273\345\217\212\346\257\225\344\270\232\350\256\276\350\256\241\345\256\236\346\226\275\350\256\241\345\210\222.md"
+ M Docs/Handoff/REPORT_QA-REFACTOR-01.md
+ M Docs/Handoff/TASK_QA-REFACTOR-01.md
+ M Docs/Handoff/workflow-rules.md
+ M Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt
+?? .editorconfig
+?? Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+?? Assets/_Project/Tests/QA/Editor/QaLauncher.cs.meta
+?? Assets/_Project/Tests/QaTestTemplate.md
+?? Assets/_Project/Tests/QaTestTemplate.md.meta
+?? "Docs/06_\346\265\213\350\257\225\346\236\266\346\236\204\344\270\216\351\252\214\346\224\266\345\210\206\345\261\202.md"
+?? "Docs/07_\345\267\245\347\250\213\350\247\204\350\214\203\344\270\216\345\237\272\347\241\200\350\256\276\346\226\275.md"
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run10/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run11/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run7/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run8/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run9/
+?? Docs/QA/Evidence/DOC-INFRA-01/
+?? Docs/QA/Evidence/FND-00B-06/editor_run7/
+?? Docs/QA/Evidence/FND-00B-06/editor_run8/
+?? Docs/QA/Evidence/OPS-01/
+?? Docs/QA/Evidence/QA-REFACTOR-01/capture_final.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_ac1.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_compile.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_gitscope.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_l2.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/compile.log
+?? Docs/QA/Evidence/QA-REFACTOR-01/dedup_counts.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/dedup_counts_phaseE.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/final/
+?? Docs/QA/Evidence/QA-REFACTOR-01/git_scope.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/l2_domainreload/
+?? Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness_phaseE.ps1
+?? Docs/QA/Evidence/REBASELINE-DOC/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run19/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run20/
+?? Docs/QA/Evidence/SPEC-01/editor_run43/
+?? Docs/QA/Evidence/SPEC-01/editor_run44/

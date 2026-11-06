@@ -1,0 +1,20 @@
+OPS-01：所有者本机待执行命令（执行者不得代跑 git 写操作）
+================================================================
+
+【命令 1｜OPS-02】注册 UnityYAMLMerge 合并驱动（仓库级，一次即可）
+路径已确认存在：D:/unity/2022.3.62f3c1/Editor/Data/Tools/UnityYAMLMerge.exe
+
+  git config merge.unityyamlmerge.driver "\"D:/unity/2022.3.62f3c1/Editor/Data/Tools/UnityYAMLMerge.exe\" merge -p %O %B %A %A"
+
+说明：.gitattributes 只声明 *.unity/*.prefab/*.asset 使用 unityyamlmerge；驱动本身需本机配置，否则冲突时 git 报 "merge driver not configured"。
+现状核对：git config --get merge.unityyamlmerge.driver 当前无输出（未配置）。
+
+【命令 2｜OPS-03】把 Unity 生成的工程文件移出索引（保留磁盘文件）
+Dungeon.sln 已被跟踪，必须一并 --cached，否则 *.sln 忽略规则对它不生效。
+
+  git rm --cached Assembly-CSharp.csproj Assembly-CSharp-Editor.csproj Dungeon.sln
+
+说明：--cached 只删索引不删文件，Unity 重新生成后不会再被跟踪。
+若只想保留 .sln 入库，则改为：
+  git rm --cached Assembly-CSharp.csproj Assembly-CSharp-Editor.csproj
+并把 .gitignore 的 *.sln 改成仅忽略生成目录内的 sln（例如 /*.sln 之外的写法需再评估）。

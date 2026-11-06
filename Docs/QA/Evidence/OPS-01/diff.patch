@@ -1,0 +1,37 @@
+﻿diff --git a/.gitattributes b/.gitattributes
+index dfe07704..1ed99db1 100644
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -1,2 +1,7 @@
+ # Auto detect text files and perform LF normalization
+ * text=auto
++
++# Unity YAML 涓夋柟鍚堝苟锛堥渶鏈満閰嶇疆 merge.unityyamlmerge.driver锛屽懡浠よ Docs/QA/Evidence/OPS-01/锛?+*.unity merge=unityyamlmerge
++*.prefab merge=unityyamlmerge
++*.asset merge=unityyamlmerge
+diff --git a/.gitignore b/.gitignore
+index f10ab5d6..59b72f0c 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -30,4 +30,8 @@
+ 
+ # 宕╂簝鎶ュ憡
+ sysinfo.txt
+-*.stackdump
+\ No newline at end of file
++*.stackdump
++
++# Unity 鑷姩鐢熸垚鐨?IDE 宸ョ▼鏂囦欢锛堢敱 Unity 閲嶆柊鐢熸垚锛屼笉鍏ュ簱锛?+*.csproj
++*.sln
+\ No newline at end of file
+diff --git a/Docs/Handoff/workflow-rules.md b/Docs/Handoff/workflow-rules.md
+index c05e2daa..a0f6831a 100644
+--- a/Docs/Handoff/workflow-rules.md
++++ b/Docs/Handoff/workflow-rules.md
+@@ -338,6 +338,13 @@ Unity/鍖?鍚姩鏂瑰紡鍙樺寲锛涘叕鍏辩被銆佸瓧娈点€佹暟鎹?ID銆佺洰褰曟垨绋嬪簭
+ - [ ] **澶嶅閫氳繃**锛氬ぇ鑴戞寜 AC 琛ㄥ鏍革紝鏃犺秺鏉冩敼鍔紙`git status` 涓嶅惈 `Assets/**`銆乣ProjectSettings/**`銆乣Packages/**` 鐨勮鍒掑鏀瑰姩锛夈€? - [ ] **鐢ㄦ埛纭**锛氭墍鏈夎€呭畬鎴愮洰妫€骞?*浜茶嚜**鏍?`Done`锛汚I 涓嶄唬鏍囥€? 
++## 11. 涓婁笅鏂囦笌棰勭畻
++
++- **涓讳細璇濋槇鍊?70%**锛氫笂涓嬫枃鍗犵敤杈?70% 鍚庯紝蹇呴』绛?*涓嬩竴娆￠噷绋嬬鏀跺彛**锛堜竴鍗曢獙鏀?+ 浜ゆ帴鍐欏畬锛夊啀鍋滄骞跺啓浜ゆ帴锛屼笉寰楃‖鎾戝埌鑰楀敖銆?+- **瀛愪唬鐞嗛槇鍊?60%**锛氬埌鐐瑰嵆鏀跺熬锛屾妸缁撹涓庤瘉鎹氦鍥炰富浼氳瘽锛屼笉缁х画鎵╅潰銆?+- **绂佹閲岀▼纰戜腑閫斿仠**锛氫笉寰楀洜涓婁笅鏂囦笉瓒冲湪閲岀▼纰戜腑閫斾腑鏂紱姝ｇ‘鍋氭硶鏄缉鐭崟杞寖鍥淬€佹彁鍓嶆敹鍙ｏ紝鑰屼笉鏄暀鍗婃垚鍝併€?+- **淇杞涓婇檺**锛氭瘡鍗曞父瑙?1 杞€侀珮椋庨櫓 2 杞紱涓?`TASK_INTERRUPT-*` / `TASK_RESCUE-*` 鍗曠殑杞涓婇檺涓€鑷淬€傝秴闄愭寜 搂7 鍋滄鏉′欢澶勭悊锛堣浆 RESCUE 鎴栧洖澶ц剳閲嶅啓 TASK锛夛紝涓嶅緱鍘熷湴鍙嶅璇曘€?+
+ ## 闄勫綍 A. 妯″瀷涓庨挶鍖呰矾鐢? 
+ - 鎵ц鑰?`deepseek-v4.1-flash`锛歚opencode.json` 瀵?`opencode`銆乣opencode-go` 涓や釜 provider 璁?`temperature 0`锛沗thinking.type=disabled` 宸蹭簬 2026-11-04 鍥炴粴锛堝叧鎬濊€冨紩鍙戝伐鍏疯皟鐢ㄩ噸澶嶅惊鐜級銆?

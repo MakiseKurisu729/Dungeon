@@ -1,0 +1,1 @@
+﻿35: | TEST-02 | UTF 迁移 | 测试为自研探针 + 协程断言，未使用 NUnit / Unity Test Framework（全仓 0 处 `[Test]`/`[UnityTest]`/`using NUnit`） | 关键断言包装为 `[UnityTest]`；依赖 ENG-02 的 asmdef 才可引用 UTF | 能断言真实的帧与协程时序，减少手工目检 | 2–3 天 | 中：时序测试本身易间歇，需 N≥3 复跑；迁移后需执行 REBASELINE（见 Docs/02 §7.3） | 待排期 | M7 之后 |

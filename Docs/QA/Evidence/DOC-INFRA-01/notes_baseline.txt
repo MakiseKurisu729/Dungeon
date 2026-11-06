@@ -1,0 +1,11 @@
+﻿DOC-INFRA-01 证据说明
+- 本任务只改三个 Docs/AGENTS 文件，未触碰 Assets/、代码、场景、预制体。
+- 改动前基线（本会话首次 git status）：AGENTS.md 干净；Assembly-CSharp.csproj 与 Assembly-CSharp-Editor.csproj 已为 M（Unity 重新生成，非本任务改动）。
+- 改动后 git status 见 git_status.txt：仅 AGENTS.md、Docs/01、新增 Docs/07、新增本证据目录；两个 .csproj 仍为同一基线状态。
+- 未执行任何 git 写操作。
+
+=== 第 2 轮（事实修正）===
+本任务（DOC-INFRA-01）名下改动仅：AGENTS.md、Docs/01_总体架构与内容生产规范.md、Docs/07_工程规范与基础设施.md、Docs/QA/Evidence/DOC-INFRA-01/。
+git_status.txt 中其余条目（两个 Assembly-CSharp*.csproj、Assets/_Project/Tests/*.cs、Docs/QA/Evidence/QA-REFACTOR-01/、REFACTOR-M4/）属并行工作流，非本任务改动，本任务未触碰。
+修正三处：TEST-02 现状（自研探针，0 处 NUnit/Test 特性）、TEST-03 规模（29 个 .cs：21 runtime + 8 editor，12,253 行）、OPS-04 状态（已批准（待写入 workflow-rules））。
+复算命令与结果见 ac6_fact_fixes.txt；未执行任何 git 写操作。

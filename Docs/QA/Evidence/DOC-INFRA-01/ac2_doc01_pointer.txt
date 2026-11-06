@@ -1,0 +1,1 @@
+﻿Docs/01:523 : 工程规范与基础设施清单（.editorconfig、YAMLMerge、asmdef、存档、CI 等缺口与排期）见 `Docs/07_工程规范与基础设施.md`；本节只定验收门槛，不复述工具选型。

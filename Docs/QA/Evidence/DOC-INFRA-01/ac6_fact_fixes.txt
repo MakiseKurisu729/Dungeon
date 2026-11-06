@@ -1,0 +1,10 @@
+﻿line 24 : | OPS-04 | 上下文与预算规则 | 无成文预算，长会话常在临界点做半截改动，交接丢状态 | 主会话上下文 70% 收口、子代理 60%；只允许在里程碑边界收口并写 Handoff | 交接可预期，避免上下文溢出导致返工 | 一段规则文本 | 零 | 已批准（待写入 `workflow-rules`） | 阶段 0（写入 `workflow-rules`） |
+line 35 : | TEST-02 | UTF 迁移 | 测试为自研探针 + 协程断言，未使用 NUnit / Unity Test Framework（全仓 0 处 `[Test]`/`[UnityTest]`/`using NUnit`） | 关键断言包装为 `[UnityTest]`；依赖 ENG-02 的 asmdef 才可引用 UTF | 能断言真实的帧与协程时序，减少手工目检 | 2–3 天 | 中：时序测试本身易间歇，需 N≥3 复跑 | 待排期 | M7 之后 |
+line 36 : | TEST-03 | 测试不进构建 | `Assets/_Project/Tests` 29 个 `.cs`（21 runtime + 8 editor）、12,253 行全部编进产品包 | 测试独立 asmdef + `defineConstraints: UNITY_INCLUDE_TESTS` | 包体与编译时间下降，测试代码不随包发布 | 半天 | 低：只在打包/构建路径回归 | 待排期 | 阶段 1 |
+line 73 : 测试规模（TEST-03 口径）：
+line 83 : 测试框架现状（TEST-02 口径）：全仓 `Assets/**/*.cs` 中 `using NUnit`、`[Test]`、`[UnityTest]`、`UnityEngine.TestTools` 命中数均为 0，测试靠自研探针 + 协程断言。
+verify framework hits (using NUnit|[Test]|[UnityTest]|UnityEngine.TestTools|NUnit.Framework) = 0
+verify tests total = 29
+verify runtime = 21
+verify editor = 8
+verify lines = 12253
