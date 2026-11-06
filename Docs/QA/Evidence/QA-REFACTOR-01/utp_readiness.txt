@@ -1,0 +1,91 @@
+# QA-REFACTOR-01 phase A - AC-10 UTP readiness static checks
+generatedAt: 2026-11-06 13:18:28
+root: D:\unity\Dungeon\Assets\_Project\Tests
+
+## 1. interface IQaSink definition count
+command : grep -R "interface\s+IQaSink\b" Assets/_Project/Tests --include=*.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## 2. QaSink.cs forbidden tokens
+command : grep -E "File|Directory|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 2b. IQaSink member list
+command : grep -E "^\s{4}(void|string)" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : void Record ; void BlockedAssertion ; void InfraFailure ; string EvidenceDir
+result  : N/A - expected exactly: void Record ; void BlockedAssertion ; void InfraFailure ; string EvidenceDir
+
+## 3. QaEvidence declares IQaSink
+command : grep -E "class QaEvidence\s*:\s*IQaSink" Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## 4. Assert*(IQaSink sink) in SPEC01/Runtime/SPEC01_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## 4. Assert*(IQaSink sink) in REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 4. Assert*(IQaSink sink) in DIAG/Runtime/DIAG_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 4. Assert*(IQaSink sink) in FND00B/Runtime/FND00B06_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 4b. phase A total Assert*(IQaSink sink) >= 1
+command : sum of the four counts above
+actual  : 1
+expected: 1
+result  : PASS
+
+## 5. forbidden tokens inside Assert* bodies of SPEC01/Runtime/SPEC01_ProbeRunner.cs
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body of Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (10): AssertCursorHover, AssertDamageNumber, AssertDualPathAndClocks, AssertLocomotion, AssertPostCombatAndHit, AssertRegressionFND02A, AssertSkillCastSmoke, AssertSkillInputWired, AssertSpawnAnchor, AssertTargetPick
+   still reading runner field `_ev` (phase A migration pending; see REPORT section "still-writing-files / still-boot-dependent asserts"): AssertCursorHover, AssertDamageNumber, AssertDualPathAndClocks, AssertLocomotion, AssertPostCombatAndHit, AssertSkillCastSmoke, AssertSkillInputWired, AssertTargetPick
+
+## 5. forbidden tokens inside Assert* bodies of REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body of Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (16): AssertChest, AssertHitInterrupt, AssertHitInterruptSkill, AssertInteractionContract, AssertKnockdown, AssertMeleeHit, AssertMotionUnlocked, AssertPartyMove, AssertProjectileAimPoint, AssertRangedShot, AssertRegistrySemantics, AssertRescue, AssertSkillInterruptAttack, AssertSkillInterruptInteract, AssertSkillQW, AssertStateFacade
+   still reading runner field `_ev` (phase A migration pending; see REPORT section "still-writing-files / still-boot-dependent asserts"): AssertChest, AssertHitInterrupt, AssertHitInterruptSkill, AssertInteractionContract, AssertKnockdown, AssertMeleeHit, AssertMotionUnlocked, AssertPartyMove, AssertProjectileAimPoint, AssertRangedShot, AssertRegistrySemantics, AssertRescue, AssertSkillInterruptAttack, AssertSkillInterruptInteract, AssertSkillQW, AssertStateFacade
+
+## 5. forbidden tokens inside Assert* bodies of DIAG/Runtime/DIAG_ProbeRunner.cs
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body of Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (7): AssertController, AssertEmptySlots, AssertFirstExit, AssertIndicator, AssertPrefabSlots, AssertQ, AssertW
+   still reading runner field `_ev` (phase A migration pending; see REPORT section "still-writing-files / still-boot-dependent asserts"): AssertController, AssertEmptySlots, AssertFirstExit, AssertIndicator, AssertPrefabSlots, AssertQ, AssertW
+
+## 5. forbidden tokens inside Assert* bodies of FND00B/Runtime/FND00B06_ProbeRunner.cs
+command : per-method brace scan of Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+actual  : no Assert* method found
+result  : N/A - this runner has no Assert*-named method yet (its assertions live inline); phase C must extract/rename them before this check can apply
+
+=== OVERALL ===
+ALL APPLICABLE CHECKS PASS

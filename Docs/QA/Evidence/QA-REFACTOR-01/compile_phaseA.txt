@@ -1,0 +1,44 @@
+# QA-REFACTOR-01 phase A — compile check (mode B, MCP)
+
+## 第一次编译（基本 Qa 层 + SPEC01 迁移后）
+
+工具：`unityMCP.refresh_unity(mode=force, scope=all, compile=request, wait_for_ready=true)`
+→ result: success=true, "Refresh recovered after Unity disconnect/retry; editor is ready."
+
+之后读 `mcpforunity://editor/state`：
+  compilation.is_compiling = false
+  compilation.is_domain_reload_pending = false
+  compilation.last_domain_reload_after_unix_ms = 1793941000916
+  editor.play_mode.is_playing = false
+  activity.phase = idle
+  advice.ready_for_tools = true
+
+`unityMCP.read_console(action=get, types=["error"], filter_text="error CS", count=50, format=plain)`
+→ success=true, "Retrieved 0 log entries."，data=[]  ⇒ error CS 计数 = 0
+
+`unityMCP.read_console(action=get, types=["error","warning"], filter_text="CS", count=40, format=plain)`
+→ 1 条，且与本任务无关：`MCP-FOR-UNITY: [WebSocket] Unexpected receive error: WebSocket is not initialised`
+  （MCP 桥自身警告，不是 C# 编译诊断）
+
+原始 JSON（摘录）：
+{"success":true,"message":"Retrieved 0 log entries.","data":[]}
+{"success":true,"message":"Retrieved 1 log entries.","data":["<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: [WebSocket] Unexpected receive error: WebSocket is not initialised"]}
+
+## 第二次编译（AC-10: IQaSink + 1 条示例断言改签名）
+
+refresh_unity(mode=force, scope=all, compile=request, wait_for_ready=true)  #1
+→ 1 条诊断：
+  Assets\_Project\Tests\SPEC01\Runtime\SPEC01_ProbeRunner.cs(1021,35): error CS0246:
+  The type or namespace name 'IQSink' could not be found (are you missing a using directive or an assembly reference?)
+  原因：我写签名时把 IQaSink 误打成 IQSink（笔误），当轮立即修正，未进入下一轮。
+
+修正后 refresh_unity(...) #2
+→ result: "Refresh recovered after Unity disconnect/retry; editor is ready."
+→ compilation.is_compiling = false, is_domain_reload_pending = false,
+  last_domain_reload_after_unix_ms = 1793941833026
+→ read_console(types=["error"], filter_text="error CS") = "Retrieved 0 log entries." ⇒ error CS = 0
+
+结论（最终）：阶段 A 结束时全仓编译绿（error CS = 0）。编译红只出现 1 次且同轮修正，
+未触发“编译连续 2 轮红”熔断。REFACTOR / FND00B06 / DIAG 与 SPEC01 同属 Assembly-CSharp，
+编译通过即证明三套件未被本次改动打断（DIAG 仅类名 SPEC01_Json → QaJson 的机械替换，
+git numstat 18/18；REFACTOR / FND00B06 源码零改动）。

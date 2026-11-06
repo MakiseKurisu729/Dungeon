@@ -1,0 +1,38 @@
+SPEC01 assertion triple diff - (qaItem, assertion, status) sorted
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\SPEC01\before\SPEC01_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\SPEC01\after\SPEC01_Assertions.jsonl
+
+BEFORE count=12 pass=12 fail=0
+AFTER  count=12 pass=12 fail=0
+
+=== BEFORE ===
+Animation.PostCombatAndHit | Animation.PostCombatAndHit | pass
+Attack.DualPathUnified | Attack.DualPathUnified | pass
+Clock.MeleeNormalizedWindow | Clock.MeleeNormalizedWindow | pass
+Clock.RangedOneShotPerCycle | Clock.RangedOneShotPerCycle | pass
+Locomotion.AllPlayersMoveParam | Locomotion.AllPlayersMoveParam | pass
+Regression.FND02A | Regression.FND02A | pass
+Skill.CastSmoke | Skill.CastSmoke | pass
+Skill.CursorHover | Skill.CursorHover | pass
+Skill.InputWired | Skill.InputWired | pass
+Skill.TargetPick | Skill.TargetPick | pass
+UI.DamageNumberScale | UI.DamageNumberScale | pass
+UI.SpawnAnchor | UI.SpawnAnchor | pass
+
+=== AFTER ===
+Animation.PostCombatAndHit | Animation.PostCombatAndHit | pass
+Attack.DualPathUnified | Attack.DualPathUnified | pass
+Clock.MeleeNormalizedWindow | Clock.MeleeNormalizedWindow | pass
+Clock.RangedOneShotPerCycle | Clock.RangedOneShotPerCycle | pass
+Locomotion.AllPlayersMoveParam | Locomotion.AllPlayersMoveParam | pass
+Regression.FND02A | Regression.FND02A | pass
+Skill.CastSmoke | Skill.CastSmoke | pass
+Skill.CursorHover | Skill.CursorHover | pass
+Skill.InputWired | Skill.InputWired | pass
+Skill.TargetPick | Skill.TargetPick | pass
+UI.DamageNumberScale | UI.DamageNumberScale | pass
+UI.SpawnAnchor | UI.SpawnAnchor | pass
+
+=== DIFF ===
+(empty)
+RESULT: IDENTICAL

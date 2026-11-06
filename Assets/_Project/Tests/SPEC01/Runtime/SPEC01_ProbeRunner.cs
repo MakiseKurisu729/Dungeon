@@ -8,6 +8,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static QaFixtures;
+using static QaJson;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Animations;
@@ -26,8 +28,8 @@ using UnityEditor.Animations;
 /// </summary>
 public class SPEC01_ProbeRunner : MonoBehaviour
 {
-    public const string ScenePath = "Assets/Scenes/DungeonWorld.unity";
-    public const string EnemyPrefabGuid = "18dec5e6af31178468b146e0440bd081";
+    public const string ScenePath = QaScene.ScenePath;
+    public const string EnemyPrefabGuid = QaScene.EnemyPrefabGuid;
     public const string ControllerPath = "Assets/_Project/Art/Animations/PlayerBase.controller";
     public const string FinishedKey = "SPEC01.Finished";
     public const string ExitCodeKey = "SPEC01.ExitCode";
@@ -35,12 +37,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // 场景敌人的实际位置即基线（不再写死坐标）：接近点 = 敌人实际位置 + 朝骑士方向的长(起点距离 - 5m)。
     const float ApproachGain = 5f;
     const float ApproachMinStandOff = 2f;
-
-    const string Locomotion = "Locomotion";
-    const string AttackMelee = "AttackMelee";
-    const string AttackDraw = "Attack_Draw";
-    const string AttackRelease = "Attack_Release";
-    const string HitA = "Hit_A";
 
     // 伤害飘字规格常量（断言期望值，与 DamageNumber 的默认常量对齐）
     const float UiBaselineScale = 0.006f;
@@ -57,7 +53,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     static string _exitReason = "";
     static FieldInfo _firedField;
     static FieldInfo _rangedTimerField;
-    static FieldInfo _damageElementField;
     static MethodInfo _resolveHoverWithOut;
 
     int _run;
@@ -87,74 +82,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     GameObject _target;
     UnitStats _targetStats;
 
-    class PlayerProbe
-    {
-        public string name;
-        public UnitHealth health;
-        public CharacterBrain brain;
-        public Animator animator;
-        public Selectable selectable;
-        public MeleeCombat sword;
-        public RangedCombat ranged;
-        public Vector3 home;
-        public float attackSpeed = 1f;
-        public float cycle = 1f;
-        public float effectiveCycle = 1f;
-
-        public int drawEntries;
-        public int releaseEntries;
-        public int meleeEntries;
-        public int fireCount;
-        public string lastState = "";
-        public bool lastFired;
-        public float firstDrawTime = -1f;
-        public float firstFireTime = -1f;
-        public List<Dictionary<string, object>> fireEvents = new List<Dictionary<string, object>>();
-        public List<Dictionary<string, object>> hitEvents = new List<Dictionary<string, object>>();
-
-        public Transform tx { get { return health != null ? health.transform : null; } }
-    }
-
-    class HitCollector
-    {
-        public UnitHealth Target;
-        public int FilterSource;
-        public int Count;
-        public readonly List<Dictionary<string, object>> Events = new List<Dictionary<string, object>>();
-
-        public void Subscribe(UnitHealth target, int filterSource)
-        {
-            Target = target;
-            FilterSource = filterSource;
-            if (Target != null) Target.OnHit += OnHit;
-        }
-
-        public void Unsubscribe()
-        {
-            if (Target != null) Target.OnHit -= OnHit;
-        }
-
-        void OnHit(DamageInfo info)
-        {
-            if (FilterSource != 0 && (info.source == null || info.source.GetInstanceID() != FilterSource)) return;
-            Count++;
-            string state = "none";
-            float nt = -1f;
-            int sourceId = 0;
-            if (info.source != null)
-            {
-                sourceId = info.source.GetInstanceID();
-                Animator a = info.source.GetComponentInChildren<Animator>();
-                state = StateName(a);
-                nt = StateNorm(a);
-            }
-            if (Events.Count < 500)
-                Events.Add(Dict("time", Time.time, "sourceId", sourceId, "state", state,
-                                "normalizedTime", nt, "amount", info.finalAmount,
-                                "element", DamageElementName(info)));
-        }
-    }
-
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -178,7 +105,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
 
         Debug.Log("[SPEC01] runner start; mode=" + _mode + "; run=" + _run +
                   "; seed=" + _seed + "; unity=" + Application.unityVersion +
-                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + GetHead());
+                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + QaScene.GetHead("SPEC01.Head"));
 
         float waited = 0f;
         while (SceneManager.GetActiveScene().path != ScenePath && waited < 25f)
@@ -220,7 +147,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         yield return RunSafe("Attack.DualPathUnified", AssertDualPathAndClocks());
         yield return RunSafe("Animation.PostCombatAndHit", AssertPostCombatAndHit());
         yield return RunSafe("UI.DamageNumberScale", AssertDamageNumber());
-        yield return RunSafe("UI.SpawnAnchor", AssertSpawnAnchor());
+        yield return RunSafe("UI.SpawnAnchor", AssertSpawnAnchor(_ev));
         yield return RunSafe("Skill.CastSmoke", AssertSkillCastSmoke());
         yield return RunSafe("Skill.InputWired", AssertSkillInputWired());
         yield return RunSafe("Skill.CursorHover", AssertCursorHover());
@@ -436,7 +363,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         _gameStarted = GameFlow.GameStarted;
         _enemy = FindRealEnemy();
         _enemyFound = _enemy != null;
-        _enemySourceGuid = GetEnemySourceGuid();
+        _enemySourceGuid = QaScene.GetEnemySourceGuid(ScenePath, "SPEC01.EnemySourceGuid");
         _enemyCount = CountSceneEnemies();
 
         if (_enemy != null)
@@ -562,7 +489,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
 
             var combat = p.brain.combat as ICharacterCombat;
             if (combat != null) combat.CancelAttack();
-            yield return WaitState(p, Locomotion, 4.0f);
+            yield return QaWait.WaitState(p.animator, Locomotion, 4.0f);
 
             var collector = new HitCollector();
             collector.Subscribe(targetHealth, p.health != null ? p.health.GetInstanceID() : 0);
@@ -614,7 +541,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             p.brain.CommandAttack(null);
             var c2 = p.brain.combat as ICharacterCombat;
             if (c2 != null) c2.CancelAttack();
-            yield return WaitState(p, Locomotion, 4.0f);
+            yield return QaWait.WaitState(p.animator, Locomotion, 4.0f);
         }
 
         // ---- 自动攻击路径（Aggro 自动索敌） ----
@@ -624,7 +551,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             var c = p.brain.combat as ICharacterCombat;
             if (c != null) c.CancelAttack();
         }
-        yield return WaitAllStates(Locomotion, 5.0f);
+        yield return QaWait.WaitAllStates(_players.Select(p => p.animator), Locomotion, 5.0f);
 
         var autoCollector = new HitCollector();
         autoCollector.Subscribe(targetHealth, 0);
@@ -967,7 +894,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
 
         // 清掉前序断言可能残留的飘字，避免污染采样
-        yield return WaitNoNumbers(2.5f);
+        yield return QaWait.WaitNoNumbers(2.5f);
 
         // ---- 小伤害采样（期望 min 钳制 1.5x） ----
         var beforeSmall = ActiveNumberIds();
@@ -987,7 +914,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         bool smallRaycastOff = smallText != null && !smallText.raycastTarget;
         bool smallHasGroup = small != null && small.GetComponent<CanvasGroup>() != null;
 
-        yield return WaitNoNumbers(2.5f);
+        yield return QaWait.WaitNoNumbers(2.5f);
 
         // ---- 大伤害采样（期望 max 钳制 5x） ----
         var beforeLarge = ActiveNumberIds();
@@ -1004,7 +931,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         float largeFont = large != null ? InstFloat(large, "AppliedFontSize") : -1f;
         string largeElement = InstString(large, "Element");
 
-        yield return WaitNoNumbers(2.5f);
+        yield return QaWait.WaitNoNumbers(2.5f);
 
         // ---- 连续 Show 压力：池复用、不新增画布 ----
         int overlayBeforeStress = CountOverlayCanvases();
@@ -1091,7 +1018,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 8. UI.SpawnAnchor（出生点锚点：飘字屏幕位置对齐目标胸口投影）
     // ============================================================
-    IEnumerator AssertSpawnAnchor()
+    IEnumerator AssertSpawnAnchor(IQaSink sink)
     {
         const string AssertionId = "UI.SpawnAnchor";
         const float TolerancePx = 50f;
@@ -1106,7 +1033,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
         if (cam == null)
         {
-            _ev.BlockedAssertion(AssertionId, AssertionId,
+            sink.BlockedAssertion(AssertionId, AssertionId,
                 "飘字出生瞬间屏幕位置与目标胸口相机投影距离 ≤ " + F(TolerancePx) + "px",
                 "场景中未找到可用相机（Camera.main 与 Camera.allCameras 均为空）", null);
             yield break;
@@ -1115,7 +1042,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         var fixture = CreateTarget("SPEC01_Target_Anchor", new Vector3(0f, 0f, -4f), true);
         if (fixture == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "飘字锚点夹具创建失败", "");
+            sink.InfraFailure(AssertionId, AssertionId, "飘字锚点夹具创建失败", "");
             yield break;
         }
         var fh = fixture.GetComponent<UnitHealth>();
@@ -1132,7 +1059,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             h.showDamageNumber = false;
         }
 
-        yield return WaitNoNumbers(2.5f);
+        yield return QaWait.WaitNoNumbers(2.5f);
 
         var before = ActiveNumberIds();
         fh.ApplyDamage(25f, targetPos, null);
@@ -1178,7 +1105,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         if (fixture != null) Destroy(fixture);
         DestroyTarget();
 
-        _ev.Record(AssertionId, AssertionId,
+        sink.Record(AssertionId, AssertionId,
             "飘字出生瞬间的屏幕位置与目标胸口（target.position + up*ChestHeight）相机投影距离 ≤ " + F(TolerancePx) + "px",
             "distancePx=" + F(distancePx) +
             "; actual=(" + F(actualScreen.x) + "," + F(actualScreen.y) + ")" +
@@ -1699,7 +1626,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         {
             _ev.WriteSummary(ScenePath, _seed, string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason,
                 Dict("mode", _mode,
-                     "head", GetHead(),
+                     "head", QaScene.GetHead("SPEC01.Head"),
                      "enemySourceGuid", _enemySourceGuid,
                      "enemyPosition", V3(_enemyStartPos),
                      "fixtureNote", "SPEC01_Target_Combat / SPEC01_Target_UI 为运行期内存 UnitHealth，结束前销毁；不写入场景",
@@ -1746,41 +1673,10 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     void FindPlayers()
     {
         _players.Clear();
-        foreach (string n in new[] { "Knight_Unit", "Archer_Unit", "Mage_Unit" })
-        {
-            PlayerProbe p = FindPlayer(n);
-            if (p != null) _players.Add(p);
-        }
+        _players.AddRange(QaFixtures.FindPlayers());
         foreach (var p in _players) Debug.Log("[SPEC01] player " + p.name + " at " + V3Text(p.home) +
                                               "; sword=" + (p.sword != null) + "; ranged=" + (p.ranged != null) +
                                               "; attackSpeed=" + p.attackSpeed);
-    }
-
-    static PlayerProbe FindPlayer(string name)
-    {
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-        {
-            if (h == null || h.team != Team.Player) continue;
-            if (!(h.name == name || h.name.StartsWith(name + " ", StringComparison.Ordinal) ||
-                  h.name.StartsWith(name + "(", StringComparison.Ordinal))) continue;
-
-            var p = new PlayerProbe();
-            p.name = name;
-            p.health = h;
-            p.brain = h.GetComponent<CharacterBrain>();
-            p.animator = h.GetComponentInChildren<Animator>();
-            p.selectable = h.GetComponent<Selectable>();
-            p.sword = h.GetComponent<MeleeCombat>();
-            p.ranged = h.GetComponent<RangedCombat>();
-            p.home = h.transform.position;
-            p.attackSpeed = p.brain != null && p.brain.stats != null ? p.brain.stats.attackSpeed : 1f;
-            float len = p.sword != null ? p.sword.attackLen : (p.ranged != null ? p.ranged.attackLen : 1f);
-            float spd = p.attackSpeed > 0f ? p.attackSpeed : 1f;
-            p.cycle = len / spd;
-            p.effectiveCycle = Mathf.Max(p.cycle, 2.8f / spd);
-            return p;
-        }
-        return null;
     }
 
     static UnitHealth FindRealEnemy()
@@ -1805,75 +1701,14 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         return n;
     }
 
-    static void Select(PlayerProbe p)
-    {
-        var sm = SelectionManager.instance;
-        if (sm == null || p.selectable == null) return;
-        var m = typeof(SelectionManager).GetMethod("SingleSelect", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (m != null) m.Invoke(sm, new object[] { p.selectable });
-    }
-
+    /// <summary>夹具薄包装：统一走 QaFixtures.CreateTarget，并保留本套件对 _targetStats 的销毁责任。</summary>
     GameObject CreateTarget(string name, Vector3 pos, bool showDamageNumber)
     {
-        var go = new GameObject(name);
-        go.SetActive(false);
-        go.transform.position = pos;
-
-        _targetStats = ScriptableObject.CreateInstance<UnitStats>();
-        _targetStats.team = Team.Monster;
-        _targetStats.maxHp = 100000f;
-        _targetStats.damage = 0f;
-        _targetStats.attackRange = 0f;
-        _targetStats.preferredRange = 0f;
-        _targetStats.aggroRange = 0f;
-        _targetStats.moveSpeed = 0f;
-        _targetStats.attackSpeed = 1f;
-
-        var uh = go.AddComponent<UnitHealth>();
-        uh.stats = _targetStats;
-        uh.showDamageNumber = showDamageNumber;
-
-        var col = go.AddComponent<CapsuleCollider>();
-        col.center = new Vector3(0f, 0.9f, 0f);
-        col.height = 1.8f;
-        col.radius = 0.4f;
-
-        go.SetActive(true);
+        var go = QaFixtures.CreateTarget(name, pos, showDamageNumber);
+        var uh = go != null ? go.GetComponent<UnitHealth>() : null;
+        _targetStats = uh != null ? uh.stats : null;
         Debug.Log("[SPEC01] fixture created " + name + " at " + V3Text(pos) + "; showDamageNumber=" + showDamageNumber);
         return go;
-    }
-
-    IEnumerator WaitState(PlayerProbe p, string state, float timeout)
-    {
-        float t = 0f;
-        while (t < timeout)
-        {
-            if (p.animator != null && StateName(p.animator) == state) yield break;
-            yield return null;
-            t += Time.deltaTime;
-        }
-    }
-
-    IEnumerator WaitAllStates(string state, float timeout)
-    {
-        float t = 0f;
-        while (t < timeout)
-        {
-            if (_players.All(p => p.animator != null && StateName(p.animator) == state)) yield break;
-            yield return null;
-            t += Time.deltaTime;
-        }
-    }
-
-    IEnumerator WaitNoNumbers(float timeout)
-    {
-        float t = 0f;
-        while (t < timeout)
-        {
-            if (CountNumbers(false) == 0) yield break;
-            yield return null;
-            t += Time.deltaTime;
-        }
     }
 
     static void TrackState(PlayerProbe p)
@@ -1908,33 +1743,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         bool edge = f && !p.lastFired;
         p.lastFired = f;
         return edge;
-    }
-
-    static string StateName(Animator a, int layer = 0)
-    {
-        if (a == null) return "null";
-        if (layer < 0 || layer >= a.layerCount) return "layer_out_of_range";
-        var st = a.GetCurrentAnimatorStateInfo(layer);
-        if (st.IsName(Locomotion)) return Locomotion;
-        if (st.IsName(AttackMelee)) return AttackMelee;
-        if (st.IsName(AttackDraw)) return AttackDraw;
-        if (st.IsName(AttackRelease)) return AttackRelease;
-        if (st.IsName(HitA)) return HitA;
-        if (st.IsName("Q_1")) return "Q_1";
-        if (st.IsName("W_1")) return "W_1";
-        if (st.IsName("E_1")) return "E_1";
-        if (st.IsName("R_1")) return "R_1";
-        if (st.IsName("Interact")) return "Interact";
-        if (st.IsName("Downed")) return "Downed";
-        if (st.IsName("Rise")) return "Rise";
-        return "Other:" + st.shortNameHash;
-    }
-
-    static float StateNorm(Animator a, int layer = 0)
-    {
-        if (a == null || layer < 0 || layer >= a.layerCount) return -1f;
-        float n = a.GetCurrentAnimatorStateInfo(layer).normalizedTime;
-        return n <= 1f ? n : 1f;
     }
 
     // ---- 反射读取：新 API 在 red 阶段不存在时返回 <missing> / -1，不抛异常 ----
@@ -1988,15 +1796,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         return v != null ? v.ToString() : "<missing>";
     }
 
-    static string DamageElementName(DamageInfo info)
-    {
-        if (_damageElementField == null)
-            _damageElementField = typeof(DamageInfo).GetField("element", BindingFlags.Public | BindingFlags.Instance);
-        if (_damageElementField == null) return "<missing>";
-        object v = _damageElementField.GetValue(info);
-        return v != null ? v.ToString() : "<null>";
-    }
-
     // ---- 飘字实例统计 ----
     static int CountNumbers(bool includeInactive)
     {
@@ -2037,24 +1836,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         return n;
     }
 
-    static string GetHead()
-    {
-#if UNITY_EDITOR
-        return SessionState.GetString("SPEC01.Head", "unknown");
-#else
-        return "n/a";
-#endif
-    }
-
-    static string GetEnemySourceGuid()
-    {
-#if UNITY_EDITOR
-        return SessionState.GetString("SPEC01.EnemySourceGuid", "none");
-#else
-        return "n/a";
-#endif
-    }
-
     static float XZ(Vector3 a, Vector3 b)
     {
         Vector3 d = a - b; d.y = 0f;
@@ -2069,19 +1850,6 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     static string V3Text(Vector3 v)
     {
         return "(" + F(v.x) + ", " + F(v.y) + ", " + F(v.z) + ")";
-    }
-
-    static Dictionary<string, object> Dict(params object[] kvs)
-    {
-        var d = new Dictionary<string, object>();
-        for (int i = 0; i + 1 < kvs.Length; i += 2)
-            d[(string)kvs[i]] = kvs[i + 1];
-        return d;
-    }
-
-    static Dictionary<string, object> V3(Vector3 v)
-    {
-        return new Dictionary<string, object> { { "x", v.x }, { "y", v.y }, { "z", v.z } };
     }
 }
 

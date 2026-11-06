@@ -1,0 +1,36 @@
+# QA-REFACTOR-01 phase A — Unity editor_state 开工/收工快照（模式 B）
+
+## 开工（12:31 左右，首次读取）
+instance: Dungeon@4f5c34c82f31646e（唯一实例，已 set_active_instance pin）
+unity_version: 2022.3.62f3c1
+is_batch_mode: false
+compilation.is_compiling: false
+compilation.is_domain_reload_pending: false
+editor.play_mode: {"is_playing":false,"is_paused":false,"is_changing":false}
+active_scene: Assets/Scenes/DungeonWorld.unity（guid 34311eeab6af4594cb2fd435186a6ee9）
+advice.ready_for_tools: true
+instances: {"instance_count":1, "id":"Dungeon@4f5c34c82f31646e"}
+
+## 收工（阶段 A 结束后）
+instance: Dungeon@4f5c34c82f31646e
+compilation.is_compiling: false
+compilation.is_domain_reload_pending: false
+compilation.last_domain_reload_after_unix_ms: 1793941833026
+editor.play_mode: {"is_playing":false,"is_paused":false,"is_changing":false}
+active_scene: Assets/Scenes/DungeonWorld.unity
+
+## 基线运行（阶段 A 前，四套件各 1 次，全部经 Tools/QA/In-Editor/* 菜单，未用 run_tests）
+SPEC01   : Docs/QA/Evidence/SPEC-01/editor_run40        code=0, 12 pass / 0 fail, 12 行
+REFACTOR : Docs/QA/Evidence/REFACTOR-M4/editor_run17    code=0, 16 pass / 0 fail, 16 行
+FND00B06 : Docs/QA/Evidence/FND-00B-06/editor_run5      code=0, 12 pass / 0 fail + observed 2, 14 行
+DIAG     : Docs/QA/Evidence/DIAG-SKILL/editor_run5      code=2, 6 pass / 1 fail（Diag.Input.FirstExit）, 7 行
+
+## 迁移后 SPEC01 回归 #1（Qa 层 + SPEC01 迁移完成后）
+SPEC01   : Docs/QA/Evidence/SPEC-01/editor_run41        code=0, 12 pass / 0 fail, 12 行
+  → 中间快照，保留在 Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/after_editor_run41_pre_IQaSink/
+
+## 迁移后 SPEC01 回归 #2（AC-10: IQaSink + AssertSpawnAnchor(IQaSink) 之后，最终代码）
+SPEC01   : Docs/QA/Evidence/SPEC-01/editor_run42        code=0, 12 pass / 0 fail, 12 行
+  → 最终 after 快照：Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/after/
+
+运行总次数：4（基线）+ 2（SPEC01 回归）= 6 ≤ 20。

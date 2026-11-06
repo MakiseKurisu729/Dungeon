@@ -1,0 +1,36 @@
+# SPEC01 expected-field diff (literal spec must not drift)  [brain check, QA-REFACTOR-01 AC-1]
+BEFORE: Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/before/SPEC01_Assertions.jsonl
+AFTER : Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/after/SPEC01_Assertions.jsonl
+BEFORE count=12  AFTER count=12
+
+=== BEFORE ===
+Animation.PostCombatAndHit :: "目标销毁后限定时间内三角色回到 Locomotion；玩家经生产 UnitHealth.ApplyDamage 受非致命伤害后进入 Hit_A"
+Attack.DualPathUnified :: "CommandAttack 与 Aggro 自动索敌两条路径：骑士命中瞬间处于 AttackMelee（单段，状态名=触发器名），弓/法发射瞬间处于 Attack_Release；远程触发器为 AttackRange；不存在 Locomotion 出伤/出射"
+Clock.MeleeNormalizedWindow :: "骑士命中由 layer 0 AttackMelee.normalizedTime 的 [activeStart, activeEnd] 窗口驱动；单周期恰 1 次；触发器/命中状态名均为 AttackMelee；AttackSpeed 参数等于 stats.attackSpeed"
+Clock.RangedOneShotPerCycle :: "弓手/法师单个攻击动画周期恰发射 1 次；发射瞬间处于 Attack_Release 的可调 normalizedTime 窗口；法师下令到首次出手符合攻速周期"
+Locomotion.AllPlayersMoveParam :: "三角色经生产移动命令移动时处于 Locomotion，SpeedZ 随实际速度非零变化，停稳归零；控制器 Locomotion 状态名精确、混合树为 1D、参数 SpeedZ、阈值 0/4"
+Regression.FND02A :: "FND-02A 自动开局、场景实际遭遇位置为基线、真实寻路相对接近、零新增 Console 错误/异常继续通过"
+Skill.CastSmoke :: {"失败施放":"Cast(0,null) false；manaDelta=0；CdRemaining=0；无异常","Q":"Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Q_1","W":"Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 W_1","E/R":"Cast(2/3) false；蓝不变；无异常"}
+Skill.CursorHover :: "给定瞄准态与一条从相机指向敌人胸口的合成射线，ResolveHover(ray) 返回 Hover.Attack 且命中敌人就是该敌人"
+Skill.InputWired :: {"controllerCount":1,"indicatorPointsToSceneIndicator":true,"skillKeys":"Q,W,E,R"}
+Skill.TargetPick :: "给定同一条指向敌人胸口的合成射线，PickEnemyFromRay(ray) 返回该敌人的 UnitHealth（team=Monster、存活）"
+UI.DamageNumberScale :: "单个共享 Screen Space-Overlay 画布（唯一、不随伤害新增）；字号随伤害分档（5→1.5x、200→5x 钳制）；Text raycastTarget=false；连续 40 次 Show 活跃/总实例 ≤ 32"
+UI.SpawnAnchor :: "飘字出生瞬间的屏幕位置与目标胸口（target.position + up*ChestHeight）相机投影距离 ≤ 50px"
+
+=== AFTER ===
+Animation.PostCombatAndHit :: "目标销毁后限定时间内三角色回到 Locomotion；玩家经生产 UnitHealth.ApplyDamage 受非致命伤害后进入 Hit_A"
+Attack.DualPathUnified :: "CommandAttack 与 Aggro 自动索敌两条路径：骑士命中瞬间处于 AttackMelee（单段，状态名=触发器名），弓/法发射瞬间处于 Attack_Release；远程触发器为 AttackRange；不存在 Locomotion 出伤/出射"
+Clock.MeleeNormalizedWindow :: "骑士命中由 layer 0 AttackMelee.normalizedTime 的 [activeStart, activeEnd] 窗口驱动；单周期恰 1 次；触发器/命中状态名均为 AttackMelee；AttackSpeed 参数等于 stats.attackSpeed"
+Clock.RangedOneShotPerCycle :: "弓手/法师单个攻击动画周期恰发射 1 次；发射瞬间处于 Attack_Release 的可调 normalizedTime 窗口；法师下令到首次出手符合攻速周期"
+Locomotion.AllPlayersMoveParam :: "三角色经生产移动命令移动时处于 Locomotion，SpeedZ 随实际速度非零变化，停稳归零；控制器 Locomotion 状态名精确、混合树为 1D、参数 SpeedZ、阈值 0/4"
+Regression.FND02A :: "FND-02A 自动开局、场景实际遭遇位置为基线、真实寻路相对接近、零新增 Console 错误/异常继续通过"
+Skill.CastSmoke :: {"失败施放":"Cast(0,null) false；manaDelta=0；CdRemaining=0；无异常","Q":"Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Q_1","W":"Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 W_1","E/R":"Cast(2/3) false；蓝不变；无异常"}
+Skill.CursorHover :: "给定瞄准态与一条从相机指向敌人胸口的合成射线，ResolveHover(ray) 返回 Hover.Attack 且命中敌人就是该敌人"
+Skill.InputWired :: {"controllerCount":1,"indicatorPointsToSceneIndicator":true,"skillKeys":"Q,W,E,R"}
+Skill.TargetPick :: "给定同一条指向敌人胸口的合成射线，PickEnemyFromRay(ray) 返回该敌人的 UnitHealth（team=Monster、存活）"
+UI.DamageNumberScale :: "单个共享 Screen Space-Overlay 画布（唯一、不随伤害新增）；字号随伤害分档（5→1.5x、200→5x 钳制）；Text raycastTarget=false；连续 40 次 Show 活跃/总实例 ≤ 32"
+UI.SpawnAnchor :: "飘字出生瞬间的屏幕位置与目标胸口（target.position + up*ChestHeight）相机投影距离 ≤ 50px"
+
+=== DIFF ===
+(empty)
+RESULT: IDENTICAL

@@ -10,7 +10,7 @@ using UnityEngine;
 ///   - DIAG_Assertions.jsonl（每条断言一行；启动时清空）
 ///   - DIAG_Summary.json / DIAG_ExitCode.txt（收尾写）
 /// 只写 Docs 证据，不修改任何生产资产。
-/// JSON 序列化复用 SPEC01_Json（同程序集，纯工具类）。
+/// JSON 序列化复用 QaJson（同程序集，纯工具类）。
 /// </summary>
 public class DIAG_Evidence
 {
@@ -86,21 +86,21 @@ public class DIAG_Evidence
         var sb = new StringBuilder();
         sb.Append("{\n");
         sb.Append("  \"task\": \"DIAG-SKILL\",\n");
-        sb.Append("  \"mode\": ").Append(SPEC01_Json.Value(Mode)).Append(",\n");
+        sb.Append("  \"mode\": ").Append(QaJson.Value(Mode)).Append(",\n");
         sb.Append("  \"run\": ").Append(Run).Append(",\n");
-        sb.Append("  \"startedAt\": ").Append(SPEC01_Json.Value(StartedAt.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
-        sb.Append("  \"finishedAt\": ").Append(SPEC01_Json.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
-        sb.Append("  \"unityVersion\": ").Append(SPEC01_Json.Value(Application.unityVersion)).Append(",\n");
-        sb.Append("  \"scene\": ").Append(SPEC01_Json.Value(scenePath)).Append(",\n");
-        sb.Append("  \"head\": ").Append(SPEC01_Json.Value(head)).Append(",\n");
-        sb.Append("  \"assertionFile\": ").Append(SPEC01_Json.Value(_assertPath)).Append(",\n");
+        sb.Append("  \"startedAt\": ").Append(QaJson.Value(StartedAt.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
+        sb.Append("  \"finishedAt\": ").Append(QaJson.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
+        sb.Append("  \"unityVersion\": ").Append(QaJson.Value(Application.unityVersion)).Append(",\n");
+        sb.Append("  \"scene\": ").Append(QaJson.Value(scenePath)).Append(",\n");
+        sb.Append("  \"head\": ").Append(QaJson.Value(head)).Append(",\n");
+        sb.Append("  \"assertionFile\": ").Append(QaJson.Value(_assertPath)).Append(",\n");
         sb.Append("  \"pass\": ").Append(Pass).Append(",\n");
         sb.Append("  \"fail\": ").Append(Fail).Append(",\n");
         sb.Append("  \"blocked\": ").Append(Blocked).Append(",\n");
         sb.Append("  \"infraFail\": ").Append(Infra).Append(",\n");
         sb.Append("  \"observed\": ").Append(Observed).Append(",\n");
-        sb.Append("  \"conclusion\": ").Append(SPEC01_Json.Value(conclusion ?? "")).Append(",\n");
-        sb.Append("  \"exitReason\": ").Append(SPEC01_Json.Value(exitReason)).Append("\n");
+        sb.Append("  \"conclusion\": ").Append(QaJson.Value(conclusion ?? "")).Append(",\n");
+        sb.Append("  \"exitReason\": ").Append(QaJson.Value(exitReason)).Append("\n");
         sb.Append("}\n");
 
         string path = Path.Combine(_dir, "DIAG_Summary.json");
@@ -120,15 +120,15 @@ public class DIAG_Evidence
         var sb = new StringBuilder();
         sb.Append("{");
         sb.Append("\"run\":").Append(Run).Append(",");
-        sb.Append("\"qaItem\":").Append(SPEC01_Json.Value(qaItem)).Append(",");
-        sb.Append("\"assertion\":").Append(SPEC01_Json.Value(assertion)).Append(",");
-        sb.Append("\"expected\":").Append(SPEC01_Json.Value(expected)).Append(",");
-        sb.Append("\"actual\":").Append(SPEC01_Json.Value(actual)).Append(",");
+        sb.Append("\"qaItem\":").Append(QaJson.Value(qaItem)).Append(",");
+        sb.Append("\"assertion\":").Append(QaJson.Value(assertion)).Append(",");
+        sb.Append("\"expected\":").Append(QaJson.Value(expected)).Append(",");
+        sb.Append("\"actual\":").Append(QaJson.Value(actual)).Append(",");
         sb.Append("\"pass\":").Append(pass ? "true" : "false").Append(",");
-        sb.Append("\"status\":").Append(SPEC01_Json.Value(status)).Append(",");
-        sb.Append("\"kind\":").Append(SPEC01_Json.Value(kind)).Append(",");
-        sb.Append("\"timestamp\":").Append(SPEC01_Json.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",");
-        sb.Append("\"data\":").Append(SPEC01_Json.Value(data));
+        sb.Append("\"status\":").Append(QaJson.Value(status)).Append(",");
+        sb.Append("\"kind\":").Append(QaJson.Value(kind)).Append(",");
+        sb.Append("\"timestamp\":").Append(QaJson.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",");
+        sb.Append("\"data\":").Append(QaJson.Value(data));
         sb.Append("}");
         return sb.ToString();
     }

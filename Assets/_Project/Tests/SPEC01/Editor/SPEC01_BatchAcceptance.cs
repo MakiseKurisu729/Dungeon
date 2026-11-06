@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,8 +15,8 @@ using UnityEngine;
 /// </summary>
 public static class SPEC01_BatchAcceptance
 {
-    public const string ScenePath = "Assets/Scenes/DungeonWorld.unity";
-    public const string EnemyPrefabGuid = "18dec5e6af31178468b146e0440bd081";
+    public const string ScenePath = QaScene.ScenePath;
+    public const string EnemyPrefabGuid = QaScene.EnemyPrefabGuid;
     public const string ActiveKey = "SPEC01.Active";
 
     public static void Run()
@@ -28,12 +26,12 @@ public static class SPEC01_BatchAcceptance
 
         try
         {
-            string head = GitHead();
+            string head = QaScene.GetHead();
             SessionState.SetString("SPEC01.Head", head);
             Debug.Log("[SPEC01] head=" + head);
 
             var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
-            string enemySourceGuid = FindEnemySourceGuid(ScenePath);
+            string enemySourceGuid = QaScene.GetEnemySourceGuid(ScenePath);
             SessionState.SetString("SPEC01.EnemySourceGuid", enemySourceGuid);
             Debug.Log("[SPEC01] opened scene " + scene.path + "; loaded=" + scene.isLoaded +
                       "; dirty=" + scene.isDirty +
@@ -52,57 +50,6 @@ public static class SPEC01_BatchAcceptance
             Debug.LogError("[SPEC01] launcher failed: " + e);
             if (QA_InEditorMenu.TryFinish("SPEC01", 3)) return;   // 编辑器内：只记失败，不退 Unity
             EditorApplication.Exit(3);                            // batch：原样
-        }
-    }
-
-    /// <summary>只读场景 YAML，返回敌人 m_SourcePrefab guid。</summary>
-    public static string FindEnemySourceGuid(string scenePath)
-    {
-        string abs = AbsPath(scenePath);
-        if (!File.Exists(abs)) return "none";
-        string found = "none";
-        foreach (string line in File.ReadAllLines(abs, Encoding.UTF8))
-        {
-            if (line.IndexOf("m_SourcePrefab:", StringComparison.Ordinal) < 0) continue;
-            int gi = line.IndexOf("guid:", StringComparison.Ordinal);
-            if (gi < 0) continue;
-            string g = line.Substring(gi + 5).Trim().TrimEnd('}').Trim();
-            int comma = g.IndexOf(',');
-            if (comma > 0) g = g.Substring(0, comma).Trim();
-            if (g == EnemyPrefabGuid) found = g;
-        }
-        return found;
-    }
-
-    static string AbsPath(string assetPath)
-    {
-        if (Path.IsPathRooted(assetPath)) return assetPath;
-        return Path.Combine(Directory.GetParent(Application.dataPath).FullName, assetPath);
-    }
-
-    static string GitHead()
-    {
-        try
-        {
-            var psi = new System.Diagnostics.ProcessStartInfo("git", "rev-parse HEAD")
-            {
-                WorkingDirectory = Directory.GetParent(Application.dataPath).FullName,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            using (var p = System.Diagnostics.Process.Start(psi))
-            {
-                string outp = p.StandardOutput.ReadToEnd().Trim();
-                p.WaitForExit(5000);
-                return string.IsNullOrEmpty(outp) ? "unknown" : outp;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("[SPEC01] git head read failed: " + e.Message);
-            return "unknown";
         }
     }
 }

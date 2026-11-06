@@ -1,0 +1,43 @@
+# QA-REFACTOR-01 phase A scope evidence (regenerated after AC-10 change)
+generatedAt: 2026-11-06 13:19:46
+
+## git rev-parse --short HEAD
+df7ea0b0
+
+## git status --porcelain
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ D Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
+ D Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs.meta
+?? Assets/_Project/Tests/QA/Runtime.meta
+?? Assets/_Project/Tests/QA/Runtime/
+?? Docs/Handoff/TASK_QA-REFACTOR-01.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run5/
+?? Docs/QA/Evidence/FND-00B-06/editor_run5/
+?? Docs/QA/Evidence/QA-REFACTOR-01/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run17/
+?? Docs/QA/Evidence/SPEC-01/editor_run40/
+?? Docs/QA/Evidence/SPEC-01/editor_run41/
+?? Docs/QA/Evidence/SPEC-01/editor_run42/
+
+## git diff --numstat -- Assets/_Project/Tests
+18	18	Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+4	57	Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+25	292	Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+24	256	Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+0	413	Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs
+0	11	Assets/_Project/Tests/SPEC01/Runtime/SkillCastFixture.cs.meta
+
+## untracked under Assets/_Project/Tests
+
+?? Assets/_Project/Tests/QA/Runtime.meta
+?? Assets/_Project/Tests/QA/Runtime/
+
+
+
+## Assets/_Project/Scripts changes (expect: none)
+(none)
