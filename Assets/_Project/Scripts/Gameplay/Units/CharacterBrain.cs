@@ -3,7 +3,6 @@ using Dungeon.Core;
 using Dungeon.Gameplay.Combat;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.World;
-using Dungeon.App;
 namespace Dungeon.Gameplay.Units {
 
     /// <summary>
@@ -146,7 +145,7 @@ namespace Dungeon.Gameplay.Units {
         void Update()
         {
             if (agent == null || combat == null) return;
-            if (AppFlow.IsPaused) return;
+            if (PauseState.IsPaused) return;
 
             // 离开技能状态的那一帧解除运动锁：技能协程正常收尾会自己 End，
             // 这里兜住「被打断 / 过渡打断 / 协程未走到 finally」等路径（End 幂等）。

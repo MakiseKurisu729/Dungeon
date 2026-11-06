@@ -7,8 +7,8 @@
 |---|---|---|---|---|---|---|---|
 | **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 1 |
-| **Gameplay** | 81 | 25 | (292) | 7 | 3 | 0 | 408 |
-| **App** | 17 | 0 | 7 | (15) | 0 | 0 | 39 |
+| **Gameplay** | 88 | 25 | (292) | 0 | 3 | 0 | 408 |
+| **App** | 21 | 0 | 7 | (15) | 0 | 0 | 43 |
 | **UI** | 11 | 0 | 43 | 7 | (18) | 0 | 79 |
 | **Editor** | 3 | 0 | 5 | 0 | 0 | (0) | 8 |
 
@@ -16,17 +16,9 @@
 
 ## 违规方向（下层 → 上层，M7 必须先消）
 
-- **Gameplay → App**：7 条边
-  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:27` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:94` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs:74` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:149` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:215` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs:121` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
 - **Gameplay → UI**：3 条边
   - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:28` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:49` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
+  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
   - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:51` 引用 `TransitionFader` → `Assets/_Project/Scripts/UI/TransitionFader.cs`
 
 ## 每个依赖组的来源文件
@@ -35,7 +27,7 @@
 
 - `Assets/_Project/Scripts/Content/UnitStats.cs`：Team@11
 
-### Gameplay → Core（81 条，24 个来源文件）
+### Gameplay → Core（88 条，25 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs`：EventBus@15; EventBus@20
 - `Assets/_Project/Scripts/Gameplay/Combat/ExplosionFx.cs`：Team@147
@@ -43,12 +35,13 @@
 - `Assets/_Project/Scripts/Gameplay/Combat/RangedCombat.cs`：ICharacterCombat@8
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs`：MessageFeed@30; MessageFeed@32; MessageFeed@34
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@36
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@128; Team@109; Team@169; Team@232
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@104; MessageFeed@118; MessageFeed@176; MessageFeed@178; Team@197; Team@223
-- `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：MessageFeed@67; MessageFeed@84; RunState@65; RunState@66; Team@135; Team@180
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：ICharacterCombat@98; Team@28
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：MessageFeed@93; MessageFeed@175; MessageFeed@203; MessageFeed@295; MessageFeed@310
-- `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs`：ICharacterCombat@186; RunState@101; RunState@102; Team@54
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：PauseState@27
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@127; PauseState@93; Team@108; Team@168; Team@231
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@103; MessageFeed@117; MessageFeed@175; MessageFeed@177; PauseState@47; Team@196; Team@222
+- `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：MessageFeed@66; MessageFeed@83; PauseState@73; RunState@64; RunState@65; Team@134; Team@179
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：ICharacterCombat@97; PauseState@148; Team@27
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：MessageFeed@92; MessageFeed@174; MessageFeed@202; MessageFeed@294; MessageFeed@309; PauseState@214
+- `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs`：ICharacterCombat@185; PauseState@120; RunState@100; RunState@101; Team@53
 - `Assets/_Project/Scripts/Gameplay/Units/SkeletonWander.cs`：Team@63
 - `Assets/_Project/Scripts/Gameplay/Units/SkillData.cs`：Cooldown@16
 - `Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs`：Cooldown@28; Cooldown@32; Cooldown@42; MessageFeed@84; MessageFeed@85; MessageFeed@92
@@ -72,32 +65,22 @@
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs`：DamageType@73
 - `Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs`：ItemData@9
 - `Assets/_Project/Scripts/Gameplay/Items/Inventory.cs`：ItemData@12; ItemData@17; ItemData@21
-- `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：DamageType@136; DamageType@167; UnitStats@14
+- `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：DamageType@135; DamageType@166; UnitStats@13
 - `Assets/_Project/Scripts/Gameplay/Units/ShieldedUnitHealth.cs`：DamageType@14
 - `Assets/_Project/Scripts/Gameplay/Units/UnitAnimatorSpeed.cs`：UnitStats@12; UnitStats@27
 - `Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs`：UnitStats@17
 - `Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs`：DamageType@66; DamageType@94; UnitStats@13
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：ItemData@46; ItemData@100
 
-### Gameplay → App（7 条，7 个来源文件）
-
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：AppFlow@27
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：AppFlow@94
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：AppFlow@48
-- `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：AppFlow@74
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：AppFlow@149
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：AppFlow@215
-- `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs`：AppFlow@121
-
 ### Gameplay → UI（3 条，3 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@28
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@49
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@48
 - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
 
-### App → Core（17 条，4 个来源文件）
+### App → Core（21 条，4 个来源文件）
 
-- `Assets/_Project/Scripts/App/AppFlow.cs`：Team@44
+- `Assets/_Project/Scripts/App/AppFlow.cs`：PauseState@15; PauseState@20; PauseState@27; PauseState@36; Team@44
 - `Assets/_Project/Scripts/App/GameData.cs`：MessageFeed@12; MessageFeed@16; MessageFeed@17; MessageFeed@20; MessageFeed@22; RunState@9; RunState@11; RunState@20 …
 - `Assets/_Project/Scripts/App/MetaState.cs`：MessageFeed@28; ProgressionState@12; ProgressionState@13; RunState@23; RunState@24
 - `Assets/_Project/Scripts/App/RunFlow.cs`：MessageFeed@54; Team@44

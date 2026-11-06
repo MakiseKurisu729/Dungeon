@@ -1,6 +1,6 @@
 using UnityEngine;
+using Dungeon.Core;
 using Dungeon.Gameplay.Units;
-using Dungeon.App;
 using Dungeon.UI;
 namespace Dungeon.Gameplay.Player {
 
@@ -24,7 +24,7 @@ namespace Dungeon.Gameplay.Player {
         void Update()
         {
             if (_brain == null || _brain.agent == null) return;
-            if (AppFlow.IsPaused) return;
+            if (PauseState.IsPaused) return;
             if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
 
             if (Input.GetMouseButtonDown(1))

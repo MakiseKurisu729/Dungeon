@@ -18,6 +18,7 @@
 | `Assets/_Project/Scripts/Core/EventBus.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/ICharacterCombat.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/MessageFeed.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
+| `Assets/_Project/Scripts/Core/PauseState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/ProgressionState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/RunState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/Team.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
@@ -86,7 +87,7 @@
 
 ## 分层统计
 
-- Core: 8 个文件
+- Core: 9 个文件
 - Content: 3 个文件
 - Gameplay: 50 个文件
 - App: 6 个文件

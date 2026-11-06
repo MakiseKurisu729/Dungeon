@@ -1,6 +1,6 @@
 # M7-0 循环引用清单（文件级 SCC）
 
-> 扫描文件数：78；类型数：91；文件级边数：535。
+> 扫描文件数：79；类型数：92；文件级边数：539。
 > 判定口径：A 文件引用 B 文件声明的类型即 A→B；强连通分量（SCC）大小 ≥2 视为循环。
 > 近似分析（词边界匹配，已剥离注释与字符串）可能误报同名成员，所有边保留 `文件:行` 与源码片段供人工确认。
 > 已做过滤：`小写变量.类型名` 形式的实例成员访问不计为类型引用。
@@ -57,97 +57,97 @@
   `if (SelectionManager.instance != null)`
 - `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs:18` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `SelectionManager.instance.Register(this);`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:22` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:21` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `readonly List<Selectable> _all = new List<Selectable>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:23` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:22` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `readonly List<Selectable> _selected = new List<Selectable>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:26` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:25` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `public Selectable Primary`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:34` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:33` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `CharacterBrain PrimaryBrain`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:39` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:38` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `return p != null ? p.GetComponentInParent<CharacterBrain>() : null;`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:64` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:63` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `var s = h.GetComponentInChildren<Selectable>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:69` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:68` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `public void Register(Selectable s)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:80` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:79` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `public void ForEachSelectedBrain(System.Action<CharacterBrain> action)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:84` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:83` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var b = s.GetComponentInParent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:117` 引用 `SkillInputController` → `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:116` 引用 `SkillInputController` → `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`  
   `if (Input.GetMouseButtonUp(0) && !_moved && !(SkillInputController.instance != null && SkillInputController.IsTargeting))`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:124` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:123` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `var runner = InteractionRunner.Ensure(primaryBrain);`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:155` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:154` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `Selectable sel = null;`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:157` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:156` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `IInteractionTarget inter = null;`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:163` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:162` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `var s = h.collider.GetComponentInParent<Selectable>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:171` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:170` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `inter = BestTarget(inter, h.collider.GetComponentInParent<IInteractionTarget>(), primaryBrain);`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:190` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:189` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = s.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:199` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:198` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = s.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:211` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:210` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `static IInteractionTarget BestTarget(IInteractionTarget best, IInteractionTarget cand, CharacterBrain unit)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:211` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:210` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `static IInteractionTarget BestTarget(IInteractionTarget best, IInteractionTarget cand, CharacterBrain unit)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:221` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:220` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `bool TryCommandRescue(IInteractionTarget target)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:223` 引用 `InteractionPriority` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:222` 引用 `InteractionPriority` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `if (target == null || target.Priority != InteractionPriority.Rescue) return false;`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:233` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:232` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = s.GetComponentInParent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:241` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:240` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `void SingleSelect(Selectable s)`
-- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:248` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:247` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `void ToggleSelect(Selectable s)`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:49` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
   `if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:75` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:74` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = _pendingCaster.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:122` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:121` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = ss.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:169` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:168` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:170` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:169` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();`
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:23` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:22` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `InteractionRunner _runner;`
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:69` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:68` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
   `public void CommandInteract(Interactable it)`
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:76` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:75` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `public void CommandInteract(IInteractionTarget target)`
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:79` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:78` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `if (_runner == null) _runner = InteractionRunner.Ensure(this);`
-- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:114` 引用 `DownedRescue` → `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:113` 引用 `DownedRescue` → `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`  
   `DownedRescue.NotifyMoveCommand(gameObject);`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:18` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:17` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `public class DownedRescue : MonoBehaviour, IInteractionTarget`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:51` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:50` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
   `Interactable _interact;`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:73` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:72` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
   `_interact = GetComponent<Interactable>();`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:74` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:73` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
   `if (_interact == null) _interact = GetComponentInParent<Interactable>();`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:88` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:87` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `var sel = GetComponentInChildren<Selectable>();`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:107` 引用 `InteractionPriority` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:106` 引用 `InteractionPriority` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `public InteractionPriority Priority { get { return InteractionPriority.Rescue; } }`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:111` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:110` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `public bool IsAvailable(CharacterBrain unit) { return IsDown; }`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:113` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:112` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:113` 引用 `InteractionDefinition` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:112` 引用 `InteractionDefinition` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs`  
   `public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:116` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:115` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `public void Interact(CharacterBrain unit)`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:139` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:138` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var rBrain = rescuer.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:142` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
+- `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:141` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `InteractionRunner.Ensure(rBrain).Order(this);`
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs:15` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `public class Chest : MonoBehaviour, IInteractionTarget`

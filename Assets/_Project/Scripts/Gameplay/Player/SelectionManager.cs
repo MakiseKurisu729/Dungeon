@@ -4,7 +4,6 @@ using Dungeon.Core;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Units;
 using Dungeon.Gameplay.World;
-using Dungeon.App;
 namespace Dungeon.Gameplay.Player {
 
     /// <summary>
@@ -91,7 +90,7 @@ namespace Dungeon.Gameplay.Player {
 
         void Update()
         {
-            if (AppFlow.IsPaused) return;
+            if (PauseState.IsPaused) return;
 
             for (int i = 0; i < 4; i++)
             {

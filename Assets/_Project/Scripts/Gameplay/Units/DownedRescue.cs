@@ -7,7 +7,6 @@ using Dungeon.Gameplay.Combat;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Player;
 using Dungeon.Gameplay.World;
-using Dungeon.App;
 namespace Dungeon.Gameplay.Units {
 
     /// <summary>倒地与救援（指令式、动画机驱动）：挂玩家单位，且同物体挂 Interactable。
@@ -212,7 +211,7 @@ namespace Dungeon.Gameplay.Units {
                 while (t < rescueTime)
                 {
                     if (interrupted || !IsDown || rescuer.dead) break;
-                    if (AppFlow.IsPaused) { yield return null; continue; }
+                    if (PauseState.IsPaused) { yield return null; continue; }
                     if (!InRange(rescuer, 1f)) break;      // 出界按中断处理
                     PushInteract(rAnim, false);            // 读条循环：Interact 播完/掉出就重发
                     t += Time.deltaTime;

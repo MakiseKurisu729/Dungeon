@@ -1,6 +1,50 @@
 [
  {
   "src": "Assets/_Project/Scripts/App/AppFlow.cs",
+  "line": 15,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "App",
+  "module_dst": "Core",
+  "layer_src": "App",
+  "layer_dst": "Core",
+  "snippet": "public static bool IsPaused { get { return PauseState.IsPaused; } }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/App/AppFlow.cs",
+  "line": 20,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "App",
+  "module_dst": "Core",
+  "layer_src": "App",
+  "layer_dst": "Core",
+  "snippet": "PauseState.Set(true);"
+ },
+ {
+  "src": "Assets/_Project/Scripts/App/AppFlow.cs",
+  "line": 27,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "App",
+  "module_dst": "Core",
+  "layer_src": "App",
+  "layer_dst": "Core",
+  "snippet": "PauseState.Set(false);"
+ },
+ {
+  "src": "Assets/_Project/Scripts/App/AppFlow.cs",
+  "line": 36,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "App",
+  "module_dst": "Core",
+  "layer_src": "App",
+  "layer_dst": "Core",
+  "snippet": "PauseState.Set(false);"
+ },
+ {
+  "src": "Assets/_Project/Scripts/App/AppFlow.cs",
   "line": 44,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
@@ -1651,17 +1695,6 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 27,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Player",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
   "line": 15,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
@@ -1692,6 +1725,17 @@
   "layer_src": "Gameplay",
   "layer_dst": "Gameplay",
   "snippet": "if (sm.Primary.GetComponentInParent<CharacterBrain>() != _brain) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
+  "line": 27,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Player",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
@@ -1750,18 +1794,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 94,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Player",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 34,
+  "line": 33,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1772,7 +1805,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 39,
+  "line": 38,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1783,7 +1816,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 80,
+  "line": 79,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1794,7 +1827,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 84,
+  "line": 83,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1805,7 +1838,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 190,
+  "line": 189,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1816,7 +1849,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 199,
+  "line": 198,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1827,7 +1860,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 211,
+  "line": 210,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1838,7 +1871,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 233,
+  "line": 232,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1849,7 +1882,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 24,
+  "line": 23,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/Player",
@@ -1860,7 +1893,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 44,
+  "line": 43,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/Player",
@@ -1871,7 +1904,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 48,
+  "line": 47,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/Player",
@@ -1882,7 +1915,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 56,
+  "line": 55,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/Player",
@@ -1893,7 +1926,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 157,
+  "line": 156,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Player",
@@ -1904,7 +1937,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 171,
+  "line": 170,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Player",
@@ -1915,7 +1948,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 211,
+  "line": 210,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Player",
@@ -1926,7 +1959,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 221,
+  "line": 220,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Player",
@@ -1937,7 +1970,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 223,
+  "line": 222,
   "type": "InteractionPriority",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Player",
@@ -1948,7 +1981,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 124,
+  "line": 123,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/Player",
@@ -1959,7 +1992,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 128,
+  "line": 127,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -1970,7 +2003,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 22,
+  "line": 93,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Player",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
+  "line": 21,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -1981,7 +2025,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 23,
+  "line": 22,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -1992,7 +2036,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 26,
+  "line": 25,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2003,7 +2047,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 64,
+  "line": 63,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2014,7 +2058,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 69,
+  "line": 68,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2025,7 +2069,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 155,
+  "line": 154,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2036,7 +2080,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 163,
+  "line": 162,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2047,7 +2091,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 241,
+  "line": 240,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2058,7 +2102,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 248,
+  "line": 247,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Player",
@@ -2069,7 +2113,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 117,
+  "line": 116,
   "type": "SkillInputController",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
   "module_src": "Gameplay/Player",
@@ -2080,7 +2124,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 109,
+  "line": 108,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2091,7 +2135,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 169,
+  "line": 168,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2102,7 +2146,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 232,
+  "line": 231,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2113,7 +2157,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 108,
+  "line": 107,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2124,7 +2168,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 109,
+  "line": 108,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2135,7 +2179,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 156,
+  "line": 155,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2146,7 +2190,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 168,
+  "line": 167,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2157,7 +2201,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 231,
+  "line": 230,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2168,7 +2212,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 261,
+  "line": 260,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2179,7 +2223,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 264,
+  "line": 263,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2190,7 +2234,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
-  "line": 62,
+  "line": 61,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/Player",
@@ -2201,18 +2245,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 48,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Player",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 75,
+  "line": 74,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -2223,7 +2256,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 122,
+  "line": 121,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -2234,7 +2267,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 104,
+  "line": 103,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2245,7 +2278,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 118,
+  "line": 117,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2256,7 +2289,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 176,
+  "line": 175,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2267,7 +2300,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 178,
+  "line": 177,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2278,7 +2311,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 169,
+  "line": 47,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Player",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
+  "line": 168,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "Gameplay/Player",
@@ -2289,7 +2333,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 170,
+  "line": 169,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "Gameplay/Player",
@@ -2300,7 +2344,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 149,
+  "line": 148,
   "type": "SkillData",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillData.cs",
   "module_src": "Gameplay/Player",
@@ -2311,7 +2355,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 28,
+  "line": 27,
   "type": "SkillIndicator",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs",
   "module_src": "Gameplay/Player",
@@ -2322,7 +2366,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 37,
+  "line": 36,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2333,7 +2377,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 167,
+  "line": 166,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2344,7 +2388,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 170,
+  "line": 169,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2355,7 +2399,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 174,
+  "line": 173,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2366,7 +2410,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 197,
+  "line": 196,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2377,7 +2421,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 223,
+  "line": 222,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2388,7 +2432,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 49,
+  "line": 48,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "Gameplay/Player",
@@ -2399,7 +2443,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 40,
+  "line": 39,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2410,7 +2454,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 60,
+  "line": 59,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2421,7 +2465,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 182,
+  "line": 181,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2432,7 +2476,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 190,
+  "line": 189,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2443,7 +2487,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 196,
+  "line": 195,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2454,7 +2498,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 206,
+  "line": 205,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2465,7 +2509,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 223,
+  "line": 222,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/Player",
@@ -2476,18 +2520,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 74,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Units",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 136,
+  "line": 135,
   "type": "DamageType",
   "dst": "Assets/_Project/Scripts/Content/WeaponData.cs",
   "module_src": "Gameplay/Units",
@@ -2498,7 +2531,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 167,
+  "line": 166,
   "type": "DamageType",
   "dst": "Assets/_Project/Scripts/Content/WeaponData.cs",
   "module_src": "Gameplay/Units",
@@ -2509,7 +2542,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 67,
+  "line": 66,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -2520,7 +2553,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 84,
+  "line": 83,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -2531,7 +2564,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 65,
+  "line": 73,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Units",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
+  "line": 64,
   "type": "RunState",
   "dst": "Assets/_Project/Scripts/Core/RunState.cs",
   "module_src": "Gameplay/Units",
@@ -2542,7 +2586,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 66,
+  "line": 65,
   "type": "RunState",
   "dst": "Assets/_Project/Scripts/Core/RunState.cs",
   "module_src": "Gameplay/Units",
@@ -2553,7 +2597,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 35,
+  "line": 34,
   "type": "SleepingSkeleton",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SleepingSkeleton.cs",
   "module_src": "Gameplay/Units",
@@ -2564,7 +2608,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 135,
+  "line": 134,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Units",
@@ -2575,7 +2619,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 180,
+  "line": 179,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Units",
@@ -2586,7 +2630,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 15,
+  "line": 14,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2597,7 +2641,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 52,
+  "line": 51,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2608,7 +2652,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 134,
+  "line": 133,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2619,7 +2663,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 165,
+  "line": 164,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2630,7 +2674,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 180,
+  "line": 179,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2641,7 +2685,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 180,
+  "line": 179,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/Units",
@@ -2652,7 +2696,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
-  "line": 14,
+  "line": 13,
   "type": "UnitStats",
   "dst": "Assets/_Project/Scripts/Content/UnitStats.cs",
   "module_src": "Gameplay/Units",
@@ -2663,18 +2707,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 149,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Units",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 56,
+  "line": 55,
   "type": "DamageInfo",
   "dst": "Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs",
   "module_src": "Gameplay/Units",
@@ -2685,7 +2718,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 114,
+  "line": 113,
   "type": "DownedRescue",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
   "module_src": "Gameplay/Units",
@@ -2696,7 +2729,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 98,
+  "line": 97,
   "type": "ICharacterCombat",
   "dst": "Assets/_Project/Scripts/Core/ICharacterCombat.cs",
   "module_src": "Gameplay/Units",
@@ -2707,7 +2740,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 76,
+  "line": 75,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Units",
@@ -2718,7 +2751,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 69,
+  "line": 68,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "Gameplay/Units",
@@ -2729,7 +2762,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 23,
+  "line": 22,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/Units",
@@ -2740,7 +2773,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 79,
+  "line": 78,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/Units",
@@ -2751,7 +2784,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 28,
+  "line": 148,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Units",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
+  "line": 27,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Units",
@@ -2762,7 +2806,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 14,
+  "line": 13,
   "type": "UnitBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs",
   "module_src": "Gameplay/Units",
@@ -2773,7 +2817,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 25,
+  "line": 24,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2784,7 +2828,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 31,
+  "line": 30,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2795,7 +2839,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 35,
+  "line": 34,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2806,7 +2850,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 46,
+  "line": 45,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2817,7 +2861,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 172,
+  "line": 171,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -2828,7 +2872,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
-  "line": 154,
+  "line": 153,
   "type": "UnitMotion",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs",
   "module_src": "Gameplay/Units",
@@ -2839,18 +2883,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 215,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Units",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) { yield return null; continue; }"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 111,
+  "line": 110,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Units",
@@ -2861,7 +2894,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 113,
+  "line": 112,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Units",
@@ -2872,7 +2905,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 116,
+  "line": 115,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Units",
@@ -2883,7 +2916,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 139,
+  "line": 138,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Units",
@@ -2894,7 +2927,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 206,
+  "line": 205,
   "type": "DamageInfo",
   "dst": "Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs",
   "module_src": "Gameplay/Units",
@@ -2905,7 +2938,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 18,
+  "line": 17,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Units",
@@ -2916,7 +2949,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 51,
+  "line": 50,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "Gameplay/Units",
@@ -2927,7 +2960,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 73,
+  "line": 72,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "Gameplay/Units",
@@ -2938,7 +2971,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 74,
+  "line": 73,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "Gameplay/Units",
@@ -2949,7 +2982,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 113,
+  "line": 112,
   "type": "InteractionDefinition",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs",
   "module_src": "Gameplay/Units",
@@ -2960,7 +2993,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 107,
+  "line": 106,
   "type": "InteractionPriority",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/Units",
@@ -2971,7 +3004,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 142,
+  "line": 141,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/Units",
@@ -2982,7 +3015,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 93,
+  "line": 92,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -2993,7 +3026,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 175,
+  "line": 174,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -3004,7 +3037,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 203,
+  "line": 202,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -3015,7 +3048,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 295,
+  "line": 294,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -3026,7 +3059,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 310,
+  "line": 309,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Units",
@@ -3037,7 +3070,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 88,
+  "line": 214,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Units",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) { yield return null; continue; }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
+  "line": 87,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "Gameplay/Units",
@@ -3048,7 +3092,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 24,
+  "line": 23,
   "type": "UnitBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs",
   "module_src": "Gameplay/Units",
@@ -3059,7 +3103,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 68,
+  "line": 67,
   "type": "UnitBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs",
   "module_src": "Gameplay/Units",
@@ -3070,7 +3114,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 23,
+  "line": 22,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3081,7 +3125,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 48,
+  "line": 47,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3092,7 +3136,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 50,
+  "line": 49,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3103,7 +3147,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 67,
+  "line": 66,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3114,7 +3158,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 126,
+  "line": 125,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3125,7 +3169,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 178,
+  "line": 177,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3136,7 +3180,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 271,
+  "line": 270,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3147,7 +3191,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 86,
+  "line": 85,
   "type": "UnitMotion",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs",
   "module_src": "Gameplay/Units",
@@ -3158,7 +3202,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 99,
+  "line": 98,
   "type": "UnitMotion",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs",
   "module_src": "Gameplay/Units",
@@ -3169,7 +3213,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
-  "line": 306,
+  "line": 305,
   "type": "UnitMotion",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs",
   "module_src": "Gameplay/Units",
@@ -3180,18 +3224,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 121,
-  "type": "AppFlow",
-  "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
-  "module_src": "Gameplay/Units",
-  "module_dst": "App",
-  "layer_src": "Gameplay",
-  "layer_dst": "App",
-  "snippet": "if (AppFlow.IsPaused) return;"
- },
- {
-  "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 186,
+  "line": 185,
   "type": "ICharacterCombat",
   "dst": "Assets/_Project/Scripts/Core/ICharacterCombat.cs",
   "module_src": "Gameplay/Units",
@@ -3202,7 +3235,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 101,
+  "line": 120,
+  "type": "PauseState",
+  "dst": "Assets/_Project/Scripts/Core/PauseState.cs",
+  "module_src": "Gameplay/Units",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "if (PauseState.IsPaused) return;"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
+  "line": 100,
   "type": "RunState",
   "dst": "Assets/_Project/Scripts/Core/RunState.cs",
   "module_src": "Gameplay/Units",
@@ -3213,7 +3257,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 102,
+  "line": 101,
   "type": "RunState",
   "dst": "Assets/_Project/Scripts/Core/RunState.cs",
   "module_src": "Gameplay/Units",
@@ -3224,7 +3268,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 54,
+  "line": 53,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Units",
@@ -3235,7 +3279,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 11,
+  "line": 10,
   "type": "UnitBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs",
   "module_src": "Gameplay/Units",
@@ -3246,7 +3290,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 44,
+  "line": 43,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3257,7 +3301,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 60,
+  "line": 59,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",
@@ -3268,7 +3312,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
-  "line": 149,
+  "line": 148,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Units",

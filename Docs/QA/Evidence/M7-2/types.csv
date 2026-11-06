@@ -14,6 +14,7 @@ Cooldown,struct,Assets/_Project/Scripts/Core/Cooldown.cs,5,Core,Core
 EventBus,class,Assets/_Project/Scripts/Core/EventBus.cs,8,Core,Core
 ICharacterCombat,interface,Assets/_Project/Scripts/Core/ICharacterCombat.cs,5,Core,Core
 MessageFeed,class,Assets/_Project/Scripts/Core/MessageFeed.cs,4,Core,Core
+PauseState,class,Assets/_Project/Scripts/Core/PauseState.cs,4,Core,Core
 ProgressionState,class,Assets/_Project/Scripts/Core/ProgressionState.cs,3,Core,Core
 RunState,class,Assets/_Project/Scripts/Core/RunState.cs,4,Core,Core
 Team,enum,Assets/_Project/Scripts/Core/Team.cs,3,Core,Core
@@ -47,13 +48,13 @@ ChestItem,class,Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs,6,Gameplay/I
 Inventory,class,Assets/_Project/Scripts/Gameplay/Items/Inventory.cs,7,Gameplay/Items,Gameplay
 PlayerCommandController,class,Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs,10,Gameplay/Player,Gameplay
 Selectable,class,Assets/_Project/Scripts/Gameplay/Player/Selectable.cs,5,Gameplay/Player,Gameplay
-SelectionManager,class,Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs,16,Gameplay/Player,Gameplay
+SelectionManager,class,Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs,15,Gameplay/Player,Gameplay
 SkillIndicator,class,Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs,5,Gameplay/Player,Gameplay
-SkillInputController,class,Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs,15,Gameplay/Player,Gameplay
-BossBrain,class,Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs,11,Gameplay/Units,Gameplay
-CharacterBrain,class,Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs,14,Gameplay/Units,Gameplay
-DownedRescue,class,Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs,18,Gameplay/Units,Gameplay
-MonsterBrain,class,Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs,11,Gameplay/Units,Gameplay
+SkillInputController,class,Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs,14,Gameplay/Player,Gameplay
+BossBrain,class,Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs,10,Gameplay/Units,Gameplay
+CharacterBrain,class,Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs,13,Gameplay/Units,Gameplay
+DownedRescue,class,Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs,17,Gameplay/Units,Gameplay
+MonsterBrain,class,Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs,10,Gameplay/Units,Gameplay
 ShieldedUnitHealth,class,Assets/_Project/Scripts/Gameplay/Units/ShieldedUnitHealth.cs,7,Gameplay/Units,Gameplay
 SkeletonWander,class,Assets/_Project/Scripts/Gameplay/Units/SkeletonWander.cs,10,Gameplay/Units,Gameplay
 SkillData,class,Assets/_Project/Scripts/Gameplay/Units/SkillData.cs,7,Gameplay/Units,Gameplay

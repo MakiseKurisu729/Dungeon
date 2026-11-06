@@ -19,6 +19,7 @@ using Dungeon.Gameplay.Units;
 using Dungeon.Gameplay.World;
 using Dungeon.App;
 using Dungeon.UI;
+using PauseState = Dungeon.Core.PauseState;
 #endif
 
 /// <summary>
@@ -116,7 +117,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 "Skill.InterruptAttack", "Hit.InterruptSkill", "Skill.InterruptInteract", "Projectile.AimPoint",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
                 "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract",
-                "Skill.MotionUnlocked", "Refactor.ProgressionFacade"
+                "Skill.MotionUnlocked", "Refactor.ProgressionFacade", "Refactor.PauseFacade"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -143,6 +144,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Refactor.StateFacade", AssertStateFacade(_ev));
         yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked(_ev, _players));
         yield return RunSafe("Refactor.ProgressionFacade", AssertProgressionFacade(_ev));
+        yield return RunSafe("Refactor.PauseFacade", AssertPauseFacade(_ev));
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -1892,6 +1894,65 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             allPass, allPass ? "pass" : "product_fail", "production",
             QaJson.Dict("steps", rows,
                  "note", "M7-2 子项 1 新增第 17 条；读写均走生产入口，结束前还原 RunState.Gold 与等级"));
+        yield break;
+    }
+    // ============================================================
+    // 18. Refactor.PauseFacade（M7-2 子项 2：暂停边下沉 Core）
+    // ============================================================
+    /// <summary>暂停门面：PauseState.IsPaused 只由 AppFlow.Pause/Resume 写；AppFlow.IsPaused 只读转发；
+    /// 团灭 timeScale=0 不等于暂停。所有写入在 finally 还原。</summary>
+    IEnumerator AssertPauseFacade(IQaSink sink)
+    {
+        const string Id = "Refactor.PauseFacade";
+        bool pausedBefore = PauseState.IsPaused;
+        float timeScaleBefore = Time.timeScale;
+        var rows = new List<object>();
+        bool setOn = false, setOff = false, appPause = false, appResume = false;
+        bool wipedNotPaused = false, restoredOk = false;
+
+        try
+        {
+            PauseState.Set(true);
+            setOn = PauseState.IsPaused && AppFlow.IsPaused;
+            PauseState.Set(false);
+            setOff = !PauseState.IsPaused && !AppFlow.IsPaused;
+            rows.Add(QaJson.Dict("step", "pause-state-forward", "setTrue", setOn,
+                          "setFalse", setOff, "pass", setOn && setOff));
+
+            AppFlow.Pause();
+            appPause = Mathf.Approximately(Time.timeScale, 0f) && PauseState.IsPaused && AppFlow.IsPaused;
+            AppFlow.Resume();
+            appResume = Mathf.Approximately(Time.timeScale, 1f) && !PauseState.IsPaused && !AppFlow.IsPaused;
+            rows.Add(QaJson.Dict("step", "appflow-pause-resume", "onPause", appPause,
+                          "onResume", appResume, "timeScale", Time.timeScale,
+                          "pass", appPause && appResume));
+
+            // 团灭语义：RunFlow 只写 timeScale=0，不置 IsPaused（这里只验证解耦，不触发真实团灭）
+            PauseState.Set(false);
+            Time.timeScale = 0f;
+            wipedNotPaused = !PauseState.IsPaused && !AppFlow.IsPaused;
+            Time.timeScale = 1f;
+            rows.Add(QaJson.Dict("step", "wipe-not-pause", "timeScale0ButIsPaused", !wipedNotPaused,
+                          "pass", wipedNotPaused));
+        }
+        finally
+        {
+            PauseState.Set(pausedBefore);
+            Time.timeScale = timeScaleBefore;
+            restoredOk = PauseState.IsPaused == pausedBefore &&
+                         AppFlow.IsPaused == pausedBefore &&
+                         Mathf.Approximately(Time.timeScale, timeScaleBefore);
+        }
+
+        bool allPass = setOn && setOff && appPause && appResume && wipedNotPaused && restoredOk;
+        sink.Record(Id, Id,
+            "暂停门面：PauseState.Set(true/false) 与 AppFlow.IsPaused 同步；AppFlow.Pause→timeScale=0 且 IsPaused，" +
+            "Resume→1 且 !IsPaused；timeScale=0 本身不算暂停；结束前还原",
+            "setOn=" + setOn + "; setOff=" + setOff + "; onPause=" + appPause +
+            "; onResume=" + appResume + "; wipeNotPause=" + wipedNotPaused + "; restored=" + restoredOk,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            QaJson.Dict("steps", rows,
+                 "note", "M7-2 子项 2 新增第 18 条；PauseState 不写 timeScale，团灭语义只验证解耦"));
         yield break;
     }
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)

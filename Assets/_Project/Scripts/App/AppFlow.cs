@@ -11,20 +11,20 @@ namespace Dungeon.App {
         /// <summary>是否已开局（原 GameFlow 的 GameStarted 静态字段）。</summary>
         public static bool GameStarted { get; set; }
 
-        /// <summary>是否因 Esc 菜单而暂停（原 PauseManager.IsPaused）。</summary>
-        public static bool IsPaused { get; private set; }
+        /// <summary>是否因 Esc 菜单而暂停（转发 PauseState.IsPaused；原 PauseManager.IsPaused）。</summary>
+        public static bool IsPaused { get { return PauseState.IsPaused; } }
 
-        /// <summary>暂停：timeScale = 0（原 PauseManager.Pause）。</summary>
+        /// <summary>暂停：PauseState.Set(true) + timeScale = 0（原 PauseManager.Pause）。</summary>
         public static void Pause()
         {
-            IsPaused = true;
+            PauseState.Set(true);
             Time.timeScale = 0f;
         }
 
-        /// <summary>恢复：timeScale = 1（原 PauseManager.Resume）。</summary>
+        /// <summary>恢复：PauseState.Set(false) + timeScale = 1（原 PauseManager.Resume）。</summary>
         public static void Resume()
         {
-            IsPaused = false;
+            PauseState.Set(false);
             Time.timeScale = 1f;
         }
 
@@ -33,7 +33,7 @@ namespace Dungeon.App {
         public static void ReloadActiveScene()
         {
             GameStarted = false;
-            IsPaused = false;
+            PauseState.Set(false);
             Time.timeScale = 1f;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Dungeon.Content;
 using Dungeon.Core;
-using Dungeon.App;
 namespace Dungeon.Gameplay.Units {
 
     /// <summary>Boss 驱动：追击+平砍+蓄力重击；半血唤醒沉睡骷髅；死亡激活奖励宝箱。
@@ -71,7 +70,7 @@ namespace Dungeon.Gameplay.Units {
         void Update()
         {
             if (health == null || health.dead) return;
-            if (AppFlow.IsPaused) return;
+            if (PauseState.IsPaused) return;
             if (animator != null && !string.IsNullOrEmpty(speedParam))
                 animator.SetFloat(speedParam, _agent.velocity.magnitude);
 
