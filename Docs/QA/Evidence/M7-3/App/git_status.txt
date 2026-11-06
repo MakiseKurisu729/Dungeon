@@ -1,0 +1,5 @@
+﻿?? Assets/_Project/Scripts/App/Dungeon.App.asmdef
+?? Assets/_Project/Scripts/App/Dungeon.App.asmdef.meta
+?? Docs/QA/Evidence/M7-3/App/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run38/
+?? Docs/QA/Evidence/SPEC-01/editor_run57/

@@ -1,0 +1,14 @@
+{
+    "name": "Dungeon.App",
+    "rootNamespace": "Dungeon.App",
+    "references": ["Dungeon.Core", "Dungeon.Content", "Dungeon.Gameplay"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
