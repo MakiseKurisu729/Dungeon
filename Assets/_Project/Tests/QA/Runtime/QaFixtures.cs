@@ -4,6 +4,9 @@ using System.Reflection;
 using UnityEngine;
 using Dungeon.Content;
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
 
 /// <summary>
 /// Play 模式夹具与观测工具：玩家探针、命中收集器、内存目标单位、选择、动画状态名。

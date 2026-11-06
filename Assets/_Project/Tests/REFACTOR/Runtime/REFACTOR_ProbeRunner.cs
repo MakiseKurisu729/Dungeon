@@ -11,6 +11,12 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using Dungeon.Content;
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Interaction;
+using Dungeon.Gameplay.Items;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
+using Dungeon.Gameplay.World;
 #endif
 
 /// <summary>

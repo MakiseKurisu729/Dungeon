@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Dungeon.Gameplay.Items;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.World;
 
 /// <summary>
 /// UI 咽喉：所有面板开关只走这里。场景里面板物体保持激活，初始隐藏由本类 Awake 统一执行。

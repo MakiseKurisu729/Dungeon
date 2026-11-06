@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dungeon.Gameplay.Combat;
 
 /// <summary>
 /// 协程等待/轮询：全部以 Time.deltaTime 累加超时（与原各套件实现同口径），超时静默返回。

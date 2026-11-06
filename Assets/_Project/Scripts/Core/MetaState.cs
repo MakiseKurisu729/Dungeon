@@ -1,4 +1,6 @@
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Units;
 /// <summary>成长状态：等级 + 升级收益。
 /// 生命周期 = 进程内（跨场景重载保留），与重构前 GameData 的 level 字段一致；本类不新增任何自动重置。</summary>
 public static class MetaState

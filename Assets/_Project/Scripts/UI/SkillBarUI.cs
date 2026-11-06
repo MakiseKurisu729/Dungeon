@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
 
 /// <summary>技能栏：跟随主选角色；图标/冷却遮罩(纵向缩放)/耗蓝变灰/按键标签。</summary>
 public class SkillBarUI : MonoBehaviour

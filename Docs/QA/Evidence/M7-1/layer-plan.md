@@ -5,20 +5,6 @@
 
 | 文件 | 现目录 | 目标层 | 理由 |
 |---|---|---|---|
-| `Assets/_Project/Scripts/Combat/CombatFeedback.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/DamageInfo.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/DamageNumber.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/ExplosionFx.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/FireballProjectile.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/HeavySlashEffect.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/MeleeCombat.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/Projectile.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/RangedCombat.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/SimplePool.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/SkillCastContext.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/SkillEffectBase.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/SkillEffectFireball.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Combat/SkillEffects.cs` | Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Content/ItemData.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
 | `Assets/_Project/Scripts/Content/UnitStats.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
 | `Assets/_Project/Scripts/Content/WeaponData.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
@@ -35,27 +21,57 @@
 | `Assets/_Project/Scripts/Core/RunState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/Team.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/UnitId.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
-| `Assets/_Project/Scripts/Core/UnitRegistry.cs` | Core | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Core/WaveSpawner.cs` | Core | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs` | Debug | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Debug/DebugTestTools.cs` | Debug | **Editor** | UNITY_EDITOR 专用，运行时代码不得反向依赖 |
-| `Assets/_Project/Scripts/Debug/Mirror.cs` | Debug | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/DamageNumber.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/ExplosionFx.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/FireballProjectile.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/HeavySlashEffect.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/Projectile.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/RangedCombat.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/SimplePool.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/SkillCastContext.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectBase.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Items/ChestItem.cs` | Items | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Items/Inventory.cs` | Items | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Player/PlayerCommandController.cs` | Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Player/Selectable.cs` | Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Player/SelectionManager.cs` | Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Player/SkillIndicator.cs` | Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Player/SkillInputController.cs` | Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/Chest.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/DungeonDoor.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/FogOfWar.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/ForestGenerator.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/Interactable.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/System/SkeletonSpawner.cs` | System | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs` | Gameplay/Items | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Items/Inventory.cs` | Gameplay/Items | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs` | Gameplay/Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs` | Gameplay/Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs` | Gameplay/Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs` | Gameplay/Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs` | Gameplay/Player | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/ShieldedUnitHealth.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/SkeletonWander.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/SkillData.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/SleepingSkeleton.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitAnimatorSpeed.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitMana.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/Visibility.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs` | Gameplay/Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/Chest.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/Interactable.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/Mirror.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/UI/BasePanel.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
 | `Assets/_Project/Scripts/UI/CursorManager.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
 | `Assets/_Project/Scripts/UI/EscMenuPanel.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
@@ -66,22 +82,6 @@
 | `Assets/_Project/Scripts/UI/SlotClickHandler.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
 | `Assets/_Project/Scripts/UI/TransitionFader.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
 | `Assets/_Project/Scripts/UI/UIManager.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
-| `Assets/_Project/Scripts/Units/BossBrain.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/CharacterBrain.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/DownedRescue.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/MonsterBrain.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/SkeletonWander.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/SkillData.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/SkillSystem.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/SleepingSkeleton.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/UnitBrain.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/UnitHealth.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/UnitMana.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/UnitMotion.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/Visibility.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
-| `Assets/_Project/Scripts/Units/WorldHealthBar.cs` | Units | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 
 ## 分层统计
 

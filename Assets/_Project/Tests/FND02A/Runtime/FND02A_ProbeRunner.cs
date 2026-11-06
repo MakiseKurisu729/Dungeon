@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 using Dungeon.Core;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
+using Dungeon.Gameplay.World;
 #endif
 
 /// <summary>

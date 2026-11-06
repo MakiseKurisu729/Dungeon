@@ -4,6 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Dungeon.Core;
+using Dungeon.Gameplay.Units;
 
 /// <summary>
 /// 手动测试调试键位（仅编辑器，不进包、不改场景）：

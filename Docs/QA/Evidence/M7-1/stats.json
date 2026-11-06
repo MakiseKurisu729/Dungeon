@@ -3,7 +3,7 @@
   "files_with_zero_declared_types": [],
   "type_count": 90,
   "edge_count": 533,
-  "cross_module_edge_count": 342,
+  "cross_module_edge_count": 321,
   "duplicate_type_names": {},
   "file_scc_count": 4,
   "file_scc_sizes": [
@@ -29,92 +29,92 @@
   },
   "upward_layer_edges": [
     {
-      "src": "Assets/_Project/Scripts/Combat/MeleeCombat.cs",
-      "line": 147,
+      "src": "Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs",
+      "line": 149,
       "type": "MetaState",
       "dst": "Assets/_Project/Scripts/Core/MetaState.cs",
       "src_layer": "Gameplay",
       "dst_layer": "App"
     },
     {
-      "src": "Assets/_Project/Scripts/Player/PlayerCommandController.cs",
-      "line": 23,
+      "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
+      "line": 25,
       "type": "AppFlow",
       "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
       "src_layer": "Gameplay",
       "dst_layer": "App"
     },
     {
-      "src": "Assets/_Project/Scripts/Player/PlayerCommandController.cs",
-      "line": 24,
+      "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
+      "line": 26,
       "type": "UIManager",
       "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
       "src_layer": "Gameplay",
       "dst_layer": "UI"
     },
     {
-      "src": "Assets/_Project/Scripts/Player/SelectionManager.cs",
-      "line": 89,
+      "src": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
+      "line": 93,
       "type": "AppFlow",
       "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
       "src_layer": "Gameplay",
       "dst_layer": "App"
     },
     {
-      "src": "Assets/_Project/Scripts/Player/SkillInputController.cs",
-      "line": 44,
+      "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
+      "line": 46,
       "type": "AppFlow",
       "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
       "src_layer": "Gameplay",
       "dst_layer": "App"
     },
     {
-      "src": "Assets/_Project/Scripts/Player/SkillInputController.cs",
-      "line": 45,
-      "type": "UIManager",
-      "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "UI"
-    },
-    {
-      "src": "Assets/_Project/Scripts/System/DungeonDoor.cs",
+      "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
       "line": 47,
+      "type": "UIManager",
+      "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
+      "src_layer": "Gameplay",
+      "dst_layer": "UI"
+    },
+    {
+      "src": "Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs",
+      "line": 73,
+      "type": "AppFlow",
+      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
+      "src_layer": "Gameplay",
+      "dst_layer": "App"
+    },
+    {
+      "src": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
+      "line": 148,
+      "type": "AppFlow",
+      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
+      "src_layer": "Gameplay",
+      "dst_layer": "App"
+    },
+    {
+      "src": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
+      "line": 214,
+      "type": "AppFlow",
+      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
+      "src_layer": "Gameplay",
+      "dst_layer": "App"
+    },
+    {
+      "src": "Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs",
+      "line": 120,
+      "type": "AppFlow",
+      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
+      "src_layer": "Gameplay",
+      "dst_layer": "App"
+    },
+    {
+      "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
+      "line": 50,
       "type": "TransitionFader",
       "dst": "Assets/_Project/Scripts/UI/TransitionFader.cs",
       "src_layer": "Gameplay",
       "dst_layer": "UI"
-    },
-    {
-      "src": "Assets/_Project/Scripts/Units/BossBrain.cs",
-      "line": 72,
-      "type": "AppFlow",
-      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "App"
-    },
-    {
-      "src": "Assets/_Project/Scripts/Units/CharacterBrain.cs",
-      "line": 144,
-      "type": "AppFlow",
-      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "App"
-    },
-    {
-      "src": "Assets/_Project/Scripts/Units/DownedRescue.cs",
-      "line": 209,
-      "type": "AppFlow",
-      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "App"
-    },
-    {
-      "src": "Assets/_Project/Scripts/Units/MonsterBrain.cs",
-      "line": 119,
-      "type": "AppFlow",
-      "dst": "Assets/_Project/Scripts/Core/AppFlow.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "App"
     }
   ]
 }

@@ -1,0 +1,22 @@
+﻿### Editor.log lines 1130-1145 (批2 编译段尾部)
+1130: info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+1131:       Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 13.9566ms
+1132: ExitCode: 0 Duration: 12s
+1133: Finished compiling graph: 729 nodes, 10231 flattened edges (8247 ToBuild, 118 ToUse), maximum node priority 710
+1134: [397/726    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+1135: [564/726    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+1136: [BUSY       6s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+1137: [718/726    8s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+1138: [719/726    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+1139: Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll, with 121 defines and 255 references
+1140: 
+1141: processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+1142: 
+1143: running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+1144: [720/726    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+1145: [721/726    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+
+### 全日志统计
+total_lines_measure=2629
+last_error_CS_line=none
+finished_compiling_graph_last_line=1133

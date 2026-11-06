@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
 #endif
 
 /// <summary>

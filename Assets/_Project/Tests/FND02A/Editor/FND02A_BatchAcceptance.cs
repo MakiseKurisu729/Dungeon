@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using Dungeon.Core;
+using Dungeon.Gameplay.Units;
 
 /// <summary>
 /// FND-02A batchmode 主入口（唯一）。

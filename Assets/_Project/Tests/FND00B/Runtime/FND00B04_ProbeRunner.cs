@@ -11,6 +11,10 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Dungeon.Content;
 using Dungeon.Core;
+using Dungeon.Gameplay.Items;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
+using Dungeon.Gameplay.World;
 
 /// <summary>
 /// FND-00B-04 运行期探针（Play 模式）。

@@ -1,4 +1,6 @@
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Units;
 /// <summary>【薄的适配层】旧 GameData API：全部转发到 RunState（金币/击杀）、MetaState（等级/升级）、MessageFeed（消息）。
 /// 新代码请直接用 RunState / MetaState / MessageFeed；本类只为测试与未迁移引用保留，签名与可写性与重构前一致。</summary>
 public static class GameData

@@ -15,6 +15,9 @@ using UnityEditor;
 using UnityEditor.Animations;
 using Dungeon.Content;
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
 #endif
 
 /// <summary>

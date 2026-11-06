@@ -11,6 +11,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Dungeon.Core;
+using Dungeon.Gameplay.Combat;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
 
 /// <summary>
 /// FND-00B-06 运行期探针（Play 模式）。

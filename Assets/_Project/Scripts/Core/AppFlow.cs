@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Dungeon.Core;
+using Dungeon.Gameplay.Units;
 
 /// <summary>应用级流程：开局标志 / 暂停 / 重开 / 队伍存在性。timeScale 的唯一写入口。
 /// 原 GameFlow.Start 的场景判定与 PauseManager 的 Pause/Resume 在此收编；GameFlow/PauseManager 只剩转发。</summary>

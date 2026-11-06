@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Dungeon.Core;
+using Dungeon.Gameplay.Player;
+using Dungeon.Gameplay.Units;
+using Dungeon.Gameplay.World;
 
 /// <summary>上下文光标：默认/选择/攻击/交互 四态。白色贴图自动染色，热点可调。
 /// 交互光标（interactCursor）检查器自拖；悬停 Interactable 时换用并显示其 hint。</summary>
