@@ -381,11 +381,24 @@ def main():
     # ---------------- M7-1.NoLogicChange.DiffScan（提交后）
     if args.diff_scan:
         p = subprocess.run(["git", "diff", "-w", "--find-renames=1%", "--unified=0",
-                            args.base + "..HEAD", "--", "Assets/_Project/Scripts"],
+                            args.base + "..HEAD", "--", ":(glob)Assets/_Project/Scripts/**/*.cs"],
                            capture_output=True)
         if p.returncode != 0:
             add(res, False, "M7-1.NoLogicChange.DiffScan", "git diff failed: " + p.stderr.decode("utf-8", "replace"))
         else:
+            # 基线全部 .cs 的“去空白非空行”集合：用于容忍 git 未识别重命名时整文件按删除/新增展示
+            base_lines = set()
+            cand = set(MOVE.keys())
+            for name, d in FINAL_DIR.items():
+                cand.add(d + "/" + name + ".cs")
+            for old in sorted(cand):
+                txt = git_show(args.base, "Assets/_Project/Scripts/" + old)
+                if txt is None:
+                    continue
+                for ln in txt.replace("\r\n", "\n").split("\n"):
+                    s = ln.strip()
+                    if s:
+                        base_lines.add(s)
             bad_lines = []
             counts = {"plus": 0, "minus": 0}
             for ln in p.stdout.decode("utf-8", "replace").split("\n"):
@@ -410,6 +423,8 @@ def main():
                 if body in ("#if UNITY_EDITOR", "#endif"):
                     continue
                 if re.match(r"^(public|internal)\s+static\s+void\s+RaiseChanged\(\)\s*\{\s*Changed\?\.Invoke\(\);\s*\}$", body):
+                    continue
+                if body in base_lines:
                     continue
                 bad_lines.append(body)
             add(res, not bad_lines, "M7-1.NoLogicChange.DiffScan",

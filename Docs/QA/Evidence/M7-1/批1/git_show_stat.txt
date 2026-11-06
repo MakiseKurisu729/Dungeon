@@ -1,0 +1,119 @@
+﻿commit 84f7555e5f149c4df8dda4e46b14ca9732f9b01c
+Author: MakiseKurisu729 <1127589746@qq.com>
+Date:   Fri Nov 6 19:47:49 2026 +0800
+
+    閲嶆瀯锛歁7-1 鎵? Core+Content 鐩綍涓庡懡鍚嶇┖闂村綊涓€锛圡7-1/鎵?锛?    涓轰粈涔堬細鍏堟敹鍙ｆ渶搴曞眰锛屽悗缁壒娆″彧鏀逛笂灞傦紝閬垮厤璺ㄥ眰寮曠敤鍙嶅鍙樺姩锛涙湰杞寜鎵€鏈夎€呰姹傚彧鍋氭壒 1锛屽仛瀹屽嵆鍋溿€?    楠岃瘉锛氱紪璇?0 error锛汻EFACTOR 16/0锛汼PEC01 12/0锛沘udit upward=11锛泇erify 9 PASS锛坰tage 1锛夛紱璇佹嵁 Docs/QA/Evidence/M7-1/鎵?/
+
+ Assets/_Project/Scripts/Combat/CombatFeedback.cs   |    1 +
+ Assets/_Project/Scripts/Combat/DamageInfo.cs       |    1 +
+ Assets/_Project/Scripts/Combat/ExplosionFx.cs      |    2 +
+ Assets/_Project/Scripts/Combat/MeleeCombat.cs      |    2 +
+ Assets/_Project/Scripts/Combat/Projectile.cs       |    1 +
+ Assets/_Project/Scripts/Combat/RangedCombat.cs     |    2 +
+ .../_Project/Scripts/Combat/SkillEffectFireball.cs |    1 +
+ Assets/_Project/Scripts/Combat/SkillEffects.cs     |    2 +
+ Assets/_Project/Scripts/Content.meta               |    8 +
+ .../Scripts/{Items => Content}/ItemData.cs         |   20 +-
+ .../Scripts/{Items => Content}/ItemData.cs.meta    |    0
+ .../Scripts/{Units => Content}/UnitStats.cs        |   53 +-
+ .../Scripts/{Units => Content}/UnitStats.cs.meta   |    0
+ .../Scripts/{Combat => Content}/WeaponData.cs      |   40 +-
+ .../Scripts/{Combat => Content}/WeaponData.cs.meta |    0
+ Assets/_Project/Scripts/Core/AppFlow.cs            |    1 +
+ .../Scripts/{Framework => Core}/Cooldown.cs        |   18 +-
+ .../Scripts/{Framework => Core}/Cooldown.cs.meta   |    0
+ Assets/_Project/Scripts/Core/EventBus.cs           |   54 +-
+ Assets/_Project/Scripts/Core/GameData.cs           |    1 +
+ .../Scripts/{Combat => Core}/ICharacterCombat.cs   |   12 +-
+ .../{Combat => Core}/ICharacterCombat.cs.meta      |    0
+ Assets/_Project/Scripts/Core/MessageFeed.cs        |   26 +-
+ Assets/_Project/Scripts/Core/MetaState.cs          |    1 +
+ Assets/_Project/Scripts/Core/RunFlow.cs            |    1 +
+ Assets/_Project/Scripts/Core/RunState.cs           |   26 +-
+ Assets/_Project/Scripts/Core/Team.cs               |    4 +
+ .../_Project/Scripts/{Units => Core}/Team.cs.meta  |    0
+ Assets/_Project/Scripts/Core/UnitId.cs             |   42 +-
+ Assets/_Project/Scripts/Core/UnitRegistry.cs       |    1 +
+ Assets/_Project/Scripts/Core/WaveSpawner.cs        |    1 +
+ Assets/_Project/Scripts/Debug/DebugTestTools.cs    |    1 +
+ Assets/_Project/Scripts/Items/ChestItem.cs         |    1 +
+ Assets/_Project/Scripts/Items/Inventory.cs         |    1 +
+ Assets/_Project/Scripts/Player/SelectionManager.cs |    1 +
+ .../Scripts/Player/SkillInputController.cs         |    1 +
+ Assets/_Project/Scripts/System/Chest.cs            |    2 +
+ Assets/_Project/Scripts/System/DungeonDoor.cs      |    1 +
+ Assets/_Project/Scripts/System/FogOfWar.cs         |    1 +
+ Assets/_Project/Scripts/UI/CursorManager.cs        |    1 +
+ Assets/_Project/Scripts/UI/HUD.cs                  |    1 +
+ Assets/_Project/Scripts/UI/InventoryUI.cs          |    1 +
+ Assets/_Project/Scripts/Units/BossBrain.cs         |    2 +
+ Assets/_Project/Scripts/Units/CharacterBrain.cs    |    1 +
+ Assets/_Project/Scripts/Units/DownedRescue.cs      |    1 +
+ Assets/_Project/Scripts/Units/MonsterBrain.cs      |    1 +
+ .../_Project/Scripts/Units/ShieldedUnitHealth.cs   |    1 +
+ Assets/_Project/Scripts/Units/SkeletonWander.cs    |    1 +
+ Assets/_Project/Scripts/Units/SkillData.cs         |    1 +
+ Assets/_Project/Scripts/Units/SkillSystem.cs       |    1 +
+ Assets/_Project/Scripts/Units/Team.cs              |    2 -
+ Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs |    1 +
+ Assets/_Project/Scripts/Units/UnitBrain.cs         |    2 +
+ Assets/_Project/Scripts/Units/UnitHealth.cs        |    2 +
+ Assets/_Project/Scripts/Units/Visibility.cs        |    1 +
+ Assets/_Project/Scripts/Units/WorldHealthBar.cs    |    1 +
+ .../Tests/FND00B/Runtime/FND00B04_ProbeRunner.cs   |    2 +
+ .../Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs   |    1 +
+ .../Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs   |    1 +
+ .../Tests/FND02A/Editor/FND02A_BatchAcceptance.cs  |    1 +
+ .../Tests/FND02A/Runtime/FND02A_ProbeRunner.cs     |    1 +
+ Assets/_Project/Tests/QA/Runtime/QaFixtures.cs     |    2 +
+ .../_Project/Tests/QA/Runtime/SkillCastFixture.cs  |    2 +
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs |    2 +
+ .../Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs     |    2 +
+ Docs/QA/Evidence/M7-1/coverage.txt                 |   19 +
+ Docs/QA/Evidence/M7-1/cycles.md                    |  377 ++
+ Docs/QA/Evidence/M7-1/edges.csv                    |  534 ++
+ Docs/QA/Evidence/M7-1/edges.json                   | 5865 ++++++++++++++++++++
+ Docs/QA/Evidence/M7-1/files.csv                    |   78 +
+ Docs/QA/Evidence/M7-1/graph.mmd                    |  262 +
+ Docs/QA/Evidence/M7-1/layer-matrix.md              |  141 +
+ Docs/QA/Evidence/M7-1/layer-plan.md                |  107 +
+ Docs/QA/Evidence/M7-1/module-matrix.md             |  226 +
+ Docs/QA/Evidence/M7-1/stats.json                   |  120 +
+ Docs/QA/Evidence/M7-1/types.csv                    |   91 +
+ Docs/QA/Evidence/M7-1/verify_m7_1.py               |  431 ++
+ .../M7-1/\346\211\2710/audit/audit-output.txt"     |  Bin 0 -> 3972 bytes
+ .../M7-1/\346\211\2710/audit/coverage.txt"         |   19 +
+ .../Evidence/M7-1/\346\211\2710/audit/stats.json"  |  120 +
+ .../M7-1/\346\211\2711/ExitCode-red-baseline.txt"  |    1 +
+ "Docs/QA/Evidence/M7-1/\346\211\2711/ExitCode.txt" |  Bin 0 -> 26 bytes
+ "Docs/QA/Evidence/M7-1/\346\211\2711/Summary.md"   |   43 +
+ .../M7-1/\346\211\2711/audit/audit-output.txt"     |  Bin 0 -> 3972 bytes
+ .../M7-1/\346\211\2711/audit/coverage.txt"         |   19 +
+ .../Evidence/M7-1/\346\211\2711/audit/edges.csv"   |  534 ++
+ .../Evidence/M7-1/\346\211\2711/audit/files.csv"   |   78 +
+ .../Evidence/M7-1/\346\211\2711/audit/stats.json"  |  120 +
+ .../M7-1/\346\211\2711/compile-editorlog-tail.txt" |   32 +
+ "Docs/QA/Evidence/M7-1/\346\211\2711/compile.md"   |   19 +
+ .../QA/Evidence/M7-1/\346\211\2711/git_status.txt" |   89 +
+ .../suite-refactor/InEditorResult.txt"             |    7 +
+ .../suite-refactor/REFACTOR_ExitCode_run1.txt"     |    1 +
+ .../suite-refactor/REFACTOR_Runs.jsonl"            |    1 +
+ .../suite-refactor/REFACTOR_Summary_run1.json"     |   19 +
+ .../\346\211\2711/suite-spec01/InEditorResult.txt" |    7 +
+ .../suite-spec01/SPEC01_ExitCode_run1.txt"         |    1 +
+ .../\346\211\2711/suite-spec01/SPEC01_Runs.jsonl"  |    1 +
+ .../suite-spec01/SPEC01_Summary_run1.json"         |   24 +
+ "Docs/QA/Evidence/M7-1/\346\211\2711/suites.md"    |   27 +
+ .../M7-1/\346\211\2711/verify-red-baseline.txt"    |  Bin 0 -> 3168 bytes
+ "Docs/QA/Evidence/M7-1/\346\211\2711/verify.txt"   |  Bin 0 -> 1808 bytes
+ .../REFACTOR-M4/editor_run22/InEditorResult.txt    |    7 +
+ .../editor_run22/REFACTOR_Assertions.jsonl         |   16 +
+ .../editor_run22/REFACTOR_ExitCode_run1.txt        |    1 +
+ .../REFACTOR-M4/editor_run22/REFACTOR_Runs.jsonl   |    1 +
+ .../editor_run22/REFACTOR_Summary_run1.json        |   19 +
+ .../SPEC-01/editor_run46/InEditorResult.txt        |    7 +
+ .../SPEC-01/editor_run46/SPEC01_Assertions.jsonl   |   12 +
+ .../SPEC-01/editor_run46/SPEC01_ExitCode_run1.txt  |    1 +
+ .../SPEC-01/editor_run46/SPEC01_Runs.jsonl         |    1 +
+ .../SPEC-01/editor_run46/SPEC01_Summary_run1.json  |   24 +
+ 112 files changed, 9729 insertions(+), 138 deletions(-)
