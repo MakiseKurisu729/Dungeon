@@ -1,0 +1,126 @@
+# HANDOFF — M7 结构收口前的交接（2026-11-06）
+
+> **用途：供 Plan 模式的新会话使用。** 这轮只做决策讨论：不写 TASK、不派单、不改仓库文件。
+> 讨论完由所有者另开 Build 会话，读本文件 + 决策结论，再写 `TASK_M7-1` 并派单。
+> 规则入口仍是 `AGENTS.md`；状态入口是 `Docs/Handoff/CURRENT.md`（本文件不替代它）。
+
+## 0. 新会话先读什么
+
+1. `Docs/Handoff/CURRENT.md` —— 当前状态、基线、下一步；
+2. `Docs/Handoff/REPORT_M7-0.md` + `Docs/QA/Evidence/M7-0/asmdef-plan.md` —— 审计结论与拆分计划；
+3. `AGENTS.md` §3.2.1（MCP 规则）、§5（风险）、§6（熔断）。
+
+不要重跑审计，也不要重新扫描全仓；数据在 `Docs/QA/Evidence/M7-0/`。
+
+## 1. 当前状态
+
+| 项 | 值 |
+|---|---|
+| 分支 / HEAD | `docs/fnd-00-baseline` / `8e245df4`（M7-0 审计） |
+| 工作区 | 干净（仅 `.csproj`，已 ignore） |
+| Unity | `2022.3.62f3c1`，模式 B（常开编辑器 + MCP），实例 `Dungeon@4f5c34c82f31646e` |
+| 测试 | SPEC01 12/0、REFACTOR 16/0、FND00B06 12/0+2obs、DIAG 6/1（已知红 `Diag.Input.FirstExit`） |
+| 已完成 | M0–M4、M4.5 预制体基座、SKILL-CLOSE-01、QA-REFACTOR-01（Done）、M7-0 审计 |
+| 已授权 | 所有者 2026-11-06 “授权 M7 目录迁移” |
+
+## 2. M7 审计结论（摘要）
+
+| 项 | 数据 |
+|---|---|
+| 覆盖 | 77/77 个 `.cs`；90 个类型；533 条文件级引用边（跨目录 320） |
+| 循环 | 4 个 SCC：15 / 4 / 3 / 2 |
+| **硬阻塞** | **11 条上行边**（Gameplay→App 8 条、Gameplay→UI 3 条，涉及 9 个文件） |
+| 目录迁移 | **60/77 个文件**需要移动（asmdef 边界 = 目录边界） |
+| 工期 | 26.5 人时 ≈ **3.5 个工作日**；最坏 5–6 天 |
+
+**11 条上行边**（必须消，才能拆 asmdef）：
+
+| 组 | 文件 | 引用 | 建议解法 | 预计 |
+|---|---|---|---|---|
+| 升级 | `Combat/MeleeCombat.cs:145` | `MetaState.Level` | 抽 `ProgressionState` 到 Core，只读 | 1h |
+| 暂停 | `Player/PlayerCommandController:23`、`SelectionManager:88`、`SkillInputController:43`、`BossBrain:70`、`CharacterBrain:143`、`DownedRescue:208`、`MonsterBrain:118` | `AppFlow.IsPaused` | 暂停标志下沉 Core（`PauseState`），`AppFlow` 只写 `timeScale` | 4h |
+| 模态 | `PlayerCommandController:24`、`SkillInputController:44` | `UIManager.IsInventoryOpen` | 定义 `IUiModalState`，`UIManager` 实现并注册 | 2h |
+| 过场 | `System/DungeonDoor.cs:46` | `TransitionFader.Transition` | 改事件 `TransitionRequested`，由 UI/App 订阅 | 1h |
+
+**不阻塞 M7 的环**（将来拆 Gameplay 子程序集才需要）：技能链（4 文件）、伤害链（3 文件）、选择/交互/UI 大环（15 文件）。
+
+## 3. 已定边界
+
+- 只在 `Assets/_Project/Scripts/**` 与必要的 `Tests/**` `using` 修补内改动；
+- 目录移动必须在 Unity 内完成（或连 `.meta` 一起移），保持 GUID；
+- 每批提交一次，每批跑 `REFACTOR` + `SPEC01`；
+- 不改 `Docs/01` §1.4 的 14 条不变量；不改场景/预制体/Animator/`.asset`；
+- 不改 `CURRENT.md`（大脑维护）；不做 push。
+
+## 4. 待所有者决策（按编号，可直接“全按推荐”）
+
+| # | 决策 | 推荐 |
+|---|---|---|
+| D1 | 目录迁移分几批 | **4 批**：`Core+Content` → `Gameplay` → `App` → `UI/Editor`+测试 using；每批一提交 |
+| D2 | 命名空间风格 | `Dungeon.Core`、`Dungeon.Content`、`Dungeon.Gameplay.{Units,Combat,Interaction,World,Player,Items}`、`Dungeon.App`、`Dungeon.UI`、`Dungeon.Editor` |
+| D3 | 目录布局 | `Scripts/{Core,Content,Gameplay,App,UI,Editor}`；`Gameplay` 下按上一条分子目录 |
+| D4 | `RunState` 放哪 | **Core**（纯静态金币/击杀，零项目依赖）；放 App 会多出 5 条上行边 |
+| D5 | 暂停状态 | **下沉 Core**（`PauseState.IsPaused`），`AppFlow` 只负责 `timeScale` |
+| D6 | 模态判断 | **`IUiModalState` 接口**，`UIManager` 实现并注册；Gameplay 只读接口 |
+| D7 | 门过场 | **事件 `TransitionRequested`**，不把 `TransitionFader` 挪进 Gameplay |
+| D8 | 测试 `using` 时机 | **M7-1 内同步补**（30 个测试文件）；测试 asmdef 留到 TEST-03 |
+| D9 | 旧适配层（`GameData`/`GameFlow`/`PauseManager`） | **M7 内保留**，M7 结束后单独一张单删除；现在删会把行为风险混进结构改动 |
+| D10 | 回滚锚 | 开工前 **tag `pre-m7`**；每批提交可单独 revert |
+| D11 | 迁移时所有者是否在场 | 建议**第 1 批在场**（Core+Content），其余批可无人值守 |
+| D12 | 是否顺带做 `Docs/07` 的 OPS-04 状态更新 | 顺带（一行） |
+
+## 5. 建议执行顺序
+
+```
+tag pre-m7
+→ M7-1 批1 Core+Content（2–3h）
+→ M7-1 批2 Gameplay（3–4h）
+→ M7-1 批3 App（1–2h）
+→ M7-1 批4 UI/Editor + 测试 using（1–2h）
+→ M7-2 消 11 条上行边（8h，逐子项提交）
+→ M7-3 asmdef：Core→Content→Gameplay→App→UI→Editor（6.5–7.5h）
+→ M7-4 全量回归 + 场景冒烟（4h）
+→ 之后再谈 M6 / M5 / Unity 6.3（含 REBASELINE）
+```
+
+## 6. 风险与回滚
+
+| 风险 | 信号 | 应对 |
+|---|---|---|
+| `.meta` 丢失 / GUID 断 | `git status` 出现 `.meta` 删除+新增配对；场景 Missing | 立即回滚该批，重做 |
+| 暂停语义漏改 | 暂停后 AI/输入仍有动作 | 回滚 M7-2 对应子项，逐文件核对 |
+| 升级倍率错 | 新开局伤害倍率不对 | 回滚 `MeleeCombat` 子项 |
+| asmdef 循环引用 | 编译报 CS0246/循环 | 保留上一批 asmdef，回退本次 |
+
+## 7. 验收口径（每批）
+
+1. `is_compiling=false` 且 `read_console` 无 `error CS`；
+2. `Tools/QA/In-Editor/REFACTOR` = 16/16；`SPEC01` = 12/12；
+3. `git status` 只有本批声明的文件；`.meta` 成对；
+4. 场景进 Play 30 秒无 Missing Script；
+5. `audit_scripts.py` 重跑，`upward_layer_edges` 只减不增。
+
+## 8. Plan 会话的产出与收尾
+
+本轮（Plan 模式）只需要产出**决策结论**，形式不限，建议按下面模板收尾，便于直接带进 Build 会话：
+
+```text
+M7 决策结论（2026-11-06）
+D1 分批：4 批（Core+Content / Gameplay / App / UI+Editor+测试 using）
+D2 命名空间：<确认或修改>
+D3 目录布局：<确认或修改>
+D4 RunState：Core / App
+D5 暂停状态：下沉 Core（PauseState） / 其他
+D6 模态接口：IUiModalState / 其他
+D7 门过场：事件 / 挪 TransitionFader
+D8 测试 using：M7-1 同步补 / 延后
+D9 旧适配层：M7 内保留 / M7 内删除
+D10 回滚锚：tag pre-m7
+D11 批 1 是否在场：是 / 否
+D12 OPS-04 状态顺手更新：是 / 否
+补充决策：<讨论中新增的，按 D13、D14… 编号>
+```
+
+**Plan 会话不做的事**：不写 `TASK_*.md`、不派子代理、不改仓库文件、不跑测试、不碰 Unity。
+
+**Build 会话接手时**：读本文件 + 上面的决策结论 → 更新 `CURRENT.md` 的 HEAD → 写 `TASK_M7-1.md` → 派 executor。
