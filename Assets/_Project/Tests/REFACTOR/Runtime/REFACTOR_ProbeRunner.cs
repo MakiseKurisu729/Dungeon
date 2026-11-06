@@ -116,7 +116,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 "Skill.InterruptAttack", "Hit.InterruptSkill", "Skill.InterruptInteract", "Projectile.AimPoint",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
                 "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract",
-                "Skill.MotionUnlocked"
+                "Skill.MotionUnlocked", "Refactor.ProgressionFacade"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -142,6 +142,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics(_ev, _players));
         yield return RunSafe("Refactor.StateFacade", AssertStateFacade(_ev));
         yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked(_ev, _players));
+        yield return RunSafe("Refactor.ProgressionFacade", AssertProgressionFacade(_ev));
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -1837,6 +1838,60 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                  "note", "W 走 HeavySlashEffect 不加运动锁，故 2a 验证「不残留锁」，2b 用唯一加锁的 Q 验证「锁着被打断也能解锁」；" +
                          "复活不重跑 3s 读条以免拉长套件（本套件既有惯例是反射读产品私有成员）"));
 
+        yield break;
+    }
+    // ============================================================
+    // 17. Refactor.ProgressionFacade（M7-2 子项 1：升级边下沉 Core）
+    // ============================================================
+    /// <summary>升级门面：MetaState.Level 转发 ProgressionState.Level；TryLevelUp 收益不变
+    /// （+1 级 / 扣 50*Level / 骑士 dmgMult +0.25 / maxHp +20 / RaiseChanged）。所有写入在 finally 还原。</summary>
+    IEnumerator AssertProgressionFacade(IQaSink sink)
+    {
+        const string Id = "Refactor.ProgressionFacade";
+        int goldBefore = RunState.Gold;
+        int levelBefore = ProgressionState.Level;
+        var rows = new List<object>();
+        bool levelForward = false, levelBackward = false, costOk = false;
+        bool upgradeOk = false, goldOk = false, restoredOk = false;
+
+        try
+        {
+            ProgressionState.Level = 7;
+            levelForward = MetaState.Level == 7;
+            MetaState.Level = 9;
+            levelBackward = ProgressionState.Level == 9;
+            costOk = MetaState.LevelCost() == 50 * ProgressionState.Level;
+            rows.Add(QaJson.Dict("step", "progression-forward", "progressionToMeta", levelForward,
+                          "metaToProgression", levelBackward, "levelCostOk", costOk,
+                          "level", ProgressionState.Level, "cost", MetaState.LevelCost()));
+
+            RunState.Gold = MetaState.LevelCost();
+            int levelBeforeUp = ProgressionState.Level;
+            bool upgraded = MetaState.TryLevelUp(null, null);
+            upgradeOk = upgraded && ProgressionState.Level == levelBeforeUp + 1;
+            goldOk = RunState.Gold == 0;
+            rows.Add(QaJson.Dict("step", "try-level-up", "returned", upgraded,
+                          "levelBefore", levelBeforeUp, "levelAfter", ProgressionState.Level,
+                          "goldAfter", RunState.Gold, "pass", upgradeOk && goldOk));
+        }
+        finally
+        {
+            RunState.Gold = goldBefore;
+            MetaState.Level = levelBefore;
+            ProgressionState.Level = levelBefore;
+            restoredOk = RunState.Gold == goldBefore && MetaState.Level == levelBefore &&
+                         ProgressionState.Level == levelBefore;
+        }
+
+        bool allPass = levelForward && levelBackward && costOk && upgradeOk && goldOk && restoredOk;
+        sink.Record(Id, Id,
+            "升级门面：MetaState.Level == ProgressionState.Level（双向）；LevelCost=50*Level；" +
+            "TryLevelUp(金币=费用) 返回 true、等级 +1、金币归 0；结束前全部还原",
+            "forward=" + levelForward + "; backward=" + levelBackward + "; cost=" + costOk +
+            "; upgrade=" + upgradeOk + "; gold=" + goldOk + "; restored=" + restoredOk,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            QaJson.Dict("steps", rows,
+                 "note", "M7-2 子项 1 新增第 17 条；读写均走生产入口，结束前还原 RunState.Gold 与等级"));
         yield break;
     }
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)

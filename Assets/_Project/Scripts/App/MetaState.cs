@@ -6,8 +6,12 @@ namespace Dungeon.App {
     /// 生命周期 = 进程内（跨场景重载保留），与重构前 GameData 的 level 字段一致；本类不新增任何自动重置。</summary>
     public static class MetaState
     {
-        /// <summary>等级。默认 1（与重构前一致）。</summary>
-        public static int Level { get; set; } = 1;
+        /// <summary>等级。转发 `ProgressionState.Level`（默认 1、跨场景保留、不自动重置）。</summary>
+        public static int Level
+        {
+            get { return ProgressionState.Level; }
+            set { ProgressionState.Level = value; }
+        }
 
         /// <summary>当前升级费用：50 * Level。</summary>
         public static int LevelCost() { return 50 * Level; }

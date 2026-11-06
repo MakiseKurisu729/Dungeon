@@ -3,7 +3,6 @@ using UnityEngine;
 using Dungeon.Content;
 using Dungeon.Core;
 using Dungeon.Gameplay.Units;
-using Dungeon.App;
 namespace Dungeon.Gameplay.Combat {
 
     /// <summary>
@@ -147,7 +146,7 @@ namespace Dungeon.Gameplay.Combat {
 
         void Start()
         {
-            dmgMult += (MetaState.Level - 1) * 0.25f;
+            dmgMult += (ProgressionState.Level - 1) * 0.25f;
             if (sword != null) sword.gameObject.SetActive(true);
             if (shield != null) shield.gameObject.SetActive(true);
         }
