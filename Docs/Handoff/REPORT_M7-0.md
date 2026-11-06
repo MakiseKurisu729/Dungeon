@@ -5,7 +5,7 @@
 
 ## 1. 结果摘要
 
-**完成** —— 77/77 个 `.cs` 全覆盖，产出 90 个类型、533 条文件级引用边、4 个文件级循环、77 个文件的分层建议与 8 步 asmdef 拆分计划；M7 的硬阻塞收敛为 **11 条上行边（9 个文件）**，估算 **3.5 个工作日**（最坏 5–6 天）。
+**完成** —— 77/77 个 `.cs` 全覆盖，产出 90 个类型、533 条文件级引用边、4 个文件级循环、77 个文件的分层建议与 9 步（Step 0–8）asmdef 拆分计划；M7 的硬阻塞收敛为 **11 条上行边（9 个文件）**，估算 **3.5 个工作日**（最坏 5–6 天）。
 
 ## 2. AC 回填表
 
@@ -15,7 +15,7 @@
 | AC-2 | 通过 | `M7.EdgeTrace` | 边 533 条（跨目录 320）；矩阵含 10 个现目录、6 个目标层；每条边可回溯 `文件:行` | `module-matrix.md`、`layer-matrix.md`、`edges.csv` |
 | AC-3 | 通过 | `M7.Cycles` | 4 个 SCC：15 / 4 / 3 / 2 个文件；每条内部边含 `文件:行` + 源码片段 + 建议解法 | `cycles.md`、`asmdef-plan.md` §4/§5 |
 | AC-4 | 通过 | `M7.LayerPlan` | 77 个文件各 1 个目标层：Core 7 / Content 3 / Gameplay 50 / App 6 / UI 10 / Editor 1 | `layer-plan.md` |
-| AC-5 | 通过 | `M7.AsmdefPlan` | 8 步顺序 + 每步验收 + 人时 + 最坏情况（3 类阻塞、6 个循环） | `asmdef-plan.md` |
+| AC-5 | 通过 | `M7.AsmdefPlan` | 9 步顺序（Step 0–8）+ 每步验收 + 人时 + 最坏情况（3 类阻塞、6 个循环） | `asmdef-plan.md` |
 | AC-6 | 通过 | `M7.ReadOnly` | `git status --porcelain -- Assets` 为空；新增仅在允许路径 | `git_status.txt` |
 
 - **运行次数**：最终脚本成功运行 **1 次**（确定性输出）；此前 2 次失败均为脚本自身 bug（`sys` 未导入、哈希口径不对），已修正后重跑，不影响分析结论。未运行 Unity/测试（本单不需要）。
@@ -28,9 +28,9 @@
 3. **实际数据流**：`77 个 .cs → 剥离注释/字符串 → 90 个类型声明 → 533 条文件级边（含行号）→ 模块矩阵 / 层矩阵 → Tarjan SCC → 分层与 asmdef 计划`。
 4. **关键位置（3–5 条）**：
    - `Docs/QA/Evidence/M7-0/audit_scripts.py:1` —— 唯一分析脚本（标准库，可复现）。
-   - `Docs/QA/Evidence/M7-0/audit_scripts.py:76` —— 目标层映射（按职责，不按现目录）。
-   - `Docs/QA/Evidence/M7-0/audit_scripts.py:200` —— 类型→文件、文件→类型建边与过滤。
-   - `Docs/QA/Evidence/M7-0/audit_scripts.py:360` —— 迭代版 Tarjan（文件级 SCC）。
+   - `Docs/QA/Evidence/M7-0/audit_scripts.py:92` —— 目标层映射（按职责，不按现目录）。
+   - `Docs/QA/Evidence/M7-0/audit_scripts.py:178` —— 类型→文件、文件→类型建边与过滤。
+   - `Docs/QA/Evidence/M7-0/audit_scripts.py:312` —— 迭代版 Tarjan（文件级 SCC）。
    - `Docs/QA/Evidence/M7-0/asmdef-plan.md:1` —— 拆分顺序、阻塞边、工期与最坏情况。
 5. **边界 / 失败模式**：同名大写成员（如 `Foo.Bar` 中 `Bar` 恰好是类型名）可能误报；字符串里的类型名（`SendMessage("X")`）不会计入；`#if` 分支按全文计入（未做预处理）。因此所有循环结论都附源码片段，改代码前必须人工确认。
 6. **与计划的差异及原因**：TASK §2 建议“按现有目录聚合”，实际同时产出了**按目标层**的矩阵——因为 M7 的 asmdef 边界是目标层而非现目录，只看现目录会低估“Core 目录里 8/12 个文件其实不是 Core”这一问题。
@@ -73,7 +73,7 @@
 | `Docs/QA/Evidence/M7-0/graph.mmd` | 新增：Mermaid 文件级依赖图 |
 | `Docs/QA/Evidence/M7-0/edge-sampling.md` | 新增：5 条边人工抽查 |
 | `Docs/QA/Evidence/M7-0/git_status.txt` | 新增：只读证明 |
-| `Docs/Handoff/REPORT_M7-0.md` | 新增：本报告 |
+| `Docs/Handoff/REPORT_M7-0.md` | 新增：本报告（中间版被所有者随 `ba7f48bb` 提交，最终版为当前工作区修改） |
 
 未改：`Assets/**`（`git status --porcelain -- Assets` 为空）、`CURRENT.md`、其他 TASK/REPORT。
 
@@ -89,7 +89,7 @@
 | `Docs/QA/Evidence/M7-0/module-matrix.md` / `layer-matrix.md` | 模块/层矩阵，含违规方向逐边定位 |
 | `Docs/QA/Evidence/M7-0/cycles.md` | 4 个 SCC 的完整内部边 |
 | `Docs/QA/Evidence/M7-0/layer-plan.md` | 77 个文件的唯一目标层与理由 |
-| `Docs/QA/Evidence/M7-0/asmdef-plan.md` | 8 步拆分、验收、人时、最坏情况 |
+| `Docs/QA/Evidence/M7-0/asmdef-plan.md` | 9 步拆分（Step 0–8）、验收、人时、最坏情况 |
 | `Docs/QA/Evidence/M7-0/graph.mmd` | Mermaid 依赖图 |
 | `Docs/QA/Evidence/M7-0/edge-sampling.md` | 5/5 抽查真实 |
 | `Docs/QA/Evidence/M7-0/git_status.txt` | 只读证明 + 基线/HEAD 变化说明 |
@@ -100,9 +100,11 @@
 
 ## 7. 未决项
 
-- **仓库 HEAD 在本单执行期间变化**：开工 `5df13b1a` → 完成 `66d8410b`（所有者提交 2 次）。已核验 `git diff 5df13b1a..66d8410b -- Assets/_Project/Scripts` 为 0 行，审计结果仍对应同一份代码；详见 `git_status.txt`。
+- **仓库 HEAD 在本单执行期间变化**：开工 `5df13b1a` → 完成 `ba7f48bb`（所有者提交 3 次：`5159b59a`、`66d8410b`、`ba7f48bb`）。已核验 `git diff 5df13b1a..ba7f48bb -- Assets/_Project/Scripts` 为 0 行，审计结果仍对应同一份代码；详见 `git_status.txt`。
+- **REPORT 被中途提交**：`ba7f48bb` 把执行者当时的中间版 `REPORT_M7-0.md` 一并提交，当前工作区是补完后的最终版（`M`），证据目录仍未跟踪；提交时请把最终版一起提交。
 - **近似分析的残余误报面**：与类型同名的大写成员访问、`#if` 分支未预处理。改代码前需按 `cycles.md` 的源码片段人工确认。
 - **`Assembly-CSharp*.csproj` / `Dungeon.sln` 当前为已暂存删除**（`D `），非本单操作；提交前请所有者确认这是预期的生成物清理。
+- **复现命令**：`py -3.12 -X utf8 Docs/QA/Evidence/M7-0/audit_scripts.py`。本 shell 里 `python` 指向 Windows Store 占位符（退出码 9009），实际解释器是 Python 3.12.10（`py -3.12`）；脚本只用标准库，未安装任何包。
 - **待目检（≤3）**：① `layer-plan.md` 中 6 个“目标层与职责冲突”文件的处理意见；② `asmdef-plan.md` §4 的 4 个解法是否符合预期架构；③ 是否把 `RunState` 放 Core（放 App 会多 5 条上行边）。
 
 ## 8. 建议提交

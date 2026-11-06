@@ -1,0 +1,219 @@
+# M7-0 asmdef 拆分计划（顺序 / 验收 / 工期 / 最坏情况）
+
+> 输入：`types.csv`、`edges.csv`、`module-matrix.md`、`layer-matrix.md`、`cycles.md`、`layer-plan.md`。
+> 结论只依赖静态数据；**本单未运行 Unity、未创建 asmdef**，工期为估算，不是实测。
+> 目标分层依据 `Docs/01` §3.1 / §3.3。
+
+## 0. 结论先行
+
+1. **可行，但不能一步到位。** 目标依赖链 `Core ← Content ← Gameplay ← App ← UI`（Editor 旁挂）在现有 533 条边中只被 **11 条上行边**破坏；这 11 条是 M7 的硬阻塞。
+2. **目录迁移是大头，不是 asmdef 本身。** asmdef 边界必须等于目录边界；77 个文件里 **60 个需要移动目录**（只有 `Core` 的 4 个纯 Core 文件、`UI` 的 10 个、`Gameplay/Interaction` 的 3 个原地不动）。
+3. **建议顺序：先命名空间+目录（无 asmdef）→ 建叶子程序集 Core/Content → 消 11 条上行边 → 再建 Gameplay/App/UI/Editor。** 叶子优先保证每一步都能编译、可回滚。
+4. **估算 3.5 个工作日（约 27 人时）**；最坏 5–6 天，风险集中在 `AppFlow.IsPaused` 与 `MetaState` 两处行为改动。
+
+## 1. 目标程序集
+
+| 程序集 | 目标层 | 文件数 | 引用 | 平台 |
+|---|---|---|---|---|
+| `Dungeon.Core` | Core | 7 | 无（仅引擎） | 全平台 |
+| `Dungeon.Content` | Content | 3 | `Dungeon.Core` | 全平台 |
+| `Dungeon.Gameplay` | Gameplay | 50 | `Dungeon.Core`、`Dungeon.Content` | 全平台 |
+| `Dungeon.App` | App | 6 | `Dungeon.Core`、`Dungeon.Content`、`Dungeon.Gameplay` | 全平台 |
+| `Dungeon.UI` | UI | 10 | `Dungeon.Core`、`Dungeon.Content`、`Dungeon.Gameplay`、`Dungeon.App`、`UnityEngine.UI` | 全平台 |
+| `Dungeon.Editor` | Editor | 1 | 上述全部 + `UnityEditor` | 仅 Editor |
+
+合计 77 个文件，与 `files.csv` 的 77 行一致。
+
+## 2. 拆分顺序（每步独立可编译、可回滚）
+
+### Step 0｜命名空间 + 目录归一（M7-1，先不做 asmdef）
+
+- 动作：
+  1. 按 `layer-plan.md` 给 77 个文件加命名空间：`Dungeon.Core`、`Dungeon.Content`、`Dungeon.Gameplay.{Units,Combat,Interaction,World,Player,Items}`、`Dungeon.App`、`Dungeon.UI`、`Dungeon.Editor`。
+  2. 按 §3 的迁移表移动文件（`.cs` 与 `.meta` 一起，在 Unity 编辑器内移动以保 GUID）。
+  3. 给引用方补 `using`；`Assets/_Project/Tests/**` 不在扫描范围但会因命名空间改动编译失败，必须同步补 `using`（30 个测试 `.cs`，按引用面逐个补）。
+- 验收：
+  - Unity batchmode 编译 0 error（证据：编译日志）。
+  - 重新跑 `audit_scripts.py`，`files.csv` 仍是 77 行，`layer_file_counts` 与 §1 一致。
+  - 场景/预制体引用抽查：移动后 `git status` 中不应出现 `.meta` 删除+新增配对（GUID 保持）。
+- 预计：**8 人时**。
+- 回滚锚：`git revert` 本次提交（纯文件移动 + using，无逻辑改动）。
+
+### Step 1｜`Dungeon.Core.asmdef`
+
+- 动作：在 `Assets/_Project/Scripts/Core/` 放 asmdef，`noEngineReferences: false`。
+- 前置：`Team.cs`、`Cooldown.cs`、`ICharacterCombat.cs` 已移入 `Core/`（见 §3）。
+- 验收：Core 的 7 个文件不引用任何项目内其他类型（`edges.csv` 中 `src_layer=Core` 且 `dst_layer≠Core` 的边 = 0）；编译 0 error。
+- 预计：**1 人时**。
+- 回滚：删除 asmdef 即可，代码不动。
+
+### Step 2｜`Dungeon.Content.asmdef`
+
+- 动作：`Assets/_Project/Scripts/Content/` 放 asmdef，引用 `Dungeon.Core`。
+- 前置：`WeaponData.cs`、`ItemData.cs`、`UnitStats.cs` 已移入。
+- 验收：Content 只依赖 Core（`src_layer=Content` 的非 Core 边 = 0）；编译 0 error。
+- 预计：**1 人时**。
+
+### Step 3｜消 11 条上行边（M7-2，代码改动，建议单独任务单）
+
+这是 M7 唯一需要改产品代码的部分，必须先于 Step 4/5/6。逐条见 §4。
+
+- 验收：
+  - `audit_scripts.py` 重跑后 `upward_layer_edges` 数量 = **0**。
+  - 行为回归：升级（金币/等级/伤害倍率）、暂停（Esc/时间缩放）、AI 在暂停时停手、开箱打开背包、地牢门过场。
+- 预计：**8 人时**（4 个子项，见 §4）。
+- 回滚：按子项独立提交，任一子项可单独 revert。
+
+### Step 4｜`Dungeon.Gameplay.asmdef`
+
+- 动作：`Assets/_Project/Scripts/Gameplay/` 放 asmdef，引用 Core、Content。
+- 前置：`Units/`、`Combat/`、`Player/`、`System/`、`Items/`、`Debug` 的运行期组件、`Core/UnitRegistry.cs`、`Core/WaveSpawner.cs` 全部移入 `Gameplay/` 子树。
+- 验收：Gameplay 不引用 App/UI（上行边 = 0）；编译 0 error；场景冒烟（进 Play 无 Missing Script）。
+- 预计：**2 人时**。
+- 回滚：删除 asmdef。
+
+### Step 5｜`Dungeon.App.asmdef`
+
+- 动作：`Assets/_Project/Scripts/App/` 放 asmdef，引用 Core、Content、Gameplay。
+- 前置：`AppFlow`、`GameData`、`GameFlow`、`MetaState`、`PauseManager`、`RunFlow` 已移入。
+- 验收：App 不引用 UI；编译 0 error；开局/团灭/R 重开/暂停回归。
+- 预计：**1 人时**。
+
+### Step 6｜`Dungeon.UI.asmdef`
+
+- 动作：`Assets/_Project/Scripts/UI/` 放 asmdef，引用 Core、Content、Gameplay、App、`UnityEngine.UI`。
+- 验收：UI 无下层反向引用（UI 只出现在 `src_layer`，不出现在其他层的 `dst_layer`）；编译 0 error；面板开关/背包/Esc 菜单回归。
+- 预计：**1 人时**。
+
+### Step 7｜`Dungeon.Editor.asmdef`
+
+- 动作：`Assets/_Project/Scripts/Editor/` 放 asmdef，`includePlatforms: ["Editor"]`，引用全部运行时程序集。
+- 前置：`DebugTestTools.cs`（`#if UNITY_EDITOR`）移入。
+- 验收：打包构建（非 Editor 平台）不包含该程序集；Editor 编译 0 error。
+- 预计：**0.5 人时**。
+
+### Step 8｜测试与全量回归
+
+- 动作：`Assets/_Project/Tests/**` 暂不拆 asmdef（预定义程序集自动引用所有 asmdef，测试仍可编译）；只补 `using`。
+- 验收：
+  - batchmode 全量验收：`SPEC01`、`FND00B06`、`DIAG` 三套按 `TEST-MCP-01` 走 `Tools/QA/In-Editor/*` 或 batchmode 入口，全绿。
+  - 场景冒烟：主场景进 Play 30 秒无异常日志、无 Missing Script。
+- 预计：**4 人时**。
+
+## 3. 必须先挪的文件（asmdef 边界 = 目录边界）
+
+| 现目录 | 文件数 | 目标目录 | 需移动 |
+|---|---|---|---|
+| `Scripts/Core` | 12 | `Core` 4 / `App` 6 / `Gameplay/{Units,World}` 2 | 8 |
+| `Scripts/Units` | 18 | `Gameplay/Units` 16 / `Core` 1 / `Content` 1 | 18 |
+| `Scripts/Combat` | 16 | `Gameplay/Combat` 14 / `Core` 1 / `Content` 1 | 16 |
+| `Scripts/Player` | 5 | `Gameplay/Player` | 5 |
+| `Scripts/System` | 6 | `Gameplay/World` | 6 |
+| `Scripts/Items` | 3 | `Gameplay/Items` 2 / `Content` 1 | 3 |
+| `Scripts/Framework` | 1 | `Core` | 1 |
+| `Scripts/Debug` | 3 | `Gameplay/World` 2 / `Editor` 1 | 3 |
+| `Scripts/UI` | 10 | `UI` | 0 |
+| `Scripts/Gameplay/Interaction` | 3 | `Gameplay/Interaction` | 0 |
+| **合计** | **77** | — | **60** |
+
+**必须单独点名、容易被漏掉的跨目录文件（12 个）**
+
+| 文件 | 从 | 到 | 原因 |
+|---|---|---|---|
+| `Core/UnitRegistry.cs` | Core | `Gameplay/Units` | 依赖 `UnitHealth`，不是 Core |
+| `Core/WaveSpawner.cs` | Core | `Gameplay/World` | MonoBehaviour 玩法组件 |
+| `Core/AppFlow.cs` | Core | `App` | 时间缩放/场景重载 |
+| `Core/GameData.cs` | Core | `App` | 适配层，依赖玩法 |
+| `Core/GameFlow.cs` | Core | `App` | 流程宿主 |
+| `Core/MetaState.cs` | Core | `App` | 成长状态 |
+| `Core/PauseManager.cs` | Core | `App` | 暂停适配 |
+| `Core/RunFlow.cs` | Core | `App` | 团灭/重开 |
+| `Units/Team.cs` | Units | `Core` | 纯枚举 |
+| `Units/UnitStats.cs` | Units | `Content` | ScriptableObject |
+| `Units/SkillData.cs` | Units | `Gameplay/Units` | 持有 `SkillEffectBase[]`，不能进 Content |
+| `Combat/ICharacterCombat.cs` | Combat | `Core` | 纯接口 |
+| `Combat/WeaponData.cs` | Combat | `Content` | ScriptableObject |
+| `Items/ItemData.cs` | Items | `Content` | ScriptableObject |
+| `Debug/DebugTestTools.cs` | Debug | `Editor` | `#if UNITY_EDITOR` |
+| `Debug/DebugCameraSwitcher.cs`、`Debug/Mirror.cs` | Debug | `Gameplay/World` | 运行期组件，不能进 Editor |
+
+> 注：`RunState.cs` 留在 `Core`（纯静态数据：金币/击杀，零项目依赖），这是消除 `Gameplay→App` 边最多的一个判定；若坚持放 App，会额外产生 5 条上行边（3 个文件：`Chest`、`BossBrain`、`MonsterBrain`）。
+
+## 4. 必须先消的 11 条上行边
+
+| # | 来源 `文件:行` | 引用 | 方向 | 建议解法 | 预计 |
+|---|---|---|---|---|---|
+| 1 | `Combat/MeleeCombat.cs:145` | `MetaState.Level` | Gameplay→App | 把「等级/伤害倍率」拆成 Core 的纯状态 `ProgressionState`；`MeleeCombat` 只读 Core，`MetaState.TryLevelUp` 留 App 写入 | 1h |
+| 2 | `Player/PlayerCommandController.cs:23` | `AppFlow.IsPaused` | Gameplay→App | 暂停标志下沉到 Core（`PauseState.IsPaused`），`AppFlow` 只负责写 `timeScale` | 4h（共 6 文件） |
+| 3 | `Player/SelectionManager.cs:88` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 4 | `Player/SkillInputController.cs:43` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 5 | `Units/BossBrain.cs:70` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 6 | `Units/CharacterBrain.cs:143` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 7 | `Units/DownedRescue.cs:208` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 8 | `Units/MonsterBrain.cs:118` | `AppFlow.IsPaused` | Gameplay→App | 同上 | — |
+| 9 | `Player/PlayerCommandController.cs:24` | `UIManager.IsInventoryOpen` | Gameplay→UI | 在 Core/Gameplay 定义 `IUiModalState { bool IsModalOpen; }`，`UIManager` 实现并注册；Gameplay 只读接口 | 2h（共 2 文件） |
+| 10 | `Player/SkillInputController.cs:44` | `UIManager.IsInventoryOpen` | Gameplay→UI | 同上 | — |
+| 11 | `System/DungeonDoor.cs:46` | `TransitionFader.Transition` | Gameplay→UI | 改为事件 `DungeonDoor.TransitionRequested`，由 UI/App 订阅并播过场；或把 `TransitionFader` 归 App | 1h |
+
+合计 8 人时。
+
+## 5. 最坏情况清单
+
+| 循环 | 涉及 | 是否阻塞 M7 | 难度 | 预计轮次 | 说明 |
+|---|---|---|---|---|---|
+| C4 `MeleeCombat ↔ MetaState` | 2 文件 | **是** | 中 | 2 轮 | 改的是升级后的伤害倍率，行为敏感；第 1 轮易漏「新开局初始倍率」 |
+| `Gameplay → AppFlow.IsPaused` | 6 文件 / 7 边 | **是** | 中 | 2–3 轮 | 暂停语义散在 AI/输入/救援协程，漏一处会出现「暂停仍行动」 |
+| `Gameplay → UI`（UIManager/TransitionFader） | 3 文件 / 3 边 | **是** | 低–中 | 2 轮 | 接口注册时序（`UIManager.Awake` 前查询）易空引用 |
+| C2 技能链 `SkillCastContext ↔ SkillEffectBase ↔ SkillData ↔ SkillSystem` | 4 文件 | 否（M7 单 Gameplay 程序集不阻塞） | 高 | 3 轮 | 只有将来把 Gameplay 再拆 `Units/Combat` 才需要；需抽 `ISkillEffect` 契约 |
+| C3 伤害链 `DamageInfo ↔ UnitHealth ↔ UnitRegistry` | 3 文件 | 否 | 高 | 3–4 轮 | 同上；`DamageInfo` 想下沉 Core 必须先把 `UnitHealth` 换成 `UnitId`/接口 |
+| C1 选择/交互/UI 大环 | 15 文件 | 否（跨 App/Gameplay/UI 的部分已计入上面 11 条） | 最高 | 4–5 轮 | `SelectionManager ↔ Selectable`、`CharacterBrain ↔ InteractionRunner`、`Chest ↔ UI` 三组纠缠；将来拆 Gameplay 子程序集才需要 |
+
+**最坏情况触发条件**：Step 3 的暂停/升级改动引入行为回归，或目录迁移时 `.meta` 丢失导致场景引用断裂。前者 +1–2 天，后者需要从回滚锚恢复并重做 Step 0。
+
+## 6. 工期汇总
+
+| 阶段 | 人时 | 累计 |
+|---|---|---|
+| Step 0 命名空间 + 目录 | 8 | 8 |
+| Step 1 Core asmdef | 1 | 9 |
+| Step 2 Content asmdef | 1 | 10 |
+| Step 3 消 11 条上行边 | 8 | 18 |
+| Step 4 Gameplay asmdef | 2 | 20 |
+| Step 5 App asmdef | 1 | 21 |
+| Step 6 UI asmdef | 1 | 22 |
+| Step 7 Editor asmdef | 0.5 | 22.5 |
+| Step 8 测试与回归 | 4 | 26.5 |
+
+**基准 3.5 个工作日；乐观 3 天；最坏 5–6 天。**
+
+## 7. asmdef 样例
+
+`Assets/_Project/Scripts/Core/Dungeon.Core.asmdef`：
+
+```json
+{
+  "name": "Dungeon.Core",
+  "rootNamespace": "Dungeon.Core",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
+```
+
+`Dungeon.Gameplay` 的 `references`：`["Dungeon.Core", "Dungeon.Content"]`。
+`Dungeon.UI` 额外加 `"UnityEngine.UI"`。
+`Dungeon.Editor`：`"includePlatforms": ["Editor"]`，`references` 为全部运行时程序集。
+
+## 8. 本单明确不做
+
+- 不创建任何 asmdef、不改命名空间、不移动文件。
+- 不拆 `Dungeon.Gameplay` 的子程序集（需先消 C1/C2/C3）。
+- 不动 `Assets/_Project/Tests/**` 的 asmdef（M7 只补 `using`）。
+- 不做 Roslyn 语义分析（近似分析已足够规划；残余误报见 `cycles.md`）。

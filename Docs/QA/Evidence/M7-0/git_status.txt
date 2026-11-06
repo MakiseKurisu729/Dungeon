@@ -1,0 +1,59 @@
+﻿# M7-0 git status 证据
+
+## 1. 基线
+
+- 开工时 HEAD：`5df13b1a`（开工首条命令 `git rev-parse --short HEAD`）
+- 完成时 HEAD：`ba7f48bb`
+- 说明：所有者在本单执行期间提交了 3 次（`5159b59a` 阶段 E、`66d8410b` 文档收口、`ba7f48bb` 工程/文档收口），**不是执行者操作**；执行者未做任何 git 写操作。
+- `git diff 5df13b1a..ba7f48bb -- Assets/_Project/Scripts` 输出行数：**0**（= 扫描的 77 个 .cs 从开工到完成零变化，审计结果对应同一份代码）。
+- 注意：`ba7f48bb` 把执行者当时的**中间版** `REPORT_M7-0.md` 一并提交了；当前工作区里的 REPORT 是执行者随后补完的最终版，显示为 `M`。证据目录 `Docs/QA/Evidence/M7-0/` 仍为未跟踪。
+
+## 2. 当前完整 `git status --porcelain`
+
+```text
+ M Docs/Handoff/REPORT_M7-0.md
+?? Docs/QA/Evidence/M7-0/
+```
+
+## 3. `Assets/` 范围 status（AC-6：必须为空）
+
+```text
+```
+
+## 4. 本单新增/修改（只允许这两个路径）
+
+```text
+ M Docs/Handoff/REPORT_M7-0.md
+?? Docs/QA/Evidence/M7-0/
+```
+
+## 5. 开工前已存在的改动（快照，非本单产生）
+
+开工首条 `git status --porcelain` 已包含以下条目（节选，均为所有者此前的工作）；执行者未改动其中任何文件：
+
+```text
+ M .gitattributes
+ M .gitignore
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M Docs/01_总体架构与内容生产规范.md
+ M Docs/02_Unity63迁移及毕业设计实施计划.md
+ M Docs/Handoff/REPORT_QA-REFACTOR-01.md
+ M Docs/Handoff/TASK_QA-REFACTOR-01.md
+ M Docs/Handoff/workflow-rules.md
+ M Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt
+```
+
+> 上述条目已在执行期间被所有者提交；`Assembly-CSharp*.csproj` 与 `Dungeon.sln` 的删除也由所有者提交处理，均不是执行者操作（执行者从未执行 git add/rm/commit）。
+
+## 6. 结论
+
+- `Assets/` 范围 status 为空 → 未改任何产品代码/资产/场景。
+- 本单产出全部位于 `Docs/QA/Evidence/M7-0/` 与 `Docs/Handoff/REPORT_M7-0.md`。

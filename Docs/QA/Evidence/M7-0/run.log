@@ -1,0 +1,44 @@
+﻿{
+  "file_count": 77,
+  "files_with_zero_declared_types": [],
+  "type_count": 90,
+  "edge_count": 533,
+  "cross_module_edge_count": 320,
+  "duplicate_type_names": {},
+  "file_scc_count": 4,
+  "file_scc_sizes": [
+    15,
+    4,
+    3,
+    2
+  ],
+  "layer_sccs": [
+    [
+      "App",
+      "Gameplay",
+      "UI"
+    ]
+  ],
+  "layer_file_counts": {
+    "Core": 7,
+    "Content": 3,
+    "Gameplay": 50,
+    "App": 6,
+    "UI": 10,
+    "Editor": 1
+  }
+}
+file SCC: [(15, ['App', 'Gameplay', 'UI']), (4, ['Gameplay']), (3, ['Gameplay']), (2, ['App', 'Gameplay'])]
+upward edges: 11
+  Assets/_Project/Scripts/Combat/MeleeCombat.cs 145 MetaState -> Assets/_Project/Scripts/Core/MetaState.cs Gameplay -> App
+  Assets/_Project/Scripts/Player/PlayerCommandController.cs 23 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Player/PlayerCommandController.cs 24 UIManager -> Assets/_Project/Scripts/UI/UIManager.cs Gameplay -> UI
+  Assets/_Project/Scripts/Player/SelectionManager.cs 88 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Player/SkillInputController.cs 43 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Player/SkillInputController.cs 44 UIManager -> Assets/_Project/Scripts/UI/UIManager.cs Gameplay -> UI
+  Assets/_Project/Scripts/System/DungeonDoor.cs 46 TransitionFader -> Assets/_Project/Scripts/UI/TransitionFader.cs Gameplay -> UI
+  Assets/_Project/Scripts/Units/BossBrain.cs 70 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Units/CharacterBrain.cs 143 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Units/DownedRescue.cs 208 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+  Assets/_Project/Scripts/Units/MonsterBrain.cs 118 AppFlow -> Assets/_Project/Scripts/Core/AppFlow.cs Gameplay -> App
+ExitCode=0
