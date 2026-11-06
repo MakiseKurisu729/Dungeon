@@ -13,7 +13,7 @@
 | 基线提交 | `df7ea0b0`（开工时以 `git rev-parse --short HEAD` 复核；不符即停） |
 | 回滚锚 | 阶段提交前一律 `git stash`/`git checkout -- <file>` 可回；整单回滚 = 回到 `df7ea0b0` |
 | 分支 | 当前分支 `docs/fnd-00-baseline`（不新开分支：本单只动 Tests，五阶段连续提交，开短分支反而增加合并成本） |
-| 状态 | `Ready` |
+| 状态 | `Done`（所有者 2026-11-06 验收，大脑代录） |
 | 执行方式 | **五阶段串行**，每阶段一个独立 executor 会话、干完即弃；每阶段验收后由大脑本地 commit |
 
 > **只有所有者能标 `Done`。** 执行者不得改 `CURRENT.md`、不得做任何 git 写操作、不得标 `Done`。
