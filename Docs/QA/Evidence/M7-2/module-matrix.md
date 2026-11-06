@@ -3,19 +3,20 @@
 > 由 `audit_scripts.py` 生成；行=引用方，列=被引用方，单元格为**边数**（同一文件/行/类型去重后）。
 > 逐边原始记录（含 `文件:行` 与源码片段）见 `edges.csv`。
 
-| 引用方 \ 被引用 | Core | Content | Gameplay/Units | Gameplay/Combat | Gameplay/Interaction | Gameplay/World | Gameplay/Player | Gameplay/Items | App | UI | Editor | 合计 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| **Gameplay/Units** | 56 | 10 | (98) | 13 | 7 | 4 | 1 | 0 | 0 | 0 | 0 | 189 |
-| **Gameplay/Combat** | 13 | 9 | 24 | (39) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 85 |
-| **Gameplay/Interaction** | 0 | 0 | 6 | 0 | (7) | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
-| **Gameplay/World** | 6 | 2 | 13 | 0 | 10 | (3) | 0 | 7 | 0 | 1 | 0 | 42 |
-| **Gameplay/Player** | 13 | 0 | 33 | 0 | 6 | 4 | (17) | 0 | 0 | 2 | 0 | 75 |
-| **Gameplay/Items** | 0 | 4 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 0 | 0 | 4 |
-| **App** | 21 | 0 | 5 | 2 | 0 | 0 | 0 | 0 | (15) | 0 | 0 | 43 |
-| **UI** | 11 | 0 | 11 | 1 | 0 | 11 | 12 | 8 | 7 | (18) | 0 | 79 |
-| **Editor** | 3 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 8 |
+| 引用方 \ 被引用 | Core | Content | Gameplay/Units | Gameplay/Combat | Gameplay/Interaction | Gameplay/World | Gameplay/Player | Gameplay/Items | App | UI | Editor | Gameplay/IUiModalState.cs | 合计 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| **Gameplay/Units** | 56 | 10 | (98) | 13 | 7 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 189 |
+| **Gameplay/Combat** | 13 | 9 | 24 | (39) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 85 |
+| **Gameplay/Interaction** | 0 | 0 | 6 | 0 | (7) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
+| **Gameplay/World** | 6 | 2 | 13 | 0 | 10 | (3) | 0 | 7 | 0 | 1 | 0 | 0 | 42 |
+| **Gameplay/Player** | 13 | 0 | 33 | 0 | 6 | 4 | (17) | 0 | 0 | 0 | 0 | 2 | 75 |
+| **Gameplay/Items** | 0 | 4 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 0 | 0 | 0 | 4 |
+| **App** | 21 | 0 | 5 | 2 | 0 | 0 | 0 | 0 | (15) | 0 | 0 | 0 | 43 |
+| **UI** | 11 | 0 | 11 | 1 | 0 | 11 | 12 | 8 | 7 | (18) | 0 | 3 | 82 |
+| **Editor** | 3 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 8 |
+| **Gameplay/IUiModalState.cs** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 0 |
 
 括号内为同组内部引用。
 
@@ -140,15 +141,15 @@
 
 ### Gameplay/Player → Core（13 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：PauseState@27
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：PauseState@26
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@127; PauseState@93; Team@108; Team@168; Team@231
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@103; MessageFeed@117; MessageFeed@175; MessageFeed@177; PauseState@47; Team@196; Team@222
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@102; MessageFeed@116; MessageFeed@174; MessageFeed@176; PauseState@46; Team@195; Team@221
 
 ### Gameplay/Player → Gameplay/Units（33 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：CharacterBrain@15; CharacterBrain@20; CharacterBrain@35
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：CharacterBrain@14; CharacterBrain@19; CharacterBrain@34
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：CharacterBrain@33; CharacterBrain@38; CharacterBrain@79; CharacterBrain@83; CharacterBrain@189; CharacterBrain@198; CharacterBrain@210; CharacterBrain@232 …
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：CharacterBrain@74; CharacterBrain@121; SkillData@148; SkillSystem@36; SkillSystem@166; SkillSystem@169; SkillSystem@173; UnitHealth@39 …
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：CharacterBrain@73; CharacterBrain@120; SkillData@147; SkillSystem@35; SkillSystem@165; SkillSystem@168; SkillSystem@172; UnitHealth@38 …
 
 ### Gameplay/Player → Gameplay/Interaction（6 条，1 个来源文件）
 
@@ -158,10 +159,10 @@
 
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：DebugCameraSwitcher@23; DebugCameraSwitcher@43; DebugCameraSwitcher@47; DebugCameraSwitcher@55
 
-### Gameplay/Player → UI（2 条，2 个来源文件）
+### Gameplay/Player → Gameplay/IUiModalState.cs（2 条，2 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@28
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@48
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UiModalState@27
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UiModalState@47
 
 ### Gameplay/Items → Content（4 条，2 个来源文件）
 
@@ -208,26 +209,30 @@
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@42; Chest@47; Chest@51; Chest@121
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@47; Chest@53; Chest@57; Chest@127
 
 ### UI → Gameplay/Player（12 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：Selectable@65; Selectable@108; Selectable@112; Selectable@119; Selectable@120; SelectionManager@151
 - `Assets/_Project/Scripts/UI/HUD.cs`：SelectionManager@47; SelectionManager@48
 - `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@57; SelectionManager@58
-- `Assets/_Project/Scripts/UI/UIManager.cs`：SelectionManager@124; SelectionManager@125
+- `Assets/_Project/Scripts/UI/UIManager.cs`：SelectionManager@130; SelectionManager@131
 
 ### UI → Gameplay/Items（8 条，2 个来源文件）
 
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：Inventory@20; Inventory@28; Inventory@39; Inventory@46; Inventory@52; Inventory@81
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Inventory@121; Inventory@125
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Inventory@127; Inventory@131
 
 ### UI → App（7 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@14; AppFlow@19; AppFlow@32
 - `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@52
 - `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@18
-- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@66; RunFlow@66
+- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@72; RunFlow@72
+
+### UI → Gameplay/IUiModalState.cs（3 条，1 个来源文件）
+
+- `Assets/_Project/Scripts/UI/UIManager.cs`：IUiModalState@15; UiModalState@43; UiModalState@52
 
 ### Editor → Core（3 条，1 个来源文件）
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 using Dungeon.Core;
 using Dungeon.Gameplay.Units;
-using Dungeon.UI;
 namespace Dungeon.Gameplay.Player {
 
     /// <summary>右键指令 + 动画驱动（单层版）：Animator 自动查找。
@@ -25,7 +24,7 @@ namespace Dungeon.Gameplay.Player {
         {
             if (_brain == null || _brain.agent == null) return;
             if (PauseState.IsPaused) return;
-            if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
+            if (UiModalState.Current != null && UiModalState.Current.IsModalOpen) return;
 
             if (Input.GetMouseButtonDown(1))
             {

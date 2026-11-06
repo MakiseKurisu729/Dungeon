@@ -38,6 +38,7 @@
 | `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectBase.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/IUiModalState.cs` | Gameplay/IUiModalState.cs | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs` | Gameplay/Interaction | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
@@ -89,7 +90,7 @@
 
 - Core: 9 个文件
 - Content: 3 个文件
-- Gameplay: 50 个文件
+- Gameplay: 51 个文件
 - App: 6 个文件
 - UI: 10 个文件
 - Editor: 1 个文件

@@ -1,13 +1,12 @@
 # M7-0 循环引用清单（文件级 SCC）
 
-> 扫描文件数：79；类型数：92；文件级边数：539。
+> 扫描文件数：80；类型数：94；文件级边数：542。
 > 判定口径：A 文件引用 B 文件声明的类型即 A→B；强连通分量（SCC）大小 ≥2 视为循环。
 > 近似分析（词边界匹配，已剥离注释与字符串）可能误报同名成员，所有边保留 `文件:行` 与源码片段供人工确认。
 > 已做过滤：`小写变量.类型名` 形式的实例成员访问不计为类型引用。
 
-## C1. App / Gameplay / UI 循环（15 个文件）
+## C1. Gameplay 循环（9 个文件）
 
-- `Assets/_Project/Scripts/App/RunFlow.cs`（App）
 - `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`（Gameplay）
 - `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs`（Gameplay）
 - `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`（Gameplay）
@@ -16,17 +15,10 @@
 - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`（Gameplay）
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`（Gameplay）
 - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`（Gameplay）
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs`（Gameplay）
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`（Gameplay）
-- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`（UI）
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`（UI）
-- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`（UI）
-- `Assets/_Project/Scripts/UI/UIManager.cs`（UI）
 
 内部边（`文件:行` → 被引用文件）：
 
-- `Assets/_Project/Scripts/App/RunFlow.cs:46` 引用 `DownedRescue` → `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`  
-  `var dr = h.GetComponent<DownedRescue>();`
 - `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs:32` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `bool IsAvailable(CharacterBrain unit);`
 - `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs:35` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
@@ -105,15 +97,13 @@
   `void SingleSelect(Selectable s)`
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:247` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `void ToggleSelect(Selectable s)`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
-  `if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:74` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:73` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = _pendingCaster.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:121` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:120` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = ss.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:168` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:167` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:169` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:168` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();`
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:22` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `InteractionRunner _runner;`
@@ -149,69 +139,16 @@
   `var rBrain = rescuer.GetComponent<CharacterBrain>();`
 - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:141` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `InteractionRunner.Ensure(rBrain).Order(this);`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:15` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
-  `public class Chest : MonoBehaviour, IInteractionTarget`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:29` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
-  `Interactable _interact;`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:37` 引用 `Interactable` → `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`  
-  `_interact = GetComponent<Interactable>();`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:53` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
-  `public void OpenBy(CharacterBrain unit)`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:66` 引用 `InteractionPriority` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
-  `public InteractionPriority Priority { get { return InteractionPriority.Default; } }`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:70` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
-  `public bool IsAvailable(CharacterBrain unit) { return !_opened; }`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:72` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
-  `public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:72` 引用 `InteractionDefinition` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs`  
-  `public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }`
-- `Assets/_Project/Scripts/Gameplay/World/Chest.cs:75` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
-  `public void Interact(CharacterBrain unit) { OpenBy(unit); }`
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs:14` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `public IInteractionTarget Target()`
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs:16` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `var target = GetComponent<IInteractionTarget>();`
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs:17` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `return target != null ? target : GetComponentInParent<IInteractionTarget>();`
-- `Assets/_Project/Scripts/UI/EscMenuPanel.cs:25` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
-  `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
-- `Assets/_Project/Scripts/UI/InventoryUI.cs:29` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `Chest _chest;`
-- `Assets/_Project/Scripts/UI/InventoryUI.cs:52` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `public void SetChestData(Inventory chestInv, Chest chest)`
-- `Assets/_Project/Scripts/UI/MainMenuPanel.cs:24` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
-  `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
-- `Assets/_Project/Scripts/UI/UIManager.cs:20` 引用 `InventoryUI` → `Assets/_Project/Scripts/UI/InventoryUI.cs`  
-  `public InventoryUI inventoryPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:26` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
-  `public EscMenuPanel escMenuPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:28` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
-  `public MainMenuPanel mainMenuPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:42` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `Chest.Opened += OnChestOpened;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:47` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `Chest.Opened -= OnChestOpened;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:51` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `void OnChestOpened(Chest chest)`
-- `Assets/_Project/Scripts/UI/UIManager.cs:66` 引用 `RunFlow` → `Assets/_Project/Scripts/App/RunFlow.cs`  
-  `bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:107` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
-  `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
-- `Assets/_Project/Scripts/UI/UIManager.cs:107` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
-  `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
-- `Assets/_Project/Scripts/UI/UIManager.cs:121` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
-  `public void ShowInventory(Inventory chestInv, Chest chest)`
-- `Assets/_Project/Scripts/UI/UIManager.cs:124` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
-  `if (chestInv == null && SelectionManager.instance != null && SelectionManager.instance.Primary != null)`
-- `Assets/_Project/Scripts/UI/UIManager.cs:125` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
-  `inventoryPanel.BindPlayer(SelectionManager.instance.Primary.GetComponentInParent<Inventory>());`
 
 **建议解法**：
 
-- M7 只需处理其中跨层的 3 条 `Gameplay→UI`（`UIManager`×2、`TransitionFader`×1），其余是同层纠缠。
-- ① `SelectionManager ↔ Selectable`：抽 `ISelectable` 或让 `Selectable` 只发选中事件，由 `SelectionManager` 订阅。
-- ② `CharacterBrain ↔ InteractionRunner ↔ IInteractionTarget`：Runner 依赖接口而非 `CharacterBrain` 具体类，由 CharacterBrain 注入。
-- ③ `Chest ↔ UIManager/InventoryUI`：`Chest.Opened` 已是事件，UI 改为纯订阅方；`Contents` 暴露 `Inventory` 契约而不是 `Chest`。
+- 需人工确认后按层拆接口。
 
 ## C2. Gameplay 循环（4 个文件）
 
@@ -347,6 +284,33 @@
   `public static bool TryGetId(UnitHealth unit, out UnitId id)`
 - `Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs:263` 引用 `UnitHealth` → `Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs`  
   `UnitHealth u = _units[i];`
+
+**建议解法**：
+
+- `DamageInfo` 的 `UnitHealth` 字段改为 `UnitId`（Core），即可把伤害结果包下沉。
+- `UnitRegistry` 归 Gameplay 后，此环变成同层，不阻塞 M7。
+- 若将来再拆，注册表改为 `IUnitRegistry` 接口，`UnitHealth` 只依赖接口。
+
+## C4. UI 循环（3 个文件）
+
+- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`（UI）
+- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`（UI）
+- `Assets/_Project/Scripts/UI/UIManager.cs`（UI）
+
+内部边（`文件:行` → 被引用文件）：
+
+- `Assets/_Project/Scripts/UI/EscMenuPanel.cs:25` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+  `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
+- `Assets/_Project/Scripts/UI/MainMenuPanel.cs:24` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+  `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
+- `Assets/_Project/Scripts/UI/UIManager.cs:27` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
+  `public EscMenuPanel escMenuPanel;`
+- `Assets/_Project/Scripts/UI/UIManager.cs:29` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
+  `public MainMenuPanel mainMenuPanel;`
+- `Assets/_Project/Scripts/UI/UIManager.cs:113` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
+  `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
+- `Assets/_Project/Scripts/UI/UIManager.cs:113` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
+  `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
 
 **建议解法**：
 

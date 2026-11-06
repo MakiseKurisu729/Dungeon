@@ -7,18 +7,16 @@
 |---|---|---|---|---|---|---|---|
 | **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 1 |
-| **Gameplay** | 88 | 25 | (292) | 0 | 3 | 0 | 408 |
+| **Gameplay** | 88 | 25 | (294) | 0 | 1 | 0 | 408 |
 | **App** | 21 | 0 | 7 | (15) | 0 | 0 | 43 |
-| **UI** | 11 | 0 | 43 | 7 | (18) | 0 | 79 |
+| **UI** | 11 | 0 | 46 | 7 | (18) | 0 | 82 |
 | **Editor** | 3 | 0 | 5 | 0 | 0 | (0) | 8 |
 
 括号内为同组内部引用。
 
 ## 违规方向（下层 → 上层，M7 必须先消）
 
-- **Gameplay → UI**：3 条边
-  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:28` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
+- **Gameplay → UI**：1 条边
   - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:51` 引用 `TransitionFader` → `Assets/_Project/Scripts/UI/TransitionFader.cs`
 
 ## 每个依赖组的来源文件
@@ -35,9 +33,9 @@
 - `Assets/_Project/Scripts/Gameplay/Combat/RangedCombat.cs`：ICharacterCombat@8
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs`：MessageFeed@30; MessageFeed@32; MessageFeed@34
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@36
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：PauseState@27
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：PauseState@26
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@127; PauseState@93; Team@108; Team@168; Team@231
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@103; MessageFeed@117; MessageFeed@175; MessageFeed@177; PauseState@47; Team@196; Team@222
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@102; MessageFeed@116; MessageFeed@174; MessageFeed@176; PauseState@46; Team@195; Team@221
 - `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：MessageFeed@66; MessageFeed@83; PauseState@73; RunState@64; RunState@65; Team@134; Team@179
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：ICharacterCombat@97; PauseState@148; Team@27
 - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：MessageFeed@92; MessageFeed@174; MessageFeed@202; MessageFeed@294; MessageFeed@309; PauseState@214
@@ -72,10 +70,8 @@
 - `Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs`：DamageType@66; DamageType@94; UnitStats@13
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：ItemData@46; ItemData@100
 
-### Gameplay → UI（3 条，3 个来源文件）
+### Gameplay → UI（1 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@28
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@48
 - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
 
 ### App → Core（21 条，4 个来源文件）
@@ -98,20 +94,20 @@
 - `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@53; MessageFeed@55
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@128; MessageFeed@138; RunState@137; Team@37
 
-### UI → Gameplay（43 条，5 个来源文件）
+### UI → Gameplay（46 条，5 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@138; Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131; Selectable@65; Selectable@108 …
 - `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@50; SelectionManager@47; SelectionManager@48; UnitHealth@49
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52; Inventory@20; Inventory@28; Inventory@39; Inventory@46; Inventory@52; Inventory@81 …
 - `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@57; SelectionManager@58; SkillSystem@55; SkillSystem@58
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@42; Chest@47; Chest@51; Chest@121; Inventory@121; Inventory@125; SelectionManager@124; SelectionManager@125
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@47; Chest@53; Chest@57; Chest@127; IUiModalState@15; Inventory@127; Inventory@131; SelectionManager@130 …
 
 ### UI → App（7 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@14; AppFlow@19; AppFlow@32
 - `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@52
 - `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@18
-- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@66; RunFlow@66
+- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@72; RunFlow@72
 
 ### Editor → Core（3 条，1 个来源文件）
 

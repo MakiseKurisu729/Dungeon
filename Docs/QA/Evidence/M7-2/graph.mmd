@@ -101,6 +101,9 @@ graph TD
   subgraph Editor[Editor]
     NEditor_DebugTestTools_cs["DebugTestTools"]
   end
+  subgraph Gameplay/IUiModalState.cs[Gameplay/IUiModalState.cs]
+    NGameplay_IUiModalState_cs["IUiModalState"]
+  end
   NApp_AppFlow_cs --> NCore_PauseState_cs
   NApp_AppFlow_cs --> NCore_Team_cs
   NApp_AppFlow_cs --> NGameplay_Units_UnitRegistry_cs
@@ -155,8 +158,8 @@ graph TD
   NGameplay_Items_ChestItem_cs --> NContent_ItemData_cs
   NGameplay_Items_Inventory_cs --> NContent_ItemData_cs
   NGameplay_Player_PlayerCommandController_cs --> NCore_PauseState_cs
+  NGameplay_Player_PlayerCommandController_cs --> NGameplay_IUiModalState_cs
   NGameplay_Player_PlayerCommandController_cs --> NGameplay_Units_CharacterBrain_cs
-  NGameplay_Player_PlayerCommandController_cs --> NUI_UIManager_cs
   NGameplay_Player_SelectionManager_cs --> NCore_MessageFeed_cs
   NGameplay_Player_SelectionManager_cs --> NCore_PauseState_cs
   NGameplay_Player_SelectionManager_cs --> NCore_Team_cs
@@ -169,12 +172,12 @@ graph TD
   NGameplay_Player_SkillInputController_cs --> NCore_MessageFeed_cs
   NGameplay_Player_SkillInputController_cs --> NCore_PauseState_cs
   NGameplay_Player_SkillInputController_cs --> NCore_Team_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_IUiModalState_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_CharacterBrain_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_SkillData_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_SkillSystem_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitHealth_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitRegistry_cs
-  NGameplay_Player_SkillInputController_cs --> NUI_UIManager_cs
   NGameplay_Units_BossBrain_cs --> NContent_UnitStats_cs
   NGameplay_Units_BossBrain_cs --> NContent_WeaponData_cs
   NGameplay_Units_BossBrain_cs --> NCore_MessageFeed_cs
@@ -267,6 +270,7 @@ graph TD
   NUI_SkillBarUI_cs --> NGameplay_Units_SkillSystem_cs
   NUI_UIManager_cs --> NApp_AppFlow_cs
   NUI_UIManager_cs --> NApp_RunFlow_cs
+  NUI_UIManager_cs --> NGameplay_IUiModalState_cs
   NUI_UIManager_cs --> NGameplay_Items_Inventory_cs
   NUI_UIManager_cs --> NGameplay_Player_SelectionManager_cs
   NUI_UIManager_cs --> NGameplay_World_Chest_cs

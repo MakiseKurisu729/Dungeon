@@ -1,14 +1,15 @@
 {
-  "file_count": 79,
+  "file_count": 80,
   "files_with_zero_declared_types": [],
-  "type_count": 92,
-  "edge_count": 539,
-  "cross_module_edge_count": 342,
+  "type_count": 94,
+  "edge_count": 542,
+  "cross_module_edge_count": 345,
   "duplicate_type_names": {},
-  "file_scc_count": 3,
+  "file_scc_count": 4,
   "file_scc_sizes": [
-    15,
+    9,
     4,
+    3,
     3
   ],
   "layer_sccs": [
@@ -21,28 +22,12 @@
   "layer_file_counts": {
     "Core": 9,
     "Content": 3,
-    "Gameplay": 50,
+    "Gameplay": 51,
     "App": 6,
     "UI": 10,
     "Editor": 1
   },
   "upward_layer_edges": [
-    {
-      "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-      "line": 28,
-      "type": "UIManager",
-      "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "UI"
-    },
-    {
-      "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-      "line": 48,
-      "type": "UIManager",
-      "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "UI"
-    },
     {
       "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
       "line": 51,

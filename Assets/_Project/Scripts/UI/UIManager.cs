@@ -4,6 +4,7 @@ using Dungeon.Gameplay.Items;
 using Dungeon.Gameplay.Player;
 using Dungeon.Gameplay.World;
 using Dungeon.App;
+using Dungeon.Gameplay;
 namespace Dungeon.UI {
 
     /// <summary>
@@ -11,7 +12,7 @@ namespace Dungeon.UI {
     /// Tab=背包 I=属性 C=装备（窗口组进栈，Esc 关栈顶）；Esc 栈空=Esc菜单（接管暂停）。
     /// 开始界面与 Esc 菜单为独占面板（不进栈）；未开始游戏/团灭时 Esc 菜单不响应。
     /// </summary>
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IUiModalState
     {
         public static UIManager instance;
 
@@ -33,9 +34,13 @@ namespace Dungeon.UI {
         public bool IsInventoryOpen { get { return inventoryPanel != null && inventoryPanel.IsOpen; } }
         public bool IsAnyPanelOpen { get { return _stack.Count > 0; } }
 
+        /// <summary>IUiModalState：严格等于 IsInventoryOpen（不扩大为“任意面板打开”）。</summary>
+        public bool IsModalOpen { get { return IsInventoryOpen; } }
+
         void Awake()
         {
             instance = this;
+            UiModalState.Current = this;
             // ★ 初始隐藏统一接管：面板物体在场景里保持激活，隐藏权 100% 归这里
             if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false);
             if (escMenuPanel != null) escMenuPanel.gameObject.SetActive(false);
@@ -44,6 +49,7 @@ namespace Dungeon.UI {
 
         void OnDestroy()
         {
+            if (ReferenceEquals(UiModalState.Current, this)) UiModalState.Current = null;
             Chest.Opened -= OnChestOpened;
         }
 

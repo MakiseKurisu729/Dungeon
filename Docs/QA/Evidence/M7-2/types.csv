@@ -40,17 +40,19 @@ SkillCastContext,struct,Assets/_Project/Scripts/Gameplay/Combat/SkillCastContext
 SkillEffectBase,class,Assets/_Project/Scripts/Gameplay/Combat/SkillEffectBase.cs,8,Gameplay/Combat,Gameplay
 FireballEffect,class,Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs,9,Gameplay/Combat,Gameplay
 BashEffect,class,Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs,12,Gameplay/Combat,Gameplay
+IUiModalState,interface,Assets/_Project/Scripts/Gameplay/IUiModalState.cs,3,Gameplay/IUiModalState.cs,Gameplay
+UiModalState,class,Assets/_Project/Scripts/Gameplay/IUiModalState.cs,9,Gameplay/IUiModalState.cs,Gameplay
 InteractionPriority,enum,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,6,Gameplay/Interaction,Gameplay
 IInteractionTarget,interface,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,17,Gameplay/Interaction,Gameplay
 InteractionDefinition,struct,Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs,9,Gameplay/Interaction,Gameplay
 InteractionRunner,class,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,12,Gameplay/Interaction,Gameplay
 ChestItem,class,Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs,6,Gameplay/Items,Gameplay
 Inventory,class,Assets/_Project/Scripts/Gameplay/Items/Inventory.cs,7,Gameplay/Items,Gameplay
-PlayerCommandController,class,Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs,10,Gameplay/Player,Gameplay
+PlayerCommandController,class,Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs,9,Gameplay/Player,Gameplay
 Selectable,class,Assets/_Project/Scripts/Gameplay/Player/Selectable.cs,5,Gameplay/Player,Gameplay
 SelectionManager,class,Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs,15,Gameplay/Player,Gameplay
 SkillIndicator,class,Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs,5,Gameplay/Player,Gameplay
-SkillInputController,class,Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs,14,Gameplay/Player,Gameplay
+SkillInputController,class,Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs,13,Gameplay/Player,Gameplay
 BossBrain,class,Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs,10,Gameplay/Units,Gameplay
 CharacterBrain,class,Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs,13,Gameplay/Units,Gameplay
 DownedRescue,class,Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs,17,Gameplay/Units,Gameplay
@@ -90,4 +92,4 @@ MainMenuPanel,class,Assets/_Project/Scripts/UI/MainMenuPanel.cs,8,UI,UI
 SkillBarUI,class,Assets/_Project/Scripts/UI/SkillBarUI.cs,8,UI,UI
 SlotClickHandler,class,Assets/_Project/Scripts/UI/SlotClickHandler.cs,6,UI,UI
 TransitionFader,class,Assets/_Project/Scripts/UI/TransitionFader.cs,7,UI,UI
-UIManager,class,Assets/_Project/Scripts/UI/UIManager.cs,14,UI,UI
+UIManager,class,Assets/_Project/Scripts/UI/UIManager.cs,15,UI,UI

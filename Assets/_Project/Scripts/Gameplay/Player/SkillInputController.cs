@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Dungeon.Core;
 using Dungeon.Gameplay.Units;
-using Dungeon.UI;
 namespace Dungeon.Gameplay.Player {
 
     /// <summary>
@@ -45,7 +44,7 @@ namespace Dungeon.Gameplay.Player {
         {
             _cacheTimer -= Time.deltaTime;
             if (PauseState.IsPaused) return;
-            if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
+            if (UiModalState.Current != null && UiModalState.Current.IsModalOpen) return;
 
             var ss = PrimarySkillSystem();
 

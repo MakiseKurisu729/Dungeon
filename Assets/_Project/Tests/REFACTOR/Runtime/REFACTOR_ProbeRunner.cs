@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using Dungeon.Content;
 using Dungeon.Core;
+using Dungeon.Gameplay;
 using Dungeon.Gameplay.Combat;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Items;
@@ -117,7 +118,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 "Skill.InterruptAttack", "Hit.InterruptSkill", "Skill.InterruptInteract", "Projectile.AimPoint",
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
                 "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract",
-                "Skill.MotionUnlocked", "Refactor.ProgressionFacade", "Refactor.PauseFacade"
+                "Skill.MotionUnlocked", "Refactor.ProgressionFacade", "Refactor.PauseFacade",
+                "Refactor.ModalFacade"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -145,6 +147,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked(_ev, _players));
         yield return RunSafe("Refactor.ProgressionFacade", AssertProgressionFacade(_ev));
         yield return RunSafe("Refactor.PauseFacade", AssertPauseFacade(_ev));
+        yield return RunSafe("Refactor.ModalFacade", AssertModalFacade(_ev));
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -1953,6 +1956,70 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             allPass, allPass ? "pass" : "product_fail", "production",
             QaJson.Dict("steps", rows,
                  "note", "M7-2 子项 2 新增第 18 条；PauseState 不写 timeScale，团灭语义只验证解耦"));
+        yield break;
+    }
+    // ============================================================
+    // 19. Refactor.ModalFacade（M7-2 子项 3：模态边改 IUiModalState）
+    // ============================================================
+    /// <summary>模态门面：UIManager 在 Awake 注册 UiModalState.Current；Gameplay 只经接口读
+    /// IsModalOpen（严格等于 IsInventoryOpen）；开/关背包各断言一次；结束前确保背包关闭。</summary>
+    IEnumerator AssertModalFacade(IQaSink sink)
+    {
+        const string Id = "Refactor.ModalFacade";
+        var rows = new List<object>();
+        bool registered = false, closedMatches = false, openedOk = false, closedOk = false;
+        bool restoredOk = false;
+
+        if (UIManager.instance == null)
+        {
+            sink.BlockedAssertion(Id, Id, "UIManager 注册 UiModalState 且 IsModalOpen == IsInventoryOpen",
+                "UIManager.instance == null", null);
+            yield break;
+        }
+
+        try
+        {
+            if (UIManager.instance.IsInventoryOpen) UIManager.instance.HideInventory();
+            registered = UiModalState.Current != null &&
+                         ReferenceEquals(UiModalState.Current, UIManager.instance);
+            closedMatches = registered &&
+                            UiModalState.Current.IsModalOpen == UIManager.instance.IsInventoryOpen &&
+                            !UiModalState.Current.IsModalOpen;
+            rows.Add(QaJson.Dict("step", "registered-closed", "registered", registered,
+                          "closedMatches", closedMatches));
+
+            UIManager.instance.ShowInventory(null, null);
+            openedOk = registered && UIManager.instance.IsInventoryOpen &&
+                       UiModalState.Current.IsModalOpen == true &&
+                       UiModalState.Current.IsModalOpen == UIManager.instance.IsInventoryOpen;
+            rows.Add(QaJson.Dict("step", "open-inventory", "isInventoryOpen", UIManager.instance.IsInventoryOpen,
+                          "isModalOpen", registered ? (object)UiModalState.Current.IsModalOpen : null,
+                          "pass", openedOk));
+
+            UIManager.instance.HideInventory();
+            closedOk = registered && !UIManager.instance.IsInventoryOpen &&
+                       UiModalState.Current.IsModalOpen == false &&
+                       UiModalState.Current.IsModalOpen == UIManager.instance.IsInventoryOpen;
+            rows.Add(QaJson.Dict("step", "close-inventory", "isInventoryOpen", UIManager.instance.IsInventoryOpen,
+                          "isModalOpen", registered ? (object)UiModalState.Current.IsModalOpen : null,
+                          "pass", closedOk));
+        }
+        finally
+        {
+            if (UIManager.instance != null && UIManager.instance.IsInventoryOpen)
+                UIManager.instance.HideInventory();
+            restoredOk = UIManager.instance != null && !UIManager.instance.IsInventoryOpen;
+        }
+
+        bool allPass = registered && closedMatches && openedOk && closedOk && restoredOk;
+        sink.Record(Id, Id,
+            "模态门面：UiModalState.Current 由 UIManager 注册且同一实例；IsModalOpen 严格等于 IsInventoryOpen；" +
+            "打开/关闭背包各断言一次；结束前背包关闭",
+            "registered=" + registered + "; closedMatches=" + closedMatches +
+            "; opened=" + openedOk + "; closed=" + closedOk + "; restored=" + restoredOk,
+            allPass, allPass ? "pass" : "product_fail", "production",
+            QaJson.Dict("steps", rows,
+                 "note", "M7-2 子项 3 新增第 19 条；只读/写入均走 UIManager 生产入口，结束前关闭背包"));
         yield break;
     }
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)
