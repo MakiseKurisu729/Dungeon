@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using Dungeon.Content;
+using Dungeon.Core;
 
 /// <summary>
 /// 单位大脑基类：导航移动 + 敌对索敌 + 攻击循环。

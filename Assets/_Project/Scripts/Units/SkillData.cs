@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Core;
 
 [CreateAssetMenu(menuName = "Dungeon/Skill Data")]
 public class SkillData : ScriptableObject

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Dungeon.Content;
+using Dungeon.Core;
 
 /// <summary>3D 爆炸·瞬爆版：核心闪现即爆，碎片迸出（带重力），落地停留后湮灭。
 /// 每个碎片有总寿命保险，杜绝残留。伤害在爆发帧结算。</summary>

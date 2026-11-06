@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>火球术：施法前摇（对齐动画）→ 发射追踪火球 → 到达范围爆炸。时序参数在资产里调。</summary>
 [CreateAssetMenu(menuName = "Dungeon/Skill Effects/Fireball")]

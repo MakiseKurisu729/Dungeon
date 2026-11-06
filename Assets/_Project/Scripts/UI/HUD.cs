@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Dungeon.Core;
 
 /// <summary>HUD：金币/等级/消息 + 按 U 升级。血蓝条由头顶 WorldHealthBar 负责。</summary>
 public class HUD : MonoBehaviour

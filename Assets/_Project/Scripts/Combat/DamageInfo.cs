@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Content;
 
 /// <summary>
 /// 伤害元素类型（飘字配色/后续抗性轴）。

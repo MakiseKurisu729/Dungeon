@@ -1,4 +1,6 @@
 using UnityEngine;
+using Dungeon.Content;
+using Dungeon.Core;
 
 /// <summary>远程执行器：动画时钟轮询放箭帧；箭矢带伤害来源（DamageInfo 溯源）。</summary>
 public class RangedCombat : MonoBehaviour, ICharacterCombat

@@ -1,0 +1,534 @@
+src_file,src_line,ref_type,dst_file,src_module,dst_module,src_layer,dst_layer,snippet
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,14,DamageDealtEvent,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,EventBus.Subscribe<DamageDealtEvent>(OnDamage);
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,14,EventBus,Assets/_Project/Scripts/Core/EventBus.cs,Combat,Core,Gameplay,Core,EventBus.Subscribe<DamageDealtEvent>(OnDamage);
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,19,DamageDealtEvent,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,EventBus.Unsubscribe<DamageDealtEvent>(OnDamage);
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,19,EventBus,Assets/_Project/Scripts/Core/EventBus.cs,Combat,Core,Gameplay,Core,EventBus.Unsubscribe<DamageDealtEvent>(OnDamage);
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,22,DamageDealtEvent,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,void OnDamage(DamageDealtEvent e)
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,29,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,IEnumerator ShowNumber(DamageInfo info)
+Assets/_Project/Scripts/Combat/CombatFeedback.cs,35,DamageNumber,Assets/_Project/Scripts/Combat/DamageNumber.cs,Combat,Combat,Gameplay,Gameplay,"DamageNumber.Show(world, info.finalAmount, info.element);"
+Assets/_Project/Scripts/Combat/DamageInfo.cs,13,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public UnitHealth source;      // 来源（可为空）
+Assets/_Project/Scripts/Combat/DamageInfo.cs,14,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public UnitHealth target;
+Assets/_Project/Scripts/Combat/DamageInfo.cs,15,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,public DamageType damageType;
+Assets/_Project/Scripts/Combat/DamageInfo.cs,27,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public struct UnitDiedEvent { public UnitHealth unit; }
+Assets/_Project/Scripts/Combat/DamageNumber.cs,43,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"static readonly Dictionary<DamageElement, Color> ElementColors = new Dictionary<DamageElement, Color>"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,45,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Physical, new Color(1f, 0.92f, 0.35f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,46,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Fire, new Color(1f, 0.45f, 0.15f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,47,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Ice, new Color(0.45f, 0.85f, 1f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,48,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Lightning, new Color(0.75f, 0.7f, 1f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,49,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Poison, new Color(0.55f, 0.95f, 0.35f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,50,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Holy, new Color(1f, 0.97f, 0.8f) },"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,51,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"{ DamageElement.Shadow, new Color(0.7f, 0.45f, 0.95f) }"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,63,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,DamageElement _element = DamageElement.Physical;
+Assets/_Project/Scripts/Combat/DamageNumber.cs,74,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,public DamageElement Element { get { return _element; } }
+Assets/_Project/Scripts/Combat/DamageNumber.cs,78,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"public static void Show(Vector3 worldPos, float amount, DamageElement element)"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,94,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,public static Color ColorFor(DamageElement element)
+Assets/_Project/Scripts/Combat/DamageNumber.cs,101,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"public static void SetElementColor(DamageElement element, Color color)"
+Assets/_Project/Scripts/Combat/DamageNumber.cs,216,DamageElement,Assets/_Project/Scripts/Combat/DamageInfo.cs,Combat,Combat,Gameplay,Gameplay,"void Play(Vector3 worldPos, float amount, DamageElement element)"
+Assets/_Project/Scripts/Combat/ExplosionFx.cs,28,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public UnitHealth source;
+Assets/_Project/Scripts/Combat/ExplosionFx.cs,144,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = h.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Combat/ExplosionFx.cs,145,Team,Assets/_Project/Scripts/Core/Team.cs,Combat,Core,Gameplay,Core,if (uh != null && uh.team == Team.Monster && !uh.dead)
+Assets/_Project/Scripts/Combat/ExplosionFx.cs,146,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,"uh.TakeHit(damage, sharpness, DamageType.Blunt,"
+Assets/_Project/Scripts/Combat/FireballProjectile.cs,5,Projectile,Assets/_Project/Scripts/Combat/Projectile.cs,Combat,Combat,Gameplay,Gameplay,public class FireballProjectile : Projectile
+Assets/_Project/Scripts/Combat/FireballProjectile.cs,19,ExplosionFx,Assets/_Project/Scripts/Combat/ExplosionFx.cs,Combat,Combat,Gameplay,Gameplay,var efx = fx.GetComponent<ExplosionFx>();
+Assets/_Project/Scripts/Combat/HeavySlashEffect.cs,5,SkillEffectBase,Assets/_Project/Scripts/Combat/SkillEffectBase.cs,Combat,Combat,Gameplay,Gameplay,public class HeavySlashEffect : SkillEffectBase
+Assets/_Project/Scripts/Combat/HeavySlashEffect.cs,9,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override bool CanCast(SkillCastContext ctx) { return ctx.Caster.sword != null; }
+Assets/_Project/Scripts/Combat/HeavySlashEffect.cs,11,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override void Execute(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,11,ICharacterCombat,Assets/_Project/Scripts/Core/ICharacterCombat.cs,Combat,Core,Gameplay,Core,"public class MeleeCombat : MonoBehaviour, ICharacterCombat"
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,21,WeaponData,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,public WeaponData weapon;
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,27,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Combat,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,29,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public UnitHealth health;
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,147,MetaState,Assets/_Project/Scripts/Core/MetaState.cs,Combat,Core,Gameplay,App,dmgMult += (MetaState.Level - 1) * 0.25f;
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,335,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = _target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,339,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,"uh.TakeHit(GetRawDamage(), _sharpness, DamageType.Slash,"
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,364,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = h.collider.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,365,Team,Assets/_Project/Scripts/Core/Team.cs,Combat,Core,Gameplay,Core,if (uh == null || uh.team != Team.Monster || !_hitIds.Add(uh.GetInstanceID())) continue;
+Assets/_Project/Scripts/Combat/MeleeCombat.cs,366,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,"uh.TakeHit(raw, _sharpness, DamageType.Slash, h.point, health);"
+Assets/_Project/Scripts/Combat/Projectile.cs,8,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,[HideInInspector] public UnitHealth target;
+Assets/_Project/Scripts/Combat/Projectile.cs,9,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,[HideInInspector] public UnitHealth source;
+Assets/_Project/Scripts/Combat/Projectile.cs,43,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,static Vector3 AimPoint(UnitHealth unit)
+Assets/_Project/Scripts/Combat/Projectile.cs,68,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,"target.TakeHit(damage, sharpness, DamageType.Thrust, end, source);"
+Assets/_Project/Scripts/Combat/Projectile.cs,87,SimplePool,Assets/_Project/Scripts/Combat/SimplePool.cs,Combat,Combat,Gameplay,Gameplay,"SimplePool.Release(_prefab, gameObject);"
+Assets/_Project/Scripts/Combat/RangedCombat.cs,6,ICharacterCombat,Assets/_Project/Scripts/Core/ICharacterCombat.cs,Combat,Core,Gameplay,Core,"public class RangedCombat : MonoBehaviour, ICharacterCombat"
+Assets/_Project/Scripts/Combat/RangedCombat.cs,13,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Combat,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Combat/RangedCombat.cs,15,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public UnitHealth health;
+Assets/_Project/Scripts/Combat/RangedCombat.cs,201,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = _target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Combat/RangedCombat.cs,204,SimplePool,Assets/_Project/Scripts/Combat/SimplePool.cs,Combat,Combat,Gameplay,Gameplay,"var go = SimplePool.Get(arrowPrefab, bow.position, Quaternion.identity);"
+Assets/_Project/Scripts/Combat/RangedCombat.cs,205,Projectile,Assets/_Project/Scripts/Combat/Projectile.cs,Combat,Combat,Gameplay,Gameplay,var p = go.GetComponent<Projectile>();
+Assets/_Project/Scripts/Combat/SkillCastContext.cs,19,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Combat,Units,Gameplay,Gameplay,public readonly SkillSystem Caster;
+Assets/_Project/Scripts/Combat/SkillCastContext.cs,21,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,public readonly UnitHealth CasterUnit;
+Assets/_Project/Scripts/Combat/SkillCastContext.cs,26,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Combat,Units,Gameplay,Gameplay,"SkillSystem caster, UnitHealth casterUnit, float speed)"
+Assets/_Project/Scripts/Combat/SkillCastContext.cs,26,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,"SkillSystem caster, UnitHealth casterUnit, float speed)"
+Assets/_Project/Scripts/Combat/SkillEffectBase.cs,21,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public abstract bool CanCast(SkillCastContext ctx);
+Assets/_Project/Scripts/Combat/SkillEffectBase.cs,22,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public abstract void Execute(SkillCastContext ctx);
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,7,SkillEffectBase,Assets/_Project/Scripts/Combat/SkillEffectBase.cs,Combat,Combat,Gameplay,Gameplay,public class FireballEffect : SkillEffectBase
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,25,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override bool CanCast(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,28,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (target == null) { MessageFeed.SetMessage(""火球需要选择一个敌人目标""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,29,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,30,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (uh == null || uh.dead) { MessageFeed.SetMessage(""火球需要选择一个敌人目标""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,32,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (d.magnitude > range) { MessageFeed.SetMessage(""目标超出技能范围""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,36,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override void Execute(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,47,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,IEnumerator FireRoutine(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,57,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = target != null ? target.GetComponent<UnitHealth>() : null;
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,62,SimplePool,Assets/_Project/Scripts/Combat/SimplePool.cs,Combat,Combat,Gameplay,Gameplay,"var go = SimplePool.Get(fireballPrefab, spawnPos, Quaternion.identity);"
+Assets/_Project/Scripts/Combat/SkillEffectFireball.cs,63,FireballProjectile,Assets/_Project/Scripts/Combat/FireballProjectile.cs,Combat,Combat,Gameplay,Gameplay,var p = go.GetComponent<FireballProjectile>();
+Assets/_Project/Scripts/Combat/SkillEffects.cs,10,SkillEffectBase,Assets/_Project/Scripts/Combat/SkillEffectBase.cs,Combat,Combat,Gameplay,Gameplay,public class BashEffect : SkillEffectBase
+Assets/_Project/Scripts/Combat/SkillEffects.cs,27,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override bool CanCast(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffects.cs,30,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (target == null) { MessageFeed.SetMessage(""盾击需要选择一个敌人目标""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffects.cs,31,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Combat/SkillEffects.cs,32,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (uh == null || uh.dead) { MessageFeed.SetMessage(""盾击需要选择一个敌人目标""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffects.cs,34,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Combat,Core,Gameplay,Core,"if (d.magnitude > range) { MessageFeed.SetMessage(""目标超出技能范围""); return false; }"
+Assets/_Project/Scripts/Combat/SkillEffects.cs,38,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,public override void Execute(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffects.cs,43,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Combat,Combat,Gameplay,Gameplay,IEnumerator BashRoutine(SkillCastContext ctx)
+Assets/_Project/Scripts/Combat/SkillEffects.cs,50,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Combat,Units,Gameplay,Gameplay,UnitMotion.Begin(agent);
+Assets/_Project/Scripts/Combat/SkillEffects.cs,67,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Combat,Units,Gameplay,Gameplay,var uh = target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Combat/SkillEffects.cs,71,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Combat,Content,Gameplay,Content,"uh.TakeHit(dmg, 999f, DamageType.Blunt, uh.transform.position + Vector3.up * 0.6f,"
+Assets/_Project/Scripts/Combat/SkillEffects.cs,73,MonsterBrain,Assets/_Project/Scripts/Units/MonsterBrain.cs,Combat,Units,Gameplay,Gameplay,var brain = uh.GetComponent<MonsterBrain>();
+Assets/_Project/Scripts/Combat/SkillEffects.cs,87,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Combat,Units,Gameplay,Gameplay,UnitMotion.End(agent);
+Assets/_Project/Scripts/Content/UnitStats.cs,11,Team,Assets/_Project/Scripts/Core/Team.cs,Content,Core,Content,Core,public Team team = Team.Monster;
+Assets/_Project/Scripts/Core/AppFlow.cs,42,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,App,Core,return UnitRegistry.OfTeam(Team.Player).Count > 0;
+Assets/_Project/Scripts/Core/AppFlow.cs,42,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Core,Core,App,Gameplay,return UnitRegistry.OfTeam(Team.Player).Count > 0;
+Assets/_Project/Scripts/Core/GameData.cs,6,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,public static int gold { get { return RunState.Gold; } set { RunState.Gold = value; } }
+Assets/_Project/Scripts/Core/GameData.cs,7,MetaState,Assets/_Project/Scripts/Core/MetaState.cs,Core,Core,App,App,public static int level { get { return MetaState.Level; } set { MetaState.Level = value; } }
+Assets/_Project/Scripts/Core/GameData.cs,8,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,public static int kills { get { return RunState.Kills; } set { RunState.Kills = value; } }
+Assets/_Project/Scripts/Core/GameData.cs,9,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,public static string message { get { return MessageFeed.Message; } set { MessageFeed.Message = value; } }
+Assets/_Project/Scripts/Core/GameData.cs,13,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,add { MessageFeed.Changed += value; }
+Assets/_Project/Scripts/Core/GameData.cs,14,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,remove { MessageFeed.Changed -= value; }
+Assets/_Project/Scripts/Core/GameData.cs,17,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,public static void AddGold(int g) { RunState.AddGold(g); MessageFeed.RaiseChanged(); }
+Assets/_Project/Scripts/Core/GameData.cs,17,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,public static void AddGold(int g) { RunState.AddGold(g); MessageFeed.RaiseChanged(); }
+Assets/_Project/Scripts/Core/GameData.cs,18,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,public static void AddKill() { RunState.AddKill(); }
+Assets/_Project/Scripts/Core/GameData.cs,19,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,public static void SetMessage(string m) { MessageFeed.SetMessage(m); }
+Assets/_Project/Scripts/Core/GameData.cs,21,MetaState,Assets/_Project/Scripts/Core/MetaState.cs,Core,Core,App,App,public static int LevelCost() { return MetaState.LevelCost(); }
+Assets/_Project/Scripts/Core/GameData.cs,23,MeleeCombat,Assets/_Project/Scripts/Combat/MeleeCombat.cs,Core,Combat,App,Gameplay,"public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh) { return MetaState.TryLevelUp(sw, uh); }"
+Assets/_Project/Scripts/Core/GameData.cs,23,MetaState,Assets/_Project/Scripts/Core/MetaState.cs,Core,Core,App,App,"public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh) { return MetaState.TryLevelUp(sw, uh); }"
+Assets/_Project/Scripts/Core/GameData.cs,23,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,App,Gameplay,"public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh) { return MetaState.TryLevelUp(sw, uh); }"
+Assets/_Project/Scripts/Core/GameFlow.cs,9,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,public static bool GameStarted { get { return AppFlow.GameStarted; } set { AppFlow.GameStarted = value; } }
+Assets/_Project/Scripts/Core/GameFlow.cs,11,RunFlow,Assets/_Project/Scripts/Core/RunFlow.cs,Core,Core,App,App,public bool IsWiped { get { return RunFlow.IsWiped; } }
+Assets/_Project/Scripts/Core/GameFlow.cs,20,RunFlow,Assets/_Project/Scripts/Core/RunFlow.cs,Core,Core,App,App,RunFlow.EnterScene();
+Assets/_Project/Scripts/Core/GameFlow.cs,25,RunFlow,Assets/_Project/Scripts/Core/RunFlow.cs,Core,Core,App,App,RunFlow.Tick();
+Assets/_Project/Scripts/Core/MetaState.cs,14,MeleeCombat,Assets/_Project/Scripts/Combat/MeleeCombat.cs,Core,Combat,App,Gameplay,"public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)"
+Assets/_Project/Scripts/Core/MetaState.cs,14,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,App,Gameplay,"public static bool TryLevelUp(MeleeCombat sw, UnitHealth uh)"
+Assets/_Project/Scripts/Core/MetaState.cs,16,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,if (RunState.Gold < LevelCost()) return false;
+Assets/_Project/Scripts/Core/MetaState.cs,17,RunState,Assets/_Project/Scripts/Core/RunState.cs,Core,Core,App,Core,RunState.Gold -= LevelCost();
+Assets/_Project/Scripts/Core/MetaState.cs,21,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,MessageFeed.RaiseChanged();
+Assets/_Project/Scripts/Core/PauseManager.cs,12,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,public bool IsPaused { get { return AppFlow.IsPaused; } }
+Assets/_Project/Scripts/Core/PauseManager.cs,21,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,AppFlow.Pause();
+Assets/_Project/Scripts/Core/PauseManager.cs,26,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,AppFlow.Resume();
+Assets/_Project/Scripts/Core/RunFlow.cs,16,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,AppFlow.GameStarted = false;
+Assets/_Project/Scripts/Core/RunFlow.cs,20,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,if (AppFlow.AnyPlayerTeam())
+Assets/_Project/Scripts/Core/RunFlow.cs,22,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,AppFlow.GameStarted = true;
+Assets/_Project/Scripts/Core/RunFlow.cs,34,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,AppFlow.ReloadActiveScene();
+Assets/_Project/Scripts/Core/RunFlow.cs,39,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Core,Core,App,App,if (!AppFlow.GameStarted) return;
+Assets/_Project/Scripts/Core/RunFlow.cs,42,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,App,Core,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/Core/RunFlow.cs,42,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Core,Core,App,Gameplay,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/Core/RunFlow.cs,44,DownedRescue,Assets/_Project/Scripts/Units/DownedRescue.cs,Core,Units,App,Gameplay,var dr = h.GetComponent<DownedRescue>();
+Assets/_Project/Scripts/Core/RunFlow.cs,52,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,App,Core,"MessageFeed.SetMessage(""全队覆没！按 R 重来"");"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,28,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _units = new List<UnitHealth>();                  // 注册顺序；含未激活
+Assets/_Project/Scripts/Core/UnitRegistry.cs,29,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"static readonly Dictionary<UnitHealth, UnitId> _ids = new Dictionary<UnitHealth, UnitId>();"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,29,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,"static readonly Dictionary<UnitHealth, UnitId> _ids = new Dictionary<UnitHealth, UnitId>();"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,30,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"static readonly Dictionary<int, UnitHealth> _byId = new Dictionary<int, UnitHealth>();"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,31,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly HashSet<UnitHealth> _active = new HashSet<UnitHealth>();
+Assets/_Project/Scripts/Core/UnitRegistry.cs,34,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewAll = new List<UnitHealth>();                // 全部注册（含未激活）
+Assets/_Project/Scripts/Core/UnitRegistry.cs,35,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewActive = new List<UnitHealth>();             // 仅激活
+Assets/_Project/Scripts/Core/UnitRegistry.cs,36,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewPlayers = new List<UnitHealth>();            // 激活 + Player
+Assets/_Project/Scripts/Core/UnitRegistry.cs,37,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewMonsters = new List<UnitHealth>();           // 激活 + Monster
+Assets/_Project/Scripts/Core/UnitRegistry.cs,38,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewPlayersAny = new List<UnitHealth>();         // 含未激活 + Player
+Assets/_Project/Scripts/Core/UnitRegistry.cs,39,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,static readonly List<UnitHealth> _viewMonstersAny = new List<UnitHealth>();        // 含未激活 + Monster
+Assets/_Project/Scripts/Core/UnitRegistry.cs,76,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,var survivors = new List<UnitHealth>(_units.Count);
+Assets/_Project/Scripts/Core/UnitRegistry.cs,77,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"var survivorIds = new Dictionary<UnitHealth, UnitId>(_units.Count);"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,77,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,"var survivorIds = new Dictionary<UnitHealth, UnitId>(_units.Count);"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,80,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth u = _units[i];
+Assets/_Project/Scripts/Core/UnitRegistry.cs,83,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,UnitId id;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,94,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth u = survivors[i];
+Assets/_Project/Scripts/Core/UnitRegistry.cs,95,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,UnitId id;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,98,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,id = new UnitId(++_nextId);
+Assets/_Project/Scripts/Core/UnitRegistry.cs,113,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,public static void Register(UnitHealth unit)
+Assets/_Project/Scripts/Core/UnitRegistry.cs,124,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,UnitId id = new UnitId(++_nextId);
+Assets/_Project/Scripts/Core/UnitRegistry.cs,133,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,public static void Unregister(UnitHealth unit)
+Assets/_Project/Scripts/Core/UnitRegistry.cs,137,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,UnitId id;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,141,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth current;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,149,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"public static void SetActiveState(UnitHealth unit, bool active)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,173,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,public static IReadOnlyList<UnitHealth> All(bool includeInactive = false)
+Assets/_Project/Scripts/Core/UnitRegistry.cs,180,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,"public static IReadOnlyList<UnitHealth> OfTeam(Team team, bool includeInactive = false)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,180,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"public static IReadOnlyList<UnitHealth> OfTeam(Team team, bool includeInactive = false)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,183,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,if (team == Team.Player) return includeInactive ? _viewPlayersAny : _viewPlayers;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,188,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"public static void InRadius(Vector3 center, float radius, List<UnitHealth> results,"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,189,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,"Team? team = null, bool includeInactive = false)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,195,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,IReadOnlyList<UnitHealth> source = includeInactive ? _viewAll : _viewActive;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,199,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth u = source[i];
+Assets/_Project/Scripts/Core/UnitRegistry.cs,209,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,"public static UnitHealth Nearest(Vector3 center, float maxRange, Team team,"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,209,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"public static UnitHealth Nearest(Vector3 center, float maxRange, Team team,"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,210,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"System.Func<UnitHealth, bool> filter = null)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,214,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,IReadOnlyList<UnitHealth> source = team == Team.Player ? _viewPlayers : _viewMonsters;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,214,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,IReadOnlyList<UnitHealth> source = team == Team.Player ? _viewPlayers : _viewMonsters;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,215,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth best = null;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,219,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth u = source[i];
+Assets/_Project/Scripts/Core/UnitRegistry.cs,229,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,public static UnitHealth Find(UnitId id)
+Assets/_Project/Scripts/Core/UnitRegistry.cs,229,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,public static UnitHealth Find(UnitId id)
+Assets/_Project/Scripts/Core/UnitRegistry.cs,232,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth unit;
+Assets/_Project/Scripts/Core/UnitRegistry.cs,238,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,"public static bool TryGetId(UnitHealth unit, out UnitId id)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,238,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,"public static bool TryGetId(UnitHealth unit, out UnitId id)"
+Assets/_Project/Scripts/Core/UnitRegistry.cs,240,UnitId,Assets/_Project/Scripts/Core/UnitId.cs,Core,Core,Gameplay,Core,if (unit == null) { id = UnitId.None; return false; }
+Assets/_Project/Scripts/Core/UnitRegistry.cs,262,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,UnitHealth u = _units[i];
+Assets/_Project/Scripts/Core/UnitRegistry.cs,266,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,if (u.team == Team.Player) _viewPlayersAny.Add(u);
+Assets/_Project/Scripts/Core/UnitRegistry.cs,271,Team,Assets/_Project/Scripts/Core/Team.cs,Core,Core,Gameplay,Core,if (u.team == Team.Player) _viewPlayers.Add(u);
+Assets/_Project/Scripts/Core/WaveSpawner.cs,24,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,readonly List<UnitHealth> _alive = new List<UnitHealth>();
+Assets/_Project/Scripts/Core/WaveSpawner.cs,40,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,Gameplay,Core,MessageFeed.SetMessage(_waveIdx + 1 >= waves.Length
+Assets/_Project/Scripts/Core/WaveSpawner.cs,66,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Core,Units,Gameplay,Gameplay,var uh = go.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Core/WaveSpawner.cs,70,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Core,Core,Gameplay,Core,"MessageFeed.SetMessage($""第 {_waveIdx + 1} 波！"");"
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,33,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Debug,Core,Editor,Gameplay,foreach (var h in UnitRegistry.All(true))
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,35,Team,Assets/_Project/Scripts/Core/Team.cs,Debug,Core,Editor,Core,if (h == null || h.team != Team.Monster) continue;
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,66,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Debug,Units,Editor,Gameplay,var health = go.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,67,Team,Assets/_Project/Scripts/Core/Team.cs,Debug,Core,Editor,Core,bool ok = health != null && !health.dead && health.team == Team.Monster;
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,93,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Debug,Core,Editor,Gameplay,foreach (var h in UnitRegistry.All())
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,95,Team,Assets/_Project/Scripts/Core/Team.cs,Debug,Core,Editor,Core,if (h == null || h.team != Team.Player) continue;
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,108,UnitMana,Assets/_Project/Scripts/Units/UnitMana.cs,Debug,Units,Editor,Gameplay,var mana = h.GetComponentInParent<UnitMana>();
+Assets/_Project/Scripts/Debug/DebugTestTools.cs,111,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Debug,Units,Editor,Gameplay,var skills = h.GetComponentInParent<SkillSystem>();
+Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,30,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,bool IsAvailable(CharacterBrain unit);
+Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,33,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,float Radius(CharacterBrain unit);
+Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,36,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,void Interact(CharacterBrain unit);
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs,26,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,"public static float RadiusFor(Component target, CharacterBrain unit)"
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,14,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,static readonly List<IInteractionTarget> KeyTargets = new List<IInteractionTarget>();
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,16,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,CharacterBrain _brain;
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,17,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,IInteractionTarget _pending;
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,20,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Gameplay/Interaction,Units,Gameplay,Gameplay,public static InteractionRunner Ensure(CharacterBrain brain)
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,30,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,public static void RegisterKeyTarget(IInteractionTarget target)
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,37,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,public static void UnregisterKeyTarget(IInteractionTarget target)
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,48,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,public void Order(IInteractionTarget target)
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,96,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,IInteractionTarget NearestKeyTarget()
+Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,100,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Gameplay/Interaction,Gameplay/Interaction,Gameplay,Gameplay,IInteractionTarget best = null;
+Assets/_Project/Scripts/Items/ChestItem.cs,8,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,Items,Content,Gameplay,Content,public ItemData data;
+Assets/_Project/Scripts/Items/Inventory.cs,11,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,Items,Content,Gameplay,Content,public List<ItemData> items;
+Assets/_Project/Scripts/Items/Inventory.cs,16,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,Items,Content,Gameplay,Content,items = new List<ItemData>(new ItemData[capacity]);
+Assets/_Project/Scripts/Items/Inventory.cs,20,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,Items,Content,Gameplay,Content,public int Add(ItemData item)
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,11,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,CharacterBrain _brain;
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,16,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,_brain = GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,23,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Player,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,24,UIManager,Assets/_Project/Scripts/UI/UIManager.cs,Player,UI,Gameplay,UI,if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,28,SkillInputController,Assets/_Project/Scripts/Player/SkillInputController.cs,Player,Player,Gameplay,Gameplay,if (SkillInputController.instance != null && SkillInputController.IsTargeting) return;
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,29,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,Player,Player,Gameplay,Gameplay,var sm = SelectionManager.instance;
+Assets/_Project/Scripts/Player/PlayerCommandController.cs,31,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,if (sm.Primary.GetComponentInParent<CharacterBrain>() != _brain) return;
+Assets/_Project/Scripts/Player/Selectable.cs,16,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,Player,Player,Gameplay,Gameplay,if (SelectionManager.instance != null)
+Assets/_Project/Scripts/Player/Selectable.cs,17,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,Player,Player,Gameplay,Gameplay,SelectionManager.instance.Register(this);
+Assets/_Project/Scripts/Player/SelectionManager.cs,17,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,readonly List<Selectable> _all = new List<Selectable>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,18,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,readonly List<Selectable> _selected = new List<Selectable>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,19,DebugCameraSwitcher,Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs,Player,Debug,Gameplay,Gameplay,DebugCameraSwitcher _cam;
+Assets/_Project/Scripts/Player/SelectionManager.cs,21,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,public Selectable Primary
+Assets/_Project/Scripts/Player/SelectionManager.cs,29,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,CharacterBrain PrimaryBrain
+Assets/_Project/Scripts/Player/SelectionManager.cs,34,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,return p != null ? p.GetComponentInParent<CharacterBrain>() : null;
+Assets/_Project/Scripts/Player/SelectionManager.cs,39,DebugCameraSwitcher,Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs,Player,Debug,Gameplay,Gameplay,DebugCameraSwitcher Cam
+Assets/_Project/Scripts/Player/SelectionManager.cs,43,DebugCameraSwitcher,Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs,Player,Debug,Gameplay,Gameplay,if (_cam == null) _cam = DebugCameraSwitcher.instance;
+Assets/_Project/Scripts/Player/SelectionManager.cs,51,DebugCameraSwitcher,Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs,Player,Debug,Gameplay,Gameplay,_cam = DebugCameraSwitcher.instance;
+Assets/_Project/Scripts/Player/SelectionManager.cs,57,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Player,Core,Gameplay,Gameplay,foreach (var h in UnitRegistry.All())
+Assets/_Project/Scripts/Player/SelectionManager.cs,59,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,var s = h.GetComponentInChildren<Selectable>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,64,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,public void Register(Selectable s)
+Assets/_Project/Scripts/Player/SelectionManager.cs,75,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,public void ForEachSelectedBrain(System.Action<CharacterBrain> action)
+Assets/_Project/Scripts/Player/SelectionManager.cs,79,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var b = s.GetComponentInParent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,89,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Player,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/SelectionManager.cs,103,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,if (s != null && s.GetComponentInParent<UnitHealth>() != null
+Assets/_Project/Scripts/Player/SelectionManager.cs,104,Team,Assets/_Project/Scripts/Core/Team.cs,Player,Core,Gameplay,Core,&& s.GetComponentInParent<UnitHealth>().team == Team.Player)
+Assets/_Project/Scripts/Player/SelectionManager.cs,104,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,&& s.GetComponentInParent<UnitHealth>().team == Team.Player)
+Assets/_Project/Scripts/Player/SelectionManager.cs,112,SkillInputController,Assets/_Project/Scripts/Player/SkillInputController.cs,Player,Player,Gameplay,Gameplay,if (Input.GetMouseButtonUp(0) && !_moved && !(SkillInputController.instance != null && SkillInputController.IsTargeting))
+Assets/_Project/Scripts/Player/SelectionManager.cs,119,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,var runner = InteractionRunner.Ensure(primaryBrain);
+Assets/_Project/Scripts/Player/SelectionManager.cs,123,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Player,Core,Gameplay,Core,if (!string.IsNullOrEmpty(hint)) MessageFeed.SetMessage(hint);
+Assets/_Project/Scripts/Player/SelectionManager.cs,150,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,Selectable sel = null;
+Assets/_Project/Scripts/Player/SelectionManager.cs,151,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,UnitHealth enemy = null;
+Assets/_Project/Scripts/Player/SelectionManager.cs,152,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,IInteractionTarget inter = null;
+Assets/_Project/Scripts/Player/SelectionManager.cs,158,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,var s = h.collider.GetComponentInParent<Selectable>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,163,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,var uh = h.collider.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,164,Team,Assets/_Project/Scripts/Core/Team.cs,Player,Core,Gameplay,Core,if (uh != null && uh.team == Team.Monster && !uh.dead) enemy = uh;
+Assets/_Project/Scripts/Player/SelectionManager.cs,166,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,"inter = BestTarget(inter, h.collider.GetComponentInParent<IInteractionTarget>(), primaryBrain);"
+Assets/_Project/Scripts/Player/SelectionManager.cs,185,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var brain = s.GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,194,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var brain = s.GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,206,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,"static IInteractionTarget BestTarget(IInteractionTarget best, IInteractionTarget cand, CharacterBrain unit)"
+Assets/_Project/Scripts/Player/SelectionManager.cs,206,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,"static IInteractionTarget BestTarget(IInteractionTarget best, IInteractionTarget cand, CharacterBrain unit)"
+Assets/_Project/Scripts/Player/SelectionManager.cs,216,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,bool TryCommandRescue(IInteractionTarget target)
+Assets/_Project/Scripts/Player/SelectionManager.cs,218,InteractionPriority,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Player,Gameplay/Interaction,Gameplay,Gameplay,if (target == null || target.Priority != InteractionPriority.Rescue) return false;
+Assets/_Project/Scripts/Player/SelectionManager.cs,226,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,var h = s.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,227,Team,Assets/_Project/Scripts/Core/Team.cs,Player,Core,Gameplay,Core,if (h == null || h.dead || h.team != Team.Player) continue;   // 倒地者 dead=true，救不了自己
+Assets/_Project/Scripts/Player/SelectionManager.cs,228,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var brain = s.GetComponentInParent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SelectionManager.cs,236,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,void SingleSelect(Selectable s)
+Assets/_Project/Scripts/Player/SelectionManager.cs,243,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Player,Player,Gameplay,Gameplay,void ToggleSelect(Selectable s)
+Assets/_Project/Scripts/Player/SelectionManager.cs,256,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,UnitHealth _enemySelected;
+Assets/_Project/Scripts/Player/SelectionManager.cs,259,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,void SelectEnemy(UnitHealth uh)
+Assets/_Project/Scripts/Player/SkillInputController.cs,24,SkillIndicator,Assets/_Project/Scripts/Player/SkillIndicator.cs,Player,Player,Gameplay,Gameplay,public SkillIndicator indicator;
+Assets/_Project/Scripts/Player/SkillInputController.cs,33,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Player,Units,Gameplay,Gameplay,SkillSystem _pendingCaster;      // 追放中的施法者（主选变更则取消）
+Assets/_Project/Scripts/Player/SkillInputController.cs,36,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,readonly List<UnitHealth> _enemyCache = new List<UnitHealth>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,44,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Player,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Player/SkillInputController.cs,45,UIManager,Assets/_Project/Scripts/UI/UIManager.cs,Player,UI,Gameplay,UI,if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;
+Assets/_Project/Scripts/Player/SkillInputController.cs,56,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,var puh = _pendingTarget != null ? _pendingTarget.GetComponent<UnitHealth>() : null;
+Assets/_Project/Scripts/Player/SkillInputController.cs,71,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var brain = _pendingCaster.GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,100,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Player,Core,Gameplay,Core,"MessageFeed.SetMessage(""未选中敌人"");   // 点空地=取消，但要说明原因"
+Assets/_Project/Scripts/Player/SkillInputController.cs,114,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Player,Core,Gameplay,Core,"MessageFeed.SetMessage(""目标超出射程，正在接近"");"
+Assets/_Project/Scripts/Player/SkillInputController.cs,118,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Player,Units,Gameplay,Gameplay,var brain = ss.GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,145,SkillData,Assets/_Project/Scripts/Units/SkillData.cs,Player,Units,Gameplay,Gameplay,static float GetSkillRange(SkillData s)
+Assets/_Project/Scripts/Player/SkillInputController.cs,163,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Player,Units,Gameplay,Gameplay,SkillSystem PrimarySkillSystem()
+Assets/_Project/Scripts/Player/SkillInputController.cs,165,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,Player,Player,Gameplay,Gameplay,if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;
+Assets/_Project/Scripts/Player/SkillInputController.cs,166,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,Player,Player,Gameplay,Gameplay,return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,166,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Player,Units,Gameplay,Gameplay,return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,170,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,Player,Units,Gameplay,Gameplay,"void CastWithFeedback(SkillSystem caster, int index, Transform target)"
+Assets/_Project/Scripts/Player/SkillInputController.cs,172,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Player,Core,Gameplay,Core,string before = MessageFeed.Message;
+Assets/_Project/Scripts/Player/SkillInputController.cs,174,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Player,Core,Gameplay,Core,"if (MessageFeed.Message == before) MessageFeed.SetMessage(""技能释放失败"");"
+Assets/_Project/Scripts/Player/SkillInputController.cs,178,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,public UnitHealth PickEnemyAt(Vector3 screenPosition)
+Assets/_Project/Scripts/Player/SkillInputController.cs,186,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,public UnitHealth PickEnemyFromRay(Ray ray)
+Assets/_Project/Scripts/Player/SkillInputController.cs,192,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,var uh = h.collider.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Player/SkillInputController.cs,193,Team,Assets/_Project/Scripts/Core/Team.cs,Player,Core,Gameplay,Core,if (uh != null && uh.team == Team.Monster && !uh.dead)
+Assets/_Project/Scripts/Player/SkillInputController.cs,202,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Player,Units,Gameplay,Gameplay,UnitHealth best = null;
+Assets/_Project/Scripts/Player/SkillInputController.cs,219,Team,Assets/_Project/Scripts/Core/Team.cs,Player,Core,Gameplay,Core,foreach (var h in UnitRegistry.OfTeam(Team.Monster))
+Assets/_Project/Scripts/Player/SkillInputController.cs,219,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Player,Core,Gameplay,Gameplay,foreach (var h in UnitRegistry.OfTeam(Team.Monster))
+Assets/_Project/Scripts/System/Chest.cs,11,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,"public class Chest : MonoBehaviour, IInteractionTarget"
+Assets/_Project/Scripts/System/Chest.cs,24,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,System,Items,Gameplay,Gameplay,Inventory _inv;
+Assets/_Project/Scripts/System/Chest.cs,25,Interactable,Assets/_Project/Scripts/System/Interactable.cs,System,System,Gameplay,Gameplay,Interactable _interact;
+Assets/_Project/Scripts/System/Chest.cs,28,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,System,Items,Gameplay,Gameplay,public Inventory Contents { get { return _inv; } }
+Assets/_Project/Scripts/System/Chest.cs,32,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,System,Items,Gameplay,Gameplay,_inv = GetComponent<Inventory>();
+Assets/_Project/Scripts/System/Chest.cs,33,Interactable,Assets/_Project/Scripts/System/Interactable.cs,System,System,Gameplay,Gameplay,_interact = GetComponent<Interactable>();
+Assets/_Project/Scripts/System/Chest.cs,34,ChestItem,Assets/_Project/Scripts/Items/ChestItem.cs,System,Items,Gameplay,Gameplay,foreach (var ci in GetComponentsInChildren<ChestItem>(true))
+Assets/_Project/Scripts/System/Chest.cs,42,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,System,Content,Gameplay,Content,_inv.items = new System.Collections.Generic.List<ItemData>(new ItemData[_inv.capacity]);
+Assets/_Project/Scripts/System/Chest.cs,43,ChestItem,Assets/_Project/Scripts/Items/ChestItem.cs,System,Items,Gameplay,Gameplay,foreach (var ci in GetComponentsInChildren<ChestItem>(true))
+Assets/_Project/Scripts/System/Chest.cs,49,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public void OpenBy(CharacterBrain unit)
+Assets/_Project/Scripts/System/Chest.cs,62,InteractionPriority,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,public InteractionPriority Priority { get { return InteractionPriority.Default; } }
+Assets/_Project/Scripts/System/Chest.cs,66,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public bool IsAvailable(CharacterBrain unit) { return !_opened; }
+Assets/_Project/Scripts/System/Chest.cs,68,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,"public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }"
+Assets/_Project/Scripts/System/Chest.cs,68,InteractionDefinition,Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs,System,Gameplay/Interaction,Gameplay,Gameplay,"public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }"
+Assets/_Project/Scripts/System/Chest.cs,71,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public void Interact(CharacterBrain unit) { OpenBy(unit); }
+Assets/_Project/Scripts/System/Chest.cs,89,ChestItem,Assets/_Project/Scripts/Items/ChestItem.cs,System,Items,Gameplay,Gameplay,foreach (var ci in GetComponentsInChildren<ChestItem>(true))
+Assets/_Project/Scripts/System/Chest.cs,96,ItemData,Assets/_Project/Scripts/Content/ItemData.cs,System,Content,Gameplay,Content,public void Take(ItemData item)
+Assets/_Project/Scripts/System/Chest.cs,98,ChestItem,Assets/_Project/Scripts/Items/ChestItem.cs,System,Items,Gameplay,Gameplay,foreach (var ci in GetComponentsInChildren<ChestItem>(false))
+Assets/_Project/Scripts/System/Chest.cs,102,RunState,Assets/_Project/Scripts/Core/RunState.cs,System,Core,Gameplay,Core,if (item.goldValue > 0) RunState.AddGold(item.goldValue);
+Assets/_Project/Scripts/System/Chest.cs,103,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,System,Core,Gameplay,Core,"if (_inv != null && _inv.items.Count == 0) MessageFeed.SetMessage(""宝箱已取空"");"
+Assets/_Project/Scripts/System/DungeonDoor.cs,9,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,"public class DungeonDoor : MonoBehaviour, IInteractionTarget"
+Assets/_Project/Scripts/System/DungeonDoor.cs,20,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,System,Gameplay/Interaction,Gameplay,Gameplay,void OnEnable() { InteractionRunner.RegisterKeyTarget(this); }
+Assets/_Project/Scripts/System/DungeonDoor.cs,22,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,System,Gameplay/Interaction,Gameplay,Gameplay,void OnDisable() { InteractionRunner.UnregisterKeyTarget(this); }
+Assets/_Project/Scripts/System/DungeonDoor.cs,30,InteractionPriority,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,public InteractionPriority Priority { get { return InteractionPriority.Default; } }
+Assets/_Project/Scripts/System/DungeonDoor.cs,34,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public bool IsAvailable(CharacterBrain unit) { return !_used; }
+Assets/_Project/Scripts/System/DungeonDoor.cs,36,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public float Radius(CharacterBrain unit) { return interactRange; }
+Assets/_Project/Scripts/System/DungeonDoor.cs,38,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,System,Units,Gameplay,Gameplay,public void Interact(CharacterBrain unit)
+Assets/_Project/Scripts/System/DungeonDoor.cs,47,TransitionFader,Assets/_Project/Scripts/UI/TransitionFader.cs,System,UI,Gameplay,UI,TransitionFader.Transition(() =>
+Assets/_Project/Scripts/System/DungeonDoor.cs,50,Team,Assets/_Project/Scripts/Core/Team.cs,System,Core,Gameplay,Core,foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/System/DungeonDoor.cs,50,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,System,Core,Gameplay,Gameplay,foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/System/DungeonDoor.cs,60,DebugCameraSwitcher,Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs,System,Debug,Gameplay,Gameplay,var cam = DebugCameraSwitcher.instance;
+Assets/_Project/Scripts/System/FogOfWar.cs,84,Team,Assets/_Project/Scripts/Core/Team.cs,System,Core,Gameplay,Core,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/System/FogOfWar.cs,84,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,System,Core,Gameplay,Gameplay,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/System/Interactable.cs,12,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,public IInteractionTarget Target()
+Assets/_Project/Scripts/System/Interactable.cs,14,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,var target = GetComponent<IInteractionTarget>();
+Assets/_Project/Scripts/System/Interactable.cs,15,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,System,Gameplay/Interaction,Gameplay,Gameplay,return target != null ? target : GetComponentInParent<IInteractionTarget>();
+Assets/_Project/Scripts/System/SkeletonSpawner.cs,40,SkeletonWander,Assets/_Project/Scripts/Units/SkeletonWander.cs,System,Units,Gameplay,Gameplay,if (go.GetComponent<SkeletonWander>() == null) go.AddComponent<SkeletonWander>();
+Assets/_Project/Scripts/System/SkeletonSpawner.cs,41,Visibility,Assets/_Project/Scripts/Units/Visibility.cs,System,Units,Gameplay,Gameplay,if (go.GetComponent<Visibility>() == null) go.AddComponent<Visibility>();
+Assets/_Project/Scripts/UI/CursorManager.cs,50,UIManager,Assets/_Project/Scripts/UI/UIManager.cs,UI,UI,UI,UI,if (UIManager.instance != null && UIManager.instance.IsInventoryOpen)
+Assets/_Project/Scripts/UI/CursorManager.cs,59,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,UnitHealth enemy;
+Assets/_Project/Scripts/UI/CursorManager.cs,60,Interactable,Assets/_Project/Scripts/System/Interactable.cs,UI,System,UI,Gameplay,Interactable inter;
+Assets/_Project/Scripts/UI/CursorManager.cs,61,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,UI,Player,UI,Gameplay,Selectable selectable;
+Assets/_Project/Scripts/UI/CursorManager.cs,71,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,if (!string.IsNullOrEmpty(inter.hint)) MessageFeed.SetMessage(inter.hint);
+Assets/_Project/Scripts/UI/CursorManager.cs,95,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,UnitHealth enemy;
+Assets/_Project/Scripts/UI/CursorManager.cs,101,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,"public Hover ResolveHover(Ray ray, out UnitHealth enemy, out float distance)"
+Assets/_Project/Scripts/UI/CursorManager.cs,103,Interactable,Assets/_Project/Scripts/System/Interactable.cs,UI,System,UI,Gameplay,Interactable inter;
+Assets/_Project/Scripts/UI/CursorManager.cs,104,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,UI,Player,UI,Gameplay,Selectable selectable;
+Assets/_Project/Scripts/UI/CursorManager.cs,108,Interactable,Assets/_Project/Scripts/System/Interactable.cs,UI,System,UI,Gameplay,"Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,"
+Assets/_Project/Scripts/UI/CursorManager.cs,108,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,UI,Player,UI,Gameplay,"Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,"
+Assets/_Project/Scripts/UI/CursorManager.cs,108,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,"Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,"
+Assets/_Project/Scripts/UI/CursorManager.cs,115,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,UI,Player,UI,Gameplay,if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)
+Assets/_Project/Scripts/UI/CursorManager.cs,116,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,UI,Player,UI,Gameplay,selectable = h.collider.GetComponentInParent<Selectable>();
+Assets/_Project/Scripts/UI/CursorManager.cs,119,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,var uh = h.collider.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/UI/CursorManager.cs,120,Team,Assets/_Project/Scripts/Core/Team.cs,UI,Core,UI,Core,if (uh != null && uh.team == Team.Monster && !uh.dead)
+Assets/_Project/Scripts/UI/CursorManager.cs,126,Interactable,Assets/_Project/Scripts/System/Interactable.cs,UI,System,UI,Gameplay,if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)
+Assets/_Project/Scripts/UI/CursorManager.cs,127,Interactable,Assets/_Project/Scripts/System/Interactable.cs,UI,System,UI,Gameplay,inter = h.collider.GetComponentInParent<Interactable>();
+Assets/_Project/Scripts/UI/CursorManager.cs,134,DownedRescue,Assets/_Project/Scripts/Units/DownedRescue.cs,UI,Units,UI,Gameplay,var downed = inter.GetComponent<DownedRescue>();
+Assets/_Project/Scripts/UI/CursorManager.cs,147,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,var sm = SelectionManager.instance;
+Assets/_Project/Scripts/UI/CursorManager.cs,149,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,var h = sm.Primary.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/UI/CursorManager.cs,150,Team,Assets/_Project/Scripts/Core/Team.cs,UI,Core,UI,Core,return h != null && !h.dead && h.team == Team.Player;
+Assets/_Project/Scripts/UI/EscMenuPanel.cs,8,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public class EscMenuPanel : BasePanel
+Assets/_Project/Scripts/UI/EscMenuPanel.cs,12,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,UI,Core,UI,App,AppFlow.Pause();
+Assets/_Project/Scripts/UI/EscMenuPanel.cs,17,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,UI,Core,UI,App,AppFlow.Resume();
+Assets/_Project/Scripts/UI/EscMenuPanel.cs,23,UIManager,Assets/_Project/Scripts/UI/UIManager.cs,UI,UI,UI,UI,if (UIManager.instance != null) UIManager.instance.ClosePanel(this);
+Assets/_Project/Scripts/UI/EscMenuPanel.cs,30,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,UI,Core,UI,App,AppFlow.ReloadActiveScene();
+Assets/_Project/Scripts/UI/HUD.cs,27,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,if (MessageFeed.Message != _lastMessage)
+Assets/_Project/Scripts/UI/HUD.cs,29,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,_lastMessage = MessageFeed.Message;
+Assets/_Project/Scripts/UI/HUD.cs,42,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,var root = SelectionManager.instance != null && SelectionManager.instance.Primary != null
+Assets/_Project/Scripts/UI/HUD.cs,43,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,? SelectionManager.instance.Primary.transform.root : null;
+Assets/_Project/Scripts/UI/HUD.cs,44,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,UI,Units,UI,Gameplay,var uh = root != null ? root.GetComponent<UnitHealth>() : null;
+Assets/_Project/Scripts/UI/HUD.cs,45,MeleeCombat,Assets/_Project/Scripts/Combat/MeleeCombat.cs,UI,Combat,UI,Gameplay,var sw = root != null ? root.GetComponent<MeleeCombat>() : null;
+Assets/_Project/Scripts/UI/HUD.cs,47,MetaState,Assets/_Project/Scripts/Core/MetaState.cs,UI,Core,UI,App,"if (MetaState.TryLevelUp(sw, uh))"
+Assets/_Project/Scripts/UI/HUD.cs,48,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,"MessageFeed.SetMessage($""升级！现在 {MetaState.Level} 级"");"
+Assets/_Project/Scripts/UI/HUD.cs,50,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,"MessageFeed.SetMessage(""金币不足！"");"
+Assets/_Project/Scripts/UI/InventoryUI.cs,11,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public class InventoryUI : BasePanel
+Assets/_Project/Scripts/UI/InventoryUI.cs,16,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,public Inventory playerInv;
+Assets/_Project/Scripts/UI/InventoryUI.cs,24,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,Inventory _chestInv;
+Assets/_Project/Scripts/UI/InventoryUI.cs,25,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,Chest _chest;
+Assets/_Project/Scripts/UI/InventoryUI.cs,33,Team,Assets/_Project/Scripts/Core/Team.cs,UI,Core,UI,Core,foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/UI/InventoryUI.cs,33,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,UI,Core,UI,Gameplay,foreach (var uh in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/UI/InventoryUI.cs,35,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,playerInv = uh.GetComponent<Inventory>();
+Assets/_Project/Scripts/UI/InventoryUI.cs,42,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,public void BindPlayer(Inventory inv)
+Assets/_Project/Scripts/UI/InventoryUI.cs,48,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,"public void SetChestData(Inventory chestInv, Chest chest)"
+Assets/_Project/Scripts/UI/InventoryUI.cs,48,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,"public void SetChestData(Inventory chestInv, Chest chest)"
+Assets/_Project/Scripts/UI/InventoryUI.cs,77,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,"void BuildGrid(Transform grid, Inventory inv, bool isChest)"
+Assets/_Project/Scripts/UI/InventoryUI.cs,102,SlotClickHandler,Assets/_Project/Scripts/UI/SlotClickHandler.cs,UI,UI,UI,UI,var clicker = slot.AddComponent<SlotClickHandler>();
+Assets/_Project/Scripts/UI/InventoryUI.cs,124,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,"else MessageFeed.SetMessage(""背包已满！"");"
+Assets/_Project/Scripts/UI/InventoryUI.cs,133,RunState,Assets/_Project/Scripts/Core/RunState.cs,UI,Core,UI,Core,RunState.AddGold(item.goldValue);
+Assets/_Project/Scripts/UI/InventoryUI.cs,134,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,UI,Core,UI,Core,"MessageFeed.SetMessage($""使用{item.itemName}，+{item.goldValue} 金币"");"
+Assets/_Project/Scripts/UI/MainMenuPanel.cs,6,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public class MainMenuPanel : BasePanel
+Assets/_Project/Scripts/UI/MainMenuPanel.cs,16,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,UI,Core,UI,App,AppFlow.GameStarted = true;
+Assets/_Project/Scripts/UI/MainMenuPanel.cs,22,UIManager,Assets/_Project/Scripts/UI/UIManager.cs,UI,UI,UI,UI,if (UIManager.instance != null) UIManager.instance.ClosePanel(this);
+Assets/_Project/Scripts/UI/SkillBarUI.cs,52,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,UI,Units,UI,Gameplay,static SkillSystem PrimarySkillSystem()
+Assets/_Project/Scripts/UI/SkillBarUI.cs,54,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;
+Assets/_Project/Scripts/UI/SkillBarUI.cs,55,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();
+Assets/_Project/Scripts/UI/SkillBarUI.cs,55,SkillSystem,Assets/_Project/Scripts/Units/SkillSystem.cs,UI,Units,UI,Gameplay,return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();
+Assets/_Project/Scripts/UI/UIManager.cs,15,InventoryUI,Assets/_Project/Scripts/UI/InventoryUI.cs,UI,UI,UI,UI,public InventoryUI inventoryPanel;
+Assets/_Project/Scripts/UI/UIManager.cs,17,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public BasePanel statsPanel;      // 第二批建，先空着
+Assets/_Project/Scripts/UI/UIManager.cs,19,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public BasePanel equipPanel;      // 第三批建，先空着
+Assets/_Project/Scripts/UI/UIManager.cs,21,EscMenuPanel,Assets/_Project/Scripts/UI/EscMenuPanel.cs,UI,UI,UI,UI,public EscMenuPanel escMenuPanel;
+Assets/_Project/Scripts/UI/UIManager.cs,23,MainMenuPanel,Assets/_Project/Scripts/UI/MainMenuPanel.cs,UI,UI,UI,UI,public MainMenuPanel mainMenuPanel;
+Assets/_Project/Scripts/UI/UIManager.cs,26,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,readonly List<BasePanel> _stack = new List<BasePanel>();
+Assets/_Project/Scripts/UI/UIManager.cs,37,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,Chest.Opened += OnChestOpened;
+Assets/_Project/Scripts/UI/UIManager.cs,42,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,Chest.Opened -= OnChestOpened;
+Assets/_Project/Scripts/UI/UIManager.cs,46,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,void OnChestOpened(Chest chest)
+Assets/_Project/Scripts/UI/UIManager.cs,61,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,UI,Core,UI,App,bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;
+Assets/_Project/Scripts/UI/UIManager.cs,61,RunFlow,Assets/_Project/Scripts/Core/RunFlow.cs,UI,Core,UI,App,bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;
+Assets/_Project/Scripts/UI/UIManager.cs,89,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,void Toggle(BasePanel p)
+Assets/_Project/Scripts/UI/UIManager.cs,96,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,"public void OpenPanel(BasePanel panel, object userData = null)"
+Assets/_Project/Scripts/UI/UIManager.cs,102,EscMenuPanel,Assets/_Project/Scripts/UI/EscMenuPanel.cs,UI,UI,UI,UI,if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))
+Assets/_Project/Scripts/UI/UIManager.cs,102,MainMenuPanel,Assets/_Project/Scripts/UI/MainMenuPanel.cs,UI,UI,UI,UI,if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))
+Assets/_Project/Scripts/UI/UIManager.cs,107,BasePanel,Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,UI,UI,public void ClosePanel(BasePanel panel)
+Assets/_Project/Scripts/UI/UIManager.cs,116,Chest,Assets/_Project/Scripts/System/Chest.cs,UI,System,UI,Gameplay,"public void ShowInventory(Inventory chestInv, Chest chest)"
+Assets/_Project/Scripts/UI/UIManager.cs,116,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,"public void ShowInventory(Inventory chestInv, Chest chest)"
+Assets/_Project/Scripts/UI/UIManager.cs,119,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,if (chestInv == null && SelectionManager.instance != null && SelectionManager.instance.Primary != null)
+Assets/_Project/Scripts/UI/UIManager.cs,120,Inventory,Assets/_Project/Scripts/Items/Inventory.cs,UI,Items,UI,Gameplay,inventoryPanel.BindPlayer(SelectionManager.instance.Primary.GetComponentInParent<Inventory>());
+Assets/_Project/Scripts/UI/UIManager.cs,120,SelectionManager,Assets/_Project/Scripts/Player/SelectionManager.cs,UI,Player,UI,Gameplay,inventoryPanel.BindPlayer(SelectionManager.instance.Primary.GetComponentInParent<Inventory>());
+Assets/_Project/Scripts/Units/BossBrain.cs,12,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Units,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Units/BossBrain.cs,13,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public UnitHealth health;
+Assets/_Project/Scripts/Units/BossBrain.cs,33,SleepingSkeleton,Assets/_Project/Scripts/Units/SleepingSkeleton.cs,Units,Units,Gameplay,Gameplay,public SleepingSkeleton[] sleepingMinions;   // ★ Boss 房里倒地的骷髅
+Assets/_Project/Scripts/Units/BossBrain.cs,50,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,if (health == null) health = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/BossBrain.cs,63,RunState,Assets/_Project/Scripts/Core/RunState.cs,Units,Core,Gameplay,Core,RunState.AddGold(50);
+Assets/_Project/Scripts/Units/BossBrain.cs,64,RunState,Assets/_Project/Scripts/Core/RunState.cs,Units,Core,Gameplay,Core,RunState.AddKill();
+Assets/_Project/Scripts/Units/BossBrain.cs,65,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"MessageFeed.SetMessage(""Boss 已讨伐！宝箱解锁 +50 金币"");"
+Assets/_Project/Scripts/Units/BossBrain.cs,72,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Units,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/BossBrain.cs,82,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"MessageFeed.SetMessage(""Boss 召唤了帮手！"");"
+Assets/_Project/Scripts/Units/BossBrain.cs,132,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,var uh = h.GetComponentInParent<UnitHealth>();
+Assets/_Project/Scripts/Units/BossBrain.cs,133,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,if (uh != null && !uh.dead && uh.team == Team.Player)
+Assets/_Project/Scripts/Units/BossBrain.cs,134,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Units,Content,Gameplay,Content,"uh.TakeHit(slamDamage, 999f, DamageType.Blunt,"
+Assets/_Project/Scripts/Units/BossBrain.cs,163,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,var uh = _target.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/BossBrain.cs,165,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Units,Content,Gameplay,Content,"uh.TakeHit(meleeDamage, 999f, DamageType.Blunt,"
+Assets/_Project/Scripts/Units/BossBrain.cs,178,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,"UnitHealth best = UnitRegistry.Nearest(transform.position, range, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/BossBrain.cs,178,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, range, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/BossBrain.cs,178,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, range, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/CharacterBrain.cs,9,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,public class CharacterBrain : UnitBrain
+Assets/_Project/Scripts/Units/CharacterBrain.cs,18,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,InteractionRunner _runner;
+Assets/_Project/Scripts/Units/CharacterBrain.cs,20,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,UnitHealth _health;
+Assets/_Project/Scripts/Units/CharacterBrain.cs,23,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,protected override Team MyTeam { get { return Team.Player; } }
+Assets/_Project/Scripts/Units/CharacterBrain.cs,26,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public UnitHealth Health
+Assets/_Project/Scripts/Units/CharacterBrain.cs,30,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,if (_health == null) _health = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/CharacterBrain.cs,41,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,_health = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/CharacterBrain.cs,51,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,void OnDamaged(DamageInfo info)
+Assets/_Project/Scripts/Units/CharacterBrain.cs,64,Interactable,Assets/_Project/Scripts/System/Interactable.cs,Units,System,Gameplay,Gameplay,public void CommandInteract(Interactable it)
+Assets/_Project/Scripts/Units/CharacterBrain.cs,71,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,public void CommandInteract(IInteractionTarget target)
+Assets/_Project/Scripts/Units/CharacterBrain.cs,74,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,if (_runner == null) _runner = InteractionRunner.Ensure(this);
+Assets/_Project/Scripts/Units/CharacterBrain.cs,93,ICharacterCombat,Assets/_Project/Scripts/Core/ICharacterCombat.cs,Units,Core,Gameplay,Core,var c = combat as ICharacterCombat;
+Assets/_Project/Scripts/Units/CharacterBrain.cs,109,DownedRescue,Assets/_Project/Scripts/Units/DownedRescue.cs,Units,Units,Gameplay,Gameplay,DownedRescue.NotifyMoveCommand(gameObject);
+Assets/_Project/Scripts/Units/CharacterBrain.cs,144,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Units,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/CharacterBrain.cs,149,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Units,Units,Gameplay,Gameplay,if (_wasInSkill && !inSkill) UnitMotion.End(agent);
+Assets/_Project/Scripts/Units/CharacterBrain.cs,167,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,var h = _orderedTarget.GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,12,IInteractionTarget,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,"public class DownedRescue : MonoBehaviour, IInteractionTarget"
+Assets/_Project/Scripts/Units/DownedRescue.cs,17,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public UnitHealth health;
+Assets/_Project/Scripts/Units/DownedRescue.cs,18,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,public UnitBrain brain;
+Assets/_Project/Scripts/Units/DownedRescue.cs,42,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public UnitHealth CurrentRescuer { get { return _rescuer; } }
+Assets/_Project/Scripts/Units/DownedRescue.cs,44,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,UnitHealth _rescuer;
+Assets/_Project/Scripts/Units/DownedRescue.cs,45,Interactable,Assets/_Project/Scripts/System/Interactable.cs,Units,System,Gameplay,Gameplay,Interactable _interact;
+Assets/_Project/Scripts/Units/DownedRescue.cs,61,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,if (health == null) health = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,62,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,if (brain == null) brain = GetComponent<UnitBrain>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,67,Interactable,Assets/_Project/Scripts/System/Interactable.cs,Units,System,Gameplay,Gameplay,_interact = GetComponent<Interactable>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,68,Interactable,Assets/_Project/Scripts/System/Interactable.cs,Units,System,Gameplay,Gameplay,if (_interact == null) _interact = GetComponentInParent<Interactable>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,80,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Units,Units,Gameplay,Gameplay,UnitMotion.End(agent);
+Assets/_Project/Scripts/Units/DownedRescue.cs,82,Selectable,Assets/_Project/Scripts/Player/Selectable.cs,Units,Player,Gameplay,Gameplay,var sel = GetComponentInChildren<Selectable>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,87,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"MessageFeed.SetMessage($""{gameObject.name} 倒下了！选中队友点击他进行救援"");"
+Assets/_Project/Scripts/Units/DownedRescue.cs,93,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Units,Units,Gameplay,Gameplay,void OnDisable() { UnitMotion.End(agent); }
+Assets/_Project/Scripts/Units/DownedRescue.cs,101,InteractionPriority,Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,public InteractionPriority Priority { get { return InteractionPriority.Rescue; } }
+Assets/_Project/Scripts/Units/DownedRescue.cs,105,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Units,Units,Gameplay,Gameplay,public bool IsAvailable(CharacterBrain unit) { return IsDown; }
+Assets/_Project/Scripts/Units/DownedRescue.cs,107,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Units,Units,Gameplay,Gameplay,"public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }"
+Assets/_Project/Scripts/Units/DownedRescue.cs,107,InteractionDefinition,Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,"public float Radius(CharacterBrain unit) { return InteractionDefinition.RadiusFor(this, unit); }"
+Assets/_Project/Scripts/Units/DownedRescue.cs,110,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Units,Units,Gameplay,Gameplay,public void Interact(CharacterBrain unit)
+Assets/_Project/Scripts/Units/DownedRescue.cs,120,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public void CommandRescue(UnitHealth rescuer)
+Assets/_Project/Scripts/Units/DownedRescue.cs,133,CharacterBrain,Assets/_Project/Scripts/Units/CharacterBrain.cs,Units,Units,Gameplay,Gameplay,var rBrain = rescuer.GetComponent<CharacterBrain>();
+Assets/_Project/Scripts/Units/DownedRescue.cs,136,InteractionRunner,Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs,Units,Gameplay/Interaction,Gameplay,Gameplay,InteractionRunner.Ensure(rBrain).Order(this);
+Assets/_Project/Scripts/Units/DownedRescue.cs,169,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"if (wasChanneling) MessageFeed.SetMessage(""救援被打断，请重新下达救援指令"");"
+Assets/_Project/Scripts/Units/DownedRescue.cs,172,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,IEnumerator RescueRoutine(UnitHealth rescuer)
+Assets/_Project/Scripts/Units/DownedRescue.cs,197,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"MessageFeed.SetMessage(""救援中……受击或移动会打断！"");"
+Assets/_Project/Scripts/Units/DownedRescue.cs,200,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,System.Action<DamageInfo> onHit = _ => interrupted = true;
+Assets/_Project/Scripts/Units/DownedRescue.cs,209,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Units,Core,Gameplay,App,if (AppFlow.IsPaused) { yield return null; continue; }
+Assets/_Project/Scripts/Units/DownedRescue.cs,265,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"bool InRange(UnitHealth rescuer, float pad = 0f)"
+Assets/_Project/Scripts/Units/DownedRescue.cs,289,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,MessageFeed.SetMessage(message);
+Assets/_Project/Scripts/Units/DownedRescue.cs,300,UnitMotion,Assets/_Project/Scripts/Units/UnitMotion.cs,Units,Units,Gameplay,Gameplay,UnitMotion.End(agent);      // 复活即解锁：技能/倒地期间留下的 isStopped 不得带起身后
+Assets/_Project/Scripts/Units/DownedRescue.cs,304,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"MessageFeed.SetMessage(""队友救起来了！"");"
+Assets/_Project/Scripts/Units/MonsterBrain.cs,9,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,public class MonsterBrain : UnitBrain
+Assets/_Project/Scripts/Units/MonsterBrain.cs,42,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,UnitHealth _self;
+Assets/_Project/Scripts/Units/MonsterBrain.cs,52,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,protected override Team MyTeam { get { return Team.Monster; } }
+Assets/_Project/Scripts/Units/MonsterBrain.cs,58,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,_self = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/MonsterBrain.cs,99,RunState,Assets/_Project/Scripts/Core/RunState.cs,Units,Core,Gameplay,Core,RunState.AddGold(10);
+Assets/_Project/Scripts/Units/MonsterBrain.cs,100,RunState,Assets/_Project/Scripts/Core/RunState.cs,Units,Core,Gameplay,Core,RunState.AddKill();
+Assets/_Project/Scripts/Units/MonsterBrain.cs,119,AppFlow,Assets/_Project/Scripts/Core/AppFlow.cs,Units,Core,Gameplay,App,if (AppFlow.IsPaused) return;
+Assets/_Project/Scripts/Units/MonsterBrain.cs,147,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"t.GetComponent<UnitHealth>().ApplyDamage(DamageValue, t.position + Vector3.up * 0.6f, _self);"
+Assets/_Project/Scripts/Units/MonsterBrain.cs,184,ICharacterCombat,Assets/_Project/Scripts/Core/ICharacterCombat.cs,Units,Core,Gameplay,Core,var c = combat as ICharacterCombat;
+Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs,6,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public class ShieldedUnitHealth : UnitHealth
+Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs,13,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Units,Content,Gameplay,Content,"public override bool TakeHit(float rawDamage, float sharpness, DamageType damageType, Vector3 hitPos, UnitHealth source = null)"
+Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs,13,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"public override bool TakeHit(float rawDamage, float sharpness, DamageType damageType, Vector3 hitPos, UnitHealth source = null)"
+Assets/_Project/Scripts/Units/SkeletonWander.cs,19,MonsterBrain,Assets/_Project/Scripts/Units/MonsterBrain.cs,Units,Units,Gameplay,Gameplay,MonsterBrain _brain;
+Assets/_Project/Scripts/Units/SkeletonWander.cs,20,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,UnitHealth _health;
+Assets/_Project/Scripts/Units/SkeletonWander.cs,26,MonsterBrain,Assets/_Project/Scripts/Units/MonsterBrain.cs,Units,Units,Gameplay,Gameplay,_brain = GetComponent<MonsterBrain>();
+Assets/_Project/Scripts/Units/SkeletonWander.cs,27,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,_health = GetComponent<UnitHealth>();
+Assets/_Project/Scripts/Units/SkeletonWander.cs,62,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,"UnitHealth best = UnitRegistry.Nearest(transform.position, aggroRange, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/SkeletonWander.cs,62,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, aggroRange, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/SkeletonWander.cs,62,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, aggroRange, Team.Player, h => !h.dead);"
+Assets/_Project/Scripts/Units/SkillData.cs,14,Cooldown,Assets/_Project/Scripts/Core/Cooldown.cs,Units,Core,Gameplay,Core,public Cooldown cooldown = new Cooldown { duration = 6f };
+Assets/_Project/Scripts/Units/SkillData.cs,17,SkillEffectBase,Assets/_Project/Scripts/Combat/SkillEffectBase.cs,Units,Combat,Gameplay,Gameplay,public SkillEffectBase[] effects;
+Assets/_Project/Scripts/Units/SkillSystem.cs,11,UnitMana,Assets/_Project/Scripts/Units/UnitMana.cs,Units,Units,Gameplay,Gameplay,public UnitMana mana;
+Assets/_Project/Scripts/Units/SkillSystem.cs,13,MeleeCombat,Assets/_Project/Scripts/Combat/MeleeCombat.cs,Units,Combat,Gameplay,Gameplay,public MeleeCombat sword;
+Assets/_Project/Scripts/Units/SkillSystem.cs,17,SkillData,Assets/_Project/Scripts/Units/SkillData.cs,Units,Units,Gameplay,Gameplay,public SkillData[] skills = new SkillData[4];
+Assets/_Project/Scripts/Units/SkillSystem.cs,26,Cooldown,Assets/_Project/Scripts/Core/Cooldown.cs,Units,Core,Gameplay,Core,readonly Cooldown[] _cds = new Cooldown[4];
+Assets/_Project/Scripts/Units/SkillSystem.cs,30,Cooldown,Assets/_Project/Scripts/Core/Cooldown.cs,Units,Core,Gameplay,Core,for (int i = 0; i < _cds.Length; i++) _cds[i] = new Cooldown();
+Assets/_Project/Scripts/Units/SkillSystem.cs,33,SkillData,Assets/_Project/Scripts/Units/SkillData.cs,Units,Units,Gameplay,Gameplay,public SkillData GetSkill(int i) { return i >= 0 && i < skills.Length ? skills[i] : null; }
+Assets/_Project/Scripts/Units/SkillSystem.cs,40,Cooldown,Assets/_Project/Scripts/Core/Cooldown.cs,Units,Core,Gameplay,Core,for (int i = 0; i < _cds.Length; i++) _cds[i] = default(Cooldown);
+Assets/_Project/Scripts/Units/SkillSystem.cs,67,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Units,Combat,Gameplay,Gameplay,"SkillCastContext ContextFor(int index, SkillEffectBase effect, Transform target)"
+Assets/_Project/Scripts/Units/SkillSystem.cs,67,SkillEffectBase,Assets/_Project/Scripts/Combat/SkillEffectBase.cs,Units,Combat,Gameplay,Gameplay,"SkillCastContext ContextFor(int index, SkillEffectBase effect, Transform target)"
+Assets/_Project/Scripts/Units/SkillSystem.cs,73,SkillCastContext,Assets/_Project/Scripts/Combat/SkillCastContext.cs,Units,Combat,Gameplay,Gameplay,"return new SkillCastContext(index, trigger, stateName, target, this,"
+Assets/_Project/Scripts/Units/SkillSystem.cs,74,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"GetComponent<UnitHealth>(), Speed);"
+Assets/_Project/Scripts/Units/SkillSystem.cs,82,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"if (!_cds[index].Ready) { MessageFeed.SetMessage($""{s.skillName} 冷却中""); return false; }"
+Assets/_Project/Scripts/Units/SkillSystem.cs,83,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"if (mana == null) { MessageFeed.SetMessage(""蓝量不足""); return false; }"
+Assets/_Project/Scripts/Units/SkillSystem.cs,90,MessageFeed,Assets/_Project/Scripts/Core/MessageFeed.cs,Units,Core,Gameplay,Core,"if (!mana.Consume(s.manaCost)) { MessageFeed.SetMessage(""蓝量不足""); return false; }"
+Assets/_Project/Scripts/Units/SleepingSkeleton.cs,15,MonsterBrain,Assets/_Project/Scripts/Units/MonsterBrain.cs,Units,Units,Gameplay,Gameplay,MonsterBrain _brain;
+Assets/_Project/Scripts/Units/SleepingSkeleton.cs,20,MonsterBrain,Assets/_Project/Scripts/Units/MonsterBrain.cs,Units,Units,Gameplay,Gameplay,_brain = GetComponent<MonsterBrain>();
+Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs,11,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Units,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs,13,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,UnitBrain _brain;
+Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs,18,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,_brain = GetComponent<UnitBrain>();
+Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs,26,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Units,Content,Gameplay,Content,UnitStats s = _brain != null && _brain.stats != null ? _brain.stats : stats;
+Assets/_Project/Scripts/Units/UnitBrain.cs,16,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Units,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Units/UnitBrain.cs,21,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,protected abstract Team MyTeam { get; }
+Assets/_Project/Scripts/Units/UnitBrain.cs,75,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,Team enemyTeam = MyTeam == Team.Player ? Team.Monster : Team.Player;
+Assets/_Project/Scripts/Units/UnitBrain.cs,77,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, range, enemyTeam, h => !h.dead);"
+Assets/_Project/Scripts/Units/UnitBrain.cs,77,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,"UnitHealth best = UnitRegistry.Nearest(transform.position, range, enemyTeam, h => !h.dead);"
+Assets/_Project/Scripts/Units/UnitBrain.cs,105,ICharacterCombat,Assets/_Project/Scripts/Core/ICharacterCombat.cs,Units,Core,Gameplay,Core,var c = combat as ICharacterCombat;
+Assets/_Project/Scripts/Units/UnitHealth.cs,11,UnitStats,Assets/_Project/Scripts/Content/UnitStats.cs,Units,Content,Gameplay,Content,public UnitStats stats;
+Assets/_Project/Scripts/Units/UnitHealth.cs,12,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,public Team team = Team.Monster;
+Assets/_Project/Scripts/Units/UnitHealth.cs,22,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,public event System.Action<DamageInfo> OnHit;
+Assets/_Project/Scripts/Units/UnitHealth.cs,43,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,UnitRegistry.Register(this);
+Assets/_Project/Scripts/Units/UnitHealth.cs,46,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,"void OnEnable() { UnitRegistry.SetActiveState(this, true); }"
+Assets/_Project/Scripts/Units/UnitHealth.cs,49,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,"void OnDisable() { UnitRegistry.SetActiveState(this, gameObject.activeInHierarchy); }"
+Assets/_Project/Scripts/Units/UnitHealth.cs,51,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,void OnDestroy() { UnitRegistry.Unregister(this); }
+Assets/_Project/Scripts/Units/UnitHealth.cs,64,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Units,Content,Gameplay,Content,"public virtual bool TakeHit(float rawDamage, float sharpness, DamageType damageType, Vector3 hitPos, UnitHealth source = null)"
+Assets/_Project/Scripts/Units/UnitHealth.cs,67,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,var info = new DamageInfo
+Assets/_Project/Scripts/Units/UnitHealth.cs,90,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,ApplyDamageInfo(new DamageInfo
+Assets/_Project/Scripts/Units/UnitHealth.cs,92,DamageType,Assets/_Project/Scripts/Content/WeaponData.cs,Units,Content,Gameplay,Content,"source = source, target = this, damageType = DamageType.Blunt,"
+Assets/_Project/Scripts/Units/UnitHealth.cs,97,DamageInfo,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,"void ApplyDamageInfo(DamageInfo info, float final)"
+Assets/_Project/Scripts/Units/UnitHealth.cs,105,DamageDealtEvent,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,EventBus.Publish(new DamageDealtEvent { info = info });
+Assets/_Project/Scripts/Units/UnitHealth.cs,105,EventBus,Assets/_Project/Scripts/Core/EventBus.cs,Units,Core,Gameplay,Core,EventBus.Publish(new DamageDealtEvent { info = info });
+Assets/_Project/Scripts/Units/UnitHealth.cs,111,EventBus,Assets/_Project/Scripts/Core/EventBus.cs,Units,Core,Gameplay,Core,EventBus.Publish(new UnitDiedEvent { unit = this });
+Assets/_Project/Scripts/Units/UnitHealth.cs,111,UnitDiedEvent,Assets/_Project/Scripts/Combat/DamageInfo.cs,Units,Combat,Gameplay,Gameplay,EventBus.Publish(new UnitDiedEvent { unit = this });
+Assets/_Project/Scripts/Units/Visibility.cs,15,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,UnitBrain _brain;
+Assets/_Project/Scripts/Units/Visibility.cs,24,UnitBrain,Assets/_Project/Scripts/Units/UnitBrain.cs,Units,Units,Gameplay,Gameplay,_brain = GetComponent<UnitBrain>();
+Assets/_Project/Scripts/Units/Visibility.cs,42,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/Units/Visibility.cs,42,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,foreach (var h in UnitRegistry.OfTeam(Team.Player))
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,13,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,public UnitHealth health;
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,15,UnitMana,Assets/_Project/Scripts/Units/UnitMana.cs,Units,Units,Gameplay,Gameplay,public UnitMana mana;
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,31,UnitHealth,Assets/_Project/Scripts/Units/UnitHealth.cs,Units,Units,Gameplay,Gameplay,static IReadOnlyList<UnitHealth> _allUnits;
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,33,Visibility,Assets/_Project/Scripts/Units/Visibility.cs,Units,Units,Gameplay,Gameplay,Visibility _visibility;   // 有 Visibility 时以它的隐身状态为准（防止本类把血条重新点亮）
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,40,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,bool visible = !health.dead && (health.team == Team.Player || IsVisibleToPlayers());
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,41,Visibility,Assets/_Project/Scripts/Units/Visibility.cs,Units,Units,Gameplay,Gameplay,if (_visibility == null) _visibility = health.GetComponent<Visibility>();
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,46,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,hpFill.color = health.team == Team.Player ? playerColor : enemyColor;
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,57,UnitRegistry,Assets/_Project/Scripts/Core/UnitRegistry.cs,Units,Core,Gameplay,Gameplay,_allUnits = UnitRegistry.All();
+Assets/_Project/Scripts/Units/WorldHealthBar.cs,62,Team,Assets/_Project/Scripts/Core/Team.cs,Units,Core,Gameplay,Core,if (u == null || u.dead || u.team != Team.Player) continue;

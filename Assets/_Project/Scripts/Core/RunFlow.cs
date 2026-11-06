@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>局内结果：团灭判定 + R 重开。原 GameFlow.Start/Update 的逻辑主体。</summary>
 public static class RunFlow

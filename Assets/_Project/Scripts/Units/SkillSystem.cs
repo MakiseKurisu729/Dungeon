@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>
 /// 技能系统：QWER 四槽（数据驱动）；验蓝+验冷却（Cooldown 结构）；

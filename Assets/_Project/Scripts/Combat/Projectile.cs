@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Content;
 
 /// <summary>抛射物基类：追踪+抛物线+到达结算（DamageInfo 管线）+对象池回收。
 /// Launch 时清除拖尾残留，防止池化复用带旧轨迹。</summary>

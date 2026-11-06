@@ -1,4 +1,6 @@
 using UnityEngine;
+using Dungeon.Content;
+using Dungeon.Core;
 
 public enum BodyPartType { Normal, Weak, Hard, Critical }
 

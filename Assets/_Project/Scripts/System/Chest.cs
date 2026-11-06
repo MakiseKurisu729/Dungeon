@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using Dungeon.Content;
+using Dungeon.Core;
 
 /// <summary>
 /// 通用宝箱：实现 <see cref="IInteractionTarget"/>，由交互执行器走到范围后调用 Interact/OpenBy

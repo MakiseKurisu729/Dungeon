@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>视野逻辑层：敌人超出玩家视野半径或被障碍物挡视线 → 隐藏模型+头顶条 + 冻结 AI。
 /// 同时控制 Renderer（模型）和 Canvas（头顶条）。遮挡层未配置时自动指向 Obstacle。</summary>

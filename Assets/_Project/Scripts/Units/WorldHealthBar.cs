@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Dungeon.Core;
 
 /// <summary>
 /// 头顶血蓝条（LoL 式）：世界空间 Canvas，面向相机；

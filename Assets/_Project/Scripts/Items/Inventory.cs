@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Dungeon.Content;
 
 /// <summary>通用背包（按槽位存储）：items 长度恒等于 capacity，空槽为 null。</summary>
 public class Inventory : MonoBehaviour

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>LoL 式战争迷雾：程序化网格板。材质手动拖入（URP Particles/Unlit + Surface=透明），
 /// 顶点色驱动：透明=已探索，暗色=迷雾。玩家周围一圈永久揭开。</summary>

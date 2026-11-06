@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Dungeon.Core;
 
 /// <summary>
 /// 背包面板（纯视图）：OnInit 自动找玩家背包+校验槽；OnOpen 刷新；OnClose 清本次数据。

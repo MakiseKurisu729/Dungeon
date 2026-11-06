@@ -1,0 +1,32 @@
+﻿### Editor.log lines 231590-231615 (最后一段编译)
+231590: info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+231591:       Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 119 defines and 276 references
+231592: info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+231593:       processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+231594: info: Unity.ILPP.Runner.PostProcessingPipeline[0]
+231595:       running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+231596: info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+231597:       Executed endpoint 'gRPC - /UnityILPP.PostProcessing/PostProcessAssembly'
+231598: info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+231599:       Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 18.2153ms
+231600: ExitCode: 0 Duration: 1s800ms
+231601: Finished compiling graph: 729 nodes, 10231 flattened edges (8247 ToBuild, 118 ToUse), maximum node priority 710
+231602: [395/726    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+231603: [564/726    0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+231604: [718/726    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+231605: [719/726    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+231606: [720/726    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp.dll (+pdb)
+231607: Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll, with 121 defines and 255 references
+231608: 
+231609: processors: zzzUnity.Burst.CodeGen.BurstILPostProcessor
+231610: 
+231611: running zzzUnity.Burst.CodeGen.BurstILPostProcessor
+231612: [721/726    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+231613: [722/726    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+231614: [723/726    0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
+231615: Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 119 defines and 276 references
+
+### 全日志统计
+total_lines=233169
+last_error_CS_line=220962
+finished_compiling_graph_last_line=231601

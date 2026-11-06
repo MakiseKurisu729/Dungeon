@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>战斗反馈：订阅伤害事件 → 飘字延迟到命中特效峰值（表现对齐表现）。
 /// 伤害结算本身由逻辑层即时完成，本组件只管"何时让玩家看见"。</summary>

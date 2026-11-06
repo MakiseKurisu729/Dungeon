@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Dungeon.Core;
 
 /// <summary>倒地与救援（指令式、动画机驱动）：挂玩家单位，且同物体挂 Interactable。
 /// 倒地：血空 → SetTrigger(Die) → Downed 保持末端；AI/移动禁用。

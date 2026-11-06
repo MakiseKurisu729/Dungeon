@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using Dungeon.Content;
+using Dungeon.Core;
 
 /// <summary>
 /// Play 模式夹具与观测工具：玩家探针、命中收集器、内存目标单位、选择、动画状态名。

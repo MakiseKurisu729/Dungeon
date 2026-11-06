@@ -9,6 +9,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using Dungeon.Core;
 #endif
 
 /// <summary>

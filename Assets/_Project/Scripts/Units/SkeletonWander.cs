@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using Dungeon.Core;
 
 /// <summary>骷髅游荡：平时漫游态（AI 冻结、随机走动），玩家进入警觉距离或被攻击时
 /// 唤醒 MonsterBrain 进入战斗。双向视野：玩家能看见漫游的怪，怪也能发现靠近的玩家。</summary>

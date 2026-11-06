@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Dungeon.Core;
 
 /// <summary>波次生成器：按 UnitHealth 判定存活；每波血量递增。</summary>
 public class WaveSpawner : MonoBehaviour

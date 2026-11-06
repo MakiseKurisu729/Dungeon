@@ -13,6 +13,8 @@ using static QaJson;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Animations;
+using Dungeon.Content;
+using Dungeon.Core;
 #endif
 
 /// <summary>

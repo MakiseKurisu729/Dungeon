@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.Content;
 
 /// <summary>带盾单位：正面扇形内受到的伤害减免（Boss 用）。
 /// 弓手绕到背后可打出全额伤害——配合玩法的核心机制。</summary>

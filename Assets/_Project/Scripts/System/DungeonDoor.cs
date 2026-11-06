@@ -1,6 +1,7 @@
 // ⑦ DungeonDoor.cs
 using UnityEngine;
 using UnityEngine.AI;
+using Dungeon.Core;
 
 /// <summary>地牢入口：实现 <see cref="IInteractionTarget"/>（唯一 KeyInteractable 目标）。
 /// 提示与 F 键由输入层（SelectionManager）轮询/分发，本组件不再读 Input、不查 SelectionManager、不写提示；

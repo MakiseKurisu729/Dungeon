@@ -5,6 +5,8 @@ using System.Reflection;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
+using Dungeon.Content;
+using Dungeon.Core;
 #endif
 
 /// <summary>一次施法探针的原始观测值（不做断言判定，判定由调用方按工单口径完成）。</summary>
