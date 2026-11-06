@@ -1,0 +1,14 @@
+{
+    "name": "Dungeon.Gameplay",
+    "rootNamespace": "Dungeon.Gameplay",
+    "references": ["Dungeon.Core", "Dungeon.Content", "UnityEngine.UI"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

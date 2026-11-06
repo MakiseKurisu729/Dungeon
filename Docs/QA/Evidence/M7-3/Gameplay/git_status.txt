@@ -1,0 +1,5 @@
+﻿?? Assets/_Project/Scripts/Gameplay/Dungeon.Gameplay.asmdef
+?? Assets/_Project/Scripts/Gameplay/Dungeon.Gameplay.asmdef.meta
+?? Docs/QA/Evidence/M7-3/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run37/
+?? Docs/QA/Evidence/SPEC-01/editor_run56/

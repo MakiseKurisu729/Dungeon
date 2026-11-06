@@ -1,0 +1,279 @@
+graph TD
+  %% M7-0 文件级依赖图（仅跨模块边；模块内边见 edges.csv）
+  subgraph Core[Core]
+    NCore_Cooldown_cs["Cooldown"]
+    NCore_EventBus_cs["EventBus"]
+    NCore_ICharacterCombat_cs["ICharacterCombat"]
+    NCore_MessageFeed_cs["MessageFeed"]
+    NCore_PauseState_cs["PauseState"]
+    NCore_ProgressionState_cs["ProgressionState"]
+    NCore_RunState_cs["RunState"]
+    NCore_Team_cs["Team"]
+    NCore_UnitId_cs["UnitId"]
+  end
+  subgraph Content[Content]
+    NContent_ItemData_cs["ItemData"]
+    NContent_UnitStats_cs["UnitStats"]
+    NContent_WeaponData_cs["WeaponData"]
+  end
+  subgraph Gameplay/Units[Gameplay/Units]
+    NGameplay_Units_BossBrain_cs["BossBrain"]
+    NGameplay_Units_CharacterBrain_cs["CharacterBrain"]
+    NGameplay_Units_DownedRescue_cs["DownedRescue"]
+    NGameplay_Units_MonsterBrain_cs["MonsterBrain"]
+    NGameplay_Units_ShieldedUnitHealth_cs["ShieldedUnitHealth"]
+    NGameplay_Units_SkeletonWander_cs["SkeletonWander"]
+    NGameplay_Units_SkillData_cs["SkillData"]
+    NGameplay_Units_SkillSystem_cs["SkillSystem"]
+    NGameplay_Units_SleepingSkeleton_cs["SleepingSkeleton"]
+    NGameplay_Units_UnitAnimatorSpeed_cs["UnitAnimatorSpeed"]
+    NGameplay_Units_UnitBrain_cs["UnitBrain"]
+    NGameplay_Units_UnitHealth_cs["UnitHealth"]
+    NGameplay_Units_UnitMana_cs["UnitMana"]
+    NGameplay_Units_UnitMotion_cs["UnitMotion"]
+    NGameplay_Units_UnitRegistry_cs["UnitRegistry"]
+    NGameplay_Units_Visibility_cs["Visibility"]
+    NGameplay_Units_WorldHealthBar_cs["WorldHealthBar"]
+  end
+  subgraph Gameplay/Combat[Gameplay/Combat]
+    NGameplay_Combat_CombatFeedback_cs["CombatFeedback"]
+    NGameplay_Combat_DamageInfo_cs["DamageInfo"]
+    NGameplay_Combat_DamageNumber_cs["DamageNumber"]
+    NGameplay_Combat_ExplosionFx_cs["ExplosionFx"]
+    NGameplay_Combat_FireballProjectile_cs["FireballProjectile"]
+    NGameplay_Combat_HeavySlashEffect_cs["HeavySlashEffect"]
+    NGameplay_Combat_MeleeCombat_cs["MeleeCombat"]
+    NGameplay_Combat_Projectile_cs["Projectile"]
+    NGameplay_Combat_RangedCombat_cs["RangedCombat"]
+    NGameplay_Combat_SimplePool_cs["SimplePool"]
+    NGameplay_Combat_SkillCastContext_cs["SkillCastContext"]
+    NGameplay_Combat_SkillEffectBase_cs["SkillEffectBase"]
+    NGameplay_Combat_SkillEffectFireball_cs["SkillEffectFireball"]
+    NGameplay_Combat_SkillEffects_cs["SkillEffects"]
+  end
+  subgraph Gameplay/Interaction[Gameplay/Interaction]
+    NGameplay_Interaction_IInteractionTarget_cs["IInteractionTarget"]
+    NGameplay_Interaction_InteractionDefinition_cs["InteractionDefinition"]
+    NGameplay_Interaction_InteractionRunner_cs["InteractionRunner"]
+  end
+  subgraph Gameplay/World[Gameplay/World]
+    NGameplay_World_Chest_cs["Chest"]
+    NGameplay_World_DebugCameraSwitcher_cs["DebugCameraSwitcher"]
+    NGameplay_World_DungeonDoor_cs["DungeonDoor"]
+    NGameplay_World_FogOfWar_cs["FogOfWar"]
+    NGameplay_World_ForestGenerator_cs["ForestGenerator"]
+    NGameplay_World_Interactable_cs["Interactable"]
+    NGameplay_World_Mirror_cs["Mirror"]
+    NGameplay_World_SkeletonSpawner_cs["SkeletonSpawner"]
+    NGameplay_World_TransitionRequest_cs["TransitionRequest"]
+    NGameplay_World_WaveSpawner_cs["WaveSpawner"]
+  end
+  subgraph Gameplay/Player[Gameplay/Player]
+    NGameplay_Player_PlayerCommandController_cs["PlayerCommandController"]
+    NGameplay_Player_Selectable_cs["Selectable"]
+    NGameplay_Player_SelectionManager_cs["SelectionManager"]
+    NGameplay_Player_SkillIndicator_cs["SkillIndicator"]
+    NGameplay_Player_SkillInputController_cs["SkillInputController"]
+  end
+  subgraph Gameplay/Items[Gameplay/Items]
+    NGameplay_Items_ChestItem_cs["ChestItem"]
+    NGameplay_Items_Inventory_cs["Inventory"]
+  end
+  subgraph App[App]
+    NApp_AppFlow_cs["AppFlow"]
+    NApp_GameData_cs["GameData"]
+    NApp_GameFlow_cs["GameFlow"]
+    NApp_MetaState_cs["MetaState"]
+    NApp_PauseManager_cs["PauseManager"]
+    NApp_RunFlow_cs["RunFlow"]
+  end
+  subgraph UI[UI]
+    NUI_BasePanel_cs["BasePanel"]
+    NUI_CursorManager_cs["CursorManager"]
+    NUI_EscMenuPanel_cs["EscMenuPanel"]
+    NUI_HUD_cs["HUD"]
+    NUI_InventoryUI_cs["InventoryUI"]
+    NUI_MainMenuPanel_cs["MainMenuPanel"]
+    NUI_SkillBarUI_cs["SkillBarUI"]
+    NUI_SlotClickHandler_cs["SlotClickHandler"]
+    NUI_TransitionFader_cs["TransitionFader"]
+    NUI_UIManager_cs["UIManager"]
+  end
+  subgraph Editor[Editor]
+    NEditor_DebugTestTools_cs["DebugTestTools"]
+  end
+  subgraph Gameplay/IUiModalState.cs[Gameplay/IUiModalState.cs]
+    NGameplay_IUiModalState_cs["IUiModalState"]
+  end
+  NApp_AppFlow_cs --> NCore_PauseState_cs
+  NApp_AppFlow_cs --> NCore_Team_cs
+  NApp_AppFlow_cs --> NGameplay_Units_UnitRegistry_cs
+  NApp_GameData_cs --> NCore_MessageFeed_cs
+  NApp_GameData_cs --> NCore_RunState_cs
+  NApp_GameData_cs --> NGameplay_Combat_MeleeCombat_cs
+  NApp_GameData_cs --> NGameplay_Units_UnitHealth_cs
+  NApp_MetaState_cs --> NCore_MessageFeed_cs
+  NApp_MetaState_cs --> NCore_ProgressionState_cs
+  NApp_MetaState_cs --> NCore_RunState_cs
+  NApp_MetaState_cs --> NGameplay_Combat_MeleeCombat_cs
+  NApp_MetaState_cs --> NGameplay_Units_UnitHealth_cs
+  NApp_RunFlow_cs --> NCore_MessageFeed_cs
+  NApp_RunFlow_cs --> NCore_Team_cs
+  NApp_RunFlow_cs --> NGameplay_Units_DownedRescue_cs
+  NApp_RunFlow_cs --> NGameplay_Units_UnitRegistry_cs
+  NContent_UnitStats_cs --> NCore_Team_cs
+  NEditor_DebugTestTools_cs --> NCore_Team_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_SkillSystem_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitHealth_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitMana_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitRegistry_cs
+  NGameplay_Combat_CombatFeedback_cs --> NCore_EventBus_cs
+  NGameplay_Combat_DamageInfo_cs --> NContent_WeaponData_cs
+  NGameplay_Combat_DamageInfo_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_ExplosionFx_cs --> NContent_WeaponData_cs
+  NGameplay_Combat_ExplosionFx_cs --> NCore_Team_cs
+  NGameplay_Combat_ExplosionFx_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_MeleeCombat_cs --> NContent_UnitStats_cs
+  NGameplay_Combat_MeleeCombat_cs --> NContent_WeaponData_cs
+  NGameplay_Combat_MeleeCombat_cs --> NCore_ICharacterCombat_cs
+  NGameplay_Combat_MeleeCombat_cs --> NCore_ProgressionState_cs
+  NGameplay_Combat_MeleeCombat_cs --> NCore_Team_cs
+  NGameplay_Combat_MeleeCombat_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_Projectile_cs --> NContent_WeaponData_cs
+  NGameplay_Combat_Projectile_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_RangedCombat_cs --> NContent_UnitStats_cs
+  NGameplay_Combat_RangedCombat_cs --> NCore_ICharacterCombat_cs
+  NGameplay_Combat_RangedCombat_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_SkillCastContext_cs --> NGameplay_Units_SkillSystem_cs
+  NGameplay_Combat_SkillCastContext_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_SkillEffectFireball_cs --> NCore_MessageFeed_cs
+  NGameplay_Combat_SkillEffectFireball_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_SkillEffects_cs --> NContent_WeaponData_cs
+  NGameplay_Combat_SkillEffects_cs --> NCore_MessageFeed_cs
+  NGameplay_Combat_SkillEffects_cs --> NGameplay_Units_MonsterBrain_cs
+  NGameplay_Combat_SkillEffects_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_SkillEffects_cs --> NGameplay_Units_UnitMotion_cs
+  NGameplay_Interaction_IInteractionTarget_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Interaction_InteractionDefinition_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Interaction_InteractionRunner_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Items_ChestItem_cs --> NContent_ItemData_cs
+  NGameplay_Items_Inventory_cs --> NContent_ItemData_cs
+  NGameplay_Player_PlayerCommandController_cs --> NCore_PauseState_cs
+  NGameplay_Player_PlayerCommandController_cs --> NGameplay_IUiModalState_cs
+  NGameplay_Player_PlayerCommandController_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Player_SelectionManager_cs --> NCore_MessageFeed_cs
+  NGameplay_Player_SelectionManager_cs --> NCore_PauseState_cs
+  NGameplay_Player_SelectionManager_cs --> NCore_Team_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_Interaction_InteractionRunner_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_Units_UnitRegistry_cs
+  NGameplay_Player_SelectionManager_cs --> NGameplay_World_DebugCameraSwitcher_cs
+  NGameplay_Player_SkillInputController_cs --> NCore_MessageFeed_cs
+  NGameplay_Player_SkillInputController_cs --> NCore_PauseState_cs
+  NGameplay_Player_SkillInputController_cs --> NCore_Team_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_IUiModalState_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_Units_SkillData_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_Units_SkillSystem_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitRegistry_cs
+  NGameplay_Units_BossBrain_cs --> NContent_UnitStats_cs
+  NGameplay_Units_BossBrain_cs --> NContent_WeaponData_cs
+  NGameplay_Units_BossBrain_cs --> NCore_MessageFeed_cs
+  NGameplay_Units_BossBrain_cs --> NCore_PauseState_cs
+  NGameplay_Units_BossBrain_cs --> NCore_RunState_cs
+  NGameplay_Units_BossBrain_cs --> NCore_Team_cs
+  NGameplay_Units_CharacterBrain_cs --> NCore_ICharacterCombat_cs
+  NGameplay_Units_CharacterBrain_cs --> NCore_PauseState_cs
+  NGameplay_Units_CharacterBrain_cs --> NCore_Team_cs
+  NGameplay_Units_CharacterBrain_cs --> NGameplay_Combat_DamageInfo_cs
+  NGameplay_Units_CharacterBrain_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_Units_CharacterBrain_cs --> NGameplay_Interaction_InteractionRunner_cs
+  NGameplay_Units_CharacterBrain_cs --> NGameplay_World_Interactable_cs
+  NGameplay_Units_DownedRescue_cs --> NCore_MessageFeed_cs
+  NGameplay_Units_DownedRescue_cs --> NCore_PauseState_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_Combat_DamageInfo_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_Interaction_InteractionDefinition_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_Interaction_InteractionRunner_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_Player_Selectable_cs
+  NGameplay_Units_DownedRescue_cs --> NGameplay_World_Interactable_cs
+  NGameplay_Units_MonsterBrain_cs --> NCore_ICharacterCombat_cs
+  NGameplay_Units_MonsterBrain_cs --> NCore_PauseState_cs
+  NGameplay_Units_MonsterBrain_cs --> NCore_RunState_cs
+  NGameplay_Units_MonsterBrain_cs --> NCore_Team_cs
+  NGameplay_Units_ShieldedUnitHealth_cs --> NContent_WeaponData_cs
+  NGameplay_Units_SkeletonWander_cs --> NCore_Team_cs
+  NGameplay_Units_SkillData_cs --> NCore_Cooldown_cs
+  NGameplay_Units_SkillData_cs --> NGameplay_Combat_SkillEffectBase_cs
+  NGameplay_Units_SkillSystem_cs --> NCore_Cooldown_cs
+  NGameplay_Units_SkillSystem_cs --> NCore_MessageFeed_cs
+  NGameplay_Units_SkillSystem_cs --> NGameplay_Combat_MeleeCombat_cs
+  NGameplay_Units_SkillSystem_cs --> NGameplay_Combat_SkillCastContext_cs
+  NGameplay_Units_SkillSystem_cs --> NGameplay_Combat_SkillEffectBase_cs
+  NGameplay_Units_UnitAnimatorSpeed_cs --> NContent_UnitStats_cs
+  NGameplay_Units_UnitBrain_cs --> NContent_UnitStats_cs
+  NGameplay_Units_UnitBrain_cs --> NCore_ICharacterCombat_cs
+  NGameplay_Units_UnitBrain_cs --> NCore_Team_cs
+  NGameplay_Units_UnitHealth_cs --> NContent_UnitStats_cs
+  NGameplay_Units_UnitHealth_cs --> NContent_WeaponData_cs
+  NGameplay_Units_UnitHealth_cs --> NCore_EventBus_cs
+  NGameplay_Units_UnitHealth_cs --> NCore_Team_cs
+  NGameplay_Units_UnitHealth_cs --> NGameplay_Combat_DamageInfo_cs
+  NGameplay_Units_UnitRegistry_cs --> NCore_Team_cs
+  NGameplay_Units_UnitRegistry_cs --> NCore_UnitId_cs
+  NGameplay_Units_Visibility_cs --> NCore_Team_cs
+  NGameplay_Units_WorldHealthBar_cs --> NCore_Team_cs
+  NGameplay_World_Chest_cs --> NContent_ItemData_cs
+  NGameplay_World_Chest_cs --> NCore_MessageFeed_cs
+  NGameplay_World_Chest_cs --> NCore_RunState_cs
+  NGameplay_World_Chest_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_World_Chest_cs --> NGameplay_Interaction_InteractionDefinition_cs
+  NGameplay_World_Chest_cs --> NGameplay_Items_ChestItem_cs
+  NGameplay_World_Chest_cs --> NGameplay_Items_Inventory_cs
+  NGameplay_World_Chest_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_World_DungeonDoor_cs --> NCore_EventBus_cs
+  NGameplay_World_DungeonDoor_cs --> NCore_Team_cs
+  NGameplay_World_DungeonDoor_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_World_DungeonDoor_cs --> NGameplay_Interaction_InteractionRunner_cs
+  NGameplay_World_DungeonDoor_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_World_DungeonDoor_cs --> NGameplay_Units_UnitRegistry_cs
+  NGameplay_World_FogOfWar_cs --> NCore_Team_cs
+  NGameplay_World_FogOfWar_cs --> NGameplay_Units_UnitRegistry_cs
+  NGameplay_World_Interactable_cs --> NGameplay_Interaction_IInteractionTarget_cs
+  NGameplay_World_SkeletonSpawner_cs --> NGameplay_Units_SkeletonWander_cs
+  NGameplay_World_SkeletonSpawner_cs --> NGameplay_Units_Visibility_cs
+  NGameplay_World_WaveSpawner_cs --> NCore_MessageFeed_cs
+  NGameplay_World_WaveSpawner_cs --> NGameplay_Units_UnitHealth_cs
+  NUI_CursorManager_cs --> NCore_MessageFeed_cs
+  NUI_CursorManager_cs --> NCore_Team_cs
+  NUI_CursorManager_cs --> NGameplay_Player_Selectable_cs
+  NUI_CursorManager_cs --> NGameplay_Player_SelectionManager_cs
+  NUI_CursorManager_cs --> NGameplay_Units_DownedRescue_cs
+  NUI_CursorManager_cs --> NGameplay_Units_UnitHealth_cs
+  NUI_CursorManager_cs --> NGameplay_World_Interactable_cs
+  NUI_EscMenuPanel_cs --> NApp_AppFlow_cs
+  NUI_HUD_cs --> NApp_MetaState_cs
+  NUI_HUD_cs --> NCore_MessageFeed_cs
+  NUI_HUD_cs --> NGameplay_Combat_MeleeCombat_cs
+  NUI_HUD_cs --> NGameplay_Player_SelectionManager_cs
+  NUI_HUD_cs --> NGameplay_Units_UnitHealth_cs
+  NUI_InventoryUI_cs --> NCore_MessageFeed_cs
+  NUI_InventoryUI_cs --> NCore_RunState_cs
+  NUI_InventoryUI_cs --> NCore_Team_cs
+  NUI_InventoryUI_cs --> NGameplay_Items_Inventory_cs
+  NUI_InventoryUI_cs --> NGameplay_Units_UnitRegistry_cs
+  NUI_InventoryUI_cs --> NGameplay_World_Chest_cs
+  NUI_MainMenuPanel_cs --> NApp_AppFlow_cs
+  NUI_SkillBarUI_cs --> NGameplay_Player_SelectionManager_cs
+  NUI_SkillBarUI_cs --> NGameplay_Units_SkillSystem_cs
+  NUI_TransitionFader_cs --> NCore_EventBus_cs
+  NUI_TransitionFader_cs --> NGameplay_World_TransitionRequest_cs
+  NUI_UIManager_cs --> NApp_AppFlow_cs
+  NUI_UIManager_cs --> NApp_RunFlow_cs
+  NUI_UIManager_cs --> NGameplay_IUiModalState_cs
+  NUI_UIManager_cs --> NGameplay_Items_Inventory_cs
+  NUI_UIManager_cs --> NGameplay_Player_SelectionManager_cs
+  NUI_UIManager_cs --> NGameplay_World_Chest_cs
