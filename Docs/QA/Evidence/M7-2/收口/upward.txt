@@ -1,0 +1,3 @@
+file_count=81
+upward_layer_edges=0
+layer_file_counts={'Core': 9, 'Content': 3, 'Gameplay': 52, 'App': 6, 'UI': 10, 'Editor': 1}

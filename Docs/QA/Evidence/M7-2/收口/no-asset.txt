@@ -1,0 +1,28 @@
+﻿M7-2 NoAsset check (0a78111a..HEAD, Assets)
+changed_total=22
+allowed_scripts_or_runner=22
+bad=0
+
+--- changed paths ---
+Assets/_Project/Scripts/App/AppFlow.cs
+Assets/_Project/Scripts/App/MetaState.cs
+Assets/_Project/Scripts/Core/PauseState.cs
+Assets/_Project/Scripts/Core/PauseState.cs.meta
+Assets/_Project/Scripts/Core/ProgressionState.cs
+Assets/_Project/Scripts/Core/ProgressionState.cs.meta
+Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs
+Assets/_Project/Scripts/Gameplay/IUiModalState.cs
+Assets/_Project/Scripts/Gameplay/IUiModalState.cs.meta
+Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs
+Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs
+Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs
+Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs
+Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs
+Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs
+Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs
+Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs
+Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs
+Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs.meta
+Assets/_Project/Scripts/UI/TransitionFader.cs
+Assets/_Project/Scripts/UI/UIManager.cs
+Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
