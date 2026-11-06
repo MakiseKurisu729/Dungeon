@@ -1,0 +1,24 @@
+# QA-REFACTOR-01 phase C - compile evidence
+generatedAt: 2026-11-06 14:56
+unity: 2022.3.62f3c1 (mode B, resident editor)
+
+## 1. error CS count
+command : mcpforunity read_console(types=["error"]) + read_console(types=["all"]) after refresh_unity(scope=scripts, compile=request)
+actual  : error entries = 1 ("Import Error Code:(4)"，非编译错误)；`error CS` = 0
+expected: `error CS` = 0
+result  : PASS
+
+## 2. 改动是否真的参与编译
+command : Get-ChildItem Library\ScriptAssemblies\Assembly-CSharp.dll | select LastWriteTime
+actual  : 2026-11-06 14:41:49（本次编辑最后落盘 14:41:08）
+conclusion: 编译发生在本次改动之后，green 覆盖 SPEC01 / REFACTOR / FND00B06 / DIAG 四套件（同在 Assembly-CSharp）
+
+## 3. 编译前守护：无 error CS 时四套件入口仍在
+command : mcpforunity://menu-items 过滤 "Tools/QA/In-Editor/"
+actual  : Tools/QA/In-Editor/DIAG, Tools/QA/In-Editor/FND00B06, Tools/QA/In-Editor/REFACTOR, Tools/QA/In-Editor/SPEC01 (green)
+conclusion: 菜单项文本未变（QA_InEditorMenu.cs 未被本阶段触碰）
+
+## 4. 本阶段改动文件与行数（wc -l，LF，无 BOM）
+Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs   : 33   (改：薄适配器，原 240)
+Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs: 1593 (改：14 条 Assert* + 去重; 原 1514)
+Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs : 213 (未改：本套件无 GitHead；FND00B06_Boot 按阶段 E 保留)

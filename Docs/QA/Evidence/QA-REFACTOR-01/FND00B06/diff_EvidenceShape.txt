@@ -1,0 +1,33 @@
+FND00B06 evidence shape diff (before vs after migration)
+BEFORE dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\before
+AFTER  dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\after
+
+=== FILE NAMES ===
+BEFORE (4): 06_Assertions.jsonl, 06_ExitCode_run1.txt, 06_Summary_run1.json, InEditorResult.txt
+AFTER  (4): 06_Assertions.jsonl, 06_ExitCode_run1.txt, 06_Summary_run1.json, InEditorResult.txt
+FILE NAME DIFF: (empty) IDENTICAL
+
+=== SUMMARY KEY ORDER ===
+BEFORE (16): run, task, qaItems, startedAt, finishedAt, unityVersion, scene, randomSeed, assertionFile, assertionLinesInFile, pass, fail, blocked, infraFail, observed, exitReason
+AFTER  (16): run, task, qaItems, startedAt, finishedAt, unityVersion, scene, randomSeed, assertionFile, assertionLinesInFile, pass, fail, blocked, infraFail, observed, exitReason
+SUMMARY KEY DIFF: (empty) IDENTICAL (order-sensitive)
+
+=== ASSERTION LINE FIELD ORDER (first line) ===
+BEFORE (136): run, qaItem, assertion, expected, requirement, playerEntity, targetEntity, actual, player, id, name, hp, maxHp, dead, agentOk, agentReason, agentPos, x, y, z, target, id, name, path, prefabSource, team, hp, maxHp, dead, position, x, y, z, distanceToPlayer, hasSelectableComponent, agentPresent, agentEnabled, agentOnNavMesh, monsterBrainPresent, monsterBrainDisabledForFixture, fixtureTag, sceneMonsterCount, playerCount, pass, status, kind, timestamp, data, playerScan, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, spawnMethod, spawnTrials, distance, requested, x, y, z, sampled, candidate, x, y, z, pathStatus, cornerCount, spawnSeconds, scene, otherPlayersBrainIsolation, count, names, note, fixtureNote
+AFTER  (136): run, qaItem, assertion, expected, requirement, playerEntity, targetEntity, actual, player, id, name, hp, maxHp, dead, agentOk, agentReason, agentPos, x, y, z, target, id, name, path, prefabSource, team, hp, maxHp, dead, position, x, y, z, distanceToPlayer, hasSelectableComponent, agentPresent, agentEnabled, agentOnNavMesh, monsterBrainPresent, monsterBrainDisabledForFixture, fixtureTag, sceneMonsterCount, playerCount, pass, status, kind, timestamp, data, playerScan, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, id, name, path, team, hp, maxHp, dead, position, x, y, z, hasSelectable, hasCharacterBrain, hasMeleeCombat, hasRangedCombat, agentPresent, agentEnabled, agentOnNavMesh, agentPosition, x, y, z, spawnMethod, spawnTrials, distance, requested, x, y, z, sampled, candidate, x, y, z, pathStatus, cornerCount, spawnSeconds, scene, otherPlayersBrainIsolation, count, names, note, fixtureNote
+ASSERTION LINE DIFF: (empty) IDENTICAL
+
+=== RUNS INDEX ===
+BEFORE runs files=0 AFTER runs files=0
+RUNS INDEX DIFF: (empty) IDENTICAL (both sides generate none)
+
+=== ENCODING ===
+06_Assertions.jsonl: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+06_ExitCode_run1.txt: beforeBOM=False afterBOM=False beforeCRLF=True afterCRLF=True
+06_Summary_run1.json: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+InEditorResult.txt: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+BOM DIFF: (empty) IDENTICAL (no BOM on either side)
+
+=== EXITCODE CONTENT ===
+before exists=True after exists=True
+before=[0] after=[0] IDENTICAL

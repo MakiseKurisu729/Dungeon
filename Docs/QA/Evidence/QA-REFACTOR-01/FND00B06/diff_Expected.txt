@@ -1,0 +1,24 @@
+FND00B06 `expected` literal comparison (before vs after migration)
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\before\06_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\after\06_Assertions.jsonl
+
+BEFORE assertions=14  AFTER assertions=14
+
+=== PER ASSERTION ===
+IDENTICAL  4 | Attack.Fixture  len=159
+IDENTICAL  4 | Attack.CommandAccepted  len=405
+IDENTICAL  4 | Attack.Approach  len=116
+IDENTICAL  4 | Attack.Starts  len=118
+IDENTICAL  4 | Attack.Repeats  len=129
+IDENTICAL  4 | Attack.DamageResolved  len=139
+IDENTICAL  4 | Attack.TargetDeath  len=63
+IDENTICAL  6 | Animation.ConfigMapping  len=246
+IDENTICAL  6 | Animation.Idle  len=178
+IDENTICAL  6 | Animation.PostCombatState  len=113
+IDENTICAL  6 | Animation.Move  len=121
+IDENTICAL  6 | Animation.Attack  len=159
+IDENTICAL  6 | Animation.Hit  len=165
+IDENTICAL  6 | Animation.DownedOrDeath  len=129
+
+=== RESULT ===
+IDENTICAL (14 assertions, expected literals char-for-char equal)

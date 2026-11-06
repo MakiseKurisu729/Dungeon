@@ -1,0 +1,42 @@
+FND00B06 assertion triple diff - (qaItem, assertion, status) sorted
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\before\06_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\after\06_Assertions.jsonl
+
+BEFORE count=14 pass=13 fail= observed=2
+AFTER  count=14 pass=13 fail= observed=2
+
+=== BEFORE ===
+4 | Attack.Approach | pass
+4 | Attack.CommandAccepted | pass
+4 | Attack.DamageResolved | pass
+4 | Attack.Fixture | pass
+4 | Attack.Repeats | pass
+4 | Attack.Starts | pass
+4 | Attack.TargetDeath | pass
+6 | Animation.Attack | pass
+6 | Animation.ConfigMapping | observed
+6 | Animation.DownedOrDeath | pass
+6 | Animation.Hit | pass
+6 | Animation.Idle | pass
+6 | Animation.Move | pass
+6 | Animation.PostCombatState | observed
+
+=== AFTER ===
+4 | Attack.Approach | pass
+4 | Attack.CommandAccepted | pass
+4 | Attack.DamageResolved | pass
+4 | Attack.Fixture | pass
+4 | Attack.Repeats | pass
+4 | Attack.Starts | pass
+4 | Attack.TargetDeath | pass
+6 | Animation.Attack | pass
+6 | Animation.ConfigMapping | observed
+6 | Animation.DownedOrDeath | pass
+6 | Animation.Hit | pass
+6 | Animation.Idle | pass
+6 | Animation.Move | pass
+6 | Animation.PostCombatState | observed
+
+=== DIFF ===
+(empty)
+RESULT: IDENTICAL

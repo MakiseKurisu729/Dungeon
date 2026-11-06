@@ -288,3 +288,133 @@ test(qa): REFACTOR 套件迁移到 Qa 公共层（阶段 B，断言零变化）
 - 钱包：`Go 订阅`
 - 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
 - 轮次：1 轮实现 + 1 轮修复（8 处 `CS1503`，额度内）；套件运行 1 次（REFACTOR）。
+
+---
+
+# 阶段 C — FND00B06 套件迁移（执行者会话，2026-11-06）
+
+## C.0 开工前六问（本阶段）
+
+| 问 | 答 |
+|---|---|
+| 唯一主要结果 | FND00B06 的 14 条断言变成 `IEnumerator AssertXxx(IQSink sink, …)`，断言口径（ID / `qaItem` / `expected` / 阈值 / `status` / 条数）零变化；证据文件名与 Summary 键序零变化 |
+| 明确不做什么 | 阶段 D（DIAG）/ 阶段 E（统一 Boot、删 `*_Boot`、模板、`Docs/06`）；不动 `Scripts/**`、资产、`ProjectSettings`、`CURRENT.md`；不删其他三套件的 `*_Boot`；不碰 `FND00B04/05`、`FND02A` |
+| 允许改哪些文件 | `Assets/_Project/Tests/**`（本阶段只改 `FND00B06_Evidence.cs`、`FND00B06_ProbeRunner.cs`）+ `Docs/Handoff/REPORT_QA-REFACTOR-01.md` + `Docs/QA/Evidence/QA-REFACTOR-01/**` |
+| 必须保持哪些旧行为 | 证据目录 `FND-00B-06/[<subdir>]`、`06_Assertions.jsonl`、`06_Summary_run<N>.json`、`06_ExitCode_run<N>.txt`（内容 `0`）、**无 Runs 索引**；Summary 16 键键序；断言行 10 字段字段序；UTF-8 无 BOM；菜单项文本；`FND00B06.*` SessionState 键；`FND00B06_Runner` 名字 |
+| 如何证明完成 | 编译 `error CS`=0 + 菜单跑 1 次得 12 pass / 0 fail / observed 2（14 行）+ 三份 diff（triple / expected / shape）+ `utp_readiness.txt` PHASE C 段静态检查全 PASS |
+| 失败后在哪里停 | 任一断言 ID/条数/status/阈值变化、需要改 `Scripts/**` 或资产、编译连续 2 轮红、`QaEvidenceSpec` 表达不了现状 → 停并留现场（TASK §4 熔断） |
+
+## C.1 结果摘要
+
+- 编译：`error CS` = 0（`Assembly-CSharp.dll` 重编于 14:41:49，晚于最后一次编辑 14:41:08）。
+- 套件：`Tools/QA/In-Editor/FND00B06` 跑 1 次 → **12 pass / 0 fail / blocked 0 / infraFail 0 / observed 2，共 14 行**，`code=0`，`evidenceSubdir=editor_run6`。
+- 断言 ID 三重集：BEFORE 14 / AFTER 14，**DIFF 空**（`RESULT: IDENTICAL`）。
+- `expected` 字面量：14/14 **逐字符一致**（`IDENTICAL`）。
+- 证据形状：文件名集合一致（4 个）、Summary 16 键键序一致、断言行字段序一致（136 个键序位一致）、两侧均无 BOM、`06_ExitCode_run1.txt` 仍在且内容 `0`、两侧均无 Runs 索引。
+- AC-10：FND00B06 14 条 `Assert*(IQaSink sink)`；断言体内 `File./Directory./SessionState/EditorApplication/QaLauncher/_Boot` = 0；残留 `_ev` = none。
+- **口径说明（与派单文字的一处偏差，必须记录）**：派单写“4 项攻击 6 条 + 6 项动画 6 条 + 2 observed”，实测 `before/06_Assertions.jsonl` 是 **7 条 item-4 + 7 条 item-6**；2 条 observed 分别是 `Animation.ConfigMapping` 与 `Animation.PostCombatState`（本轮 `Attack.TargetDeath` 因目标死亡走 pass 分支；其 `observed` 分支代码原样保留）。本阶段按实测 7+7 拆分，未增删任何断言。
+
+## C.2 改动清单（含行数）
+
+| 文件 | 改法 | 行数 |
+|---|---|---|
+| `Tests/FND00B/Runtime/FND00B06_Evidence.cs` | 改为 `class FND00B06_Evidence : QaEvidence` 薄适配器（只组装 `QaEvidenceSpec`）；删 `FND00B06_Json`（改用 `QaJson`） | 240 → **33** |
+| `Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs` | 14 条断言抽成 `AssertXxx(IQSink sink, …)`；删本地 `Dict`/`V3`（改用 `QaJson.Dict`/`QaJson.V3`）；`Finish()` 的 ExitCode 改用 `QaEvidence.ExitCodePath()`；`WriteSummary` 增加 `qaItems` extra | 1514 → **1593** |
+| `Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs` | **未改**（本套件无 `GitHead`，已是 `SessionState` + `QaScene` 形态；`FND00B06_Boot` 按 TASK §2.5 留到阶段 E） | 213（不变） |
+
+## C.3 关键位置（`文件:行`）
+
+1. `Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs:6` — `public class FND00B06_Evidence : QaEvidence`（33 行适配器；`EvidenceFolder="FND-00B-06"`、`ExitCodeFileName="06_ExitCode_run{run}.txt"`、`RunIndexFileName=null`、`ShouldTruncateAssertions=(r,m)=>r==1`）。
+2. `Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:23-31`（`SummaryFields` 见适配器）与 `:204` — `WriteSummary(…, QaJson.Dict("qaItems","4,6"))`，保住 `run, task, qaItems, …` 的 16 键键序（`QaSummaryKey.Run, Task, Extra, StartedAt, …`）。
+3. `Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:223` — ExitCode 不再在 runner 里拼路径：`string exitPath = _ev != null ? _ev.ExitCodePath() : null;`（文件名逐字符不变）。
+4. `Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:438-445` / `:521-524` / `:909-933` — 编排层改成 `yield return AssertXxx(sink, …)`，bail-out 级联仍留在编排层（用 `_ev.BlockedAssertion`）。
+5. `Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs:533` / `:714` / `:1119` — 三条代表性断言方法（夹具型 / 观察窗口型 / 夹具生命周期型）。
+
+## C.4 AC 回填（仅 C 阶段范围）
+
+| AC | C 阶段结论 | 证据 |
+|---|---|---|
+| **AC-1** | 通过：FND00B06 的 `(qaItem, assertion, status)` 排序后逐行一致，`DIFF` 空；14 条 `expected` 字面量逐字符一致；计数 14 = 14（pass 13 / observed 2 两侧同） | `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/diff_AssertionIds.txt`（`RESULT: IDENTICAL`）、`…/diff_Expected.txt`（`IDENTICAL (14 assertions …)`） |
+| **AC-3** | 通过：文件名集合 `{06_Assertions.jsonl, 06_ExitCode_run1.txt, 06_Summary_run1.json, InEditorResult.txt}` 两侧一致；Summary 16 键键序一致；断言行字段序一致；无 BOM；ExitCode 内容 `0`；无 Runs 索引 | `…/diff_EvidenceShape.txt` |
+| **AC-10** | 通过（FND00B06 部分）：14 条 `Assert\w+\(IQaSink sink`；逐方法花括号扫描禁用 token = 0，`_ev.` 残留 = none；`FND00B06_Json` 全树 0；适配器 33 行、无 I/O | `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt` 的 `## PHASE C` 段（`ALL APPLICABLE CHECKS PASS`） |
+| AC-2 / AC-8 / AC-4 等 | 不在本阶段验收（AC-2 连跑 2 次属阶段 E；AC-8 全仓编译属阶段 E；AC-4 的 git 范围由大脑在阶段末核） | — |
+
+## C.5 14 条断言拆分对照表（旧位置 → 新方法）
+
+> 旧行号 = 迁移前 `FND00B06_ProbeRunner.cs`（1514 行）的 `_ev.Record/BlockedAssertion` 行；新行号 = 本次 1593 行版本的方法声明行。判定表达式逐字搬入，未改阈值/期望/`status`。
+
+| # | 断言 ID | 旧位置 | 新方法（行） |
+|---|---|---|---|
+| 1 | `4 / Attack.Fixture` | `GroupAttack` 内联 `:448` | `AssertAttackFixture(IQSink sink, UnitHealth player, UnitHealth target, NavMeshAgent playerAgent, int playerCount, int monsterCount, List<object> playerScan, string spawnMethod, List<object> spawnTrials)`（`:533`） |
+| 2 | `4 / Attack.CommandAccepted` | `GroupAttack` 内联 `:529` | `AssertAttackCommandAccepted(IQSink sink, Selectable playerSelectable, bool selected, bool primaryOk, bool enemyMarked, bool orderedOk, string entryError, bool selectionManagerPresent)`（`:588`） |
+| 3 | `4 / Attack.Approach` | `GroupAttack` 内联 `:587`（含 18s 接敌循环） | `AssertAttackApproach(IQSink sink, UnitHealth player, UnitHealth target, CharacterBrain brain)`（`:612`） |
+| 4 | `4 / Attack.Starts` | `GroupAttack` 内联 `:640`（含 4s 出招等待循环） | `AssertAttackStarts(IQSink sink, UnitHealth player, UnitHealth target, MeleeCombat sword, CharacterBrain brain)`（`:669`） |
+| 5 | `4 / Attack.Repeats` | `GroupAttack` 内联 `:703`（含 8s 伤害观察窗口） | `AssertAttackRepeats(IQSink sink, UnitHealth target, MeleeCombat sword, CharacterBrain brain)`（`:714`） |
+| 6 | `4 / Attack.DamageResolved` | `GroupAttack` 内联 `:733` | `AssertAttackDamageResolved(IQSink sink, UnitHealth target)`（`:778`） |
+| 7 | `4 / Attack.TargetDeath` | `GroupAttack` 内联 `:753`（died）/ `:767`（observed 分支） | `AssertAttackTargetDeath(IQSink sink, UnitHealth target)`（`:811`，两分支原样保留） |
+| 8 | `6 / Animation.ConfigMapping` | `GroupAnimation` 内联 `:857` | `AssertAnimationConfigMapping(IQSink sink, Animator refAnim, MeleeCombat sword)`（`:937`，`status="observed"` 不变） |
+| 9 | `6 / Animation.Idle` | `GroupAnimation` 内联 `:879`（blocked）/ `:893`（record） | `AssertAnimationIdle(IQSink sink)`（`:974`） |
+| 10 | `6 / Animation.PostCombatState` | `GroupAnimation` 内联 `:925`（含 7.6s 观察 + 4 采样） | `AssertAnimationPostCombatState(IQSink sink, Animator animator, NavMeshAgent agent)`（`:1006`，`status="observed"`、`pass=false` 不变） |
+| 11 | `6 / Animation.Move` | `GroupAnimation` 内联 `:944`（blocked）/ `:961`（record） | `AssertAnimationMove(IQSink sink)`（`:1041`） |
+| 12 | `6 / Animation.Attack` | `GroupAnimation` 内联 `:976`（blocked）/ `:992`（record） | `AssertAnimationAttack(IQSink sink, CharacterBrain brain, MeleeCombat sword)`（`:1075`） |
+| 13 | `6 / Animation.Hit` | `HitAnimationFixture` `:1025`（blocked）/ `:1120`（record），方法体 `:1019-1144` | `AssertAnimationHit(IQSink sink, UnitHealth player)`（`:1119`；`CreateAnimationFixture` 上移到编排层） |
+| 14 | `6 / Animation.DownedOrDeath` | `DownedAnimationFixture` `:1150`（blocked）/ `:1189`（record），方法体 `:1146-1210` | `AssertAnimationDownedOrDeath(IQSink sink)`（`:1237`） |
+
+**编排层保留项**：`Start` / `Update` 看门狗 / `Finish`（`SessionState` + 退出码）/ 夹具建立与清理（`CleanupAttackFixture`、`CreateAnimationFixture`、`Destroy`）/ 各级 blocked 级联 / `RestoreOtherBrains` 仍留在 runner；断言体内只调 `sink.*`。
+
+## C.6 未合并项及原因（去重纪律）
+
+| 本地实现 | 处置 | 原因（等价性判断） |
+|---|---|---|
+| `static Dictionary<string,object> Dict(params object[])` | **删除**，全部改 `QaJson.Dict(` | 与 `QaJson.Dict` 逐行等价（同为按 `kvs` 插入序建字典） |
+| `static Dictionary<string,object> V3(Vector3)` | **删除**，全部改 `QaJson.V3(` | 与 `QaJson.V3` 等价（`{x,y,z}` 且字段序相同，序列化结果一致） |
+| `static string GetPath(Transform)` | **留原地** | `QaFixtures`/`QaScene`/`QaWait` 均无等价物（`QaFixtures.StateName` 是动画状态名，不是层级路径）；套件内补注释说明 |
+| `static float XZDistance(Vector3,Vector3)` | **留原地** | Qa 层无等价物；且它是 `Attack.Approach` 判定口径（XZ 平面距离）的直接实现，参数化会引入口径风险 |
+| `string ResolveState(Animator)` | **留原地** | **不等价**：本套件先用 `DumpAnimator` 收集的 `_stateNames`（含 `" Locomotion"` 前导空格的真实状态名）做哈希查表，未命中再按 `KnownStates` 逐名比对，最后返回 `unknown#<hash>`；`QaFixtures.StateName` 是固定白名单且返回 `Other:<hash>`。换掉会改变证据里的 `stateName` 字面量，进而可能改变 `TrimState(state)=="Locomotion"` 之类的判定 |
+| `AnimSample` / `DumpAnimator` / `TryPickSpawn` / `CreateAnimationFixture` | **留套件内** | 套件专有（FND00B06 的状态名表、NavMesh 落点策略、Knight 动画夹具生命周期），Qa 层无对应抽象 |
+
+## C.7 证据清单（本阶段新增，全部为新增文件或追加）
+
+| 路径 | 内容 |
+|---|---|
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/before/` | 阶段 A 采集的迁移前基线（4 文件，本阶段只读） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/after/` | 本次 `FND-00B-06/editor_run6` 的复制快照（4 文件） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/diff_AssertionIds.txt` | 三重集比对（`RESULT: IDENTICAL`，diffRows=0） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/diff_Expected.txt` | 14 条 `expected` 逐字符比对（`IDENTICAL`） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/diff_EvidenceShape.txt` | 文件名/Summary 键序/断言行字段序/BOM/Runs/ExitCode |
+| `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/{compare,expected,shape}.ps1` | 上述三份 diff 的可复跑脚本 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt` | 追加 `## PHASE C` 段（C1–C5，`ALL APPLICABLE CHECKS PASS`） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness_phaseC.ps1` | PHASE C 静态检查脚本（含逐方法花括号扫描） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/compile_phaseC.txt` | `error CS`=0 + 重编时间 + 菜单项存在 + 改动行数 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/editor_state_phaseC.txt` | 模式 B 开工/编译/跑套件/收工四段 `editor_state` |
+| `Docs/QA/Evidence/FND-00B-06/editor_run6/` | canonical 套件证据（只追加；菜单自动递增） |
+
+## C.8 §10 更新（本阶段）：仍直写文件 / 仍依赖引导的断言
+
+**结论：无。** FND00B06 的 14 条断言全部满足 AC-10 ③：首参 `IQaSink sink`（分别另收 0–8 个夹具/观测参数），体内只经 `sink.Record` / `sink.BlockedAssertion`；逐方法花括号扫描 `File.` / `Directory.` / `SessionState` / `EditorApplication` / `QaLauncher` / `_Boot` = 0，残留 `_ev.` = none。落盘、计分、Summary、ExitCode 路径全部在 `QaEvidence` / `IQaSink` 侧；`SessionState`、`EditorApplication.isPlaying`、`Time.timeScale`、退出码仍只在编排层（`Start`/`Update`/`Finish`）。
+
+**已知取舍（供阶段 E 参考）**：断言体仍读取 runner 的**观测字段**（`_hitEvents`、`_moveSamples`、`_stateTimeline`、`_idleSamples`、`_animFixture*`、`_attackWindowStart` 等）与**测点快照**（`_playerAgentOk/_playerAgentWhy/_monsterBrainDisabled/_prevSwordTimer/_targetDeathAt`）。这些是“测量结果”，不是引导状态；AC-10 表只禁止读引导字段与在断言内现取当前场景对象。若阶段 E 要把断言搬出 runner，这些字段需随夹具结构一起打包。
+
+## C.9 目检项（≤3，供所有者）
+
+1. 打开 `Docs/QA/Evidence/QA-REFACTOR-01/FND00B06/diff_EvidenceShape.txt`，确认 Summary 第 1 键是 `run`、第 3 键是 `qaItems`，且 `06_ExitCode_run1.txt` 存在、内容 `0`。
+2. `git diff -- Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs` 目视确认适配器只剩 spec 组装（33 行、无 I/O）；`FND00B06_Boot` 仍在 `FND00B06_BatchAcceptance.cs`（本阶段未动该文件）。
+3. Unity Console 只应有 `[FND00B06][ASSERT]` 日志、无 `error CS`；`Docs/QA/Evidence/FND-00B-06/editor_run6/` 为本次只追加产物（`editor_run5` 未被覆盖）。
+
+## C.10 建议提交（阶段 C）
+
+```text
+test(qa): FND00B06 套件迁移到 Qa 公共层（阶段 C，断言零变化）
+
+为什么：FND00B06 的 14 条断言原本内联在 GroupAttack/GroupAnimation/两个夹具协程里，
+拆成 AssertXxx(IQSink sink, …) 后断言只经 IQaSink 出证据、ExitCode 路径归还 QaEvidence，
+并用“三重集 + expected 逐字符 + 证据形状”三份机检 diff 证明断言口径与证据契约没动。
+```
+
+（由所有者用 GitHub Desktop 提交；本执行者未做任何 git 写操作。）
+
+## C.11 消耗记录（阶段 C）
+
+- 钱包：`Go 订阅`
+- 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
+- 轮次：1 轮实现 + 1 轮修复（1 处类型名拼写 `IQSink`→`IQaSink` 共 14 处、1 处脚本 UTF-8 BOM 导致的解析失败；均未触及断言口径）；套件运行 1 次（FND00B06，`editor_run6`）。

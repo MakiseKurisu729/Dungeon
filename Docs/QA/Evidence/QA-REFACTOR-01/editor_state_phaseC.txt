@@ -1,0 +1,36 @@
+# QA-REFACTOR-01 phase C - editor_state (mode B, MCP resident editor)
+# 命令：mcpforunity://editor/state（只读资源）; 记录时点以各自 observed_at_unix_ms 为准
+
+## 1. 开工（修改前）
+observed_at_unix_ms=1793945893035
+instance_id=Dungeon@4f5c34c82f31646e
+unity_version=2022.3.62f3c1
+is_batch_mode=false
+is_focused=false
+play_mode.is_playing=false / is_paused=false / is_changing=false
+active_scene=Assets/Scenes/DungeonWorld.unity
+compilation.is_compiling=false
+compilation.is_domain_reload_pending=false
+assets.is_updating=false
+advice.ready_for_tools=true / blocking_reasons=[]
+
+## 2. 编译（refresh_unity force/scripts + compile=request）
+refresh_unity result: success=true, message="Refresh recovered after Unity disconnect/retry; editor is ready."
+Library/ScriptAssemblies/Assembly-CSharp.dll LastWriteTime=2026-11-06 14:41:49（本次编辑落盘 14:41:08 之后 -> 本次改动已参与编译）
+read_console(types=error): 仅 "Import Error Code:(4)"（无 error CS）；read_console(types=all) 共 2 条，均无 CS 编译错误
+
+## 3. 跑套件（Tools/QA/In-Editor/FND00B06 菜单，一次）
+execute_menu_item: success=true
+证据目录：Docs/QA/Evidence/FND-00B-06/editor_run6（canonical，只追加）
+06_Summary_run1.json: pass=12 fail=0 blocked=0 infraFail=0 observed=2, assertionLinesInFile=14
+InEditorResult.txt: code=0, evidenceSubdir=editor_run6
+
+## 4. 收工（跑完后）
+observed_at_unix_ms=1793948178645
+instance_id=Dungeon@4f5c34c82f31646e
+play_mode.is_playing=false / is_paused=false / is_changing=false
+active_scene=Assets/Scenes/DungeonWorld.unity
+compilation.is_compiling=false
+compilation.is_domain_reload_pending=false
+compilation.last_domain_reload_after_unix_ms=1793947488330
+assets.is_updating=false / external_changes_dirty=false

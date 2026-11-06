@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,6 +123,16 @@ public class FND00B06_ProbeRunner : MonoBehaviour
     FieldInfo _orderedTargetField;
     FieldInfo _enemySelectedField;
 
+    // ---- 断言判定快照：编排层在测点写入，断言方法只读（不引入引导状态依赖）----
+    bool _playerAgentOk;
+    string _playerAgentWhy = "";
+    bool _monsterBrainDisabled;
+    bool _aFixturePass;
+    bool _aCommandPass;
+    bool _aApproachPass;
+    float _prevSwordTimer = -1f;
+    float _targetDeathAt = -1f;
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -190,7 +200,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _finished = true;
 
         if (_ev != null)
-            _ev.WriteSummary(ScenePath, _seed, string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason);
+            _ev.WriteSummary(ScenePath, _seed, string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason,
+                             QaJson.Dict("qaItems", "4,6"));
 
         int code;
         if (_ev == null || _ev.Infra > 0) code = 3;
@@ -209,10 +220,9 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         SessionState.SetInt(ExitCodeKey, code);
         try
         {
-            if (_ev != null)
-                System.IO.File.WriteAllText(
-                    System.IO.Path.Combine(_ev.EvidenceDir, "06_ExitCode_run" + _run + ".txt"),
-                    code.ToString() + Environment.NewLine,
+            string exitPath = _ev != null ? _ev.ExitCodePath() : null;
+            if (exitPath != null)
+                System.IO.File.WriteAllText(exitPath, code.ToString() + Environment.NewLine,
                     new System.Text.UTF8Encoding(false));
         }
         catch (Exception e) { Debug.LogWarning("[FND00B06] exit code file write failed: " + e.Message); }
@@ -265,6 +275,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
     IEnumerator GroupAttack()
     {
         Debug.Log("[FND00B06] === QA item 4: Attack ===");
+        IQaSink sink = _ev;
 
         UnitHealth[] players;
         int monsterCount;
@@ -280,7 +291,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             yield break;
         }
 
-        var playerScan = players.Select(h => (object)Dict(
+        var playerScan = players.Select(h => (object)QaJson.Dict(
             "id", h.GetInstanceID(),
             "name", h.name,
             "path", GetPath(h.transform),
@@ -288,7 +299,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             "hp", h.hp,
             "maxHp", h.maxHp,
             "dead", h.dead,
-            "position", V3(h.transform.position),
+            "position", QaJson.V3(h.transform.position),
             "hasSelectable", h.GetComponentInChildren<Selectable>(true) != null,
             "hasCharacterBrain", h.GetComponent<CharacterBrain>() != null,
             "hasMeleeCombat", FindSword(h) != null,
@@ -296,7 +307,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             "agentPresent", h.GetComponent<NavMeshAgent>() != null,
             "agentEnabled", h.GetComponent<NavMeshAgent>() != null && h.GetComponent<NavMeshAgent>().enabled,
             "agentOnNavMesh", h.GetComponent<NavMeshAgent>() != null && h.GetComponent<NavMeshAgent>().isOnNavMesh,
-            "agentPosition", h.GetComponent<NavMeshAgent>() != null ? V3(h.GetComponent<NavMeshAgent>().nextPosition) : null)).ToList();
+            "agentPosition", h.GetComponent<NavMeshAgent>() != null ? QaJson.V3(h.GetComponent<NavMeshAgent>().nextPosition) : null)).ToList();
 
         _player = players.FirstOrDefault(h => h != null && !h.dead &&
                                               FindSword(h) != null &&
@@ -304,14 +315,14 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         if (_player == null)
         {
             _ev.BlockedAssertion("4", "Attack.Fixture",
-                Dict("requirement", "场景存在可下达攻击指令的近战玩家单位"),
+                QaJson.Dict("requirement", "场景存在可下达攻击指令的近战玩家单位"),
                 "未找到「存活 + CharacterBrain + MeleeCombat」的玩家单位",
-                Dict("playerCount", players.Length, "playerScan", playerScan,
+                QaJson.Dict("playerCount", players.Length, "playerScan", playerScan,
                      "sceneMonsterCount", monsterCount, "scene", SceneManager.GetActiveScene().path));
             for (int i = 1; i < AttackAssertionIds.Length; i++)
                 _ev.BlockedAssertion("4", AttackAssertionIds[i],
-                    Dict("requirement", "见工单 §4"),
-                    "无近战玩家单位，普攻链路无起点", Dict("playerCount", players.Length));
+                    QaJson.Dict("requirement", "见工单 §4"),
+                    "无近战玩家单位，普攻链路无起点", QaJson.Dict("playerCount", players.Length));
             yield break;
         }
 
@@ -326,8 +337,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _orderedTargetField = PrivField(typeof(CharacterBrain), "_orderedTarget");
         _enemySelectedField = PrivField(typeof(SelectionManager), "_enemySelected");
 
-        bool playerAgentOk = _pAgent != null && _pAgent.enabled && _pAgent.isOnNavMesh;
-        string playerAgentWhy = _pAgent == null ? "缺 NavMeshAgent" :
+        _playerAgentOk = _pAgent != null && _pAgent.enabled && _pAgent.isOnNavMesh;
+        _playerAgentWhy = _pAgent == null ? "缺 NavMeshAgent" :
             (!_pAgent.enabled ? "agent.enabled=false" :
             (!_pAgent.isOnNavMesh ? "agent.isOnNavMesh=false" : "ok"));
 
@@ -358,8 +369,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         {
             _ev.InfraFailure("4", "Attack.Fixture", "无法加载 " + EnemyPrefabPath + "; " + (enemyLoadError ?? ""), "");
             for (int i = 1; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "敌人夹具预制体不可用", Dict("prefab", EnemyPrefabPath, "error", enemyLoadError));
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "敌人夹具预制体不可用", QaJson.Dict("prefab", EnemyPrefabPath, "error", enemyLoadError));
             yield break;
         }
 
@@ -371,12 +382,12 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         if (!spawnPlaced)
         {
             _ev.BlockedAssertion("4", "Attack.Fixture",
-                Dict("requirement", "在玩家附近 NavMesh 上放置 1 个既有敌人预制体实例"),
+                QaJson.Dict("requirement", "在玩家附近 NavMesh 上放置 1 个既有敌人预制体实例"),
                 "附近未找到可通行 NavMesh 落点（4 个方向 / 7m、5.5m、4m）",
-                Dict("playerPosition", V3(_player.transform.position), "spawnTrials", spawnTrials));
+                QaJson.Dict("playerPosition", QaJson.V3(_player.transform.position), "spawnTrials", spawnTrials));
             for (int i = 1; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "敌人夹具无法落位", Dict("spawnTrials", spawnTrials));
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "敌人夹具无法落位", QaJson.Dict("spawnTrials", spawnTrials));
             yield break;
         }
 
@@ -393,15 +404,15 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         {
             _ev.InfraFailure("4", "Attack.Fixture", "敌人夹具实例化失败: " + e.Message, e.ToString());
             for (int i = 1; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "敌人夹具实例化失败", Dict("error", e.Message));
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "敌人夹具实例化失败", QaJson.Dict("error", e.Message));
             yield break;
         }
 
         // 夹具目标关闭自主 AI，避免对手攻击/追击污染普攻观测（只改实例，不改生产资产）
         var monsterBrain = _targetGo.GetComponent<MonsterBrain>();
-        bool monsterBrainDisabled = false;
-        if (monsterBrain != null && monsterBrain.enabled) { monsterBrain.enabled = false; monsterBrainDisabled = true; }
+        _monsterBrainDisabled = false;
+        if (monsterBrain != null && monsterBrain.enabled) { monsterBrain.enabled = false; _monsterBrainDisabled = true; }
         var wander = _targetGo.GetComponent<SkeletonWander>();
         if (wander != null && wander.enabled) wander.enabled = false;
 
@@ -410,8 +421,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         {
             _ev.InfraFailure("4", "Attack.Fixture", "敌人夹具缺少 UnitHealth", "");
             for (int i = 1; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "敌人夹具缺少 UnitHealth", Dict("prefab", EnemyPrefabPath));
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "敌人夹具缺少 UnitHealth", QaJson.Dict("prefab", EnemyPrefabPath));
             yield break;
         }
 
@@ -424,59 +435,15 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _target.OnHit += OnTargetHit;
         _target.OnDeath += OnTargetDeath;
 
-        NavMeshAgent targetAgent = _target.GetComponent<NavMeshAgent>();
-        var targetInfo = Dict(
-            "id", _target.GetInstanceID(),
-            "name", _target.name,
-            "path", GetPath(_target.transform),
-            "prefabSource", EnemyPrefabPath,
-            "team", _target.team.ToString(),
-            "hp", _target.hp,
-            "maxHp", _target.maxHp,
-            "dead", _target.dead,
-            "position", V3(_target.transform.position),
-            "distanceToPlayer", XZDistance(_target.transform.position, _player.transform.position),
-            "hasSelectableComponent", _target.GetComponentInChildren<Selectable>(true) != null,
-            "agentPresent", targetAgent != null,
-            "agentEnabled", targetAgent != null && targetAgent.enabled,
-            "agentOnNavMesh", targetAgent != null && targetAgent.isOnNavMesh,
-            "monsterBrainPresent", monsterBrain != null,
-            "monsterBrainDisabledForFixture", monsterBrainDisabled,
-            "fixtureTag", FixturePrefix);
+        yield return AssertAttackFixture(sink, _player, _target, _pAgent, players.Length, monsterCount,
+                                         playerScan, spawnMethod, spawnTrials);
 
-        bool fixturePass = playerAgentOk && _target != null && !_target.dead;
-        _ev.Record("4", "Attack.Fixture",
-            Dict(
-                "requirement", "选中 1 名存活近战玩家；以既有普通敌人预制体在内存建立目标夹具；记录双方 ID/队伍/位置/生命/存活/可选中/Agent 导航状态",
-                "playerEntity", "DungeonWorld 场景内玩家单位",
-                "targetEntity", "既有敌人预制体内存实例（不写入场景）"),
-            Dict(
-                "player", Dict("id", _player.GetInstanceID(), "name", _player.name,
-                               "hp", _player.hp, "maxHp", _player.maxHp, "dead", _player.dead,
-                               "agentOk", playerAgentOk, "agentReason", playerAgentWhy,
-                               "agentPos", _pAgent != null ? V3(_pAgent.transform.position) : null),
-                "target", targetInfo,
-                "sceneMonsterCount", monsterCount,
-                "playerCount", players.Length),
-            fixturePass, fixturePass ? "pass" : "blocked", "production",
-            Dict(
-                "playerScan", playerScan,
-                "spawnMethod", spawnMethod,
-                "spawnTrials", spawnTrials,
-                "spawnSeconds", _targetSpawnSeconds,
-                "scene", SceneManager.GetActiveScene().path,
-                "otherPlayersBrainIsolation", Dict(
-                    "count", _othersDisabled.Count,
-                    "names", _othersDisabled.Select(h => h.name).ToList(),
-                    "note", "仅运行时禁用其他玩家 CharacterBrain，避免其自动攻击夹具目标；测后恢复，不改资产"),
-                "fixtureNote", "目标为内存夹具：Skeleton_Warrior 预制体实例，关闭其 MonsterBrain 以免反击/追击；场景真实怪物数为上值，不把夹具存在写成遭遇通过"));
-
-        if (!fixturePass)
+        if (!_aFixturePass)
         {
             for (int i = 1; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
                     "夹具前置失败（玩家 Agent 不在 NavMesh 或目标无效）",
-                    Dict("playerAgentOk", playerAgentOk, "agentReason", playerAgentWhy));
+                    QaJson.Dict("playerAgentOk", _playerAgentOk, "agentReason", _playerAgentWhy));
             CleanupAttackFixture();
             yield break;
         }
@@ -525,49 +492,140 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             Debug.LogError("[FND00B06] command entry failed: " + e);
         }
 
+        yield return AssertAttackCommandAccepted(sink, _playerSel, selected, primaryOk, enemyMarked, orderedOk,
+                                                entryError, sm != null);
+
+        if (!_aCommandPass)
+        {
+            for (int i = 2; i < AttackAssertionIds.Length; i++)
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "生产攻击命令入口未接受（详见 Attack.CommandAccepted）",
+                    QaJson.Dict("error", entryError, "orderedTargetIsTarget", orderedOk));
+            CleanupAttackFixture();
+            yield break;
+        }
+
+        yield return AssertAttackApproach(sink, _player, _target, _brain);
+
+        if (!_aApproachPass)
+        {
+            for (int i = 3; i < AttackAssertionIds.Length; i++)
+                _ev.BlockedAssertion("4", AttackAssertionIds[i], QaJson.Dict("requirement", "见工单 §4"),
+                    "未能通过生产移动链接敌（endReason=" + _approachEndReason + "）",
+                    QaJson.Dict("endDistance", _approachEndDist, "attackRange", _approachConfiguredRange));
+            CleanupAttackFixture();
+            yield break;
+        }
+
+        // ---- 出招 / 持续攻击 / 伤害结算 ----
+        yield return AssertAttackStarts(sink, _player, _target, _sword, _brain);
+        yield return AssertAttackRepeats(sink, _target, _sword, _brain);
+        yield return AssertAttackDamageResolved(sink, _target);
+        yield return AssertAttackTargetDeath(sink, _target);
+
+        CleanupAttackFixture();
+        yield return null;
+    }
+
+    // ============================================================
+    // 断言（AC-10 / R-8）：只经 IQaSink 出证据；夹具走参数，不读写引导状态
+    // ============================================================
+    IEnumerator AssertAttackFixture(IQaSink sink, UnitHealth player, UnitHealth target, NavMeshAgent playerAgent,
+                                    int playerCount, int monsterCount, List<object> playerScan,
+                                    string spawnMethod, List<object> spawnTrials)
+    {
+        NavMeshAgent targetAgent = target.GetComponent<NavMeshAgent>();
+        bool monsterBrainPresent = _targetGo != null && _targetGo.GetComponent<MonsterBrain>() != null;
+        var targetInfo = QaJson.Dict(
+            "id", target.GetInstanceID(),
+            "name", target.name,
+            "path", GetPath(target.transform),
+            "prefabSource", EnemyPrefabPath,
+            "team", target.team.ToString(),
+            "hp", target.hp,
+            "maxHp", target.maxHp,
+            "dead", target.dead,
+            "position", QaJson.V3(target.transform.position),
+            "distanceToPlayer", XZDistance(target.transform.position, player.transform.position),
+            "hasSelectableComponent", target.GetComponentInChildren<Selectable>(true) != null,
+            "agentPresent", targetAgent != null,
+            "agentEnabled", targetAgent != null && targetAgent.enabled,
+            "agentOnNavMesh", targetAgent != null && targetAgent.isOnNavMesh,
+            "monsterBrainPresent", monsterBrainPresent,
+            "monsterBrainDisabledForFixture", _monsterBrainDisabled,
+            "fixtureTag", FixturePrefix);
+
+        bool fixturePass = _playerAgentOk && target != null && !target.dead;
+        _aFixturePass = fixturePass;
+        sink.Record("4", "Attack.Fixture",
+            QaJson.Dict(
+                "requirement", "选中 1 名存活近战玩家；以既有普通敌人预制体在内存建立目标夹具；记录双方 ID/队伍/位置/生命/存活/可选中/Agent 导航状态",
+                "playerEntity", "DungeonWorld 场景内玩家单位",
+                "targetEntity", "既有敌人预制体内存实例（不写入场景）"),
+            QaJson.Dict(
+                "player", QaJson.Dict("id", player.GetInstanceID(), "name", player.name,
+                               "hp", player.hp, "maxHp", player.maxHp, "dead", player.dead,
+                               "agentOk", _playerAgentOk, "agentReason", _playerAgentWhy,
+                               "agentPos", playerAgent != null ? QaJson.V3(playerAgent.transform.position) : null),
+                "target", targetInfo,
+                "sceneMonsterCount", monsterCount,
+                "playerCount", playerCount),
+            fixturePass, fixturePass ? "pass" : "blocked", "production",
+            QaJson.Dict(
+                "playerScan", playerScan,
+                "spawnMethod", spawnMethod,
+                "spawnTrials", spawnTrials,
+                "spawnSeconds", _targetSpawnSeconds,
+                "scene", SceneManager.GetActiveScene().path,
+                "otherPlayersBrainIsolation", QaJson.Dict(
+                    "count", _othersDisabled.Count,
+                    "names", _othersDisabled.Select(h => h.name).ToList(),
+                    "note", "仅运行时禁用其他玩家 CharacterBrain，避免其自动攻击夹具目标；测后恢复，不改资产"),
+                "fixtureNote", "目标为内存夹具：Skeleton_Warrior 预制体实例，关闭其 MonsterBrain 以免反击/追击；场景真实怪物数为上值，不把夹具存在写成遭遇通过"));
+        yield break;
+    }
+
+    IEnumerator AssertAttackCommandAccepted(IQaSink sink, Selectable playerSelectable, bool selected, bool primaryOk,
+                                            bool enemyMarked, bool orderedOk, string entryError,
+                                            bool selectionManagerPresent)
+    {
         bool commandPass = selected && primaryOk && enemyMarked && orderedOk;
-        _ev.Record("4", "Attack.CommandAccepted",
-            Dict(
+        _aCommandPass = commandPass;
+        sink.Record("4", "Attack.CommandAccepted",
+            QaJson.Dict(
                 "requirement", "下发一次真实普攻命令，命令被接受且目标正确",
                 "selectionEntry", "SelectionManager.SingleSelect(Selectable)（左键单选生产方法）",
                 "attackCommandEntry", "SelectionManager.SelectEnemy(UnitHealth) + CharacterBrain.CommandAttack(Transform)",
                 "chain", "SelectionManager.HandleClick → SelectEnemy + CharacterBrain.CommandAttack → CharacterBrain.Update → UnitBrain.AttackLoop → MeleeCombat.AutoAttack",
                 "forbidden", "不得逐帧调用攻击执行器、不得直接扣血"),
-            Dict("playerSelected", selected, "primaryIsPlayer", primaryOk,
+            QaJson.Dict("playerSelected", selected, "primaryIsPlayer", primaryOk,
                  "enemyMarked", enemyMarked, "orderedTargetIsTarget", orderedOk,
                  "error", entryError),
             commandPass, commandPass ? "pass" : "blocked", "production",
-            Dict(
-                "selectionManagerPresent", sm != null,
-                "playerSelectable", _playerSel != null,
+            QaJson.Dict(
+                "selectionManagerPresent", selectionManagerPresent,
+                "playerSelectable", playerSelectable != null,
                 "note", "batchmode 无真实鼠标射线输入，按工单允许使用生产选择/命令方法作自动等价输入"));
+        yield break;
+    }
 
-        if (!commandPass)
-        {
-            for (int i = 2; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "生产攻击命令入口未接受（详见 Attack.CommandAccepted）",
-                    Dict("error", entryError, "orderedTargetIsTarget", orderedOk));
-            CleanupAttackFixture();
-            yield break;
-        }
-
-        // ---- 接敌（现有命令/移动链，不使用 Warp）----
-        _approachConfiguredRange = _brain.AttackRange;
-        _approachStartDist = XZDistance(_player.transform.position, _target.transform.position);
+    IEnumerator AssertAttackApproach(IQaSink sink, UnitHealth player, UnitHealth target, CharacterBrain brain)
+    {
+        _approachConfiguredRange = brain.AttackRange;
+        _approachStartDist = XZDistance(player.transform.position, target.transform.position);
         float approachT0 = Time.realtimeSinceStartup;
         bool inRange = false;
-        Vector3 lastPos = _player.transform.position;
+        Vector3 lastPos = player.transform.position;
         _approachMaxStep = 0f;
         _approachTeleported = false;
 
         while (Time.realtimeSinceStartup - approachT0 < ApproachTimeoutSeconds)
         {
-            if (_target == null || _target.dead) { _approachEndReason = "target dead"; break; }
-            float dist = XZDistance(_player.transform.position, _target.transform.position);
-            if (dist <= _brain.AttackRange + 0.2f) { inRange = true; _approachEndReason = "in range"; break; }
+            if (target == null || target.dead) { _approachEndReason = "target dead"; break; }
+            float dist = XZDistance(player.transform.position, target.transform.position);
+            if (dist <= brain.AttackRange + 0.2f) { inRange = true; _approachEndReason = "in range"; break; }
 
-            Vector3 p = _player.transform.position;
+            Vector3 p = player.transform.position;
             float step = Vector3.Distance(p, lastPos);
             if (step > _approachMaxStep) _approachMaxStep = step;
             if (step > 1.2f) _approachTeleported = true;
@@ -580,16 +638,17 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         }
 
         _approachSeconds = Time.realtimeSinceStartup - approachT0;
-        _approachEndDist = _target != null ? XZDistance(_player.transform.position, _target.transform.position) : -1f;
+        _approachEndDist = target != null ? XZDistance(player.transform.position, target.transform.position) : -1f;
         if (string.IsNullOrEmpty(_approachEndReason)) _approachEndReason = "timeout";
 
-        bool approachPass = inRange && !_approachTeleported && _target != null && !_target.dead;
-        _ev.Record("4", "Attack.Approach",
-            Dict(
+        bool approachPass = inRange && !_approachTeleported && target != null && !target.dead;
+        _aApproachPass = approachPass;
+        sink.Record("4", "Attack.Approach",
+            QaJson.Dict(
                 "requirement", "由现有命令/移动链接近至实际攻击范围；不得用测试 Warp 玩家冒充接敌",
                 "attackRange", _approachConfiguredRange,
                 "endCondition", "XZ 距离 <= attackRange + 0.2"),
-            Dict(
+            QaJson.Dict(
                 "startDistance", _approachStartDist,
                 "endDistance", _approachEndDist,
                 "configuredRange", _approachConfiguredRange,
@@ -602,24 +661,17 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 "agentRemainingDistance", _pAgent != null ? _pAgent.remainingDistance : -1f,
                 "moveSamples", _moveSamples.Count),
             approachPass, approachPass ? "pass" : "product_fail", "production",
-            Dict(
+            QaJson.Dict(
                 "moveSampleDetail", _moveSamples,
                 "note", "全程仅通过 CharacterBrain.CommandAttack 触发的 AttackLoop 追击；无 Warp、无 transform 直写"));
+    }
 
-        if (!approachPass)
-        {
-            for (int i = 3; i < AttackAssertionIds.Length; i++)
-                _ev.BlockedAssertion("4", AttackAssertionIds[i], Dict("requirement", "见工单 §4"),
-                    "未能通过生产移动链接敌（endReason=" + _approachEndReason + "）",
-                    Dict("endDistance", _approachEndDist, "attackRange", _approachConfiguredRange));
-            CleanupAttackFixture();
-            yield break;
-        }
-
-        // ---- 出招 / 持续攻击 / 伤害结算 ----
+    IEnumerator AssertAttackStarts(IQaSink sink, UnitHealth player, UnitHealth target, MeleeCombat sword,
+                                   CharacterBrain brain)
+    {
         _attackWindowStart = Time.realtimeSinceStartup;
         float startWait = Time.realtimeSinceStartup;
-        float prevTimer = GetSwordTimer();
+        _prevSwordTimer = GetSwordTimer();
 
         while (Time.realtimeSinceStartup - startWait < StartTimeoutSeconds)
         {
@@ -632,34 +684,38 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 _firstAttackTargetOk = SwordTargetIsTarget();
                 break;
             }
-            if (_target == null || _target.dead) break;
+            if (target == null || target.dead) break;
             yield return null;
         }
 
         bool startsPass = _firstAttackAt >= 0f && _firstAttackTargetOk;
-        _ev.Record("4", "Attack.Starts",
-            Dict(
+        sink.Record("4", "Attack.Starts",
+            QaJson.Dict(
                 "requirement", "观察到实际出招事件/状态；仅靠近未出招为产品失败",
                 "signal", "MeleeCombat 私有 _timer >= 0 或 Animator 进入攻击状态",
                 "targetLocked", true),
-            Dict("firstAttackAtSeconds", _firstAttackAt,
+            QaJson.Dict("firstAttackAtSeconds", _firstAttackAt,
                  "firstAttackState", _firstAttackState,
                  "swordTargetIsFixture", _firstAttackTargetOk,
-                 "playerHp", _player.hp,
-                 "targetHp", _target != null ? _target.hp : -1f),
+                 "playerHp", player.hp,
+                 "targetHp", target != null ? target.hp : -1f),
             startsPass, startsPass ? "pass" : "product_fail", "production",
-            Dict("attackStates", AttackStates,
-                 "swordConfigured", Dict("attackStateName", _sword.attackStateName,
-                                         "attackLayer", _sword.attackLayer,
-                                         "attackLen", _sword.attackLen,
-                                         "activeStart", _sword.activeStart,
-                                         "activeEnd", _sword.activeEnd,
-                                         "hitRange", _sword.hitRange,
-                                         "runtimeCurLen", _swordCurLenField != null ? (float)_swordCurLenField.GetValue(_sword) : -1f,
-                                         "statsAttackSpeed", _brain.stats != null ? _brain.stats.attackSpeed : -1f)));
+            QaJson.Dict("attackStates", AttackStates,
+                 "swordConfigured", QaJson.Dict("attackStateName", sword.attackStateName,
+                                         "attackLayer", sword.attackLayer,
+                                         "attackLen", sword.attackLen,
+                                         "activeStart", sword.activeStart,
+                                         "activeEnd", sword.activeEnd,
+                                         "hitRange", sword.hitRange,
+                                         "runtimeCurLen", _swordCurLenField != null ? (float)_swordCurLenField.GetValue(sword) : -1f,
+                                         "statsAttackSpeed", brain.stats != null ? brain.stats.attackSpeed : -1f)));
+    }
 
+    IEnumerator AssertAttackRepeats(IQaSink sink, UnitHealth target, MeleeCombat sword, CharacterBrain brain)
+    {
+        float prevTimer = _prevSwordTimer;
         float windowEnd = Time.realtimeSinceStartup + DamageWindowSeconds;
-        float deathAt = -1f;
+        _targetDeathAt = -1f;
         int sampleTick = 0;
         while (Time.realtimeSinceStartup < windowEnd)
         {
@@ -675,10 +731,10 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             if (_attackSamples.Count < 120 && (sampleTick++ % 3 == 0))
                 _attackSamples.Add(AnimSample(_pAnim, "attack", _pAgent));
 
-            if (_target != null && _target.dead)
+            if (target != null && target.dead)
             {
-                if (deathAt < 0f) deathAt = Time.realtimeSinceStartup;
-                else if (Time.realtimeSinceStartup - deathAt > 1f) break;
+                if (_targetDeathAt < 0f) _targetDeathAt = Time.realtimeSinceStartup;
+                else if (Time.realtimeSinceStartup - _targetDeathAt > 1f) break;
             }
             yield return null;
         }
@@ -694,31 +750,36 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         {
             var a = attributed[i - 1];
             var b = attributed[i];
-            intervals.Add(Dict("from", a["tAbs"], "to", b["tAbs"],
+            intervals.Add(QaJson.Dict("from", a["tAbs"], "to", b["tAbs"],
                                "intervalSeconds", (float)Math.Round((float)b["tAbs"] - (float)a["tAbs"], 3)));
         }
-        float expectedInterval = _sword != null && _brain.stats != null && _brain.stats.attackSpeed > 0f
-            ? _sword.attackLen / _brain.stats.attackSpeed : -1f;
+        float expectedInterval = sword != null && brain.stats != null && brain.stats.attackSpeed > 0f
+            ? sword.attackLen / brain.stats.attackSpeed : -1f;
         bool repeatsPass = attributed.Count >= 2 && unattributed == 0;
-        _ev.Record("4", "Attack.Repeats",
-            Dict(
+        sink.Record("4", "Attack.Repeats",
+            QaJson.Dict(
                 "requirement", "固定观察窗口内至少出现 2 次有效攻击结算；不得以动画播放次数替代伤害次数",
                 "minHits", 2,
                 "windowSeconds", DamageWindowSeconds,
                 "expectedIntervalSeconds", expectedInterval,
-                "attackSpeed", _brain.stats != null ? _brain.stats.attackSpeed : -1f),
-            Dict("hitCount", attributed.Count,
+                "attackSpeed", brain.stats != null ? brain.stats.attackSpeed : -1f),
+            QaJson.Dict("hitCount", attributed.Count,
                  "unattributedHitCount", unattributed,
                  "swingCount", _swingCount,
                  "swingTimes", _swingTimes, "intervals", intervals,
                  "observationWindowSeconds", (float)Math.Round(attackSpan, 3),
-                 "targetHp", _target != null ? _target.hp : -1f),
+                 "targetHp", target != null ? target.hp : -1f),
             repeatsPass, repeatsPass ? "pass" : "product_fail", "production",
-            Dict("hitEvents", _hitEvents,
+            QaJson.Dict("hitEvents", _hitEvents,
                  "expectedIntervalFormula", "attackLen / UnitStats.attackSpeed",
                  "note", "判定以被选中玩家的 OnHit 结算次数为准；其他玩家单位的命中单列不计入，swingCount 仅作对照"));
+    }
 
-        // ---- DamageResolved ----
+    IEnumerator AssertAttackDamageResolved(IQaSink sink, UnitHealth target)
+    {
+        var attributed = _hitEvents.Select(e => (Dictionary<string, object>)e)
+                                   .Where(d => (bool)d["sourceIsSelectedPlayer"]).ToList();
+        int unattributed = _hitEvents.Count - attributed.Count;
         bool damageConsistent = attributed.Count >= 2 && unattributed == 0;
         float totalDamage = 0f;
         foreach (var d in attributed)
@@ -730,54 +791,58 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             if (Math.Abs((before - after) - amount) > 0.01f) damageConsistent = false;
             if (amount <= 0f) damageConsistent = false;
         }
-        _ev.Record("4", "Attack.DamageResolved",
-            Dict(
+        sink.Record("4", "Attack.DamageResolved",
+            QaJson.Dict(
                 "requirement", "每次有效命中经既有生命/伤害入口结算；记录目标 HP 前后值、结算伤害、事件顺序与累计次数",
                 "entry", "UnitHealth.TakeHit → ApplyDamageInfo → OnHit",
                 "testWritesHp", false),
-            Dict("hitCount", attributed.Count, "unattributedHitCount", unattributed,
+            QaJson.Dict("hitCount", attributed.Count, "unattributedHitCount", unattributed,
                  "totalDamage", totalDamage,
-                 "targetHp", _target != null ? _target.hp : -1f,
-                 "targetMaxHp", _target != null ? _target.maxHp : -1f,
-                 "targetDead", _target != null && _target.dead,
+                 "targetHp", target != null ? target.hp : -1f,
+                 "targetMaxHp", target != null ? target.maxHp : -1f,
+                 "targetDead", target != null && target.dead,
                  "hpDeltaConsistent", damageConsistent),
             damageConsistent, damageConsistent ? "pass" : "product_fail", "production",
-            Dict("hitEvents", _hitEvents,
+            QaJson.Dict("hitEvents", _hitEvents,
                  "note", "断言侧无任何 HP 写入路径；HP 变化全部来自生产伤害管线"));
+        yield break;
+    }
 
-        // ---- TargetDeath ----
-        bool died = _target != null && _target.dead;
+    IEnumerator AssertAttackTargetDeath(IQaSink sink, UnitHealth target)
+    {
+        var attributed = _hitEvents.Select(e => (Dictionary<string, object>)e)
+                                   .Where(d => (bool)d["sourceIsSelectedPlayer"]).ToList();
+        int unattributed = _hitEvents.Count - attributed.Count;
+        bool died = target != null && target.dead;
         if (died)
         {
             bool deathPass = _targetDeathEvents == 1 && attributed.Count >= 2 && unattributed == 0;
-            _ev.Record("4", "Attack.TargetDeath",
-                Dict("requirement", "若观察窗口内目标死亡，记录死亡事件仅一次、后续不再重复结算",
+            sink.Record("4", "Attack.TargetDeath",
+                QaJson.Dict("requirement", "若观察窗口内目标死亡，记录死亡事件仅一次、后续不再重复结算",
                      "deathEvents", 1),
-                Dict("dead", true, "deathEvents", _targetDeathEvents,
+                QaJson.Dict("dead", true, "deathEvents", _targetDeathEvents,
                      "hitCount", attributed.Count,
                      "unattributedHitCount", unattributed,
-                     "targetHp", _target.hp,
-                     "elapsedSeconds", deathAt >= 0f ? (float)Math.Round(deathAt - _attackWindowStart, 3) : -1f),
+                     "targetHp", target.hp,
+                     "elapsedSeconds", _targetDeathAt >= 0f ? (float)Math.Round(_targetDeathAt - _attackWindowStart, 3) : -1f),
                 deathPass, deathPass ? "pass" : "product_fail", "production",
-                Dict("hitEvents", _hitEvents,
+                QaJson.Dict("hitEvents", _hitEvents,
                      "note", "死亡后仍保持 1 秒观察，未再出现新的伤害结算"));
         }
         else
         {
-            _ev.Record("4", "Attack.TargetDeath",
-                Dict("requirement", "若观察窗口内目标死亡则断言一次死亡事件；未死亡则记录最终 HP 且不据此判普攻失败",
+            sink.Record("4", "Attack.TargetDeath",
+                QaJson.Dict("requirement", "若观察窗口内目标死亡则断言一次死亡事件；未死亡则记录最终 HP 且不据此判普攻失败",
                      "covered", true),
-                Dict("dead", false, "finalHp", _target != null ? _target.hp : -1f,
-                     "targetMaxHp", _target != null ? _target.maxHp : -1f,
+                QaJson.Dict("dead", false, "finalHp", target != null ? target.hp : -1f,
+                     "targetMaxHp", target != null ? target.maxHp : -1f,
                      "hitCount", attributed.Count,
                      "unattributedHitCount", unattributed,
                      "windowSeconds", DamageWindowSeconds),
                 true, "observed", "production",
-                Dict("note", "观察窗口内目标未死亡，本单不覆盖死亡分支，不据此单独判普攻失败"));
+                QaJson.Dict("note", "观察窗口内目标未死亡，本单不覆盖死亡分支，不据此单独判普攻失败"));
         }
-
-        CleanupAttackFixture();
-        yield return null;
+        yield break;
     }
 
     void CleanupAttackFixture()
@@ -800,7 +865,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         _hitEventCount++;
         float before = _targetHpTracked;
         float after = info.target != null ? info.target.hp : -1f;
-        _hitEvents.Add(Dict(
+        _hitEvents.Add(QaJson.Dict(
             "index", _hitEventCount,
             "tSinceCommand", (float)Math.Round(Time.realtimeSinceStartup - _commandAt, 3),
             "tAbs", (float)Math.Round(Time.realtimeSinceStartup, 3),
@@ -827,6 +892,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
     IEnumerator GroupAnimation()
     {
         Debug.Log("[FND00B06] === QA item 6: Animation ===");
+        IQaSink sink = _ev;
         RestoreOtherBrains();
 
         Animator refAnim = _pAnim;
@@ -840,12 +906,42 @@ public class FND00B06_ProbeRunner : MonoBehaviour
 
         DumpAnimator(refAnim);
 
+        yield return AssertAnimationConfigMapping(sink, refAnim, _sword);
+
+        // ---- Idle（使用进入战斗前「无任何指令」时的采样）----
+        yield return AssertAnimationIdle(sink);
+
+        // ---- 战后动画状态补充观察（不计入五类状态通过/失败）----
+        yield return AssertAnimationPostCombatState(sink, _pAnim, _pAgent);
+
+        // ---- Move（复用第 4 项接近过程）----
+        yield return AssertAnimationMove(sink);
+
+        // ---- Attack ----
+        yield return AssertAnimationAttack(sink, _brain, _sword);
+
+        string err = null;
+        if (!CreateAnimationFixture("HitFixture", out err))
+        {
+            _ev.BlockedAssertion("6", "Animation.Hit",
+                QaJson.Dict("requirement", "独立动画夹具中通过生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件"),
+                "动画夹具建立失败: " + err, QaJson.Dict("error", err));
+        }
+        else
+        {
+            yield return AssertAnimationHit(sink, _player);
+        }
+        yield return AssertAnimationDownedOrDeath(sink);
+    }
+
+    IEnumerator AssertAnimationConfigMapping(IQaSink sink, Animator refAnim, MeleeCombat sword)
+    {
         var mismatches = new List<object>();
         if (refAnim == null) mismatches.Add("未找到可用 Animator");
-        if (_sword != null && _runtimeLayerCount >= 0 && _sword.attackLayer >= _runtimeLayerCount)
-            mismatches.Add("MeleeCombat.attackLayer=" + _sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
-        if (_sword != null && _stateList.Count > 0 && !_stateList.Any(s => (string)s == _sword.attackStateName))
-            mismatches.Add("MeleeCombat.attackStateName=\"" + _sword.attackStateName + "\" 不在控制器状态列表");
+        if (sword != null && _runtimeLayerCount >= 0 && sword.attackLayer >= _runtimeLayerCount)
+            mismatches.Add("MeleeCombat.attackLayer=" + sword.attackLayer + " >= Animator.layerCount=" + _runtimeLayerCount);
+        if (sword != null && _stateList.Count > 0 && !_stateList.Any(s => (string)s == sword.attackStateName))
+            mismatches.Add("MeleeCombat.attackStateName=\"" + sword.attackStateName + "\" 不在控制器状态列表");
         foreach (var st in RequiredStates)
             if (_stateList.Count > 0 && !_stateList.Any(s => (string)s == st))
                 mismatches.Add("缺少状态: " + st);
@@ -854,179 +950,174 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 mismatches.Add("缺少参数: " + p);
 
         bool mappingConsistent = mismatches.Count == 0 && refAnim != null;
-        _ev.Record("6", "Animation.ConfigMapping",
-            Dict(
+        sink.Record("6", "Animation.ConfigMapping",
+            QaJson.Dict(
                 "requirement", "只读确认 Animator Controller/Override 的状态名或哈希、参数与预期映射；不得凭名称猜测播放成功",
                 "expectedStates", RequiredStates,
                 "expectedParams", RequiredParams),
-            Dict("controller", _controllerName,
+            QaJson.Dict("controller", _controllerName,
                  "overrideBase", _overrideBaseName,
                  "layerCount", _runtimeLayerCount,
-                 "swordAttackLayer", _sword != null ? _sword.attackLayer : -1,
-                 "swordAttackStateName", _sword != null ? _sword.attackStateName : null,
+                 "swordAttackLayer", sword != null ? sword.attackLayer : -1,
+                 "swordAttackStateName", sword != null ? sword.attackStateName : null,
                  "mappingConsistent", mappingConsistent,
                  "mismatchCount", mismatches.Count),
             mappingConsistent, "observed", "production",
-            Dict("animatorOwner", _animatorOwner,
+            QaJson.Dict("animatorOwner", _animatorOwner,
                  "states", _stateList,
                  "parameters", _paramDump,
                  "mismatches", mismatches,
                  "note", "本记录只做只读映射登记；不使用 Animator.Play 制造通过"));
-
-        // ---- Idle（使用进入战斗前「无任何指令」时的采样）----
-        if (!_idleCaptured || _idleSamples.Count == 0)
-        {
-            _ev.BlockedAssertion("6", "Animation.Idle",
-                Dict("requirement", "无指令时观察待机/Locomotion 状态与参数"),
-                "进入战斗前未取得玩家 Animator 采样",
-                Dict("idleCaptured", _idleCaptured, "player", _idlePlayerName));
-        }
-        else
-        {
-            var last = (Dictionary<string, object>)_idleSamples[_idleSamples.Count - 1];
-            string state = (string)last["stateName"];
-            float sx = Math.Abs((float)last["speedX"]);
-            float sz = Math.Abs((float)last["speedZ"]);
-            bool grounded = (bool)last["grounded"];
-            bool idlePass = !IsAttackState(state) && TrimState(state) == "Locomotion" && sx <= 0.3f && sz <= 0.3f && grounded;
-
-            _ev.Record("6", "Animation.Idle",
-                Dict("requirement", "无指令时进入 Locomotion 待机混合树，SpeedX/SpeedZ≈0，Grounded=true",
-                     "expectedState", " Locomotion（控制器实际状态名含前导空格）",
-                     "maxAbsSpeed", 0.3f,
-                     "samplePoint", "下达任何指令之前（Play 进入后、第 4 项开始前）"),
-                Dict("stateName", state, "speedX", last["speedX"], "speedZ", last["speedZ"],
-                     "grounded", grounded, "attackSpeedParam", last["attackSpeedParam"],
-                     "player", _idlePlayerName),
-                idlePass, idlePass ? "pass" : "product_fail", "production",
-                Dict("samples", _idleSamples,
-                     "note", "Idle 取样点在战斗前，避免把「出招链未收尾」误判为待机失败；战后状态另记于 Animation.PostCombatState"));
-        }
-
-        // ---- 战后动画状态补充观察（不计入五类状态通过/失败）----
-        {
-            float postT0 = Time.realtimeSinceStartup;
-            while (Time.realtimeSinceStartup - postT0 < IdleWaitSeconds + 6f)
-            {
-                TrackAnim(_pAnim, "post_combat");
-                yield return null;
-            }
-            var postSamples = new List<object>();
-            for (int i = 0; i < 4; i++)
-            {
-                postSamples.Add(AnimSample(_pAnim, "post_combat", _pAgent));
-                TrackAnim(_pAnim, "post_combat_sample");
-                yield return null;
-            }
-            var postLast = (Dictionary<string, object>)postSamples[postSamples.Count - 1];
-            string postState = (string)postLast["stateName"];
-            bool notInLocomotion = TrimState(postState) != "Locomotion";
-
-            _ev.Record("6", "Animation.PostCombatState",
-                Dict("requirement", "补充观察：战斗结束（目标死亡）且无后续指令时 Animator 是否回到 Locomotion",
-                     "countedAs", "not_counted（不计入五类状态通过/失败，仅记录产品表现）"),
-                Dict("stateName", postState,
-                     "normalizedTime", postLast["normalizedTime"],
-                     "swordTimer", postLast["swordTimer"],
-                     "speedX", postLast["speedX"], "speedZ", postLast["speedZ"],
-                     "notInLocomotion", notInLocomotion,
-                     "waitSeconds", IdleWaitSeconds + 6f),
-                false, "observed", "production",
-                Dict("samples", postSamples,
-                     "stateTimeline", _stateTimeline,
-                     "analysis", "控制器链路 Attack_Draw --Attack--> Attack_Release --Attack--> Locomotion；出招中途停止后没有新的 Attack 触发器推进，可长期停留在攻击状态",
-                     "note", "本记录只陈述观察结果，不修复；若状态非 Locomotion 说明击杀/停止攻击后动画不回待机"));
-        }
-
-        // ---- Move（复用第 4 项接近过程）----
-        if (_moveSamples.Count == 0)
-        {
-            _ev.BlockedAssertion("6", "Animation.Move",
-                Dict("requirement", "使用既有移动命令观察移动状态/混合参数；复用第 4 项接近过程"),
-                "第 4 项未产生接近采样", Dict("moveSamples", 0));
-        }
-        else
-        {
-            float maxSpeedX = 0f, maxSpeedZ = 0f, maxVel = 0f;
-            foreach (var s in _moveSamples)
-            {
-                var d = (Dictionary<string, object>)s;
-                maxSpeedX = Mathf.Max(maxSpeedX, Math.Abs((float)d["speedX"]));
-                maxSpeedZ = Mathf.Max(maxSpeedZ, Math.Abs((float)d["speedZ"]));
-                maxVel = Mathf.Max(maxVel, (float)d["agentVelocity"]);
-            }
-            bool anyLocomotion = _moveSamples.Any(s => TrimState((string)((Dictionary<string, object>)s)["stateName"]) == "Locomotion");
-            bool movePass = maxVel > 0.5f && (maxSpeedX > 0.5f || maxSpeedZ > 0.5f) && anyLocomotion;
-
-            _ev.Record("6", "Animation.Move",
-                Dict("requirement", "追击移动期间 Animator 处于 Locomotion 且 SpeedX/SpeedZ 随速度非零",
-                     "minAgentVelocity", 0.5f,
-                     "expectedState", "Locomotion"),
-                Dict("maxAbsSpeedX", maxSpeedX, "maxAbsSpeedZ", maxSpeedZ,
-                     "maxAgentVelocity", maxVel, "anyLocomotionSample", anyLocomotion,
-                     "sampleCount", _moveSamples.Count),
-                movePass, movePass ? "pass" : "product_fail", "production",
-                Dict("samples", _moveSamples,
-                     "note", "不另判移动 QA，仅验证移动时动画参数与状态"));
-        }
-
-        // ---- Attack ----
-        if (_firstAttackAt < 0f)
-        {
-            _ev.BlockedAssertion("6", "Animation.Attack",
-                Dict("requirement", "与实际出招和伤害时序对照，断言进入既有攻击状态"),
-                "第 4 项未观察到出招", Dict("firstAttackAt", _firstAttackAt));
-        }
-        else
-        {
-            var attackEntries = _stateTimeline.Select(s => (Dictionary<string, object>)s)
-                                              .Where(d => IsMeleeAttackState((string)d["stateName"])).ToList();
-            var firstEntry = attackEntries.FirstOrDefault();
-            bool enteredAttackState = attackEntries.Count > 0 || IsMeleeAttackState(_firstAttackState);
-
-            var firstDamage = _hitEvents.Select(e => (Dictionary<string, object>)e)
-                                        .FirstOrDefault(d => (bool)d["sourceIsSelectedPlayer"]);
-            float animEntryAt = firstEntry != null ? (float)firstEntry["tSinceCommand"] : -1f;
-            float damageAt = firstDamage != null ? (float)firstDamage["tSinceCommand"] : -1f;
-
-            _ev.Record("6", "Animation.Attack",
-                Dict("requirement", "真实出招触发 Animator 进入 AttackMelee（单段，状态名=触发器名），且 AttackSpeed 参数与 UnitStats.attackSpeed 一致",
-                     "attackStates", AttackStates,
-                     "attackSpeedExpected", _brain != null && _brain.stats != null ? _brain.stats.attackSpeed : -1f),
-                Dict("firstAttackState", _firstAttackState,
-                     "enteredAttackState", enteredAttackState,
-                     "attackStateEntryCount", attackEntries.Count,
-                     "firstAttackStateAtSinceCommand", animEntryAt,
-                     "firstDamageAtSinceCommand", damageAt,
-                     "animationLagBehindDamageSeconds", (animEntryAt >= 0f && damageAt >= 0f) ? (float)Math.Round(animEntryAt - damageAt, 3) : -1f,
-                     "attackSpeedParam", firstEntry != null ? firstEntry["attackSpeedParam"] : null,
-                     "firstAttackAtSeconds", _firstAttackAt,
-                     "swordTargetIsFixture", _firstAttackTargetOk,
-                     "damageHits", _hitEvents.Count),
-                enteredAttackState, enteredAttackState ? "pass" : "product_fail", "production",
-                Dict("stateTimeline", _stateTimeline,
-                     "attackEntries", attackEntries,
-                     "configuredMapping", Dict("attackStateName", _sword != null ? _sword.attackStateName : null,
-                                               "attackLayer", _sword != null ? _sword.attackLayer : -1,
-                                               "layerCount", _runtimeLayerCount),
-                     "note", "未直接设置 Attack 触发器；状态变化来自生产 MeleeCombat.DoAttack；时间轴按状态变化记录"));
-        }
-
-        yield return HitAnimationFixture();
-        yield return DownedAnimationFixture();
+        yield break;
     }
 
-    IEnumerator HitAnimationFixture()
+    IEnumerator AssertAnimationIdle(IQaSink sink)
     {
-        string err = null;
-        bool created = CreateAnimationFixture("HitFixture", out err);
-        if (!created)
+        if (!_idleCaptured || _idleSamples.Count == 0)
         {
-            _ev.BlockedAssertion("6", "Animation.Hit",
-                Dict("requirement", "独立动画夹具中通过生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件"),
-                "动画夹具建立失败: " + err, Dict("error", err));
+            sink.BlockedAssertion("6", "Animation.Idle",
+                QaJson.Dict("requirement", "无指令时观察待机/Locomotion 状态与参数"),
+                "进入战斗前未取得玩家 Animator 采样",
+                QaJson.Dict("idleCaptured", _idleCaptured, "player", _idlePlayerName));
             yield break;
         }
+
+        var last = (Dictionary<string, object>)_idleSamples[_idleSamples.Count - 1];
+        string state = (string)last["stateName"];
+        float sx = Math.Abs((float)last["speedX"]);
+        float sz = Math.Abs((float)last["speedZ"]);
+        bool grounded = (bool)last["grounded"];
+        bool idlePass = !IsAttackState(state) && TrimState(state) == "Locomotion" && sx <= 0.3f && sz <= 0.3f && grounded;
+
+        sink.Record("6", "Animation.Idle",
+            QaJson.Dict("requirement", "无指令时进入 Locomotion 待机混合树，SpeedX/SpeedZ≈0，Grounded=true",
+                 "expectedState", " Locomotion（控制器实际状态名含前导空格）",
+                 "maxAbsSpeed", 0.3f,
+                 "samplePoint", "下达任何指令之前（Play 进入后、第 4 项开始前）"),
+            QaJson.Dict("stateName", state, "speedX", last["speedX"], "speedZ", last["speedZ"],
+                 "grounded", grounded, "attackSpeedParam", last["attackSpeedParam"],
+                 "player", _idlePlayerName),
+            idlePass, idlePass ? "pass" : "product_fail", "production",
+            QaJson.Dict("samples", _idleSamples,
+                 "note", "Idle 取样点在战斗前，避免把「出招链未收尾」误判为待机失败；战后状态另记于 Animation.PostCombatState"));
+        yield break;
+    }
+
+    IEnumerator AssertAnimationPostCombatState(IQaSink sink, Animator animator, NavMeshAgent agent)
+    {
+        float postT0 = Time.realtimeSinceStartup;
+        while (Time.realtimeSinceStartup - postT0 < IdleWaitSeconds + 6f)
+        {
+            TrackAnim(animator, "post_combat");
+            yield return null;
+        }
+        var postSamples = new List<object>();
+        for (int i = 0; i < 4; i++)
+        {
+            postSamples.Add(AnimSample(animator, "post_combat", agent));
+            TrackAnim(animator, "post_combat_sample");
+            yield return null;
+        }
+        var postLast = (Dictionary<string, object>)postSamples[postSamples.Count - 1];
+        string postState = (string)postLast["stateName"];
+        bool notInLocomotion = TrimState(postState) != "Locomotion";
+
+        sink.Record("6", "Animation.PostCombatState",
+            QaJson.Dict("requirement", "补充观察：战斗结束（目标死亡）且无后续指令时 Animator 是否回到 Locomotion",
+                 "countedAs", "not_counted（不计入五类状态通过/失败，仅记录产品表现）"),
+            QaJson.Dict("stateName", postState,
+                 "normalizedTime", postLast["normalizedTime"],
+                 "swordTimer", postLast["swordTimer"],
+                 "speedX", postLast["speedX"], "speedZ", postLast["speedZ"],
+                 "notInLocomotion", notInLocomotion,
+                 "waitSeconds", IdleWaitSeconds + 6f),
+            false, "observed", "production",
+            QaJson.Dict("samples", postSamples,
+                 "stateTimeline", _stateTimeline,
+                 "analysis", "控制器链路 Attack_Draw --Attack--> Attack_Release --Attack--> Locomotion；出招中途停止后没有新的 Attack 触发器推进，可长期停留在攻击状态",
+                 "note", "本记录只陈述观察结果，不修复；若状态非 Locomotion 说明击杀/停止攻击后动画不回待机"));
+    }
+
+    IEnumerator AssertAnimationMove(IQaSink sink)
+    {
+        if (_moveSamples.Count == 0)
+        {
+            sink.BlockedAssertion("6", "Animation.Move",
+                QaJson.Dict("requirement", "使用既有移动命令观察移动状态/混合参数；复用第 4 项接近过程"),
+                "第 4 项未产生接近采样", QaJson.Dict("moveSamples", 0));
+            yield break;
+        }
+
+        float maxSpeedX = 0f, maxSpeedZ = 0f, maxVel = 0f;
+        foreach (var s in _moveSamples)
+        {
+            var d = (Dictionary<string, object>)s;
+            maxSpeedX = Mathf.Max(maxSpeedX, Math.Abs((float)d["speedX"]));
+            maxSpeedZ = Mathf.Max(maxSpeedZ, Math.Abs((float)d["speedZ"]));
+            maxVel = Mathf.Max(maxVel, (float)d["agentVelocity"]);
+        }
+        bool anyLocomotion = _moveSamples.Any(s => TrimState((string)((Dictionary<string, object>)s)["stateName"]) == "Locomotion");
+        bool movePass = maxVel > 0.5f && (maxSpeedX > 0.5f || maxSpeedZ > 0.5f) && anyLocomotion;
+
+        sink.Record("6", "Animation.Move",
+            QaJson.Dict("requirement", "追击移动期间 Animator 处于 Locomotion 且 SpeedX/SpeedZ 随速度非零",
+                 "minAgentVelocity", 0.5f,
+                 "expectedState", "Locomotion"),
+            QaJson.Dict("maxAbsSpeedX", maxSpeedX, "maxAbsSpeedZ", maxSpeedZ,
+                 "maxAgentVelocity", maxVel, "anyLocomotionSample", anyLocomotion,
+                 "sampleCount", _moveSamples.Count),
+            movePass, movePass ? "pass" : "product_fail", "production",
+            QaJson.Dict("samples", _moveSamples,
+                 "note", "不另判移动 QA，仅验证移动时动画参数与状态"));
+        yield break;
+    }
+
+    IEnumerator AssertAnimationAttack(IQaSink sink, CharacterBrain brain, MeleeCombat sword)
+    {
+        if (_firstAttackAt < 0f)
+        {
+            sink.BlockedAssertion("6", "Animation.Attack",
+                QaJson.Dict("requirement", "与实际出招和伤害时序对照，断言进入既有攻击状态"),
+                "第 4 项未观察到出招", QaJson.Dict("firstAttackAt", _firstAttackAt));
+            yield break;
+        }
+
+        var attackEntries = _stateTimeline.Select(s => (Dictionary<string, object>)s)
+                                          .Where(d => IsMeleeAttackState((string)d["stateName"])).ToList();
+        var firstEntry = attackEntries.FirstOrDefault();
+        bool enteredAttackState = attackEntries.Count > 0 || IsMeleeAttackState(_firstAttackState);
+
+        var firstDamage = _hitEvents.Select(e => (Dictionary<string, object>)e)
+                                    .FirstOrDefault(d => (bool)d["sourceIsSelectedPlayer"]);
+        float animEntryAt = firstEntry != null ? (float)firstEntry["tSinceCommand"] : -1f;
+        float damageAt = firstDamage != null ? (float)firstDamage["tSinceCommand"] : -1f;
+
+        sink.Record("6", "Animation.Attack",
+            QaJson.Dict("requirement", "真实出招触发 Animator 进入 AttackMelee（单段，状态名=触发器名），且 AttackSpeed 参数与 UnitStats.attackSpeed 一致",
+                 "attackStates", AttackStates,
+                 "attackSpeedExpected", brain != null && brain.stats != null ? brain.stats.attackSpeed : -1f),
+            QaJson.Dict("firstAttackState", _firstAttackState,
+                 "enteredAttackState", enteredAttackState,
+                 "attackStateEntryCount", attackEntries.Count,
+                 "firstAttackStateAtSinceCommand", animEntryAt,
+                 "firstDamageAtSinceCommand", damageAt,
+                 "animationLagBehindDamageSeconds", (animEntryAt >= 0f && damageAt >= 0f) ? (float)Math.Round(animEntryAt - damageAt, 3) : -1f,
+                 "attackSpeedParam", firstEntry != null ? firstEntry["attackSpeedParam"] : null,
+                 "firstAttackAtSeconds", _firstAttackAt,
+                 "swordTargetIsFixture", _firstAttackTargetOk,
+                 "damageHits", _hitEvents.Count),
+            enteredAttackState, enteredAttackState ? "pass" : "product_fail", "production",
+            QaJson.Dict("stateTimeline", _stateTimeline,
+                 "attackEntries", attackEntries,
+                 "configuredMapping", QaJson.Dict("attackStateName", sword != null ? sword.attackStateName : null,
+                                           "attackLayer", sword != null ? sword.attackLayer : -1,
+                                           "layerCount", _runtimeLayerCount),
+                 "note", "未直接设置 Attack 触发器；状态变化来自生产 MeleeCombat.DoAttack；时间轴按状态变化记录"));
+        yield break;
+    }
+
+    IEnumerator AssertAnimationHit(IQaSink sink, UnitHealth player)
+    {
 
         // 夹具生命周期：先让 CharacterBrain/UnitBrain 正常走完 Awake/Start（生产侧在此订阅
         // UnitHealth.OnHit → OnDamaged），再禁用以免夹具自主移动/索敌。
@@ -1064,12 +1155,12 @@ public class FND00B06_ProbeRunner : MonoBehaviour
 
         if (!locomotionReady)
         {
-            _ev.BlockedAssertion("6", "Animation.Hit",
-                Dict("requirement", "独立动画夹具中通过生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件",
+            sink.BlockedAssertion("6", "Animation.Hit",
+                QaJson.Dict("requirement", "独立动画夹具中通过生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件",
                      "expectedState", "Hit_A",
                      "precondition", "受击前 Animator 处于 Locomotion"),
                 "夹具未能进入 Locomotion（轮询 " + locomotionWaitSeconds + "s）",
-                Dict("preState", preState,
+                QaJson.Dict("preState", preState,
                      "locomotionWaitFrames", locomotionWaitFrames,
                      "locomotionWaitSeconds", locomotionWaitSeconds,
                      "brainEnabledAtCreate", brainEnabledAtCreate,
@@ -1117,21 +1208,21 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                        _animFixtureHitAmount > 0f;
         bool pass = eventOk && hitStateObserved;
 
-        _ev.Record("6", "Animation.Hit",
-            Dict("requirement", "独立动画夹具中经生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件",
+        sink.Record("6", "Animation.Hit",
+            QaJson.Dict("requirement", "独立动画夹具中经生产 UnitHealth.ApplyDamage 施加一次非致命伤害，观察受击状态/事件",
                  "expectedState", "Hit_A",
                  "damageEntry", "UnitHealth.ApplyDamage（生产入口）",
                  "notCountedInItem4", true),
-            Dict("hitEvents", _animFixtureHitEvents,
+            QaJson.Dict("hitEvents", _animFixtureHitEvents,
                  "hpBefore", _animFixturePreHitHp,
                  "hpAfter", _animFixturePostHitHp,
                  "finalAmount", _animFixtureHitAmount,
                  "preState", preState,
                  "hitStateObserved", hitStateObserved,
                  "hitState", hitState,
-                 "playerHpUnaffected", _player != null ? _player.hp : -1f),
+                 "playerHpUnaffected", player != null ? player.hp : -1f),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("fixtureName", _animFixtureGo != null ? _animFixtureGo.name : null,
+            QaJson.Dict("fixtureName", _animFixtureGo != null ? _animFixtureGo.name : null,
                  "fixturePath", _animFixtureGo != null ? GetPath(_animFixtureGo.transform) : null,
                  "brainEnabledAtCreate", brainEnabledAtCreate,
                  "brainSettleFrames", brainSettleFrames,
@@ -1143,13 +1234,13 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                  "note", "该伤害只作动画刺激，不计入第 4 项普攻结算；夹具为 Knight_Unit 内存实例，未改生产资产"));
     }
 
-    IEnumerator DownedAnimationFixture()
+    IEnumerator AssertAnimationDownedOrDeath(IQaSink sink)
     {
         if (_animFixtureGo == null || _animFixtureHealth == null)
         {
-            _ev.BlockedAssertion("6", "Animation.DownedOrDeath",
-                Dict("requirement", "仅对一名夹具角色通过生产伤害入口施加致命伤害，记录 dead/isDown 与实际 Animator 状态"),
-                "动画夹具未建立（Hit 夹具失败）", Dict("fixturePresent", _animFixtureGo != null));
+            sink.BlockedAssertion("6", "Animation.DownedOrDeath",
+                QaJson.Dict("requirement", "仅对一名夹具角色通过生产伤害入口施加致命伤害，记录 dead/isDown 与实际 Animator 状态"),
+                "动画夹具未建立（Hit 夹具失败）", QaJson.Dict("fixturePresent", _animFixtureGo != null));
             yield break;
         }
 
@@ -1186,16 +1277,16 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         bool pass = dead && isDown && _animFixtureDeathEvents == 1 && downedStateObserved &&
                     !wipedAfter && Mathf.Approximately(tsAfter, 1f);
 
-        _ev.Record("6", "Animation.DownedOrDeath",
-            Dict("requirement", "对夹具角色施加致命伤害后：dead=true、IsDown=true、死亡事件仅 1 次、Animator 进入 Downed，且不制造团灭",
+        sink.Record("6", "Animation.DownedOrDeath",
+            QaJson.Dict("requirement", "对夹具角色施加致命伤害后：dead=true、IsDown=true、死亡事件仅 1 次、Animator 进入 Downed，且不制造团灭",
                  "expectedState", "Downed",
                  "deathEvents", 1),
-            Dict("dead", dead, "isDown", isDown, "deathEvents", _animFixtureDeathEvents,
+            QaJson.Dict("dead", dead, "isDown", isDown, "deathEvents", _animFixtureDeathEvents,
                  "stateEntered", downedStateObserved, "state", downedState,
                  "wipedBefore", wipedBefore, "wipedAfter", wipedAfter, "timeScale", tsAfter,
                  "downedListBefore", downedBefore, "downedListAfter", DownedRescue.AllDowned.Count),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("fixtureName", _animFixtureGo != null ? _animFixtureGo.name : null,
+            QaJson.Dict("fixtureName", _animFixtureGo != null ? _animFixtureGo.name : null,
                  "samples", samples,
                  "note", "当前玩家设计以倒地（Downed）代替彻底死亡；本断言不触发全员团灭，未改生产资产"));
 
@@ -1297,7 +1388,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         if (s == _lastStateName) return;
         _lastStateName = s;
         if (_stateTimeline.Count >= 240) return;
-        _stateTimeline.Add(Dict(
+        _stateTimeline.Add(QaJson.Dict(
             "phase", phase,
             "tAbs", (float)Math.Round(Time.realtimeSinceStartup, 3),
             "tSinceCommand", _commandAt > 0f ? (float)Math.Round(Time.realtimeSinceStartup - _commandAt, 3) : -1f,
@@ -1385,7 +1476,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 CollectStates(layer.stateMachine, _stateNames, _stateList);
             foreach (var p in ac.parameters)
             {
-                _paramDump.Add(Dict("name", p.name, "type", p.type.ToString(),
+                _paramDump.Add(QaJson.Dict("name", p.name, "type", p.type.ToString(),
                                     "defaultFloat", p.defaultFloat, "defaultBool", p.defaultBool, "source", "controller"));
                 if (!_paramNames.Contains(p.name)) _paramNames.Add(p.name);
             }
@@ -1397,7 +1488,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
             foreach (var p in anim.parameters)
             {
                 if (_paramNames.Contains(p.name)) continue;
-                _paramDump.Add(Dict("name", p.name, "type", p.type.ToString(), "source", "runtime"));
+                _paramDump.Add(QaJson.Dict("name", p.name, "type", p.type.ToString(), "source", "runtime"));
                 _paramNames.Add(p.name);
             }
         }
@@ -1441,8 +1532,8 @@ public class FND00B06_ProbeRunner : MonoBehaviour
                 NavMeshPath path = new NavMeshPath();
                 bool pathOk = NavMesh.CalculatePath(playerPos, cand, NavMesh.AllAreas, path) &&
                               path.status == NavMeshPathStatus.PathComplete && path.corners.Length > 1;
-                trials.Add(Dict("distance", d, "requested", V3(want), "sampled", sampled,
-                                "candidate", V3(cand), "pathStatus", path.status.ToString(), "cornerCount", path.corners.Length));
+                trials.Add(QaJson.Dict("distance", d, "requested", QaJson.V3(want), "sampled", sampled,
+                                "candidate", QaJson.V3(cand), "pathStatus", path.status.ToString(), "cornerCount", path.corners.Length));
                 if (sampled && pathOk)
                 {
                     pos = cand;
@@ -1492,19 +1583,7 @@ public class FND00B06_ProbeRunner : MonoBehaviour
         return d.magnitude;
     }
 
-    static Dictionary<string, object> Dict(params object[] kvs)
-    {
-        var d = new Dictionary<string, object>();
-        for (int i = 0; i + 1 < kvs.Length; i += 2)
-            d[(string)kvs[i]] = kvs[i + 1];
-        return d;
-    }
-
-    static Dictionary<string, object> V3(Vector3 v)
-    {
-        return new Dictionary<string, object> { { "x", v.x }, { "y", v.y }, { "z", v.z } };
-    }
-
+    /// <summary>层级路径（证据 data 里的稳定标识；Qa 层无等价物，留在套件内）。</summary>
     static string GetPath(Transform t)
     {
         var parts = new List<string>();

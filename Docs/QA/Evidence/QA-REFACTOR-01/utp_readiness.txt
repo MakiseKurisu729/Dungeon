@@ -122,3 +122,94 @@ command : grep -E 'File|Directory|SessionState|EditorApplication|QaLauncher' QA/
 ## B5. still-writing-files / still-boot-dependent assertions (REFACTOR)
 actual  : none (all 16 assertions receive IQaSink; no File./Directory./SessionState/EditorApplication/QaLauncher/_Boot in bodies)
 
+
+## PHASE C (FND00B06 suite migration) - appended 2026-11-06 14:55:50
+root: D:\unity\Dungeon\Assets\_Project\Tests
+
+## C1. Assert*(IQaSink sink) in FND00B06_ProbeRunner.cs (>= 14 = 7 item-4 + 7 item-6)
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/FND00B/FND00B06_ProbeRunner.cs
+actual  : 14
+expected: 14
+result  : PASS
+
+   methods: AssertAttackFixture, AssertAttackCommandAccepted, AssertAttackApproach, AssertAttackStarts, AssertAttackRepeats, AssertAttackDamageResolved, AssertAttackTargetDeath, AssertAnimationConfigMapping, AssertAnimationIdle, AssertAnimationPostCombatState, AssertAnimationMove, AssertAnimationAttack, AssertAnimationHit, AssertAnimationDownedOrDeath
+
+## C2. forbidden tokens inside FND00B06 Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (14): AssertAnimationAttack, AssertAnimationConfigMapping, AssertAnimationDownedOrDeath, AssertAnimationHit, AssertAnimationIdle, AssertAnimationMove, AssertAnimationPostCombatState, AssertAttackApproach, AssertAttackCommandAccepted, AssertAttackDamageResolved, AssertAttackFixture, AssertAttackRepeats, AssertAttackStarts, AssertAttackTargetDeath
+   still reading runner field `_ev` / not calling sink (phase C target = none): (none)
+
+## C3a. FND00B06_Evidence.cs line count (adapter limit <= 40, measured)
+command : wc -l Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+actual  : 33
+expected: 33
+result  : PASS
+
+## C3b. class FND00B06_Evidence : QaEvidence
+command : grep -E "class FND00B06_Evidence\s*:\s*QaEvidence" Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## C3c. class FND00B06_Json removed (whole Tests tree)
+command : grep -R "class FND00B06_Json" Assets/_Project/Tests --include=*.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## C3d. no I/O / boot tokens inside FND00B06_Evidence.cs (adapter is pure spec assembly)
+command : grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## C4a. QaSink.cs forbidden tokens (unchanged)
+command : grep -E "File|Directory|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## C4b. QaEvidence still declares IQaSink (unchanged)
+command : grep -E "class QaEvidence\s*:\s*IQaSink" Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## C4c. "Docs","QA","Evidence" literal inside the phase-C scope = QaEvidence.cs only
+command : grep -R "\"Docs\", \"QA\", \"Evidence\"" Assets/_Project/Tests/QA --include=*.cs
+actual  : 2
+expected: 2
+result  : PASS
+
+## C4d. "Docs","QA","Evidence" literal inside FND00B06_Evidence.cs (adapter must not hardcode the root)
+command : grep -E "\"Docs\", \"QA\", \"Evidence\"" Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## C5. Assert*(IQaSink sink) in SPEC01/Runtime/SPEC01_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+actual  : 1
+result  : INFO - phase C expectation = 1 [DIAG migrates in phase D]
+
+## C5. Assert*(IQaSink sink) in REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+actual  : 16
+result  : INFO - phase C expectation = 16 [DIAG migrates in phase D]
+
+## C5. Assert*(IQaSink sink) in FND00B/Runtime/FND00B06_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+actual  : 14
+result  : INFO - phase C expectation = 14 [DIAG migrates in phase D]
+
+## C5. Assert*(IQaSink sink) in DIAG/Runtime/DIAG_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 0
+result  : INFO - phase C expectation = 0 [DIAG migrates in phase D]
+
+=== PHASE C OVERALL ===
+ALL APPLICABLE CHECKS PASS
