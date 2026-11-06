@@ -1,0 +1,46 @@
+REFACTOR assertion triple diff - (qaItem, assertion, status) sorted
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\REFACTOR\before\REFACTOR_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\REFACTOR\after\REFACTOR_Assertions.jsonl
+
+BEFORE count=16 pass=16 fail=0
+AFTER  count=16 pass=16 fail=0
+
+=== BEFORE ===
+Chest.Interact | Chest.Interact | pass
+Combat.MeleeHit | Combat.MeleeHit | pass
+Combat.RangedShot | Combat.RangedShot | pass
+Downed.Knockdown | Downed.Knockdown | pass
+Hit.InterruptAttack | Hit.InterruptAttack | pass
+Hit.InterruptSkill | Hit.InterruptSkill | pass
+Party.PresentAndMove | Party.PresentAndMove | pass
+Projectile.AimPoint | Projectile.AimPoint | pass
+Refactor.InteractionContract | Refactor.InteractionContract | pass
+Refactor.RegistrySemantics | Refactor.RegistrySemantics | pass
+Refactor.StateFacade | Refactor.StateFacade | pass
+Rescue.ChannelInterrupt | Rescue.ChannelInterrupt | pass
+Skill.InterruptAttack | Skill.InterruptAttack | pass
+Skill.InterruptInteract | Skill.InterruptInteract | pass
+Skill.MotionUnlocked | Skill.MotionUnlocked | pass
+Skill.QW | Skill.QW | pass
+
+=== AFTER ===
+Chest.Interact | Chest.Interact | pass
+Combat.MeleeHit | Combat.MeleeHit | pass
+Combat.RangedShot | Combat.RangedShot | pass
+Downed.Knockdown | Downed.Knockdown | pass
+Hit.InterruptAttack | Hit.InterruptAttack | pass
+Hit.InterruptSkill | Hit.InterruptSkill | pass
+Party.PresentAndMove | Party.PresentAndMove | pass
+Projectile.AimPoint | Projectile.AimPoint | pass
+Refactor.InteractionContract | Refactor.InteractionContract | pass
+Refactor.RegistrySemantics | Refactor.RegistrySemantics | pass
+Refactor.StateFacade | Refactor.StateFacade | pass
+Rescue.ChannelInterrupt | Rescue.ChannelInterrupt | pass
+Skill.InterruptAttack | Skill.InterruptAttack | pass
+Skill.InterruptInteract | Skill.InterruptInteract | pass
+Skill.MotionUnlocked | Skill.MotionUnlocked | pass
+Skill.QW | Skill.QW | pass
+
+=== DIFF ===
+(empty)
+RESULT: IDENTICAL

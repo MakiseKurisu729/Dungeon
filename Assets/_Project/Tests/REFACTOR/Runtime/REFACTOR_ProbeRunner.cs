@@ -57,7 +57,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     int _seed;
     float _deadline;
 
-    readonly List<PlayerProbe> _players = new List<PlayerProbe>();
+    readonly List<QaFixtures.PlayerProbe> _players = new List<QaFixtures.PlayerProbe>();
     readonly List<GameObject> _suppressedMonsters = new List<GameObject>();
     GameObject _target;
     UnitStats _targetStats;
@@ -65,60 +65,6 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     ItemData _chestItem;
     bool _monstersSuppressed;
 
-    class PlayerProbe
-    {
-        public string name;
-        public UnitHealth health;
-        public CharacterBrain brain;
-        public Animator animator;
-        public MeleeCombat sword;
-        public RangedCombat ranged;
-        public SkillSystem skills;
-        public DownedRescue rescue;
-        public Vector3 home;
-        public float attackSpeed = 1f;
-
-        public Transform tx { get { return health != null ? health.transform : null; } }
-    }
-
-    class HitCollector
-    {
-        public UnitHealth Target;
-        public int FilterSource;
-        public int Count;
-        public readonly List<Dictionary<string, object>> Events = new List<Dictionary<string, object>>();
-
-        public void Subscribe(UnitHealth target, int filterSource)
-        {
-            Target = target;
-            FilterSource = filterSource;
-            if (Target != null) Target.OnHit += OnHit;
-        }
-
-        public void Unsubscribe()
-        {
-            if (Target != null) Target.OnHit -= OnHit;
-        }
-
-        void OnHit(DamageInfo info)
-        {
-            if (FilterSource != 0 && (info.source == null || info.source.GetInstanceID() != FilterSource)) return;
-            Count++;
-            string state = "none";
-            float nt = -1f;
-            int sourceId = 0;
-            if (info.source != null)
-            {
-                sourceId = info.source.GetInstanceID();
-                Animator a = info.source.GetComponentInChildren<Animator>();
-                state = StateName(a);
-                nt = StateNorm(a);
-            }
-            if (Events.Count < 200)
-                Events.Add(Dict("time", Time.time, "sourceId", sourceId, "state", state,
-                                "normalizedTime", nt, "amount", info.finalAmount));
-        }
-    }
 
     void Awake()
     {
@@ -139,7 +85,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
         Debug.Log("[REFACTOR] runner start; milestone=" + _ev.Milestone + "; run=" + _run +
                   "; seed=" + _seed + "; unity=" + Application.unityVersion +
-                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + GetHead());
+                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + QaScene.GetHead("REFACTOR.Head"));
 
         float waited = 0f;
         while (SceneManager.GetActiveScene().path != ScenePath && waited < 25f)
@@ -164,28 +110,28 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
-                    "找到玩家数=" + _players.Count, Dict("players", _players.Select(p => p.name).ToList()));
+                    "找到玩家数=" + _players.Count, QaJson.Dict("players", _players.Select(p => p.name).ToList()));
             Finish();
             yield break;
         }
 
-        yield return RunSafe("Party.PresentAndMove", AssertPartyMove());
+        yield return RunSafe("Party.PresentAndMove", AssertPartyMove(_ev, _players));
         SuppressMonsters();
-        yield return RunSafe("Combat.MeleeHit", AssertMeleeHit());
-        yield return RunSafe("Combat.RangedShot", AssertRangedShot());
-        yield return RunSafe("Skill.QW", AssertSkillQW());
-        yield return RunSafe("Skill.InterruptAttack", AssertSkillInterruptAttack());
-        yield return RunSafe("Hit.InterruptSkill", AssertHitInterruptSkill());
-        yield return RunSafe("Skill.InterruptInteract", AssertSkillInterruptInteract());
-        yield return RunSafe("Projectile.AimPoint", AssertProjectileAimPoint());
-        yield return RunSafe("Hit.InterruptAttack", AssertHitInterrupt());
-        yield return RunSafe("Downed.Knockdown", AssertKnockdown());
-        yield return RunSafe("Rescue.ChannelInterrupt", AssertRescue());
-        yield return RunSafe("Chest.Interact", AssertChest());
-        yield return RunSafe("Refactor.InteractionContract", AssertInteractionContract());
-        yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics());
-        yield return RunSafe("Refactor.StateFacade", AssertStateFacade());
-        yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked());
+        yield return RunSafe("Combat.MeleeHit", AssertMeleeHit(_ev, _players));
+        yield return RunSafe("Combat.RangedShot", AssertRangedShot(_ev, _players));
+        yield return RunSafe("Skill.QW", AssertSkillQW(_ev));
+        yield return RunSafe("Skill.InterruptAttack", AssertSkillInterruptAttack(_ev, _players));
+        yield return RunSafe("Hit.InterruptSkill", AssertHitInterruptSkill(_ev, _players));
+        yield return RunSafe("Skill.InterruptInteract", AssertSkillInterruptInteract(_ev, _players));
+        yield return RunSafe("Projectile.AimPoint", AssertProjectileAimPoint(_ev));
+        yield return RunSafe("Hit.InterruptAttack", AssertHitInterrupt(_ev, _players));
+        yield return RunSafe("Downed.Knockdown", AssertKnockdown(_ev, _players));
+        yield return RunSafe("Rescue.ChannelInterrupt", AssertRescue(_ev, _players));
+        yield return RunSafe("Chest.Interact", AssertChest(_ev, _players));
+        yield return RunSafe("Refactor.InteractionContract", AssertInteractionContract(_ev, _players));
+        yield return RunSafe("Refactor.RegistrySemantics", AssertRegistrySemantics(_ev, _players));
+        yield return RunSafe("Refactor.StateFacade", AssertStateFacade(_ev));
+        yield return RunSafe("Skill.MotionUnlocked", AssertMotionUnlocked(_ev, _players));
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -223,18 +169,18 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     // ============================================================
     // 1. Party.PresentAndMove
     // ============================================================
-    IEnumerator AssertPartyMove()
+    IEnumerator AssertPartyMove(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Party.PresentAndMove";
         var rows = new List<object>();
         bool allPass = true;
 
-        foreach (var p in _players)
+        foreach (var p in players)
         {
             if (p.brain == null || p.brain.agent == null || p.animator == null)
             {
                 allPass = false;
-                rows.Add(Dict("name", p.name, "error", "missing brain/agent/animator"));
+                rows.Add(QaJson.Dict("name", p.name, "error", "missing brain/agent/animator"));
                 continue;
             }
 
@@ -243,7 +189,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             if (!NavMesh.SamplePosition(dest, out hit, 2.0f, NavMesh.AllAreas)) dest = p.home + new Vector3(1.5f, 0f, 1.5f);
             else dest = hit.position;
 
-            Select(p);
+            QaFixtures.Select(p);
             var sm = SelectionManager.instance;
             if (sm != null) sm.ForEachSelectedBrain(b => b.CommandMove(dest));
             else p.brain.CommandMove(dest);
@@ -267,7 +213,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
                 float speed = p.brain.agent.velocity.magnitude;
                 float sz = p.animator.GetFloat("SpeedZ");
-                if (speed > 0.5f && stateDuringMove == "none") stateDuringMove = StateName(p.animator);
+                if (speed > 0.5f && stateDuringMove == "none") stateDuringMove = QaFixtures.StateName(p.animator);
                 if (speed > peakSpeed) peakSpeed = speed;
                 if (Mathf.Abs(sz) > Mathf.Abs(peakSpeedZ)) peakSpeedZ = sz;
                 grounded &= p.animator.GetBool("Grounded");
@@ -289,7 +235,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                         Mathf.Abs(finalSpeedZ) <= 0.15f && finalSpeed <= 0.15f && grounded;
             allPass &= pass;
 
-            rows.Add(Dict("name", p.name, "destination", V3(dest), "arrived", arrived,
+            rows.Add(QaJson.Dict("name", p.name, "destination", QaJson.V3(dest), "arrived", arrived,
                           "durationSeconds", elapsed, "traveled", traveled,
                           "peakAgentSpeed", peakSpeed, "peakAnimatorSpeedZ", peakSpeedZ,
                           "stateDuringMove", stateDuringMove,
@@ -297,7 +243,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                           "groundedDuringMove", grounded, "pass", pass));
 
             // 回出生点，避免影响后续断言
-            Select(p);
+            QaFixtures.Select(p);
             if (sm != null) sm.ForEachSelectedBrain(b => b.CommandMove(p.home));
             else p.brain.CommandMove(p.home);
             float w = 0f;
@@ -310,36 +256,35 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             }
         }
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "Knight/Archer/Mage 三个生产玩家单位均存在，且经 SelectionManager.ForEachSelectedBrain → CommandMove 能移动到目标点并在 Locomotion 停稳",
-            "players=" + _players.Count + "; allPass=" + allPass,
+            "players=" + players.Count + "; allPass=" + allPass,
             allPass, allPass ? "pass" : "product_fail", "production",
-            Dict("players", rows, "count", _players.Count,
+            QaJson.Dict("players", rows, "count", players.Count,
                  "note", "移动入口与右键移动同一生产方法；SpeedZ 只要求非零变化，不复制 SPEC01 阈值口径"));
     }
-
     // ============================================================
     // 2. Combat.MeleeHit
     // ============================================================
-    IEnumerator AssertMeleeHit()
+    IEnumerator AssertMeleeHit(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Combat.MeleeHit";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null)
         {
-            _ev.BlockedAssertion(Id, Id, "骑士近战普攻可命中", "未找到 Knight_Unit", null);
+            sink.BlockedAssertion(Id, Id, "骑士近战普攻可命中", "未找到 Knight_Unit", null);
             yield break;
         }
 
         _target = CreateTarget("REFACTOR_Target_Melee", knight.tx.position + knight.tx.forward * 1.8f);
         if (_target == null)
         {
-            _ev.InfraFailure(Id, Id, "近战靶夹具创建失败", "");
+            sink.InfraFailure(Id, Id, "近战靶夹具创建失败", "");
             yield break;
         }
         var targetHealth = _target.GetComponent<UnitHealth>();
 
-        var collector = new HitCollector();
+        var collector = new QaFixtures.HitCollector(200, false);
         collector.Subscribe(targetHealth, knight.health.GetInstanceID());
 
         knight.brain.enabled = false;
@@ -363,30 +308,29 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         knight.brain.CommandAttack(null);
         var combat = knight.brain.combat as ICharacterCombat;
         if (combat != null) combat.CancelAttack();
-        yield return WaitState(knight, Locomotion, 5f);
+        yield return QaWait.WaitState(knight.animator, Locomotion, 5f);
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "骑士经 CommandAttack 对近战范围内目标出手一次：目标掉血，且命中瞬间于 layer0 AttackMelee",
             "hits=" + collector.Count + "; state=" + hitState + "; amount=" + F(amount) +
             "; wait=" + F(t) + "s",
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("hits", collector.Count, "hitState", hitState, "hitNormalizedTime", hitNorm,
+            QaJson.Dict("hits", collector.Count, "hitState", hitState, "hitNormalizedTime", hitNorm,
                  "amount", amount, "waitSeconds", t,
                  "fixture", "REFACTOR_Target_Melee（运行期内存 UnitHealth，无 AI）",
                  "entry", "CharacterBrain.CommandAttack → UnitBrain.Update → ICharacterCombat.AutoAttack → MeleeCombat.SingleTargetHit"));
     }
-
     // ============================================================
     // 3. Combat.RangedShot
     // ============================================================
-    IEnumerator AssertRangedShot()
+    IEnumerator AssertRangedShot(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Combat.RangedShot";
         var rows = new List<object>();
         bool allPass = true;
         int tested = 0;
 
-        foreach (var p in _players.Where(x => x.ranged != null))
+        foreach (var p in players.Where(x => x.ranged != null))
         {
             tested++;
             _target = CreateTarget("REFACTOR_Target_Ranged_" + p.name, p.tx.position + p.tx.forward * 3.0f);
@@ -410,8 +354,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 if (f && !wasFired)
                 {
                     fired = true;
-                    fireState = StateName(p.animator);
-                    fireNorm = StateNorm(p.animator);
+                    fireState = QaFixtures.StateName(p.animator);
+                    fireNorm = QaFixtures.StateNorm(p.animator);
                     break;
                 }
                 wasFired = f;
@@ -425,11 +369,11 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             p.brain.CommandAttack(null);
             var combat = p.brain.combat as ICharacterCombat;
             if (combat != null) combat.CancelAttack();
-            yield return WaitState(p, Locomotion, 5f);
+            yield return QaWait.WaitState(p.animator, Locomotion, 5f);
 
             bool pass = fired && fireState == AttackRelease;
             allPass &= pass;
-            rows.Add(Dict("player", p.name, "fired", fired, "fireState", fireState,
+            rows.Add(QaJson.Dict("player", p.name, "fired", fired, "fireState", fireState,
                           "fireNormalizedTime", fireNorm, "waitSeconds", t,
                           "damageObserved", damage, "attackSpeed", p.attackSpeed, "pass", pass));
             DestroyTarget();
@@ -437,18 +381,17 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
         bool anyRanged = tested > 0;
         bool passOverall = anyRanged && allPass;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "弓手/法师经 CommandAttack 出手：至少发射一次，且发射瞬间于 layer0 Attack_Release",
             "tested=" + tested + "; allPass=" + allPass + "; rows=" + rows.Count,
             passOverall, passOverall ? "pass" : "product_fail", "production",
-            Dict("players", rows,
+            QaJson.Dict("players", rows,
                  "note", "伤害只记录不判定：法师火球是否结算取决于预制体 explosionEffect 配置；发射本身是远程普攻的核心契约"));
     }
-
     // ============================================================
     // 4. Skill.QW
     // ============================================================
-    IEnumerator AssertSkillQW()
+    IEnumerator AssertSkillQW(IQaSink sink)
     {
         const string Id = "Skill.QW";
         Vector3 FixturePos = new Vector3(80f, 0f, 80f);
@@ -457,14 +400,14 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         try { fx = SkillCastFixture.Create(FixturePos, true); }
         catch (Exception e)
         {
-            _ev.InfraFailure(Id, Id, "夹具创建抛异常: " + e.Message, e.StackTrace);
+            sink.InfraFailure(Id, Id, "夹具创建抛异常: " + e.Message, e.StackTrace);
             yield break;
         }
         if (fx == null || !string.IsNullOrEmpty(fx.Error))
         {
             string err = fx != null ? fx.Error : "null";
             if (fx != null) fx.Dispose();
-            _ev.InfraFailure(Id, Id, "夹具创建失败: " + err, "");
+            sink.InfraFailure(Id, Id, "夹具创建失败: " + err, "");
             yield break;
         }
 
@@ -481,9 +424,9 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             prepareSeconds = fx.PrepareSeconds;
             if (!fx.PrepareLocomotion)
             {
-                _ev.BlockedAssertion(Id, Id, "Q/W 可施放",
+                sink.BlockedAssertion(Id, Id, "Q/W 可施放",
                     "夹具未能进入 Locomotion（preState=" + prepareState + "）",
-                    Dict("prepareState", prepareState));
+                    QaJson.Dict("prepareState", prepareState));
                 yield break;
             }
 
@@ -504,37 +447,36 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         }
 
         bool pass = qPass && wPass;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "Q（BashEffect，-20 蓝，命中掉血，≤0.6s 进入 Q_1）与 W（HeavySlashEffect，-30 蓝，起手技能斩，≤0.6s 进入 W_1）均经 SkillSystem.Cast 生效",
             "qPass=" + qPass + "; wPass=" + wPass +
             "; qType=" + q.effectType + "; wType=" + w.effectType +
             "; qManaDelta=" + F(q.manaDelta) + "; wManaDelta=" + F(w.manaDelta),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("Q", q.Data(), "W", w.Data(),
+            QaJson.Dict("Q", q.Data(), "W", w.Data(),
                  "prepareState", prepareState, "prepareSeconds", prepareSeconds,
                  "fixture", SkillCastFixture.KnightPrefabPath,
                  "note", "只验 Q/W 两个有内容的槽；E/R 空槽契约由 SPEC01 覆盖，本套件不重复"));
     }
-
     // ============================================================
     // M4-A. Skill.InterruptAttack（M4 新增）
     // ============================================================
     /// <summary>普攻出招中施放 Q（BashEffect）：Cast 返回 true、普攻判定窗口被收掉（不再产生 Slash 命中）、
     /// ≤0.6s 进入 Bash。只统计骑士自己发出的伤害，并用伤害类型区分普攻(Slash)与盾击(Blunt)。</summary>
-    IEnumerator AssertSkillInterruptAttack()
+    IEnumerator AssertSkillInterruptAttack(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Skill.InterruptAttack";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null ||
             knight.skills == null || knight.sword == null)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
+            sink.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
                 "缺少 Knight_Unit 或 SkillSystem/MeleeCombat", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
+            sink.BlockedAssertion(Id, Id, "普攻出招中施放 Q：Cast 成功、普攻不再命中、≤0.6s 进入 Q_1",
                 "骑士已倒地", null);
             yield break;
         }
@@ -542,7 +484,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         _target = CreateTarget("REFACTOR_Target_SkillIntAttack", knight.tx.position + knight.tx.forward * 1.8f);
         if (_target == null)
         {
-            _ev.InfraFailure(Id, Id, "技能打断普攻靶夹具创建失败", "");
+            sink.InfraFailure(Id, Id, "技能打断普攻靶夹具创建失败", "");
             yield break;
         }
         var targetHealth = _target.GetComponent<UnitHealth>();
@@ -581,11 +523,11 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 yield return null;
                 t += Time.deltaTime;
-                if (StateName(knight.animator) != AttackMelee) continue;
+                if (QaFixtures.StateName(knight.animator) != AttackMelee) continue;
                 attacking = true;
-                if (StateNorm(knight.animator) >= 0.6f) break;
+                if (QaFixtures.StateNorm(knight.animator) >= 0.6f) break;
             }
-            attackNormAtCast = attacking ? StateNorm(knight.animator) : -1f;
+            attackNormAtCast = attacking ? QaFixtures.StateNorm(knight.animator) : -1f;
             slashHitsBeforeCast = slashHits;
 
             if (attacking)
@@ -598,7 +540,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 float w = 0f;
                 while (w < 0.6f)
                 {
-                    if (StateName(knight.animator) == "Q_1") { bashEntered = true; bashWait = w; break; }
+                    if (QaFixtures.StateName(knight.animator) == "Q_1") { bashEntered = true; bashWait = w; break; }
                     yield return null;
                     w += Time.deltaTime;
                 }
@@ -609,7 +551,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     float w2 = 0f;
                     while (w2 < 1.5f)
                     {
-                        if (StateName(knight.animator) == "Q_1")
+                        if (QaFixtures.StateName(knight.animator) == "Q_1")
                         { bashEnteredLater = true; bashActualWait = w + w2; break; }
                         yield return null;
                         w2 += Time.deltaTime;
@@ -631,13 +573,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         var combat = knight.brain.combat as ICharacterCombat;
         if (combat != null) combat.CancelAttack();
         RestoreAgent(knight);
-        yield return WaitState(knight, Locomotion, 6f);
+        yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
         DestroyTarget();
 
         bool noSecondHit = slashHitsBeforeCast >= 0 && slashHits == slashHitsBeforeCast;
         bool pass = attacking && castOk && attackTimerAfterCast < 0f &&
                     bashEntered && bashWait >= 0f && bashWait <= 0.6f && noSecondHit;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "骑士在 AttackMelee 出招中（窗口已过、仍在收招）立即 SkillSystem.Cast(0,Q)：Cast 返回 true，" +
             "MeleeCombat 攻击计时被收(-1)，普攻不再产生第二次 Slash 命中，且 ≤0.6s 进入 Q_1（盾击 Blunt 命中照常结算）",
             "attacking=" + attacking + "; normAtCast=" + F(attackNormAtCast) + "; cast=" + castOk +
@@ -646,7 +588,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             (bashEnteredLater ? "; bashLater=" + F(bashActualWait) + "s" : "") +
             "; slash=" + slashHitsBeforeCast + "→" + slashHits + "; bluntHits=" + bluntHits,
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("attackingBeforeCast", attacking, "attackNormalizedAtCast", attackNormAtCast,
+            QaJson.Dict("attackingBeforeCast", attacking, "attackNormalizedAtCast", attackNormAtCast,
                  "castReturn", castOk, "attackTimerAfterCast", attackTimerAfterCast,
                  "bashEnteredWithin0_6s", bashEntered, "bashWaitSeconds", bashWait,
                  "bashEnteredLater", bashEnteredLater, "bashActualWaitSeconds", bashActualWait,
@@ -655,25 +597,24 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                  "note", "PlayerBase.controller 的 Q 触发过渡只挂在 Locomotion 状态（Locomotion→Q），" +
                          "故出招中施放时 Q_1 会在 AttackMelee 收招后进入；本断言在命中窗口之后立即施放，覆盖“第一下已结算、不许有第二下”"));
     }
-
     // ============================================================
     // M4-B. Hit.InterruptSkill（M4 新增）
     // ============================================================
     /// <summary>施放 W（HeavySlashEffect → Skill 动画）后 0.1s 内对施法者造成 1 点伤害：
     /// ≤0.5s 进入 Hit_A，且单位未死（hp > 0）。</summary>
-    IEnumerator AssertHitInterruptSkill()
+    IEnumerator AssertHitInterruptSkill(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Hit.InterruptSkill";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null || knight.skills == null)
         {
-            _ev.BlockedAssertion(Id, Id, "施放 W 后受击 → ≤0.5s 进入 Hit_A 且未死",
+            sink.BlockedAssertion(Id, Id, "施放 W 后受击 → ≤0.5s 进入 Hit_A 且未死",
                 "缺少 Knight_Unit 或 SkillSystem/UnitHealth", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "施放 W 后受击 → ≤0.5s 进入 Hit_A 且未死", "骑士已倒地", null);
+            sink.BlockedAssertion(Id, Id, "施放 W 后受击 → ≤0.5s 进入 Hit_A 且未死", "骑士已倒地", null);
             yield break;
         }
 
@@ -688,7 +629,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         float hpAfter = knight.health.hp;
         bool hitApplied = Mathf.Abs(hpBefore - hpAfter - 1f) < 0.01f;
 
-        string observed = StateName(knight.animator);
+        string observed = QaFixtures.StateName(knight.animator);
         bool hitEntered = false;
         float hitWait = -1f;
         float h = 0f;
@@ -696,46 +637,45 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         {
             yield return null;
             h += Time.deltaTime;
-            observed = StateName(knight.animator);
+            observed = QaFixtures.StateName(knight.animator);
             if (observed == HitA) { hitEntered = true; hitWait = h; break; }
         }
-        if (!hitEntered) observed = StateName(knight.animator);
+        if (!hitEntered) observed = QaFixtures.StateName(knight.animator);
 
         knight.brain.CommandAttack(null);
         var combat = knight.brain.combat as ICharacterCombat;
         if (combat != null) combat.CancelAttack();
         RestoreAgent(knight);
-        yield return WaitState(knight, Locomotion, 6f);
+        yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
 
         bool pass = castOk && hitApplied && hitEntered && hitWait >= 0f && hitWait <= 0.5f && hpAfter > 0f;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "骑士经 SkillSystem.Cast(1,W) 进入技能后 0.1s 受 1 点伤害：≤0.5s 进入 Hit_A，伤害只结算 1 点且单位未死",
             "cast=" + castOk + "; observed=" + observed + "; hitWait=" + F(hitWait) + "s" +
             "; hp=" + F(hpBefore) + "→" + F(hpAfter),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("castReturn", castOk, "stateAfterHit", observed, "hitWaitSeconds", hitWait,
+            QaJson.Dict("castReturn", castOk, "stateAfterHit", observed, "hitWaitSeconds", hitWait,
                  "hpBefore", hpBefore, "hpAfter", hpAfter,
                  "entry", "SkillSystem.Cast(1,null) → HeavySlashEffect；UnitHealth.TakeHit(1f) → CharacterBrain.OnDamaged → Animator.SetTrigger(\"Hit\") → AnyState→Hit_A"));
     }
-
     // ============================================================
     // M4-C. Skill.InterruptInteract（M4 新增）
     // ============================================================
     /// <summary>技能（Bash）进行中对同一单位下交互指令：InteractionRunner.HasPending=false 且不朝宝箱位移；
     /// 技能结束后同一条指令能正常产生待办。宝箱为运行期内存夹具，结束前销毁。</summary>
-    IEnumerator AssertSkillInterruptInteract()
+    IEnumerator AssertSkillInterruptInteract(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Skill.InterruptInteract";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null || knight.skills == null)
         {
-            _ev.BlockedAssertion(Id, Id, "技能期间交互指令无效（无待办/不位移），技能后可下单",
+            sink.BlockedAssertion(Id, Id, "技能期间交互指令无效（无待办/不位移），技能后可下单",
                 "缺少 Knight_Unit 或 SkillSystem", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "技能期间交互指令无效（无待办/不位移），技能后可下单", "骑士已倒地", null);
+            sink.BlockedAssertion(Id, Id, "技能期间交互指令无效（无待办/不位移），技能后可下单", "骑士已倒地", null);
             yield break;
         }
 
@@ -784,7 +724,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                                    knight.tx.position + knight.tx.forward * 1.8f);
             if (_target == null)
             {
-                _ev.InfraFailure(Id, Id, "技能打断交互靶夹具创建失败", "");
+                sink.InfraFailure(Id, Id, "技能打断交互靶夹具创建失败", "");
                 yield break;
             }
 
@@ -799,7 +739,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 yield return null;
                 t += Time.deltaTime;
-                if (StateName(knight.animator) == "Q_1") { inBash = true; bashWait = t; break; }
+                if (QaFixtures.StateName(knight.animator) == "Q_1") { inBash = true; bashWait = t; break; }
             }
 
             // ---- 2. 技能期间下交互指令：不应产生待办，也不应朝宝箱位移 ----
@@ -816,7 +756,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 yield return null;
                 e += Time.deltaTime;
-                string st = StateName(knight.animator);
+                string st = QaFixtures.StateName(knight.animator);
                 if (!IsSkillStateName(st)) { skillEnded = true; break; }
             }
 
@@ -836,24 +776,24 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                         movedDuringSkill >= 0f && movedDuringSkill < 0.05f &&
                         skillEnded && pendingAfterSkill;
 
-            rows.Add(Dict("step", "cast", "castReturn", castOk, "bashEntered", inBash,
+            rows.Add(QaJson.Dict("step", "cast", "castReturn", castOk, "bashEntered", inBash,
                           "bashWaitSeconds", bashWait, "pass", castOk && inBash));
-            rows.Add(Dict("step", "interactDuringSkill", "hasPending", pendingDuringSkill,
+            rows.Add(QaJson.Dict("step", "interactDuringSkill", "hasPending", pendingDuringSkill,
                           "movedMeters", movedDuringSkill,
                           "pass", !pendingDuringSkill && movedDuringSkill < 0.05f));
-            rows.Add(Dict("step", "interactAfterSkill", "skillEnded", skillEnded,
+            rows.Add(QaJson.Dict("step", "interactAfterSkill", "skillEnded", skillEnded,
                           "hasPending", pendingAfterSkill, "pass", skillEnded && pendingAfterSkill));
-            rows.Add(Dict("step", "cleanup", "returnMoveMeters", returnMoveDistance,
+            rows.Add(QaJson.Dict("step", "cleanup", "returnMoveMeters", returnMoveDistance,
                           "note", "技能期间的运动锁由 UnitMotion 负责（施法即停），收尾恢复可动并回原位"));
 
-            _ev.Record(Id, Id,
+            sink.Record(Id, Id,
                 "SkillSystem.Cast(0,Q) 进入 Q_1 后对同一单位 CommandInteract(宝箱夹具)：InteractionRunner.HasPending=false 且 0.25s 内不位移；" +
                 "技能结束后再次 CommandInteract 能产生 HasPending=true",
                 "cast=" + castOk + "; bash=" + inBash + "; pendingDuring=" + pendingDuringSkill +
                 "; moved=" + F(movedDuringSkill) + "m; skillEnded=" + skillEnded +
                 "; pendingAfter=" + pendingAfterSkill,
                 pass, pass ? "pass" : "product_fail", "production",
-                Dict("steps", rows,
+                QaJson.Dict("steps", rows,
                      "fixture", "REFACTOR_SkillInterruptChest（运行期内存，结束前销毁；不写场景）",
                      "entry", "SkillSystem.Cast(0,target) → BashEffect；CharacterBrain.CommandInteract(Interactable) → InteractionRunner.Order（技能门禁 CanAcceptInteract）"));
         }
@@ -864,13 +804,12 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             DestroyTarget();
         }
     }
-
     // ============================================================
     // M4-D. Projectile.AimPoint（M4 新增）
     // ============================================================
     /// <summary>子弹落点 = 目标所有 Renderer 的合并包围盒中心（容差 0.05m），且不再是 position+0.6；
     /// 无 Renderer 的目标回退 transform.position。夹具为运行期内存对象，结束前销毁。</summary>
-    IEnumerator AssertProjectileAimPoint()
+    IEnumerator AssertProjectileAimPoint(IQaSink sink)
     {
         const string Id = "Projectile.AimPoint";
         GameObject projGo = null;
@@ -884,7 +823,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             _target = CreateTarget("REFACTOR_AimTarget", new Vector3(120f, 0f, 120f));
             if (_target == null)
             {
-                _ev.InfraFailure(Id, Id, "瞄准点靶夹具创建失败", "");
+                sink.InfraFailure(Id, Id, "瞄准点靶夹具创建失败", "");
                 yield break;
             }
             var uh = _target.GetComponent<UnitHealth>();
@@ -914,9 +853,9 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             float dExpected = Vector3.Distance(end, expected);
             float dLegacy = Vector3.Distance(end, legacy);
             bool aimOk = rendererCount >= 2 && dExpected <= 0.05f && dLegacy > 0.1f;
-            rows.Add(Dict("step", "rendererAim", "rendererCount", rendererCount,
-                          "computeEnd", V3(end), "mergedBoundsCenter", V3(expected),
-                          "legacyPositionPlus06", V3(legacy),
+            rows.Add(QaJson.Dict("step", "rendererAim", "rendererCount", rendererCount,
+                          "computeEnd", QaJson.V3(end), "mergedBoundsCenter", QaJson.V3(expected),
+                          "legacyPositionPlus06", QaJson.V3(legacy),
                           "distanceToCenter", dExpected, "distanceToLegacy", dLegacy, "pass", aimOk));
 
             // ---- 2. 无 Renderer 的目标：回退 transform.position（不再 +0.6m） ----
@@ -946,19 +885,19 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             float dFallback = Vector3.Distance(end2, bareGo.transform.position);
             bool fallbackOk = buh.GetComponentsInChildren<Renderer>().Length == 0 && dFallback <= 0.001f;
             Destroy(proj2Go);
-            rows.Add(Dict("step", "fallbackNoRenderer", "rendererCount", buh.GetComponentsInChildren<Renderer>().Length,
-                          "computeEnd", V3(end2), "targetPosition", V3(bareGo.transform.position),
+            rows.Add(QaJson.Dict("step", "fallbackNoRenderer", "rendererCount", buh.GetComponentsInChildren<Renderer>().Length,
+                          "computeEnd", QaJson.V3(end2), "targetPosition", QaJson.V3(bareGo.transform.position),
                           "distance", dFallback, "pass", fallbackOk));
 
             bool pass = aimOk && fallbackOk;
-            _ev.Record(Id, Id,
+            sink.Record(Id, Id,
                 "Projectile.ComputeEnd：有 Renderer 的目标取合并包围盒中心（容差 0.05m，距 position+0.6 超过 0.1m）；" +
                 "无 Renderer 的目标回退 transform.position",
                 "aimOk=" + aimOk + "; fallbackOk=" + fallbackOk +
                 "; distanceToCenter=" + F(dExpected) + "m; distanceToLegacy=" + F(dLegacy) + "m" +
                 "; fallbackDistance=" + F(dFallback) + "m",
                 pass, pass ? "pass" : "product_fail", "production",
-                Dict("steps", rows,
+                QaJson.Dict("steps", rows,
                      "fixture", "REFACTOR_AimTarget（含 2 个 MeshRenderer 子物体）/ REFACTOR_AimBare（无 Renderer），结束前销毁",
                      "entry", "Projectile.Launch → 反射调用 protected ComputeEnd()"));
         }
@@ -970,29 +909,28 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             DestroyTarget();
         }
     }
-
     // ============================================================
     // 5. Hit.InterruptAttack
     // ============================================================
-    IEnumerator AssertHitInterrupt()
+    IEnumerator AssertHitInterrupt(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Hit.InterruptAttack";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻中受击被 Hit_A 打断", "未找到 Knight_Unit", null);
+            sink.BlockedAssertion(Id, Id, "普攻中受击被 Hit_A 打断", "未找到 Knight_Unit", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "普攻中受击被 Hit_A 打断", "骑士已倒地", null);
+            sink.BlockedAssertion(Id, Id, "普攻中受击被 Hit_A 打断", "骑士已倒地", null);
             yield break;
         }
 
         _target = CreateTarget("REFACTOR_Target_HitInt", knight.tx.position + knight.tx.forward * 1.8f);
         if (_target == null)
         {
-            _ev.InfraFailure(Id, Id, "受击打断靶夹具创建失败", "");
+            sink.InfraFailure(Id, Id, "受击打断靶夹具创建失败", "");
             yield break;
         }
 
@@ -1007,10 +945,10 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         {
             yield return null;
             t += Time.deltaTime;
-            if (StateName(knight.animator) == AttackMelee) { attacking = true; break; }
+            if (QaFixtures.StateName(knight.animator) == AttackMelee) { attacking = true; break; }
         }
 
-        string observed = StateName(knight.animator);
+        string observed = QaFixtures.StateName(knight.animator);
         float hitWait = -1f;
         float hpBefore = knight.health.hp;
         if (attacking)
@@ -1021,7 +959,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             {
                 yield return null;
                 h += Time.deltaTime;
-                observed = StateName(knight.animator);
+                observed = QaFixtures.StateName(knight.animator);
                 if (observed == HitA) { hitWait = h; break; }
             }
         }
@@ -1030,49 +968,48 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         knight.brain.CommandAttack(null);
         var combat = knight.brain.combat as ICharacterCombat;
         if (combat != null) combat.CancelAttack();
-        yield return WaitState(knight, Locomotion, 6f);
+        yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
         DestroyTarget();
 
         bool pass = attacking && hitWait >= 0f && observed == HitA &&
                     Mathf.Abs(hpBefore - hpAfter - 1f) < 0.01f;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "骑士在 AttackMelee 出招中受 1 点伤害：≤1.5s 内进入 Hit_A，且伤害只结算 1 点",
             "attacking=" + attacking + "; observed=" + observed +
             "; hitWait=" + F(hitWait) + "s; hp=" + F(hpBefore) + "→" + F(hpAfter),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("attackingBeforeHit", attacking, "observedState", observed, "hitWaitSeconds", hitWait,
+            QaJson.Dict("attackingBeforeHit", attacking, "observedState", observed, "hitWaitSeconds", hitWait,
                  "hpBefore", hpBefore, "hpAfter", hpAfter,
                  "entry", "UnitHealth.ApplyDamage(1f) → CharacterBrain.OnDamaged → Animator.SetTrigger(\"Hit\") → AnyState→Hit_A"));
     }
-
     // ============================================================
     // 6. Downed.Knockdown
     // ============================================================
-    IEnumerator AssertKnockdown()
+    IEnumerator AssertKnockdown(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Downed.Knockdown";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.health == null || knight.rescue == null)
         {
-            _ev.BlockedAssertion(Id, Id, "致死进入 Downed", "骑士缺少 UnitHealth/DownedRescue", null);
+            sink.BlockedAssertion(Id, Id, "致死进入 Downed", "骑士缺少 UnitHealth/DownedRescue", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "致死进入 Downed", "骑士已倒地", null);
+            sink.BlockedAssertion(Id, Id, "致死进入 Downed", "骑士已倒地", null);
             yield break;
         }
 
         knight.health.ApplyDamage(knight.health.maxHp * 4f, knight.tx.position + Vector3.up);
 
         float t = 0f;
-        string observed = StateName(knight.animator);
+        string observed = QaFixtures.StateName(knight.animator);
         bool downedAnim = false;
         while (t < 3f)
         {
             yield return null;
             t += Time.deltaTime;
-            observed = StateName(knight.animator);
+            observed = QaFixtures.StateName(knight.animator);
             if (observed == Downed) { downedAnim = true; break; }
         }
 
@@ -1081,13 +1018,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         bool agentOff = knight.brain != null && knight.brain.agent != null && !knight.brain.agent.enabled;
 
         bool pass = isDown && downedAnim && brainOff && agentOff;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "骑士接受致死伤害后：DownedRescue.IsDown=true，layer0 进入 Downed，CharacterBrain 与 NavMeshAgent 停用",
             "isDown=" + isDown + "; anim=" + observed + "; wait=" + F(t) + "s" +
             "; brainEnabled=" + (knight.brain != null && knight.brain.enabled) +
             "; agentEnabled=" + (knight.brain != null && knight.brain.agent != null && knight.brain.agent.enabled),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("isDown", isDown, "observedState", observed, "waitSeconds", t,
+            QaJson.Dict("isDown", isDown, "observedState", observed, "waitSeconds", t,
                  "brainEnabled", knight.brain != null && knight.brain.enabled,
                  "agentEnabled", knight.brain != null && knight.brain.agent != null && knight.brain.agent.enabled,
                  "entry", "UnitHealth.ApplyDamage(致死) → OnDeath → DownedRescue.OnDowned"));
@@ -1095,24 +1032,23 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         // 保持倒地状态给下一条救援断言用
         yield return null;
     }
-
     // ============================================================
     // 7. Rescue.ChannelInterrupt
     // ============================================================
-    IEnumerator AssertRescue()
+    IEnumerator AssertRescue(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Rescue.ChannelInterrupt";
-        var downed = _players.FirstOrDefault(p => p.name == "Knight_Unit");
-        var rescuer = _players.FirstOrDefault(p => p.name == "Archer_Unit" && !p.health.dead && p.health != (downed != null ? downed.health : null));
+        var downed = players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var rescuer = players.FirstOrDefault(p => p.name == "Archer_Unit" && !p.health.dead && p.health != (downed != null ? downed.health : null));
         if (downed == null || rescuer == null || downed.rescue == null)
         {
-            _ev.BlockedAssertion(Id, Id, "救援指令 → 读条 → 受击打断 → 重新下令 → 救起",
+            sink.BlockedAssertion(Id, Id, "救援指令 → 读条 → 受击打断 → 重新下令 → 救起",
                 "缺少倒地者或可用救援者", null);
             yield break;
         }
         if (!downed.rescue.IsDown)
         {
-            _ev.BlockedAssertion(Id, Id, "救援指令 → 读条 → 受击打断 → 重新下令 → 救起",
+            sink.BlockedAssertion(Id, Id, "救援指令 → 读条 → 受击打断 → 重新下令 → 救起",
                 "骑士未处于倒地状态（上一条 Downed.Knockdown 未成立）", null);
             yield break;
         }
@@ -1129,7 +1065,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             if (downed.rescue.IsChanneling) { channeling = true; break; }
         }
         float arriveSeconds = t;
-        string stateWhileChanneling = StateName(rescuer.animator);
+        string stateWhileChanneling = QaFixtures.StateName(rescuer.animator);
 
         // 受击打断：救援者受 1 点伤害
         bool interrupted = false;
@@ -1173,13 +1109,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         bool hpOk = revived && Mathf.Abs(reviveHp - downed.rescue.reviveHp) < 0.01f;
         bool pass = channeling && interrupted && stillDownAfterInterrupt && revived && hpOk && brainBack;
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "救援指令让救援者走到范围并读条；读条中救援者受击 → 读条中断且目标仍倒地；重新下令后读完条救起（血量=reviveHp）并恢复大脑",
             "channeling=" + channeling + "; arrive=" + F(arriveSeconds) + "s; interrupted=" + interrupted +
             "; stillDown=" + stillDownAfterInterrupt + "; revived=" + revived +
             "; revive=" + F(reviveSeconds) + "s; hp=" + F(reviveHp) + "; brainBack=" + brainBack,
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("channeling", channeling, "arriveSeconds", arriveSeconds,
+            QaJson.Dict("channeling", channeling, "arriveSeconds", arriveSeconds,
                  "stateWhileChanneling", stateWhileChanneling,
                  "interrupted", interrupted, "interruptDetectSeconds", it,
                  "stillDownAfterInterrupt", stillDownAfterInterrupt,
@@ -1189,17 +1125,16 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                  "downed", downed.name, "rescuer", rescuer.name,
                  "entry", "DownedRescue.CommandRescue(UnitHealth)（选择器点击救援同一入口）→ CharacterBrain.CommandInteract 跑位 → RescueRoutine 读条"));
     }
-
     // ============================================================
     // 8. Chest.Interact
     // ============================================================
-    IEnumerator AssertChest()
+    IEnumerator AssertChest(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Chest.Interact";
-        var mage = _players.FirstOrDefault(p => p.name == "Mage_Unit");
+        var mage = players.FirstOrDefault(p => p.name == "Mage_Unit");
         if (mage == null || mage.brain == null || mage.brain.agent == null)
         {
-            _ev.BlockedAssertion(Id, Id, "走到宝箱范围后开盖", "未找到 Mage_Unit", null);
+            sink.BlockedAssertion(Id, Id, "走到宝箱范围后开盖", "未找到 Mage_Unit", null);
             yield break;
         }
 
@@ -1237,7 +1172,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         interact.hint = "点击开启宝箱";
 
         Quaternion lidBefore = lid.transform.localRotation;
-        Select(mage);
+        QaFixtures.Select(mage);
         mage.brain.CommandInteract(interact);
 
         float t = 0f;
@@ -1256,18 +1191,17 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         bool inventoryBound = inv.items != null && inv.items.Count > 0 && inv.items.Exists(i => i == _chestItem);
 
         bool pass = opened && lidAngle > 30f && itemVisible && inventoryBound;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "经生产交互入口（CharacterBrain.CommandInteract）让法师走到宝箱范围：宝箱进入已开启，盖子旋转 >30°，内容物显形且已写入宝箱背包",
             "opened=" + opened + "; wait=" + F(t) + "s; lidAngle=" + F(lidAngle) +
             "; itemVisible=" + itemVisible + "; inventoryBound=" + inventoryBound,
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("opened", opened, "waitSeconds", t, "lidAngle", lidAngle,
+            QaJson.Dict("opened", opened, "waitSeconds", t, "lidAngle", lidAngle,
                  "itemVisible", itemVisible, "inventoryBound", inventoryBound,
-                 "chestPosition", V3(chestPos), "caster", mage.name,
+                 "chestPosition", QaJson.V3(chestPos), "caster", mage.name,
                  "fixture", "REFACTOR_Chest（运行期内存，含 Interactable/Chest/Inventory/ChestItem，结束前销毁）",
                  "entry", "CharacterBrain.CommandInteract(Interactable) → 走到范围 → CharacterBrain.Update → Chest.OpenBy"));
     }
-
     static bool ChestOpened(Chest chest)
     {
         if (chest == null) return false;
@@ -1282,17 +1216,17 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     /// <summary>交互契约：三个交互目标都实现 IInteractionTarget；KeyInteractable/Priority/IsAvailable 取值成立；
     /// 宝箱 Opened 事件恰好一次且重复 Interact 幂等；InteractionRunner.Ensure 不重复挂组件。
     /// 夹具全部运行期内存创建并在断言结束前销毁（不写场景）。</summary>
-    IEnumerator AssertInteractionContract()
+    IEnumerator AssertInteractionContract(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Refactor.InteractionContract";
         var rows = new List<object>();
         bool allPass = true;
 
-        var unit = _players.FirstOrDefault(p => p.brain != null && p.health != null && !p.health.dead);
-        var downed = _players.FirstOrDefault(p => p.rescue != null);
+        var unit = players.FirstOrDefault(p => p.brain != null && p.health != null && !p.health.dead);
+        var downed = players.FirstOrDefault(p => p.rescue != null);
         if (unit == null || downed == null)
         {
-            _ev.BlockedAssertion(Id, Id, "三个交互目标实现 IInteractionTarget / 契约取值 / 开箱事件恰好一次 / Runner 复用",
+            sink.BlockedAssertion(Id, Id, "三个交互目标实现 IInteractionTarget / 契约取值 / 开箱事件恰好一次 / Runner 复用",
                 "缺少可用玩家或 DownedRescue", null);
             yield break;
         }
@@ -1348,7 +1282,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             bool markerResolves = chestMarker.Target() != null && (object)chestMarker.Target() == chest;
             bool implementsOk = chestIsTarget && rescueIsTarget && doorIsTarget && markerResolves;
             allPass &= implementsOk;
-            rows.Add(Dict("step", "implements", "chest", chestIsTarget, "downedRescue", rescueIsTarget,
+            rows.Add(QaJson.Dict("step", "implements", "chest", chestIsTarget, "downedRescue", rescueIsTarget,
                           "dungeonDoor", doorIsTarget, "interactableMarkerResolves", markerResolves,
                           "chestSource", "运行期夹具（场景内无 Chest 实例）",
                           "doorSource", "运行期夹具（场景内无 DungeonDoor 实例）",
@@ -1361,7 +1295,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                               chest.Priority == InteractionPriority.Default &&
                               door.Priority == InteractionPriority.Default;
             allPass &= keyOk && priorityOk;
-            rows.Add(Dict("step", "contractValues",
+            rows.Add(QaJson.Dict("step", "contractValues",
                           "chestKeyInteractable", chest.KeyInteractable,
                           "rescueKeyInteractable", downed.rescue.KeyInteractable,
                           "doorKeyInteractable", door.KeyInteractable,
@@ -1382,7 +1316,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             bool idempotent = openedCount == countAfterFirst;
             bool chestOk = availableBefore && countAfterFirst == 1 && !availableAfter && idempotent;
             allPass &= chestOk;
-            rows.Add(Dict("step", "chestContract", "availableBefore", availableBefore,
+            rows.Add(QaJson.Dict("step", "chestContract", "availableBefore", availableBefore,
                           "openedEventsAfterFirstInteract", countAfterFirst,
                           "availableAfter", availableAfter, "openedEventsAfterSecondInteract", openedCount,
                           "idempotent", idempotent, "waitSeconds", waited, "pass", chestOk));
@@ -1390,7 +1324,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             // ---- 4. 门：初始可交互，且本断言不触发 Enter ----
             bool doorAvailable = door.IsAvailable(unit.brain);
             allPass &= doorAvailable;
-            rows.Add(Dict("step", "doorAvailability", "isAvailable", doorAvailable,
+            rows.Add(QaJson.Dict("step", "doorAvailability", "isAvailable", doorAvailable,
                           "enteredByTest", false,
                           "note", "只读 IsAvailable，不调用 Interact，避免黑屏过场与全员传送干扰后续断言",
                           "pass", doorAvailable));
@@ -1401,7 +1335,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             int runnerCount = unit.brain.GetComponents<InteractionRunner>().Length;
             bool runnerOk = runner1 != null && runner1 == runner2 && runnerCount == 1;
             allPass &= runnerOk;
-            rows.Add(Dict("step", "runnerEnsure", "sameInstance", runner1 != null && runner1 == runner2,
+            rows.Add(QaJson.Dict("step", "runnerEnsure", "sameInstance", runner1 != null && runner1 == runner2,
                           "componentCount", runnerCount, "runtimeOnly", true, "pass", runnerOk));
         }
         finally
@@ -1412,24 +1346,23 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             if (chestItem != null) Destroy(chestItem);
         }
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "Chest/DownedRescue/DungeonDoor 都实现 IInteractionTarget；KeyInteractable 只有门为 true、救援 Priority=Rescue；" +
             "宝箱开箱前 IsAvailable=true、Interact 后 Opened 恰好 1 次且 IsAvailable=false、重复 Interact 不再触发；" +
             "门初始 IsAvailable=true 且不被本断言触发；InteractionRunner.Ensure 两次返回同一实例且只挂 1 个组件",
             "allPass=" + allPass,
             allPass, allPass ? "pass" : "product_fail", "production",
-            Dict("steps", rows,
+            QaJson.Dict("steps", rows,
                  "fixture", "REFACTOR_ContractChest / REFACTOR_ContractDoor 为运行期内存对象，断言结束前销毁；不写入场景",
                  "note", "M3 新增第 11 条；M0–M2 的 10 条断言口径未改动"));
 
         yield break;
     }
-
     // ============================================================
     // 9. Refactor.RegistrySemantics
     // ============================================================
     /// <summary>注册表契约（M1）：默认排除未激活、includeInactive 能取回、Nearest 与替换前的全场扫描同口径。</summary>
-    IEnumerator AssertRegistrySemantics()
+    IEnumerator AssertRegistrySemantics(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Refactor.RegistrySemantics";
         var rows = new List<object>();
@@ -1439,10 +1372,10 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         int playerCount = UnitRegistry.OfTeam(Team.Player, false).Count;
         bool countOk = playerCount == 3;
         allPass &= countOk;
-        rows.Add(Dict("step", "OfTeam(Player,false)", "count", playerCount, "expected", 3, "pass", countOk));
+        rows.Add(QaJson.Dict("step", "OfTeam(Player,false)", "count", playerCount, "expected", 3, "pass", countOk));
 
         // ---- 2. 临时停用一个玩家：All(false) 不含 / All(true) 含；恢复后重新含入 ----
-        UnitHealth probe = _players.Count > 0 ? _players[0].health : null;
+        UnitHealth probe = players.Count > 0 ? players[0].health : null;
         int activeBefore = UnitRegistry.All(false).Count;
         int anyBefore = UnitRegistry.All(true).Count;
         int registeredBefore = UnitRegistry.Count;
@@ -1471,7 +1404,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         }
         bool toggleOk = hideOk && showOk;
         allPass &= toggleOk;
-        rows.Add(Dict("step", "SetActive(false/true)", "probe", probe != null ? probe.name : "null",
+        rows.Add(QaJson.Dict("step", "SetActive(false/true)", "probe", probe != null ? probe.name : "null",
                       "activeBefore", activeBefore, "anyBefore", anyBefore, "registeredBefore", registeredBefore,
                       "hiddenFromAll(false)", hideOk, "backInAll(false)", showOk,
                       "unitId", probeId.IsValid ? (object)probeId.Value : "None", "idResolved", idOk,
@@ -1500,7 +1433,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         bool nonEmpty = candidates >= 1;
         bool foundProbe = viaRegistry != null && viaRegistry.gameObject == probeMonster;
         allPass &= nearestOk && nonEmpty;
-        rows.Add(Dict("step", "Nearest vs All(false) 3D 扫描", "range", range,
+        rows.Add(QaJson.Dict("step", "Nearest vs All(false) 3D 扫描", "range", range,
                       "registryResult", viaRegistry != null ? viaRegistry.name : "null",
                       "scanResult", viaScan != null ? viaScan.name : "null",
                       "candidatesInRange", candidates, "registryDistance", viaRegistry != null
@@ -1509,22 +1442,21 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                       "nearestEqualsScan", nearestOk, "nonEmpty", nonEmpty, "pickedFixture", foundProbe,
                       "pass", nearestOk && nonEmpty));
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "UnitRegistry 契约：OfTeam(Player,false)=3；SetActive(false) 后 All(false) 不含而 All(true) 含、恢复后重新含入；" +
             "Nearest(center,10,Monster) 与遍历 All(false) + 3D 距离最近的结果一致",
             "players=" + playerCount + "; toggle=" + toggleOk + "; nearestEqualsScan=" + nearestOk +
             "; candidates=" + candidates,
             allPass, allPass ? "pass" : "product_fail", "production",
-            Dict("steps", rows, "count", UnitRegistry.Count,
+            QaJson.Dict("steps", rows, "count", UnitRegistry.Count,
                  "note", "只验证 M1 契约语义；不改动 M0 的 8 条断言口径"));
     }
-
     // ============================================================
     // 10. Refactor.StateFacade
     // ============================================================
     /// <summary>状态/流程门面（M2）：RunState/MetaState/MessageFeed/AppFlow/RunFlow 与旧 GameData/GameFlow/PauseManager
     /// 双向一致；Changed 恰好触发一次且退订后不再触发；Pause/Resume 与 timeScale 对齐。所有写入在结束前还原。</summary>
-    IEnumerator AssertStateFacade()
+    IEnumerator AssertStateFacade(IQaSink sink)
     {
         const string Id = "Refactor.StateFacade";
         var rows = new List<object>();
@@ -1551,7 +1483,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             bool goldBackward = RunState.Gold == 3;
             goldOk = goldForward && goldBackward;
             allPass &= goldOk;
-            rows.Add(Dict("step", "RunState.Gold <-> GameData.gold",
+            rows.Add(QaJson.Dict("step", "RunState.Gold <-> GameData.gold",
                           "newToOld", goldForward, "oldToNew", goldBackward, "pass", goldOk));
 
             // ---- 2. 等级 + 升级费用 ----
@@ -1564,7 +1496,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             bool costOk = metaCost == 50 * MetaState.Level && metaCost == legacyCost;
             levelOk = levelForward && levelBackward && costOk;
             allPass &= levelOk;
-            rows.Add(Dict("step", "MetaState.Level <-> GameData.level; LevelCost",
+            rows.Add(QaJson.Dict("step", "MetaState.Level <-> GameData.level; LevelCost",
                           "newToOld", levelForward, "oldToNew", levelBackward,
                           "level", MetaState.Level, "metaCost", metaCost, "legacyCost", legacyCost,
                           "costOk", costOk, "pass", levelOk));
@@ -1580,7 +1512,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             int afterUnsubscribe = changed;
             messageEventOk = messageOk && afterFirst == 1 && afterUnsubscribe == afterFirst;
             allPass &= messageEventOk;
-            rows.Add(Dict("step", "MessageFeed.SetMessage -> GameData.message + Changed",
+            rows.Add(QaJson.Dict("step", "MessageFeed.SetMessage -> GameData.message + Changed",
                           "messageOk", messageOk, "changedAfterFirst", afterFirst,
                           "changedAfterUnsubscribe", afterUnsubscribe, "pass", messageEventOk));
 
@@ -1592,7 +1524,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             AppFlow.GameStarted = gameStartedBefore;
             startedOk = startedForward && startedBackward && AppFlow.GameStarted == gameStartedBefore;
             allPass &= startedOk;
-            rows.Add(Dict("step", "AppFlow.GameStarted <-> GameFlow.GameStarted",
+            rows.Add(QaJson.Dict("step", "AppFlow.GameStarted <-> GameFlow.GameStarted",
                           "newToOld", startedForward, "oldToNew", startedBackward,
                           "restoredTo", gameStartedBefore, "pass", startedOk));
 
@@ -1600,7 +1532,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             bool instanceExists = GameFlow.instance != null;
             wipedOk = instanceExists && RunFlow.IsWiped == GameFlow.instance.IsWiped;
             allPass &= wipedOk;
-            rows.Add(Dict("step", "RunFlow.IsWiped == GameFlow.instance.IsWiped",
+            rows.Add(QaJson.Dict("step", "RunFlow.IsWiped == GameFlow.instance.IsWiped",
                           "instanceExists", instanceExists, "runFlow", RunFlow.IsWiped,
                           "legacy", instanceExists ? (object)GameFlow.instance.IsWiped : null, "pass", wipedOk));
 
@@ -1613,7 +1545,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                              && Time.timeScale == 1f;
             pauseOk = pauseEntered && pauseLeft;
             allPass &= pauseOk;
-            rows.Add(Dict("step", "AppFlow.Pause/Resume -> PauseManager.IsPaused + Time.timeScale",
+            rows.Add(QaJson.Dict("step", "AppFlow.Pause/Resume -> PauseManager.IsPaused + Time.timeScale",
                           "onPause", pauseEntered, "onResume", pauseLeft, "timeScale", Time.timeScale,
                           "pass", pauseOk));
         }
@@ -1629,25 +1561,24 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                          MessageFeed.Message == messageBefore && AppFlow.GameStarted == gameStartedBefore &&
                          Time.timeScale == 1f;
             allPass &= restoredOk;
-            rows.Add(Dict("step", "restore", "gold", RunState.Gold, "level", MetaState.Level,
+            rows.Add(QaJson.Dict("step", "restore", "gold", RunState.Gold, "level", MetaState.Level,
                           "message", MessageFeed.Message, "gameStarted", AppFlow.GameStarted,
                           "isPaused", AppFlow.IsPaused, "timeScale", Time.timeScale,
                           "pausedBefore", pausedBefore, "pass", restoredOk));
         }
 
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "状态/流程门面：RunState/MetaState/MessageFeed/AppFlow/RunFlow 与旧 GameData/GameFlow/PauseManager 双向一致；" +
             "Changed 订阅后恰好触发一次、退订后不再触发；Pause -> IsPaused=true 且 timeScale=0，Resume -> false 且 1（结束 timeScale=1）",
             "gold=" + goldOk + "; level=" + levelOk + "; messageEvent=" + messageEventOk +
             "; gameStarted=" + startedOk + "; wiped=" + wipedOk + "; pause=" + pauseOk +
             "; restored=" + restoredOk,
             allPass, allPass ? "pass" : "product_fail", "production",
-            Dict("steps", rows, "changedEvents", changed,
+            QaJson.Dict("steps", rows, "changedEvents", changed,
                  "note", "M2 新增第 10 条；M0/M1 的 9 条断言口径未改动；所有写入已在 finally 还原"));
 
         yield break;
     }
-
     // ============================================================
     // SKILL-CLOSE-01. Skill.MotionUnlocked（第 16 条）
     // ============================================================
@@ -1657,20 +1588,20 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     /// ③ 倒地 → 复活。
     /// 每条都断言 agent.isStopped==false 且 UnitMotion.IsHeld==false；最后下一次移动指令证明真的能走。
     /// 复活走产品私有入口 DownedRescue.Revive（反射调用，与既有套件读私有字段同一惯例），不重跑 3s 读条。</summary>
-    IEnumerator AssertMotionUnlocked()
+    IEnumerator AssertMotionUnlocked(IQaSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)
     {
         const string Id = "Skill.MotionUnlocked";
-        var knight = _players.FirstOrDefault(p => p.name == "Knight_Unit");
+        var knight = players.FirstOrDefault(p => p.name == "Knight_Unit");
         if (knight == null || knight.brain == null || knight.health == null ||
             knight.skills == null || knight.brain.agent == null || knight.rescue == null)
         {
-            _ev.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
+            sink.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
                 "缺少 Knight_Unit 或 SkillSystem/NavMeshAgent/DownedRescue", null);
             yield break;
         }
         if (knight.health.dead)
         {
-            _ev.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
+            sink.BlockedAssertion(Id, Id, "技能结束/被打断/倒地复活后 agent.isStopped==false 且能移动",
                 "骑士已倒地", null);
             yield break;
         }
@@ -1680,7 +1611,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             BindingFlags.Instance | BindingFlags.NonPublic);
         if (reviveMethod == null)
         {
-            _ev.InfraFailure(Id, Id, "取不到 DownedRescue.Revive（产品私有入口被改名？）", "");
+            sink.InfraFailure(Id, Id, "取不到 DownedRescue.Revive（产品私有入口被改名？）", "");
             yield break;
         }
 
@@ -1705,13 +1636,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             var combat0 = knight.brain.combat as ICharacterCombat;
             if (combat0 != null) combat0.CancelAttack();
             knight.health.HealFull();
-            yield return WaitState(knight, Locomotion, 6f);
+            yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
 
             _target = CreateTarget("REFACTOR_Target_MotionUnlocked",
                                    knight.tx.position + knight.tx.forward * 1.8f);
             if (_target == null)
             {
-                _ev.InfraFailure(Id, Id, "运动锁靶夹具创建失败", "");
+                sink.InfraFailure(Id, Id, "运动锁靶夹具创建失败", "");
                 yield break;
             }
 
@@ -1725,7 +1656,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 {
                     yield return null;
                     t += Time.deltaTime;
-                    string s = StateName(knight.animator);
+                    string s = QaFixtures.StateName(knight.animator);
                     if (IsSkillStateName(s))
                     {
                         entered = true;
@@ -1743,7 +1674,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             yield return null;
             qUnlocked = !agent.isStopped;
             qNotHeld = !UnitMotion.IsHeld(agent);
-            rows.Add(Dict("step", "1-normalEnd", "castReturn", qCast, "leftSkill", qLeftSkill,
+            rows.Add(QaJson.Dict("step", "1-normalEnd", "castReturn", qCast, "leftSkill", qLeftSkill,
                           "skillSeconds", qSkillSeconds, "lockObservedDuringSkill", qLockObserved,
                           "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
                           "pass", qCast && qLeftSkill && qUnlocked && qNotHeld));
@@ -1762,7 +1693,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 {
                     yield return null;
                     h += Time.deltaTime;
-                    if (StateName(knight.animator) == HitA) { wHitEntered = true; break; }
+                    if (QaFixtures.StateName(knight.animator) == HitA) { wHitEntered = true; break; }
                 }
                 float u = 0f;
                 while (u < 2f)
@@ -1772,14 +1703,14 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     u += Time.deltaTime;
                 }
             }
-            rows.Add(Dict("step", "2a-w-then-hit", "castReturn", wCast, "hitApplied", wHitApplied,
+            rows.Add(QaJson.Dict("step", "2a-w-then-hit", "castReturn", wCast, "hitApplied", wHitApplied,
                           "enteredHit_A", wHitEntered, "unlockedWithin2s", wUnlocked,
                           "unlockSeconds", wUnlockSeconds,
                           "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
                           "pass", wCast && wHitApplied && wUnlocked));
 
             // ---- 2b. Q（唯一加锁的技能）+ 受击打断：锁着的时候被打断也必须解锁 ----
-            yield return WaitState(knight, Locomotion, 6f);
+            yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
             RefillSkills(knight);
             qbCast = knight.skills.Cast(0, _target.transform);
             {
@@ -1799,13 +1730,13 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     u += Time.deltaTime;
                 }
             }
-            rows.Add(Dict("step", "2b-q-then-hit", "castReturn", qbCast, "lockObserved", qbLockObserved,
+            rows.Add(QaJson.Dict("step", "2b-q-then-hit", "castReturn", qbCast, "lockObserved", qbLockObserved,
                           "unlockedWithin2s", qbUnlocked, "unlockSeconds", qbUnlockSeconds,
                           "agentIsStopped", agent.isStopped, "isHeld", UnitMotion.IsHeld(agent),
                           "pass", qbCast && qbLockObserved && qbUnlocked));
 
             // ---- 3. 倒地 → 复活：倒地清锁，复活后必须可动 ----
-            yield return WaitState(knight, Locomotion, 6f);
+            yield return QaWait.WaitState(knight.animator, Locomotion, 6f);
             knight.health.ApplyDamage(knight.health.maxHp * 4f, knight.tx.position + Vector3.up);
             {
                 float d = 0f;
@@ -1828,7 +1759,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 reviveUnlocked = revived && !agent.isStopped;
                 reviveNotHeld = !UnitMotion.IsHeld(agent);
             }
-            rows.Add(Dict("step", "3-down-then-revive", "downed", downed, "lockClearedOnDown", lockClearedOnDown,
+            rows.Add(QaJson.Dict("step", "3-down-then-revive", "downed", downed, "lockClearedOnDown", lockClearedOnDown,
                           "revived", revived, "agentIsStopped", agent.isStopped,
                           "isHeld", UnitMotion.IsHeld(agent),
                           "pass", downed && lockClearedOnDown && revived && reviveUnlocked && reviveNotHeld));
@@ -1860,7 +1791,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 moveOk = best > 0.1f;
                 moveNotHeld = !UnitMotion.IsHeld(agent);
             }
-            rows.Add(Dict("step", "4-canMove", "movedMeters", moveDistance, "seconds", moveSeconds,
+            rows.Add(QaJson.Dict("step", "4-canMove", "movedMeters", moveDistance, "seconds", moveSeconds,
                           "isHeld", UnitMotion.IsHeld(agent),
                           "pass", moveOk && moveNotHeld));
         }
@@ -1880,7 +1811,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                     qbCast && qbLockObserved && qbUnlocked &&
                     downed && lockClearedOnDown && revived && reviveUnlocked && reviveNotHeld &&
                     moveOk && moveNotHeld;
-        _ev.Record(Id, Id,
+        sink.Record(Id, Id,
             "运动锁复位：① Q 正常收尾（离开技能状态回 Locomotion）② W/Q 施放后受击打断 ③ 倒地 → 复活 —— " +
             "三条路径后 agent.isStopped==false 且 UnitMotion.IsHeld==false；最后下一次移动指令位移 > 0.1m",
             "qCast=" + qCast + "; qLeftSkill=" + qLeftSkill + "(" + F(qSkillSeconds) + "s)" +
@@ -1890,7 +1821,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             "; downed=" + downed + "; revived=" + revived + "; reviveUnlocked=" + reviveUnlocked +
             "; moveMeters=" + F(moveDistance),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("steps", rows,
+            QaJson.Dict("steps", rows,
                  "entry", "SkillSystem.Cast(0/1) → BashEffect/HeavySlashEffect → UnitMotion.Begin/End；" +
                           "UnitHealth.TakeHit/ApplyDamage → DownedRescue.OnDowned；DownedRescue.Revive（反射私有入口）",
                  "note", "W 走 HeavySlashEffect 不加运动锁，故 2a 验证「不残留锁」，2b 用唯一加锁的 Q 验证「锁着被打断也能解锁」；" +
@@ -1898,7 +1829,6 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
         yield break;
     }
-
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)
     {
         if (list == null || unit == null) return false;
@@ -1969,7 +1899,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         {
             _ev.WriteSummary(ScenePath, _seed,
                 string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason,
-                Dict("head", GetHead(),
+                QaJson.Dict("head", QaScene.GetHead("REFACTOR.Head"),
                      "fixtureNote", "REFACTOR_Target_* / REFACTOR_Chest 为运行期内存对象，结束前销毁；不写入场景"));
         }
 
@@ -2009,92 +1939,24 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     void FindPlayers()
     {
         _players.Clear();
-        foreach (string n in new[] { "Knight_Unit", "Archer_Unit", "Mage_Unit" })
-        {
-            PlayerProbe p = FindPlayer(n);
-            if (p != null) _players.Add(p);
-        }
+        _players.AddRange(QaFixtures.FindPlayers());
         foreach (var p in _players)
             Debug.Log("[REFACTOR] player " + p.name + " at " + V3Text(p.home) +
                       "; sword=" + (p.sword != null) + "; ranged=" + (p.ranged != null) +
                       "; skills=" + (p.skills != null) + "; rescue=" + (p.rescue != null));
     }
 
-    static PlayerProbe FindPlayer(string name)
-    {
-        foreach (var h in FindObjectsByType<UnitHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-        {
-            if (h == null || h.team != Team.Player) continue;
-            if (!(h.name == name || h.name.StartsWith(name + " ", StringComparison.Ordinal) ||
-                  h.name.StartsWith(name + "(", StringComparison.Ordinal))) continue;
-
-            var p = new PlayerProbe();
-            p.name = name;
-            p.health = h;
-            p.brain = h.GetComponent<CharacterBrain>();
-            p.animator = h.GetComponentInChildren<Animator>();
-            p.sword = h.GetComponent<MeleeCombat>();
-            p.ranged = h.GetComponent<RangedCombat>();
-            p.skills = h.GetComponent<SkillSystem>();
-            p.rescue = h.GetComponent<DownedRescue>();
-            p.home = h.transform.position;
-            p.attackSpeed = p.brain != null && p.brain.stats != null ? p.brain.stats.attackSpeed : 1f;
-            return p;
-        }
-        return null;
-    }
-
+    /// <summary>Fixture: QaFixtures.CreateTarget(showDamageNumber=false) plus the local destroy bookkeeping.</summary>
     GameObject CreateTarget(string name, Vector3 pos)
     {
         DestroyTarget();
-
-        var go = new GameObject(name);
-        go.SetActive(false);
-        go.transform.position = pos;
-
-        _targetStats = ScriptableObject.CreateInstance<UnitStats>();
-        _targetStats.team = Team.Monster;
-        _targetStats.maxHp = 100000f;
-        _targetStats.damage = 0f;
-        _targetStats.attackRange = 0f;
-        _targetStats.preferredRange = 0f;
-        _targetStats.aggroRange = 0f;
-        _targetStats.moveSpeed = 0f;
-        _targetStats.attackSpeed = 1f;
-
-        var uh = go.AddComponent<UnitHealth>();
-        uh.stats = _targetStats;
-        uh.showDamageNumber = false;
-
-        var col = go.AddComponent<CapsuleCollider>();
-        col.center = new Vector3(0f, 0.9f, 0f);
-        col.height = 1.8f;
-        col.radius = 0.4f;
-
-        go.SetActive(true);
-        return go;
+        _target = QaFixtures.CreateTarget(name, pos, false);
+        var uh = _target.GetComponent<UnitHealth>();
+        _targetStats = uh != null ? uh.stats : null;
+        return _target;
     }
 
-    static void Select(PlayerProbe p)
-    {
-        var sm = SelectionManager.instance;
-        if (sm == null || p == null || p.health == null) return;
-        var sel = p.health.GetComponent<Selectable>();
-        if (sel == null) return;
-        var m = typeof(SelectionManager).GetMethod("SingleSelect", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (m != null) m.Invoke(sm, new object[] { sel });
-    }
 
-    IEnumerator WaitState(PlayerProbe p, string state, float timeout)
-    {
-        float t = 0f;
-        while (t < timeout)
-        {
-            if (p.animator != null && StateName(p.animator) == state) yield break;
-            yield return null;
-            t += Time.deltaTime;
-        }
-    }
 
     static bool GetFired(RangedCombat r)
     {
@@ -2116,7 +1978,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
     }
 
     /// <summary>夹具复位：蓝量与冷却走生产调试入口，保证每条断言独立（不依赖上一条的剩余蓝量/冷却）。</summary>
-    static void RefillSkills(PlayerProbe p)
+    static void RefillSkills(QaFixtures.PlayerProbe p)
     {
         if (p == null || p.skills == null) return;
         if (p.skills.mana != null) p.skills.mana.Refill();
@@ -2125,7 +1987,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
 
     /// <summary>测试收尾：BashEffect 会把 NavMeshAgent.isStopped 置 true（既有产品行为，M4 未改）；
     /// 这里恢复可动，避免影响后续断言对同一单位的移动观测。</summary>
-    static void RestoreAgent(PlayerProbe p)
+    static void RestoreAgent(QaFixtures.PlayerProbe p)
     {
         if (p == null || p.brain == null || p.brain.agent == null) return;
         if (p.brain.agent.isOnNavMesh) p.brain.agent.isStopped = false;
@@ -2140,41 +2002,8 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         return v is Vector3 end ? end : new Vector3(float.NaN, float.NaN, float.NaN);
     }
 
-    static string StateName(Animator a, int layer = 0)
-    {
-        if (a == null) return "null";
-        if (layer < 0 || layer >= a.layerCount) return "layer_out_of_range";
-        var st = a.GetCurrentAnimatorStateInfo(layer);
-        if (st.IsName(Locomotion)) return Locomotion;
-        if (st.IsName(AttackMelee)) return AttackMelee;
-        if (st.IsName("Attack_Draw")) return "Attack_Draw";
-        if (st.IsName(AttackRelease)) return AttackRelease;
-        if (st.IsName(HitA)) return HitA;
-        if (st.IsName("Q_1")) return "Q_1";
-        if (st.IsName("W_1")) return "W_1";
-        if (st.IsName("E_1")) return "E_1";
-        if (st.IsName("R_1")) return "R_1";
-        if (st.IsName("Interact")) return "Interact";
-        if (st.IsName(Downed)) return Downed;
-        if (st.IsName("Rise")) return "Rise";
-        return "Other:" + st.shortNameHash;
-    }
 
-    static float StateNorm(Animator a, int layer = 0)
-    {
-        if (a == null || layer < 0 || layer >= a.layerCount) return -1f;
-        float n = a.GetCurrentAnimatorStateInfo(layer).normalizedTime;
-        return n <= 1f ? n : 1f;
-    }
 
-    static string GetHead()
-    {
-#if UNITY_EDITOR
-        return SessionState.GetString("REFACTOR.Head", "unknown");
-#else
-        return "n/a";
-#endif
-    }
 
     static string F(float v)
     {
@@ -2186,16 +2015,5 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         return "(" + F(v.x) + ", " + F(v.y) + ", " + F(v.z) + ")";
     }
 
-    static Dictionary<string, object> Dict(params object[] kvs)
-    {
-        var d = new Dictionary<string, object>();
-        for (int i = 0; i + 1 < kvs.Length; i += 2)
-            d[(string)kvs[i]] = kvs[i + 1];
-        return d;
-    }
 
-    static Dictionary<string, object> V3(Vector3 v)
-    {
-        return new Dictionary<string, object> { { "x", v.x }, { "y", v.y }, { "z", v.z } };
-    }
 }

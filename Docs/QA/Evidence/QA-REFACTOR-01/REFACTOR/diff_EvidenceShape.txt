@@ -1,0 +1,33 @@
+REFACTOR evidence shape diff (before vs after migration)
+BEFORE dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\REFACTOR\before
+AFTER  dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\REFACTOR\after
+
+=== FILE NAMES ===
+BEFORE (5): InEditorResult.txt, REFACTOR_Assertions.jsonl, REFACTOR_ExitCode_run1.txt, REFACTOR_Runs.jsonl, REFACTOR_Summary_run1.json
+AFTER  (5): InEditorResult.txt, REFACTOR_Assertions.jsonl, REFACTOR_ExitCode_run1.txt, REFACTOR_Runs.jsonl, REFACTOR_Summary_run1.json
+FILE NAME DIFF: (empty) IDENTICAL
+
+=== SUMMARY KEY ORDER ===
+BEFORE (17): task, milestone, run, startedAt, finishedAt, unityVersion, scene, randomSeed, assertionFile, pass, fail, blocked, infraFail, observed, head, fixtureNote, exitReason
+AFTER  (17): task, milestone, run, startedAt, finishedAt, unityVersion, scene, randomSeed, assertionFile, pass, fail, blocked, infraFail, observed, head, fixtureNote, exitReason
+SUMMARY KEY DIFF: (empty) IDENTICAL (order-sensitive)
+
+=== ASSERTION LINE FIELD ORDER (first line) ===
+BEFORE (59): run, milestone, qaItem, assertion, expected, actual, pass, status, kind, timestamp, data, players, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, count, note
+AFTER  (59): run, milestone, qaItem, assertion, expected, actual, pass, status, kind, timestamp, data, players, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, name, destination, x, y, z, arrived, durationSeconds, traveled, peakAgentSpeed, peakAnimatorSpeedZ, stateDuringMove, finalAgentSpeed, finalAnimatorSpeedZ, groundedDuringMove, pass, count, note
+ASSERTION LINE DIFF: (empty) IDENTICAL (milestone preserved after run)
+
+=== RUNS INDEX FIELD ORDER (first line) ===
+BEFORE (10): milestone, run, pass, fail, blocked, infraFail, observed, summary, exitReason, finishedAt
+AFTER  (10): milestone, run, pass, fail, blocked, infraFail, observed, summary, exitReason, finishedAt
+RUNS INDEX DIFF: (empty) IDENTICAL
+
+=== ENCODING ===
+InEditorResult.txt: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+REFACTOR_Assertions.jsonl: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+REFACTOR_ExitCode_run1.txt: beforeBOM=False afterBOM=False beforeCRLF=True afterCRLF=True
+REFACTOR_Runs.jsonl: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+REFACTOR_Summary_run1.json: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+
+=== EXITCODE CONTENT ===
+before=0 after=0 IDENTICAL

@@ -89,3 +89,36 @@ result  : N/A - this runner has no Assert*-named method yet (its assertions live
 
 === OVERALL ===
 ALL APPLICABLE CHECKS PASS
+
+================================================================
+## PHASE B (REFACTOR suite migration) - appended 2026-11-06 13:59:39
+================================================================
+
+## B1. Assert*(IQaSink sink) in REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : grep -E "IEnumerator Assert\w+\(IQaSink sink" Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs -c
+actual  : 16
+expected: 16 (all 16 REFACTOR assertions)
+result  : PASS
+
+## B2. forbidden tokens inside Assert* bodies (REFACTOR/Runtime/REFACTOR_ProbeRunner.cs)
+command : per-method brace scan: File\. | Directory\. | SessionState | EditorApplication | QaLauncher | _Boot
+actual  : 0
+expected: 0
+result  : PASS
+   methods scanned (16): AssertChest, AssertHitInterrupt, AssertHitInterruptSkill, AssertInteractionContract, AssertKnockdown, AssertMeleeHit, AssertMotionUnlocked, AssertPartyMove, AssertProjectileAimPoint, AssertRangedShot, AssertRegistrySemantics, AssertRescue, AssertSkillInterruptAttack, AssertSkillInterruptInteract, AssertSkillQW, AssertStateFacade
+   methods still reading runner field _ev: none
+
+## B3. local duplicates removed from REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : grep -E "class PlayerProbe" ... | actual=0 expected=0 | PASS   # class PlayerProbe (local definition)
+command : grep -E "class HitCollector" ... | actual=0 expected=0 | PASS   # class HitCollector (local definition)
+command : grep -E "IEnumerator WaitState\(" ... | actual=0 expected=0 | PASS   # IEnumerator WaitState( (local definition)
+command : grep -E "static string GetHead\(" ... | actual=0 expected=0 | PASS   # static string GetHead( (local definition)
+
+## B4. Qa layer invariants (unchanged by phase B)
+command : grep -E 'class QaEvidence\s*:\s*IQaSink' QA/Runtime/QaEvidence.cs | actual=1 expected=1 | PASS
+command : grep -E 'interface\s+IQaSink\b' QA/Runtime/QaSink.cs | actual=1 expected=1 | PASS
+command : grep -E 'File|Directory|SessionState|EditorApplication|QaLauncher' QA/Runtime/QaSink.cs | actual=0 expected=0 | PASS
+
+## B5. still-writing-files / still-boot-dependent assertions (REFACTOR)
+actual  : none (all 16 assertions receive IQaSink; no File./Directory./SessionState/EditorApplication/QaLauncher/_Boot in bodies)
+

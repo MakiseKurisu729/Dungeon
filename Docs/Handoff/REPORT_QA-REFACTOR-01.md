@@ -171,3 +171,120 @@ test(qa): 建立 Qa 公共层并迁移 SPEC01（阶段 A，断言零变化）
 | REFACTOR | 16 | 全部经本地 `_ev`（`REFACTOR_Evidence`），违禁 token = 0 | 阶段 B |
 | DIAG | 7 | 全部经本地 `_ev`（`DIAG_Evidence`），违禁 token = 0 | 阶段 D |
 | FND00B06 | 0（断言内联在 `Start` 等非 `Assert*` 方法里） | 无 `Assert*` 可改，需先拆分/命名 | 阶段 C |
+
+---
+
+# 阶段 B — REFACTOR 套件迁移（执行者会话，2026-11-06）
+
+> 本节由阶段 B 执行者**追加**；上面 §1–§10 是阶段 A 的原文，未改一字。
+
+## B.0 开工前六问（本阶段）
+
+1. **唯一主要结果**：REFACTOR 的 16 条断言改为「只经 `IQaSink` 出证据」，`REFACTOR_Evidence` 变成只组装 `QaEvidenceSpec` 的薄适配器（`class REFACTOR_Evidence : QaEvidence`，构造函数仍是 `(int run)`），套件本地重复的夹具/等待/JSON/场景查询改用 `Tests/QA/` 公共层；**断言口径零变化**。
+2. **明确不做什么**：不改任何断言 ID / `expected` 字面量 / 阈值 / 通过条件 / 条数；不删 `REFACTOR_Boot`；不碰 `Scripts/**`、场景/预制体/Animator/`.asset`/`ProjectSettings`、`CURRENT.md`、其他 `TASK_*`/`REPORT_*`、`FND00B04*`/`FND00B05*`/`FND02A/**`；不做任何 git 写操作；不跑 `run_tests`。
+3. **允许改哪些文件**：`Assets/_Project/Tests/**`（本阶段实际只改 4 个）+ `Docs/Handoff/REPORT_QA-REFACTOR-01.md` + `Docs/QA/Evidence/QA-REFACTOR-01/**`（只新增/追加）。
+4. **必须保持哪些旧行为**：断言行字段序 `run, milestone, qaItem, …`（REFACTOR 特有，逐字符保留）；Summary 17 键序（`task, milestone, run, …`）；`REFACTOR_Runs.jsonl` 键序；文件名 `REFACTOR_Assertions.jsonl` / `REFACTOR_Summary_run<N>.json` / `REFACTOR_ExitCode_run<N>.txt` / `REFACTOR_Runs.jsonl`；`run<=1 覆盖 / run>=2 追加`；`REFACTOR_MILESTONE` 语义（缺省 `M0`）；菜单项文本、`SessionState` 键、`REFACTOR_Runner` 名字。
+5. **如何证明完成**：编译 `error CS = 0`；菜单跑 1 次 → 16 行 16 pass / 0 fail、exit 0；三份机检 diff（`(qaItem, assertion, status)` 排序比对、`expected` 逐字符、证据形状）+ AC-10 静态检查；另用脚本证明 16 个断言方法体在「机械改名归一化」后与迁移前**逐字节相同**（15/16 完全相同，1 处只差 `HitCollector` 构造参数，见 B.5）。
+6. **失败后在哪里停**：断言 ID/条数/`status`/阈值/通过条件任一变化、需改产品代码或资产、编译连续 2 轮红、证据字段或文件名无法兼容、单步重试 ≥3 次仍红 → 按 TASK §4 熔断，留现场并写 REPORT，不自行取舍。
+
+## B.1 结果摘要
+
+| 项 | 迁移前（`REFACTOR/before`，源 `REFACTOR-M4/editor_run17`） | 迁移后（`REFACTOR/after`，源 `REFACTOR-M4/editor_run18`） |
+|---|---|---|
+| 断言行数 | 16 | 16 |
+| pass / fail | 16 / 0 | 16 / 0 |
+| blocked / infra / observed | 0 / 0 / 0 | 0 / 0 / 0 |
+| ExitCode | `0` | `0` |
+| Summary 键数/键序 | 17 键 | 17 键，键序逐字符一致 |
+| 断言行字段序 | `run, milestone, qaItem, …` | 同左（`milestone` 保留在 `run` 之后） |
+| Runs 索引键序 | `milestone, run, pass, …` | 同左 |
+| 文件名集合 | 5 个 | 5 个，完全一致 |
+
+编译：`error CS` = 0（整仓，含 SPEC01 / FND00B06 / DIAG —— 它们的源码本阶段**零改动**，因此必然仍可编译）。
+
+过程记录诚实说明：第一次编译出现 8 处 `CS1503`（把本地 `WaitState(PlayerProbe,…)` 机械改名为 `QaWait.WaitState(probe,…)`，而 `QaWait` 收 `Animator`）。属本阶段 1 轮修复额度内：8 处调用改为 `QaWait.WaitState(<probe>.animator, …)`，未改任何其他内容；第二次编译起全绿。原始报错与修法见 `compile_phaseB.txt`。
+
+## B.2 改动文件清单（行数 前→后）
+
+| 文件 | 行数 | 改动性质 |
+|---|---|---|
+| `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs` | 363 → 386（+29 / −6） | **纯增量**：`QaEvidenceSpec.PrefixedFields`（断言行/Runs 索引行在 `run` 之前的插入字段）、`QaSummaryKey.PrefixedFields`（Summary 里就地展开）、`BuildAssertionLine` 由 `static` 改实例并调用新增的 `AppendPrefixedFields`、`AppendRunIndex` 先写前置字段。三套既有套件不声明 `PrefixedFields` → 行为不变。 |
+| `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs` | 265 → 38（−227） | 改为薄适配器 `class REFACTOR_Evidence : QaEvidence`，只组装 `QaEvidenceSpec`（含 `PrefixedFields = milestone`、17 键 Summary 序、`ShouldTruncateAssertions = (r,m) => r <= 1`）；本地 `REFACTOR_Json` 连同整个文件 I/O / 计分逻辑删除（全仓无外部引用，已 grep 确认）。38 行 ≤ TASK §2.3 的 40 行上限。 |
+| `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs` | 2201 → 2019（+186 / −368） | 删本地 `PlayerProbe`/`HitCollector`/`WaitState`/`StateName`/`StateNorm`/`Select`/`FindPlayer`/`GetHead`/`Dict`/`V3`，改用 `QaFixtures`/`QaWait`/`QaScene`/`QaJson`；`CreateTarget` 保留本地壳（先 `DestroyTarget()` 再委托 `QaFixtures.CreateTarget(name,pos,false)` 并把 `UnitHealth.stats` 收回 `_targetStats` 参与销毁）；`FindPlayers` 改为 `QaFixtures.FindPlayers()`；16 个 `Assert*` 全部改为 `IEnumerator AssertXxx(IQSink sink, …)`。 |
+| `Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs` | 241 → 213（+1 / −29） | `GitHead()` → `QaScene.GetHead()`（语义等价：`sessionKey == null` 走真 `git rev-parse HEAD`，失败返回 `"unknown"`，与旧实现同）；删本地 `GitHead` 与随之无用的 `using System.IO` / `using System.Text`。**`REFACTOR_Boot` 原样保留**（留到阶段 E）。 |
+
+合计 4 文件，全部在 `Assets/_Project/Tests/**`（`git diff --numstat` 见 B.6）。**其他套件零改动**：`Tests/SPEC01/**`、`Tests/FND00B/**`、`Tests/DIAG/**`、`Tests/FND02A/**`、`Tests/QA/{QaJson,QaSink,QaFixtures,QaWait,QaScene,SkillCastFixture,QA_InEditorMenu}` 在 `git status --porcelain -- Assets/_Project/Tests` 里都不出现。
+
+## B.3 关键位置（`文件:行`）
+
+1. `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs:89` —— `QaEvidenceSpec.PrefixedFields` 定义（纯增量，null = 不输出）。
+2. `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs:296` —— `BuildAssertionLine` 在 `"run"` 之后调用 `AppendPrefixedFields(sb)` → 复现 `run, milestone, qaItem, …`；实现见 `:311`。
+3. `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs:8` / `:36` —— 适配器类声明 / `PrefixedFields = [milestone]`（第 36 行同时锁定 Summary 键序里 `milestone` 的位置）。
+4. `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs:172` —— 第一条断言的最终形状 `AssertPartyMove(IQSink sink, IReadOnlyList<QaFixtures.PlayerProbe> players)`；`:1591` 为最后一条 `AssertMotionUnlocked`。
+5. `Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs:1950-1957` —— `CreateTarget` 委托 `QaFixtures.CreateTarget(name, pos, false)` 并保留本地销毁簿记；`:1942` 为 `_players.AddRange(QaFixtures.FindPlayers())`；`Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs:30` 为 `QaScene.GetHead()`。
+
+断言行/证据路径侧的等价性证据不靠人眼：见 B.4 的三份机检 diff 与「断言体逐字节比对」。
+
+## B.4 AC 回填（**仅 B 阶段**，其余 AC 仍是未运行）
+
+| AC | B 阶段结论 | 证据 |
+|---|---|---|
+| **AC-1** | **PASS（REFACTOR）**：`(qaItem, assertion, status)` 排序后逐行一致，`DIFF = (empty)` / `RESULT: IDENTICAL`；BEFORE = AFTER = 16 行，pass 16 / fail 0；`expected` 16 条**逐字符**一致（`RESULT: IDENTICAL (16 assertions, char-by-char)`）。另加独立验证：16 个 `Assert*` 方法体按「`_ev.`→`sink.`、`_players`→`players`、`Dict/V3/StateName/StateNorm/Select/WaitState/GetHead` 加 `QaJson.`/`QaFixtures.`/`QaWait.`/`QaScene.` 前缀」归一化后与迁移前**逐字节相同（15/16）**，第 16 条只差 `new HitCollector()` → `new QaFixtures.HitCollector(200, false)`（B.5 第 1 条） | `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_AssertionIds.txt`、`.../diff_Expected.txt` |
+| **AC-3** | **PASS（REFACTOR）**：文件名集合 5 = 5 一致；Summary 17 键序 order-sensitive 一致（含 `milestone` 在 `task` 之后）；断言行字段序一致（59 个 token，含 `run, milestone, qaItem, …`）；Runs 索引 `milestone, run, pass, …` 一致；全部文件 `BOM=False`；ExitCode 内容 `0 / 0 IDENTICAL`。**唯一值级差异**：`head` 由 `df7ea0b0…`（before，阶段 A 起点）变成 `e7ab53f1…`（after，阶段 A 提交后），`assertionFile` 里的 `editor_run17`→`editor_run18`；两者都是实测值，AC-3 只比对形状 | `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_EvidenceShape.txt`、`.../shape.ps1` |
+| **AC-10** | **PASS（REFACTOR）**：③ `IEnumerator Assert\w+\(IQaSink sink` = **16**（期望 16）；断言体内 `File.` / `Directory.` / `SessionState` / `EditorApplication` / `QaLauncher` / `_Boot` = **0**；体内残留 `_ev` = **none**（16 个方法逐方法花括号扫描）；② `class QaEvidence : IQaSink` = 1、`interface IQaSink` = 1、`QaSink.cs` 违禁 token = 0；⑤ 见 B.7「仍直写文件 / 仍依赖引导的断言 = 无」 | `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt`（文件末尾 `PHASE B` 段，B1–B5） |
+| **AC-2** | **未运行（属阶段 E）**：本阶段只按 TASK §3「阶段 A–D 各跑本套件 1 次」跑 REFACTOR 1 次；四套件连跑 2 次在阶段 E | — |
+| **AC-4** | **未运行（属阶段 E 交付）**：本阶段只做局部自检（`git diff --numstat -- Assets/_Project/Tests` + `git status --porcelain`），完整 `git_scope.txt` 由阶段 E 出；已确认 `Scripts/**` 与资产零改动 | B.6 |
+| **AC-5** | **未运行（阶段 E：`QaTestTemplate.md` 尚未创建）** | — |
+| **AC-6** | **未运行（阶段 E 统一点数）**：本阶段相关项已可预见成立（`class PlayerProbe` 本地定义 = 0、`class HitCollector` 本地定义 = 0、`GetHead(` 本地定义 = 0、`IEnumerator WaitState(` 本地定义 = 0），但 `dedup_counts.txt` 按 TASK 在阶段 E 生成 | `utp_readiness.txt` B3 段（局部计数） |
+| **AC-7** | **未运行（阶段 E：`QaLauncher` 尚未建；`REFACTOR_Boot` 按 TASK 保留）** | — |
+| **AC-9** | **未运行（阶段 E：`Docs/06` 尚未创建）** | — |
+
+## B.5 未合并项及原因（去重纪律要求的“单列”）
+
+1. **`HitCollector` 只合并了“等价那部分”**：本地 `new HitCollector()` 的上限常量是 200 且不带 `element` 字段，`QaFixtures.HitCollector` 是「上限 + 是否带 element」双参数。故改写为 `new QaFixtures.HitCollector(200, false)` —— 逐字段等价（`time/sourceId/state/normalizedTime/amount` 同序，`FilterSource` 语义相同）。**这是 16 条断言里唯一的源码差异**，且不涉及判定表达式。
+2. **宝箱夹具三份未合并**：`AssertChest`（`REFACTOR_Chest`，`openDuration=0.3f`，先 `Chest` 后 `Interactable`）、`AssertSkillInterruptInteract`（`REFACTOR_SkillInterruptChest`，`openDuration=0f`，先 `Interactable` 后 `Chest`）、`AssertInteractionContract`（`REFACTOR_ContractChest`，`openDuration=0f`，`Interactable` 先于 `Chest`）。三者在 `openDuration`、组件添加顺序、挂载位置/数量上**边界不同**，参数化后无法逐分支证明等价，故按要求**留在原处**（仍在各断言体内，不是新增复制）。
+3. **`F(float)` / `V3Text(Vector3)` 保留本地**：`QaJson`/`QaFixtures`/`QaScene` 都没有等价物（`F` 是 `"0.###"` 格式、`V3Text` 是日志用坐标串，而 `QaJson.V3` 产出的是字典）。**不为凑统一把它们塞进公共层**；若阶段 E 认为应下沉，请大脑裁决。
+4. **`_target` / `_chestGo` / `_targetStats` / `_chestItem` 仍是 runner 字段而非断言参数**：它们是“断言内创建、由 `DestroyTarget`/`CleanupFixtures`/`Finish` 统一销毁”的生命周期状态，改成参数需要重排销毁时序（有行为风险）。**夹具侧的“玩家集合”已按要求参数化**（12 条需要玩家的断言都显式收 `IReadOnlyList<QaFixtures.PlayerProbe> players`），其余四条（`Skill.QW`/`Projectile.AimPoint`/`StateFacade`/`Projectile`）自身不依赖玩家集合。若大脑认为目标/宝箱也必须进参数，属额外重构，建议单列一条 TASK。
+5. **`SkillCastFixture.CreateTarget` 仍未合并**（沿用阶段 A 结论）：`maxHp=1000`、固定 `showDamageNumber=false`、结果进 `TargetGo/Target/TargetStats` 参与 `Dispose()`；与 `QaFixtures.CreateTarget(name,pos,showDamageNumber)`（`maxHp=100000`）边界不同。
+6. **`GetHead` 的两种语义仍是同一个方法的两条分支**（沿用阶段 A 结论）：断言/编排侧传 `"REFACTOR.Head"` 走 `SessionState` 缓存（`Play` 模式不再起进程），`BatchAcceptance` 侧不传 key 走真 `git`。`QaScene.GetHead(sessionKey)` 已参数化承载，未二选一。
+
+## B.6 证据清单（本阶段新增，全部为新增文件/追加）
+
+| 文件 | 内容 |
+|---|---|
+| `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/after/` | 迁移后快照（源 `REFACTOR-M4/editor_run18`，5 文件，复制而非移动，canonical 目录未改） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_AssertionIds.txt` | BEFORE / AFTER / DIFF 三段，`DIFF = (empty)`，`RESULT: IDENTICAL` |
+| `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_Expected.txt` | 16 条 `expected` 逐字符比对，`RESULT: IDENTICAL (16 assertions, char-by-char)` |
+| `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_EvidenceShape.txt` | 文件名集合、Summary 17 键序、断言行字段序（含 `milestone`）、Runs 索引序、BOM/CRLF、ExitCode |
+| `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/{compare,expected,shape}.ps1` | 上述三份 diff 的可重跑脚本 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/compile_phaseB.txt` | 首轮 8 条 `CS1503`（现场）+ 修法 + 修后 `error CS = 0` |
+| `Docs/QA/Evidence/QA-REFACTOR-01/editor_state_phaseB.txt` | 开工/编译后/跑前/收工 四次 `editor_state`（`is_compiling`/`is_domain_reload_pending`/`playMode`）与 `editor_run18` 结果 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt` | **追加** `PHASE B` 段（B1–B5 计数），原有 `PHASE A` 段一字未改 |
+| `git diff --numstat -- Assets/_Project/Tests`（本阶段实测） | `29/6 QaEvidence.cs`、`1/29 REFACTOR_BatchAcceptance.cs`、`30/257 REFACTOR_Evidence.cs`、`186/368 REFACTOR_ProbeRunner.cs`；`git status --porcelain -- Assets/_Project/Tests` 只有这 4 个 `M`，无新增/删除、无 `.meta` 变化 |
+
+## B.7 §10 更新（REFACTOR）：仍直写文件 / 仍依赖引导的断言
+
+**结论：无。** REFACTOR 16 条断言全部满足 AC-10 ③：首参 `IQaSink sink`（12 条另收 `IReadOnlyList<QaFixtures.PlayerProbe> players`），体内只经 `sink.Record` / `sink.BlockedAssertion` / `sink.InfraFailure` 出证据；逐方法扫描 `File.` / `Directory.` / `SessionState` / `EditorApplication` / `QaLauncher` / `_Boot` = 0，残留 `_ev` = none。落盘、计分、Summary、Runs 索引全部在 `QaEvidence`（`IQaSink` 实现方），编排层（`Start` / `Update` 看门狗 / `RunSafe` / `Finish`）照旧使用 `SessionState` 与 `EditorApplication`，位置未被搬进断言。
+
+## B.8 目检项（≤3，供所有者）
+
+1. 打开 `Docs/QA/Evidence/QA-REFACTOR-01/REFACTOR/diff_EvidenceShape.txt`，确认 Summary 第 2 键是 `milestone`、断言行前两键是 `run, milestone`。
+2. `git diff -- Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs` 目视确认适配器只剩 spec 组装（无 I/O）；`REFACTOR_ProbeRunner.cs` 里 `REFACTOR_Boot` 仍在 `REFACTOR_BatchAcceptance.cs` 中。
+3. Unity Console 只应有 `[REFACTOR]`/`[REFACTOR][ASSERT]` 日志，无 `error CS`；`Docs/QA/Evidence/REFACTOR-M4/editor_run18/` 为本次只追加产物。
+
+## B.9 建议提交（阶段 B）
+
+```text
+test(qa): REFACTOR 套件迁移到 Qa 公共层（阶段 B，断言零变化）
+
+为什么：把 REFACTOR 里重复的夹具/等待/JSON/场景查询换成唯一共享层、让 16 条断言只经 IQaSink 出证据，
+并用“断言三重集 + expected 逐字符 + 证据形状 + 断言体逐字节比对”机检证明迁移没动断言口径。
+```
+
+（由所有者用 GitHub Desktop 提交；本执行者未做任何 git 写操作。）
+
+## B.10 消耗记录（阶段 B）
+
+- 钱包：`Go 订阅`
+- 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
+- 轮次：1 轮实现 + 1 轮修复（8 处 `CS1503`，额度内）；套件运行 1 次（REFACTOR）。

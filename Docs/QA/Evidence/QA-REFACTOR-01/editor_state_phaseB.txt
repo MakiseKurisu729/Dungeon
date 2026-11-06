@@ -1,0 +1,35 @@
+# QA-REFACTOR-01 phase B - Unity editor state (mode B / MCP)
+
+## open (before any edit)
+observed_at_unix_ms : 1793943600338
+instance_id         : Dungeon@4f5c34c82f31646e
+unity_version       : 2022.3.62f3c1
+is_compiling        : False
+is_domain_reload_pending : False
+play_mode           : is_playing=False is_paused=False is_changing=False
+active_scene        : Assets/Scenes/DungeonWorld.unity
+ready_for_tools     : True
+
+## after code edits (refresh_unity force/all + compile request)
+refresh result      : success=True, refresh_triggered=True, compile_requested=True, resulting_state=idle
+error CS            : 0 (read_console filter_text="error CS" -> 0 entries)
+console leftovers   : "MCP-FOR-UNITY: [WebSocket] Unexpected receive error: WebSocket is not initialised", "Import Error Code:(4)"
+                      (transport/import notices only; no compiler diagnostics)
+
+## before REFACTOR menu run
+is_compiling=False, is_domain_reload_pending=False, play_mode idle, ready_for_tools=True
+
+## run
+menu                : Tools/QA/In-Editor/REFACTOR (execute_menu_item)
+evidence subdir     : REFACTOR-M4/editor_run18
+InEditorResult      : task=REFACTOR code=0 scenario=in-editor
+result              : 16 pass / 0 fail / 0 blocked / 0 infra / 0 observed, assertion lines = 16, exit code 0
+
+## close (after run)
+observed_at_unix_ms : 1793944839039
+instance_id         : Dungeon@4f5c34c82f31646e
+is_compiling        : False
+is_domain_reload_pending : False
+play_mode           : is_playing=False is_paused=False is_changing=False
+active_scene        : Assets/Scenes/DungeonWorld.unity
+ready_for_tools     : True

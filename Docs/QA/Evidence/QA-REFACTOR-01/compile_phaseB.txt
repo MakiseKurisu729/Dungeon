@@ -1,0 +1,26 @@
+# QA-REFACTOR-01 phase B - compile evidence (whole project, Unity 2022.3.62f3c1)
+# method: MCP refresh_unity(mode=force, scope=all, compile=request, wait_for_ready=true) + read_console
+
+## 1. refresh_unity
+{"success":true,"message":"Refresh requested.","data":{"refresh_triggered":true,"compile_requested":true,"resulting_state":"idle"}}
+
+## 2. read_console types=[error] right after the first compile of the edited files
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(311,39): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(372,43): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(576,39): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(649,39): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(971,39): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(1639,43): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(1713,43): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+Assets\_Project\Tests\REFACTOR\Runtime\REFACTOR_ProbeRunner.cs(1739,43): error CS1503: Argument 1: cannot convert from 'QaFixtures.PlayerProbe' to 'UnityEngine.Animator'
+# cause: local WaitState(PlayerProbe,...) was rewritten to QaWait.WaitState(probe,...) but QaWait takes an Animator.
+# fix (round 1 of at most 1): QaWait.WaitState(<probe>.animator, ...) at all 8 call sites; no other change.
+
+## 3. read_console after the fix
+filter_text="error CS" -> 0 entries
+
+## 4. editor_state after the fix
+is_compiling=False, is_domain_reload_pending=False, ready_for_tools=True
+
+## verdict
+error CS count = 0 (whole project compiles; SPEC01 / FND00B06 / DIAG sources untouched and therefore still compile)

@@ -24,6 +24,8 @@ public enum QaSummaryKey
     Observed,
     /// <summary>就地展开 WriteSummary 传入的 extra 字典（插入序），用于套件私有键。</summary>
     Extra,
+    /// <summary>就地展开 <see cref="QaEvidenceSpec.PrefixedFields"/>（插入序），用于 run 之前的前置键。</summary>
+    PrefixedFields,
     ExitReason
 }
 
@@ -78,12 +80,20 @@ public sealed class QaEvidenceSpec
 
     /// <summary>Summary 键序；null = <see cref="QaEvidence.DefaultSummaryFields"/>。</summary>
     public QaSummaryKey[] SummaryFields;
+
+    /// <summary>
+    /// 断言行与 Runs 索引行在 <c>"run"</c> 之前输出的字段（插入序）；Summary 侧由
+    /// <see cref="QaSummaryKey.PrefixedFields"/> 就地展开。null = 不输出（既有套件行为不变）。
+    /// REFACTOR 用它保留 <c>run, milestone, qaItem, …</c> 的现状字段序。
+    /// </summary>
+    public IList<KeyValuePair<string, object>> PrefixedFields;
 }
 
 /// <summary>
 /// 四套守卫共享的证据落盘层：断言 JSONL、计分、Summary、Runs 索引。
 /// 只写 Docs 证据，不修改任何生产资产；不含任何套件名/目录名硬编码。
-/// 断言行字段顺序固定：run, qaItem, assertion, expected, actual, pass, status, kind, timestamp, data。
+/// 断言行字段顺序固定：run, qaItem, assertion, expected, actual, pass, status, kind, timestamp, data；
+/// 套件若声明 <see cref="QaEvidenceSpec.PrefixedFields"/>，则在 run 之后先输出这些字段（REFACTOR 的 milestone）。
 /// </summary>
 public class QaEvidence : IQaSink
 {
@@ -225,10 +235,12 @@ public class QaEvidence : IQaSink
         var pairs = new List<KeyValuePair<string, object>>();
         foreach (var key in _spec.SummaryFields ?? DefaultSummaryFields)
         {
-            if (key == QaSummaryKey.Extra)
+            if (key == QaSummaryKey.Extra || key == QaSummaryKey.PrefixedFields)
             {
-                if (extra == null) continue;
-                foreach (var kv in extra) pairs.Add(new KeyValuePair<string, object>(kv.Key, kv.Value));
+                IEnumerable<KeyValuePair<string, object>> src =
+                    key == QaSummaryKey.Extra ? extra : (IEnumerable<KeyValuePair<string, object>>)_spec.PrefixedFields;
+                if (src == null) continue;
+                foreach (var kv in src) pairs.Add(new KeyValuePair<string, object>(kv.Key, kv.Value));
                 continue;
             }
             pairs.Add(new KeyValuePair<string, object>(KeyName(key), ValueOf(key, scenePath, seed, exitReason)));
@@ -258,6 +270,8 @@ public class QaEvidence : IQaSink
         try
         {
             var line = new Dictionary<string, object>();
+            if (_spec.PrefixedFields != null)
+                foreach (var kv in _spec.PrefixedFields) line[kv.Key] = kv.Value;
             if (Mode != null) line["mode"] = Mode;
             line["run"] = Run;
             line["pass"] = Pass;
@@ -273,12 +287,13 @@ public class QaEvidence : IQaSink
         catch (Exception e) { Debug.LogWarning("[" + LogTag + "] run 索引写入失败: " + e.Message); }
     }
 
-    static string BuildAssertionLine(int run, string qaItem, string assertion, object expected, object actual,
-                                     bool pass, string status, string kind, Dictionary<string, object> data)
+    string BuildAssertionLine(int run, string qaItem, string assertion, object expected, object actual,
+                              bool pass, string status, string kind, Dictionary<string, object> data)
     {
         var sb = new StringBuilder();
         sb.Append("{");
         sb.Append("\"run\":").Append(run).Append(",");
+        AppendPrefixedFields(sb);
         sb.Append("\"qaItem\":").Append(QaJson.Value(qaItem)).Append(",");
         sb.Append("\"assertion\":").Append(QaJson.Value(assertion)).Append(",");
         sb.Append("\"expected\":").Append(QaJson.Value(expected)).Append(",");
@@ -290,6 +305,14 @@ public class QaEvidence : IQaSink
         sb.Append("\"data\":").Append(QaJson.Value(data));
         sb.Append("}");
         return sb.ToString();
+    }
+
+    /// <summary>按插入序把前置字段写成 <c>"key":value,</c>；未声明时不写任何字节。</summary>
+    void AppendPrefixedFields(StringBuilder sb)
+    {
+        if (_spec.PrefixedFields == null) return;
+        foreach (var kv in _spec.PrefixedFields)
+            sb.Append(QaJson.Value(kv.Key)).Append(":").Append(QaJson.Value(kv.Value)).Append(",");
     }
 
     object ValueOf(QaSummaryKey key, string scenePath, int seed, string exitReason)

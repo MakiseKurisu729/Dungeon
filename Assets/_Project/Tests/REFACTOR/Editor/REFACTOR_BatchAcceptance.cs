@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -29,7 +27,7 @@ public static class REFACTOR_BatchAcceptance
 
         try
         {
-            string head = GitHead();
+            string head = QaScene.GetHead();
             SessionState.SetString("REFACTOR.Head", head);
             Debug.Log("[REFACTOR] head=" + head);
 
@@ -50,32 +48,6 @@ public static class REFACTOR_BatchAcceptance
             Debug.LogError("[REFACTOR] launcher failed: " + e);
             if (QA_InEditorMenu.TryFinish("REFACTOR", 3)) return;   // 编辑器内：只记失败，不退 Unity
             EditorApplication.Exit(3);                              // batch：原样
-        }
-    }
-
-    static string GitHead()
-    {
-        try
-        {
-            var psi = new System.Diagnostics.ProcessStartInfo("git", "rev-parse HEAD")
-            {
-                WorkingDirectory = Directory.GetParent(Application.dataPath).FullName,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            using (var p = System.Diagnostics.Process.Start(psi))
-            {
-                string outp = p.StandardOutput.ReadToEnd().Trim();
-                p.WaitForExit(5000);
-                return string.IsNullOrEmpty(outp) ? "unknown" : outp;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning("[REFACTOR] git head read failed: " + e.Message);
-            return "unknown";
         }
     }
 }
