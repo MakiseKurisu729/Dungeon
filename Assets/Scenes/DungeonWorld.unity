@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c953194cbcb38a45ba55e7b8854e168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryPanel: {fileID: 0}
+  inventoryPanel: {fileID: 1013740463}
   statsPanel: {fileID: 0}
   equipPanel: {fileID: 0}
   escMenuPanel: {fileID: 0}
