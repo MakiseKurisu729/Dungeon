@@ -1,0 +1,42 @@
+# AC-2 snapshot: suite=SPEC01 run=run2 source=editor_run44
+captured: 2026-11-06 17:15:19.001
+files   : InEditorResult.txt, SPEC01_Assertions.jsonl, SPEC01_ExitCode_run1.txt, SPEC01_Runs.jsonl, SPEC01_Summary_run1.json
+
+assertionFile: SPEC01_Assertions.jsonl
+lineCount    : 12
+status pass : 12
+qaItems      : Animation.PostCombatAndHit, Attack.DualPathUnified, Clock.MeleeNormalizedWindow, Clock.RangedOneShotPerCycle, Locomotion.AllPlayersMoveParam, Regression.FND02A, Skill.CastSmoke, Skill.CursorHover, Skill.InputWired, Skill.TargetPick, UI.DamageNumberScale, UI.SpawnAnchor
+
+summary      : SPEC01_Summary_run1.json
+  task=SPEC-01
+  mode=green
+  run=1
+  startedAt=2026-11-06 17:14:18.335
+  finishedAt=2026-11-06 17:15:00.225
+  unityVersion=2022.3.62f3c1
+  scene=Assets/Scenes/DungeonWorld.unity
+  randomSeed=20261106
+  assertionFile=D:\unity\Dungeon\Docs\QA\Evidence\SPEC-01\editor_run44\SPEC01_Assertions.jsonl
+  assertionLinesInFile=12
+  pass=12
+  fail=0
+  blocked=0
+  infraFail=0
+  observed=0
+  head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+  enemySourceGuid=18dec5e6af31178468b146e0440bd081
+  enemyPosition=x         y    z
+    -         -    -
+-2.72 0.0833334 15.8
+  fixtureNote=SPEC01_Target_Combat / SPEC01_Target_UI 为运行期内存 UnitHealth，结束前销毁；不写入场景
+  testWroteGameStarted=False
+  exitReason=completed
+
+InEditorResult.txt:
+  task=SPEC01
+  code=0
+  finishedAt=2026-11-06 17:15:00.755
+  unityVersion=2022.3.62f3c1
+  scenario=in-editor
+  evidenceSubdir=editor_run44
+  envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>}

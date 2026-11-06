@@ -326,3 +326,255 @@ result  : PASS
 
 === PHASE D OVERALL ===
 ALL APPLICABLE CHECKS PASS
+
+## PHASE E (unified QaLauncher + all assert signatures) - appended 2026-11-06 17:31:38
+root: D:\unity\Dungeon\Assets\_Project\Tests
+
+## E1. Assert*(IQaSink sink) in SPEC01
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+actual  : 10
+expected: 10
+result  : PASS
+
+   methods: AssertLocomotion, AssertRegressionFND02A, AssertDualPathAndClocks, AssertPostCombatAndHit, AssertDamageNumber, AssertSpawnAnchor, AssertSkillCastSmoke, AssertSkillInputWired, AssertCursorHover, AssertTargetPick
+
+## E1. Assert*(IQaSink sink) in REFACTOR
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+actual  : 16
+expected: 16
+result  : PASS
+
+   methods: AssertPartyMove, AssertMeleeHit, AssertRangedShot, AssertSkillQW, AssertSkillInterruptAttack, AssertHitInterruptSkill, AssertSkillInterruptInteract, AssertProjectileAimPoint, AssertHitInterrupt, AssertKnockdown, AssertRescue, AssertChest, AssertInteractionContract, AssertRegistrySemantics, AssertStateFacade, AssertMotionUnlocked
+
+## E1. Assert*(IQaSink sink) in FND00B06
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+actual  : 14
+expected: 14
+result  : PASS
+
+   methods: AssertAttackFixture, AssertAttackCommandAccepted, AssertAttackApproach, AssertAttackStarts, AssertAttackRepeats, AssertAttackDamageResolved, AssertAttackTargetDeath, AssertAnimationConfigMapping, AssertAnimationIdle, AssertAnimationPostCombatState, AssertAnimationMove, AssertAnimationAttack, AssertAnimationHit, AssertAnimationDownedOrDeath
+
+## E1. Assert*(IQaSink sink) in DIAG
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 7
+expected: 7
+result  : PASS
+
+   methods: AssertController, AssertIndicator, AssertFirstExit, AssertPrefabSlots, AssertQ, AssertW, AssertEmptySlots
+
+NOTE (SPEC01 count): SPEC01 emits 12 assertion rows from 10 Assert* methods;
+AssertDualPathAndClocks emits Attack.DualPathUnified + Clock.MeleeNormalizedWindow + Clock.RangedOneShotPerCycle,
+so 12 assertion IDs vs 10 IEnumerator Assert* signatures. AC-10 wording is "every Assert* takes IQaSink as first
+parameter"; that holds for 10/10 methods. Splitting AssertDualPathAndClocks would restructure judgement code (out of scope).
+
+## E2. forbidden tokens inside SPEC01 Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+## E3. assert bodies still using runner field _ev (SPEC01)
+command : per-method brace scan: grep -E "_ev\." in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (10): AssertCursorHover, AssertDamageNumber, AssertDualPathAndClocks, AssertLocomotion, AssertPostCombatAndHit, AssertRegressionFND02A, AssertSkillCastSmoke, AssertSkillInputWired, AssertSpawnAnchor, AssertTargetPick
+   _ev users: (none)
+   no-sink-call methods: AssertRegressionFND02A
+
+## E2. forbidden tokens inside REFACTOR Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+## E3. assert bodies still using runner field _ev (REFACTOR)
+command : per-method brace scan: grep -E "_ev\." in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (16): AssertChest, AssertHitInterrupt, AssertHitInterruptSkill, AssertInteractionContract, AssertKnockdown, AssertMeleeHit, AssertMotionUnlocked, AssertPartyMove, AssertProjectileAimPoint, AssertRangedShot, AssertRegistrySemantics, AssertRescue, AssertSkillInterruptAttack, AssertSkillInterruptInteract, AssertSkillQW, AssertStateFacade
+   _ev users: (none)
+   no-sink-call methods: (none)
+
+## E2. forbidden tokens inside FND00B06 Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+## E3. assert bodies still using runner field _ev (FND00B06)
+command : per-method brace scan: grep -E "_ev\." in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (14): AssertAnimationAttack, AssertAnimationConfigMapping, AssertAnimationDownedOrDeath, AssertAnimationHit, AssertAnimationIdle, AssertAnimationMove, AssertAnimationPostCombatState, AssertAttackApproach, AssertAttackCommandAccepted, AssertAttackDamageResolved, AssertAttackFixture, AssertAttackRepeats, AssertAttackStarts, AssertAttackTargetDeath
+   _ev users: (none)
+   no-sink-call methods: (none)
+
+## E2. forbidden tokens inside DIAG Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+## E3. assert bodies still using runner field _ev (DIAG)
+command : per-method brace scan: grep -E "_ev\." in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (7): AssertController, AssertEmptySlots, AssertFirstExit, AssertIndicator, AssertPrefabSlots, AssertQ, AssertW
+   _ev users: (none)
+   no-sink-call methods: (none)
+
+## E4a. interface IQaSink defined once
+command : grep -E "interface IQaSink" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E4b. QaSink.cs forbidden tokens
+command : grep -E "File|Directory|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## E4c. IQaSink members (Record/BlockedAssertion/InfraFailure/EvidenceDir) total
+command : grep -E "void Record\(|void BlockedAssertion\(|void InfraFailure\(|string EvidenceDir" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 4
+expected: 4
+result  : PASS
+
+## E4d. IQaSink has no other members
+command : grep -E "^\s+(void|string|int|bool)\s" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 3
+expected: 3
+result  : PASS
+
+## E4e. class QaEvidence : IQaSink
+command : grep -E "class QaEvidence\s*:\s*IQaSink" Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5a. single InitializeOnLoadMethod bootstrap
+command : grep -E "\[InitializeOnLoadMethod\]" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5b. ClearStaleRunFlags definition
+command : grep -E "static bool ClearStaleRunFlags\(" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5c. first-start grace 10s
+command : grep -E "FirstStartGraceSeconds = 10f" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5d. runner-lost grace 3s
+command : grep -E "RunnerLostGraceSeconds = 3f" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5e. watchdog reason literal (code only)
+command : grep -c "runner-lost-domain-reload" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 2
+expected: 2
+result  : PASS
+
+## E5f. RunnerAlive static reference check
+command : grep -E "_runner != null" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5g. RunnerAlive GameObject.Find(name) check
+command : grep -E "GameObject.Find\(name\)" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5h. runner DontDestroyOnLoad
+command : grep -E "DontDestroyOnLoad" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5i. watchdog: TryFinish precedes isPlaying=false/Exit(3)
+command : body scan of WatchdogFail
+actual  : True
+expected: True
+result  : PASS
+
+## E5j. ExitWithCode: TryFinish precedes EditorApplication.Exit(code)
+command : body scan of ExitWithCode
+actual  : True
+expected: True
+result  : PASS
+
+## E5k. no *_Boot left in the launcher
+command : grep -E "\w+_Boot" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## E5l. EnteredEditMode+Finished branch present
+command : grep -E "EnteredEditMode && SessionState.GetBool\(spec.FinishedKey" Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E5m. Begin() writes Active/Started/Finished then EnterPlaymode
+command : body scan of Begin
+actual  : 3
+expected: 3
+result  : PASS
+
+## E6a. menu uses registry Launch() instead of per-suite switch
+command : grep -E "spec\.Launch\(\)" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## E6b. no per-suite Run() switch left in Proceed
+command : grep -E "case \"SPEC01\":" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## E6c. menu items unchanged (4 entries)
+command : grep -E "\[MenuItem\(\"Tools/QA/In-Editor/" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 4
+expected: 4
+result  : PASS
+
+## E6d. subdir increment rule unchanged
+command : grep -E "editor_run" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 4
+expected: 4
+result  : PASS
+
+## E6e. runInBackground record/restore unchanged
+command : grep -E "SessionRunInBackgroundArmedKey" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 4
+expected: 4
+result  : PASS
+
+## E6f. preflight timeout unchanged
+command : grep -E "PreflightTimeoutSeconds = 120" Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+=== PHASE E OVERALL ===
+ALL APPLICABLE CHECKS PASS
+

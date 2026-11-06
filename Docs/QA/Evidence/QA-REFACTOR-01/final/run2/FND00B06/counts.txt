@@ -1,0 +1,36 @@
+# AC-2 snapshot: suite=FND00B06 run=run2 source=editor_run8
+captured: 2026-11-06 17:20:09.228
+files   : 06_Assertions.jsonl, 06_ExitCode_run1.txt, 06_Summary_run1.json, InEditorResult.txt
+
+assertionFile: 06_Assertions.jsonl
+lineCount    : 14
+status observed : 2
+status pass : 12
+qaItems      : 4, 4, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 6
+
+summary      : 06_Summary_run1.json
+  run=1
+  task=FND-00B-06
+  qaItems=4,6
+  startedAt=2026-11-06 17:19:33.176
+  finishedAt=2026-11-06 17:19:46.870
+  unityVersion=2022.3.62f3c1
+  scene=Assets/Scenes/DungeonWorld.unity
+  randomSeed=20261105
+  assertionFile=D:\unity\Dungeon\Docs\QA\Evidence\FND-00B-06\editor_run8\06_Assertions.jsonl
+  assertionLinesInFile=14
+  pass=12
+  fail=0
+  blocked=0
+  infraFail=0
+  observed=2
+  exitReason=completed
+
+InEditorResult.txt:
+  task=FND00B06
+  code=0
+  finishedAt=2026-11-06 17:19:47.347
+  unityVersion=2022.3.62f3c1
+  scenario=in-editor
+  evidenceSubdir=editor_run8
+  envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>}

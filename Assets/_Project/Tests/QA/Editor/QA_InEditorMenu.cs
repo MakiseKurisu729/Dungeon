@@ -10,8 +10,9 @@ using UnityEngine;
 /// 三套既有探针（SPEC01 / FND00B06 / DIAG）的“编辑器内运行”菜单入口。
 /// 只负责驱动：闸门检查 → 设置环境变量与证据子目录 → 调用既有 *_BatchAcceptance.Run()。
 /// 断言、阈值、夹具、场景全部复用既有实现，本类不含任何探针逻辑。
-/// 退出分叉发生在各自 *_Boot.ExitWithCode：编辑器内由 TryFinish 接管（不 Exit），
+/// 退出分叉发生在 QaLauncher.ExitWithCode：编辑器内由 TryFinish 接管（不 Exit），
 /// batch 路径没有 SessionState 标记，仍然原样执行 EditorApplication.Exit(code)。
+/// 套件差异（证据目录、注入的环境变量、入口方法）来自 <see cref="QaLauncher.Specs"/> 注册表。
 /// </summary>
 public static class QA_InEditorMenu
 {
@@ -238,41 +239,29 @@ public static class QA_InEditorMenu
     {
         if (!GateForLaunch(task)) return;
 
+        QaLaunchSpec spec = QaLauncher.Find(task);
+        if (spec == null)
+        {
+            Debug.LogError("[QA][INEDITOR] refuse task=" + task + " reason=unknownTask");
+            ResetFlags();
+            ClearSuiteEnvironment();
+            return;
+        }
+
         SessionState.SetBool(SessionActiveKey, true);
         SessionState.SetString(SessionTaskKey, task);
 
         // 先清掉上一次可能残留的套件变量，再按套件注入，避免跨套件污染。
         ClearSuiteEnvironment();
         // REFACTOR 的里程碑决定证据目录（REFACTOR-M0..M4）：必须在 NextSubdir 之前注入。
-        if (task == "REFACTOR")
-            Environment.SetEnvironmentVariable("REFACTOR_MILESTONE", REFACTOR_BatchAcceptance.DefaultMilestone);
+        if (spec.MilestoneEnvVar != null)
+            Environment.SetEnvironmentVariable(spec.MilestoneEnvVar, spec.DefaultMilestone);
         string subdir = NextSubdir(task);   // editor_run1 / editor_run2 / … 递增，不覆盖历史证据
         Environment.SetEnvironmentVariable(EvidenceSubdirEnv, subdir);
 
-        if (task == "SPEC01")
+        for (int i = 0; i < spec.EnvKeys.Length; i++)
         {
-            Environment.SetEnvironmentVariable("SPEC01_MODE", "green");
-            Environment.SetEnvironmentVariable("SPEC01_RUN", "1");
-        }
-        else if (task == "FND00B06")
-        {
-            Environment.SetEnvironmentVariable("FND00B06_RUN", "1");
-        }
-        else if (task == "DIAG")
-        {
-            Environment.SetEnvironmentVariable("DIAG_MODE", "probe");
-            Environment.SetEnvironmentVariable("DIAG_RUN", "1");
-        }
-        else if (task == "REFACTOR")
-        {
-            Environment.SetEnvironmentVariable("REFACTOR_RUN", "1");
-        }
-        else
-        {
-            Debug.LogError("[QA][INEDITOR] refuse task=" + task + " reason=unknownTask");
-            ResetFlags();
-            ClearSuiteEnvironment();
-            return;
+            Environment.SetEnvironmentVariable(spec.EnvKeys[i], spec.EnvValues[i]);
         }
 
         // 编辑器内无人值守跑探针：失焦时不冻结 Play 帧循环。
@@ -288,21 +277,7 @@ public static class QA_InEditorMenu
 
         try
         {
-            switch (task)
-            {
-                case "SPEC01":
-                    SPEC01_BatchAcceptance.Run();
-                    break;
-                case "FND00B06":
-                    FND00B06_BatchAcceptance.Run();
-                    break;
-                case "REFACTOR":
-                    REFACTOR_BatchAcceptance.Run();
-                    break;
-                default:
-                    DIAG_BatchAcceptance.Run();
-                    break;
-            }
+            spec.Launch();
         }
         catch (Exception e)
         {
@@ -315,7 +290,7 @@ public static class QA_InEditorMenu
     }
 
     /// <summary>
-    /// 编辑器内的收尾钩子：由各套 *_Boot.ExitWithCode 在 EditorApplication.Exit 之前调用。
+    /// 编辑器内的收尾钩子：由 QaLauncher.ExitWithCode 在 EditorApplication.Exit 之前调用。
     /// 返回 true = 编辑器内运行，已写结果文件、打 token、清标记与环境变量，调用方直接 return。
     /// 返回 false = 不是编辑器内运行（batch 路径），调用方保持原有 Exit 行为。
     /// </summary>
@@ -468,21 +443,11 @@ public static class QA_InEditorMenu
 
     static string EvidenceRoot(string task)
     {
-        string folder;
-        if (task == "SPEC01") folder = "SPEC-01";
-        else if (task == "FND00B06") folder = "FND-00B-06";
-        else if (task == "REFACTOR") folder = "REFACTOR-" + RefactorMilestone();
-        else folder = "DIAG-SKILL";
+        QaLaunchSpec spec = QaLauncher.Find(task);
+        string folder = spec != null ? spec.EvidenceFolderName() : "DIAG-SKILL";
 
         string root = Directory.GetParent(Application.dataPath).FullName;
         return Path.Combine(root, "Docs", "QA", "Evidence", folder);
-    }
-
-    /// <summary>REFACTOR 证据目录用的里程碑号：环境变量优先，缺省取套件默认值。</summary>
-    static string RefactorMilestone()
-    {
-        string m = Environment.GetEnvironmentVariable("REFACTOR_MILESTONE");
-        return string.IsNullOrEmpty(m) ? REFACTOR_BatchAcceptance.DefaultMilestone : m.Trim();
     }
 
     /// <summary>

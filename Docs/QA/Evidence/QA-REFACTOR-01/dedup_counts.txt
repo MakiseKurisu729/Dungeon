@@ -1,0 +1,166 @@
+# QA-REFACTOR-01 phase E - AC-6 dedup counts (grep command + actual + expected)
+generated: 2026-11-06 17:22:44
+scope   : Assets/_Project/Tests/QA/** + SPEC01/** + REFACTOR/** + DIAG/** + FND00B/FND00B06*
+excluded: Tests/FND00B/FND00B04* , FND00B05* , Tests/FND02A/** (out of scope per TASK AC-6)
+
+files in scope: 21
+  Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+  Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+  Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+  Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+  Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+  Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+  Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+  Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+  Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+  Assets/_Project/Tests/QA/Runtime/QaFixtures.cs
+  Assets/_Project/Tests/QA/Runtime/QaJson.cs
+  Assets/_Project/Tests/QA/Runtime/QaScene.cs
+  Assets/_Project/Tests/QA/Runtime/QaSink.cs
+  Assets/_Project/Tests/QA/Runtime/QaWait.cs
+  Assets/_Project/Tests/QA/Runtime/SkillCastFixture.cs
+  Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+  Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs
+  Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+  Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+  Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+  Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+
+## 1. class *_Boot (four launcher classes removed)
+command : grep -R -E "class \w+_Boot\b" <scope>
+actual  : 0
+expected: 0
+result  : PASS
+
+   note: looser pattern "class .*_Boot" also matches the runtime hook(s): Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs x1
+
+## 2. class *_Json (replaced by QaJson)
+command : grep -R -E "class \w+_Json\b" <scope>
+actual  : 0
+expected: 0
+result  : PASS
+
+## 3. class PlayerProbe (single definition in QaFixtures)
+command : grep -R -E "class PlayerProbe" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Runtime/QaFixtures.cs x1
+
+## 4. class HitCollector (single definition in QaFixtures)
+command : grep -R -E "class HitCollector" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Runtime/QaFixtures.cs x1
+
+## 5. static Dictionary<string, object> Dict( definition
+command : grep -R -E "static Dictionary<string, object> Dict\(" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Runtime/QaJson.cs x1
+
+## 6. IEnumerator WaitState( definition
+command : grep -R -E "IEnumerator WaitState\(" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Runtime/QaWait.cs x1
+
+## 7. static string GetHead( definition
+command : grep -R -E "static string GetHead\(" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Runtime/QaScene.cs x1
+
+## 8a. "Docs", "QA", "Evidence" occurrences in scope
+command : grep -R -F """Docs"", ""QA"", ""Evidence""" <scope>
+actual  : 2
+expected: 2
+result  : PASS
+
+   where: Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs x1, Assets/_Project/Tests/QA/Runtime/QaEvidence.cs x1
+
+## 8b. same literal outside QaEvidence.cs / QA_InEditorMenu.cs
+command : grep -R -F literal <scope> | grep -v -E "QaEvidence.cs|QA_InEditorMenu.cs"
+actual  : 0
+expected: 0
+result  : PASS
+
+## 9.1a. SPEC01/Runtime/SPEC01_Evidence.cs line count (<= 40)
+command : wc -l Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs  # measured 32
+actual  : True
+expected: True
+result  : PASS
+
+## 9.1b. SPEC01/Runtime/SPEC01_Evidence.cs I/O tokens (File./Directory.)
+command : grep -E "File\.|Directory\." Assets/_Project/Tests/SPEC01/Runtime/SPEC01_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 9.2a. REFACTOR/Runtime/REFACTOR_Evidence.cs line count (<= 40)
+command : wc -l Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs  # measured 38
+actual  : True
+expected: True
+result  : PASS
+
+## 9.2b. REFACTOR/Runtime/REFACTOR_Evidence.cs I/O tokens (File./Directory.)
+command : grep -E "File\.|Directory\." Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 9.3a. FND00B/Runtime/FND00B06_Evidence.cs line count (<= 40)
+command : wc -l Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs  # measured 33
+actual  : True
+expected: True
+result  : PASS
+
+## 9.3b. FND00B/Runtime/FND00B06_Evidence.cs I/O tokens (File./Directory.)
+command : grep -E "File\.|Directory\." Assets/_Project/Tests/FND00B/Runtime/FND00B06_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 9.4a. DIAG/Runtime/DIAG_Evidence.cs line count (<= 40)
+command : wc -l Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs  # measured 34
+actual  : True
+expected: True
+result  : PASS
+
+## 9.4b. DIAG/Runtime/DIAG_Evidence.cs I/O tokens (File./Directory.)
+command : grep -E "File\.|Directory\." Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## 10a. class QaLauncher (single definition)
+command : grep -R -E "class QaLauncher\b" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+## 10b. class QaLaunchSpec (single definition)
+command : grep -R -E "class QaLaunchSpec\b" <scope>
+actual  : 1
+expected: 1
+result  : PASS
+
+## 11. line counts (reference only; NOT a pass criterion per AC-6)
+command : sum of line counts over scope files
+before  : 8209 lines (phase A baseline, recorded in TASK AC revision)
+phaseD  : 8929 lines (recorded at end of phase D)
+after   : 8582 lines (phase E; QaLauncher merged 4 boot classes)
+result  : INFO
+
+=== OVERALL ===
+ALL CHECKS PASS
+

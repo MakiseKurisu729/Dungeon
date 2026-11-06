@@ -1,0 +1,143 @@
+# AC-4 git scope (phase E), raw command output
+generated: 2026-11-06 17:45:25
+
+## 0. baseline HEAD
+$ git rev-parse --short HEAD
+5df13b1a
+
+## 1. git status --porcelain (note: entries for .gitattributes/.gitignore/AGENTS.md/.editorconfig/Docs/07/workflow-rules/DOC-INFRA-01/OPS-01 are the OWNER's pre-existing DOC-INFRA-01 work, not this task)
+$ git -c core.quotepath=false status --porcelain
+ M .gitattributes
+ M .gitignore
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+ M Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+ M Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+ M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+ M Docs/01_总体架构与内容生产规范.md
+ M Docs/Handoff/REPORT_QA-REFACTOR-01.md
+ M Docs/Handoff/TASK_QA-REFACTOR-01.md
+ M Docs/Handoff/workflow-rules.md
+ M Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt
+?? .editorconfig
+?? Assets/_Project/Tests/QA/Editor/QaLauncher.cs
+?? Assets/_Project/Tests/QA/Editor/QaLauncher.cs.meta
+?? Assets/_Project/Tests/QaTestTemplate.md
+?? Assets/_Project/Tests/QaTestTemplate.md.meta
+?? Docs/06_测试架构与验收分层.md
+?? Docs/07_工程规范与基础设施.md
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run10/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run11/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run7/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run8/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run9/
+?? Docs/QA/Evidence/DOC-INFRA-01/
+?? Docs/QA/Evidence/FND-00B-06/editor_run7/
+?? Docs/QA/Evidence/FND-00B-06/editor_run8/
+?? Docs/QA/Evidence/OPS-01/
+?? Docs/QA/Evidence/QA-REFACTOR-01/capture_final.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_ac1.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_compile.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_gitscope.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/collect_l2.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/compile.log
+?? Docs/QA/Evidence/QA-REFACTOR-01/dedup_counts.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/dedup_counts_phaseE.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/final/
+?? Docs/QA/Evidence/QA-REFACTOR-01/git_scope.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/l2_domainreload/
+?? Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness_phaseE.ps1
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run19/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run20/
+?? Docs/QA/Evidence/SPEC-01/editor_run43/
+?? Docs/QA/Evidence/SPEC-01/editor_run44/
+
+## 2. git diff --stat
+$ git -c core.quotepath=false diff --stat
+ .gitattributes                                     |   5 +
+ .gitignore                                         |   6 +-
+ AGENTS.md                                          |   1 +
+ Assembly-CSharp-Editor.csproj                      | 446 ++++++++++----------
+ Assembly-CSharp.csproj                             | 457 +++++++++++----------
+ .../Tests/DIAG/Editor/DIAG_BatchAcceptance.cs      | 176 +-------
+ .../FND00B/Editor/FND00B06_BatchAcceptance.cs      | 185 +--------
+ Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs |  73 +---
+ .../REFACTOR/Editor/REFACTOR_BatchAcceptance.cs    | 178 +-------
+ .../Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs  | 189 +--------
+ .../Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs     |  88 ++--
+ Docs/01_总体架构与内容生产规范.md                  |   5 +
+ Docs/Handoff/REPORT_QA-REFACTOR-01.md              | 173 ++++++++
+ Docs/Handoff/TASK_QA-REFACTOR-01.md                |   8 +-
+ Docs/Handoff/workflow-rules.md                     |   7 +
+ Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt  | 252 ++++++++++++
+ 16 files changed, 1014 insertions(+), 1235 deletions(-)
+
+## 3. git diff --numstat -- Docs/01 (baseline = working-tree content at phase-E start, which already contained the owner's DOC-INFRA-01 edits)
+$ git -c core.quotepath=false diff --numstat -- Docs/01_*.md
+5	0	Docs/01_总体架构与内容生产规范.md
+
+reading of the numstat: total 5 added / 0 removed = 1 line of THIS task (section 14.1 pointer) + 4 lines of the
+owner's pre-existing DOC-INFRA-01 edit (section 14.4 block). This task's contribution is the single hunk below.
+baseline note: at phase-E start (before any edit of this phase) `git status --porcelain` already reported
+` M Docs/01_*.md`, i.e. the 4 lines of DOC-INFRA-01 were already in the working tree and were not touched here.
+
+## 4. git diff -U0 -- Docs/01 (hunk list: exactly one hunk is this task)
+$ git -c core.quotepath=false diff -U0 -- Docs/01_*.md
+diff --git a/Docs/01_总体架构与内容生产规范.md b/Docs/01_总体架构与内容生产规范.md
+index dda2f7ad..58d19f8d 100644
+--- a/Docs/01_总体架构与内容生产规范.md
++++ b/Docs/01_总体架构与内容生产规范.md
+@@ -511,0 +512 @@ Unit_Base
++- 分层、套件契约、断言 ID 规范与证据 schema：见 `Docs/06_测试架构与验收分层.md`。
+@@ -520,0 +522,4 @@ Unit_Base
++### 14.4 工程规范与基础设施
++
++工程规范与基础设施清单（.editorconfig、YAMLMerge、asmdef、存档、CI 等缺口与排期）见 `Docs/07_工程规范与基础设施.md`；本节只定验收门槛，不复述工具选型。
++
+
+## 5. git diff --stat -- Assets/_Project/Scripts (must be empty)
+$ git diff --stat -- Assets/_Project/Scripts
+<empty output>
+
+## 6. tracked changes by area
+$ git -c core.quotepath=false diff --name-only -- Assets/_Project/Tests Docs Assets/_Project/Scripts
+Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs
+Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs
+Assets/_Project/Tests/REFACTOR/Editor/REFACTOR_BatchAcceptance.cs
+Assets/_Project/Tests/SPEC01/Editor/SPEC01_BatchAcceptance.cs
+Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+Docs/01_总体架构与内容生产规范.md
+Docs/Handoff/REPORT_QA-REFACTOR-01.md
+Docs/Handoff/TASK_QA-REFACTOR-01.md
+Docs/Handoff/workflow-rules.md
+Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt
+
+## 7. untracked paths added by this task (new files)
+Assets/_Project/Tests/QA/Editor/QaLauncher.cs (+ .meta generated by Unity)
+Assets/_Project/Tests/QaTestTemplate.md (+ .meta generated by Unity)
+Docs/06_*.md (+ .meta generated by Unity)
+Docs/QA/Evidence/QA-REFACTOR-01/final/run1|run2/** (AC-2 snapshots, 8 runs)
+Docs/QA/Evidence/QA-REFACTOR-01/l2_domainreload/** (AC-7 L2 attempt)
+Docs/QA/Evidence/QA-REFACTOR-01/{dedup_counts.txt,compile.log,git_scope.txt,utp_readiness*.ps1,capture_final.ps1,collect_compile.ps1}
+Docs/QA/Evidence/QA-REFACTOR-01/{SPEC01,REFACTOR,FND00B06,DIAG}/** (phase A-D evidence, only appended by earlier phases)
+
+## 8. canonical suite evidence: only appended (new editor_runN subdirs created by the menu)
+$ git -c core.quotepath=false status --porcelain -- Docs/QA/Evidence/SPEC-01 Docs/QA/Evidence/REFACTOR-M4 Docs/QA/Evidence/FND-00B-06 Docs/QA/Evidence/DIAG-SKILL
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run10/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run11/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run7/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run8/
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run9/
+?? Docs/QA/Evidence/FND-00B-06/editor_run7/
+?? Docs/QA/Evidence/FND-00B-06/editor_run8/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run19/
+?? Docs/QA/Evidence/REFACTOR-M4/editor_run20/
+?? Docs/QA/Evidence/SPEC-01/editor_run43/
+?? Docs/QA/Evidence/SPEC-01/editor_run44/
+(untracked ?? entries = new editor_runN folders; no modification/deletion of existing evidence files)
+

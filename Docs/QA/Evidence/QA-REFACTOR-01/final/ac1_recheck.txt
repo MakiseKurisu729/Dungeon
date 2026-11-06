@@ -1,0 +1,32 @@
+# AC-1 phase-E recheck: phase-A/D "after" run vs phase-E final run1
+# Compares (qaItem, assertion, status, pass) tuple multisets and the expected literal per row.
+generated: 2026-11-06 17:41:47
+
+## SPEC01
+old: Docs\QA\Evidence\QA-REFACTOR-01\SPEC01\after\SPEC01_Assertions.jsonl
+new: Docs\QA\Evidence\QA-REFACTOR-01\final\run1\SPEC01\SPEC01_Assertions.jsonl
+rows old=12 new=12
+tuple multiset: IDENTICAL
+expected literals: IDENTICAL
+
+## REFACTOR
+old: Docs\QA\Evidence\QA-REFACTOR-01\REFACTOR\after\REFACTOR_Assertions.jsonl
+new: Docs\QA\Evidence\QA-REFACTOR-01\final\run1\REFACTOR\REFACTOR_Assertions.jsonl
+rows old=16 new=16
+tuple multiset: IDENTICAL
+expected literals: IDENTICAL
+
+## FND00B06
+old: Docs\QA\Evidence\QA-REFACTOR-01\FND00B06\after\06_Assertions.jsonl
+new: Docs\QA\Evidence\QA-REFACTOR-01\final\run1\FND00B06\06_Assertions.jsonl
+rows old=14 new=14
+tuple multiset: IDENTICAL
+expected literals: IDENTICAL
+
+## DIAG
+old: Docs\QA\Evidence\QA-REFACTOR-01\DIAG\after\DIAG_Assertions.jsonl
+new: Docs\QA\Evidence\QA-REFACTOR-01\final\run1\DIAG\DIAG_Assertions.jsonl
+rows old=7 new=7
+tuple multiset: IDENTICAL
+expected literals: IDENTICAL
+

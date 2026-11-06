@@ -142,16 +142,16 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                 "找到玩家数=" + _players.Count, Dict("players", _players.Select(p => p.name).ToList()));
         }
 
-        yield return RunSafe("Locomotion.AllPlayersMoveParam", AssertLocomotion());
-        yield return RunSafe("Regression.FND02A", AssertRegressionFND02A());
-        yield return RunSafe("Attack.DualPathUnified", AssertDualPathAndClocks());
-        yield return RunSafe("Animation.PostCombatAndHit", AssertPostCombatAndHit());
-        yield return RunSafe("UI.DamageNumberScale", AssertDamageNumber());
+        yield return RunSafe("Locomotion.AllPlayersMoveParam", AssertLocomotion(_ev));
+        yield return RunSafe("Regression.FND02A", AssertRegressionFND02A(_ev));
+        yield return RunSafe("Attack.DualPathUnified", AssertDualPathAndClocks(_ev));
+        yield return RunSafe("Animation.PostCombatAndHit", AssertPostCombatAndHit(_ev));
+        yield return RunSafe("UI.DamageNumberScale", AssertDamageNumber(_ev));
         yield return RunSafe("UI.SpawnAnchor", AssertSpawnAnchor(_ev));
-        yield return RunSafe("Skill.CastSmoke", AssertSkillCastSmoke());
-        yield return RunSafe("Skill.InputWired", AssertSkillInputWired());
-        yield return RunSafe("Skill.CursorHover", AssertCursorHover());
-        yield return RunSafe("Skill.TargetPick", AssertTargetPick());
+        yield return RunSafe("Skill.CastSmoke", AssertSkillCastSmoke(_ev));
+        yield return RunSafe("Skill.InputWired", AssertSkillInputWired(_ev));
+        yield return RunSafe("Skill.CursorHover", AssertCursorHover(_ev));
+        yield return RunSafe("Skill.TargetPick", AssertTargetPick(_ev));
 
         RecordRegressionFinal();
         CleanupFixtures();
@@ -190,7 +190,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 1. Locomotion.AllPlayersMoveParam（1D / SpeedZ / 阈值 0,4）
     // ============================================================
-    IEnumerator AssertLocomotion()
+    IEnumerator AssertLocomotion(IQaSink sink)
     {
         var data = Dict(
             "entry", "SelectionManager.SingleSelect(Selectable) → ForEachSelectedBrain(b => b.CommandMove(Vector3))（与右键移动同一生产方法）",
@@ -329,7 +329,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         data["players"] = playerRows;
 
         bool pass = allPlayers && allMove && controllerPass;
-        _ev.Record("Locomotion.AllPlayersMoveParam", "Locomotion.AllPlayersMoveParam",
+        sink.Record("Locomotion.AllPlayersMoveParam", "Locomotion.AllPlayersMoveParam",
             "三角色经生产移动命令移动时处于 Locomotion，SpeedZ 随实际速度非零变化，停稳归零；控制器 Locomotion 状态名精确、混合树为 1D、参数 SpeedZ、阈值 0/4",
             "playersPass=" + allMove + "; controllerPass=" + controllerPass +
             "; stateNameExact=" + stateNameExact + "; blend1D=" + blend1D +
@@ -358,7 +358,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 2. Regression.FND02A（场景实际位置基线 + 相对接近）
     // ============================================================
-    IEnumerator AssertRegressionFND02A()
+    IEnumerator AssertRegressionFND02A(IQaSink sink)
     {
         _gameStarted = GameFlow.GameStarted;
         _enemy = FindRealEnemy();
@@ -463,11 +463,11 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 3+4+5. Attack.DualPathUnified / Clock.*
     // ============================================================
-    IEnumerator AssertDualPathAndClocks()
+    IEnumerator AssertDualPathAndClocks(IQaSink sink)
     {
         if (_players.Count != 3)
         {
-            _ev.BlockedAssertion("Attack.DualPathUnified", "Attack.DualPathUnified",
+            sink.BlockedAssertion("Attack.DualPathUnified", "Attack.DualPathUnified",
                 "三角色均能进入攻击状态", "玩家数量不足", null);
             yield break;
         }
@@ -475,7 +475,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         _target = CreateTarget("SPEC01_Target_Combat", new Vector3(0f, 0f, -4f), false);
         if (_target == null)
         {
-            _ev.InfraFailure("Attack.DualPathUnified", "Attack.DualPathUnified", "夹具创建失败", "");
+            sink.InfraFailure("Attack.DualPathUnified", "Attack.DualPathUnified", "夹具创建失败", "");
             yield break;
         }
         var targetHealth = _target.GetComponent<UnitHealth>();
@@ -650,7 +650,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
 
         bool dualPass = designatedPass && autoPass && swordFieldsOk && rangedTriggerOk;
-        _ev.Record("Attack.DualPathUnified", "Attack.DualPathUnified",
+        sink.Record("Attack.DualPathUnified", "Attack.DualPathUnified",
             "CommandAttack 与 Aggro 自动索敌两条路径：骑士命中瞬间处于 AttackMelee（单段，状态名=触发器名），弓/法发射瞬间处于 Attack_Release；远程触发器为 AttackRange；不存在 Locomotion 出伤/出射",
             "designatedPass=" + designatedPass + "; autoPass=" + autoPass +
             "; swordFieldsOk=" + swordFieldsOk + "; rangedTriggerOk=" + rangedTriggerOk +
@@ -688,7 +688,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                            Mathf.Abs(melee.hitEvents.Count - melee.meleeEntries) <= 1;
             bool fieldOk = swordTrigger == AttackMelee && swordHitState == AttackMelee;
             meleePass = countOk && speedOk && fieldOk;
-            _ev.Record("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
+            sink.Record("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
                 "骑士命中由 layer 0 AttackMelee.normalizedTime 的 [activeStart, activeEnd] 窗口驱动；单周期恰 1 次；触发器/命中状态名均为 AttackMelee；AttackSpeed 参数等于 stats.attackSpeed",
                 "hits=" + melee.hitEvents.Count + "; inWindow=" + inWindow +
                 "; meleeEntries=" + melee.meleeEntries +
@@ -705,7 +705,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
         else
         {
-            _ev.BlockedAssertion("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
+            sink.BlockedAssertion("Clock.MeleeNormalizedWindow", "Clock.MeleeNormalizedWindow",
                 "骑士近战时钟", "未找到 MeleeCombat 玩家", null);
         }
 
@@ -778,7 +778,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
                 "countOk", countOk, "fireStateOk", fireStateOk, "fireWindowOk", fireWindowOk,
                 "intervalOk", intervalOk, "latencyOk", latencyOk, "speedOk", speedOk, "pass", pass));
         }
-        _ev.Record("Clock.RangedOneShotPerCycle", "Clock.RangedOneShotPerCycle",
+        sink.Record("Clock.RangedOneShotPerCycle", "Clock.RangedOneShotPerCycle",
             "弓手/法师单个攻击动画周期恰发射 1 次；发射瞬间处于 Attack_Release 的可调 normalizedTime 窗口；法师下令到首次出手符合攻速周期",
             "rangedPass=" + rangedPass,
             rangedPass, rangedPass ? "pass" : "product_fail", "production",
@@ -789,7 +789,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 6. Animation.PostCombatAndHit（不变）
     // ============================================================
-    IEnumerator AssertPostCombatAndHit()
+    IEnumerator AssertPostCombatAndHit(IQaSink sink)
     {
         DestroyTarget();
         float t = 0f;
@@ -839,7 +839,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
 
         bool pass = allLoco && hitPass && hpBefore >= 0f && Mathf.Abs(hpAfter - (hpBefore - 5f)) < 0.01f && onHitCount == 1;
-        _ev.Record("Animation.PostCombatAndHit", "Animation.PostCombatAndHit",
+        sink.Record("Animation.PostCombatAndHit", "Animation.PostCombatAndHit",
             "目标销毁后限定时间内三角色回到 Locomotion；玩家经生产 UnitHealth.ApplyDamage 受非致命伤害后进入 Hit_A",
             "allLocomotion=" + allLoco + "; settle=" + F(settleTime) + "s" +
             "; hitState=" + hitState + "; hp=" + F(hpBefore) + "→" + F(hpAfter) +
@@ -864,12 +864,12 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     // ============================================================
     // 7. UI.DamageNumberScale（共享 Overlay 画布 + 伤害分档字号 + 池复用）
     // ============================================================
-    IEnumerator AssertDamageNumber()
+    IEnumerator AssertDamageNumber(IQaSink sink)
     {
         var cf = FindFirstObjectByType<CombatFeedback>();
         if (cf == null)
         {
-            _ev.BlockedAssertion("UI.DamageNumberScale", "UI.DamageNumberScale",
+            sink.BlockedAssertion("UI.DamageNumberScale", "UI.DamageNumberScale",
                 "伤害飘字共享 Overlay 画布与伤害分档", "场景中未找到 CombatFeedback", null);
             yield break;
         }
@@ -877,7 +877,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         var fixture = CreateTarget("SPEC01_Target_UI", new Vector3(0f, 0f, -4f), true);
         if (fixture == null)
         {
-            _ev.InfraFailure("UI.DamageNumberScale", "UI.DamageNumberScale", "飘字夹具创建失败", "");
+            sink.InfraFailure("UI.DamageNumberScale", "UI.DamageNumberScale", "飘字夹具创建失败", "");
             yield break;
         }
         var fh = fixture.GetComponent<UnitHealth>();
@@ -972,7 +972,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         foreach (var p in _players) if (p.brain != null) p.brain.enabled = true;
         if (fixture != null) Destroy(fixture);
 
-        _ev.Record("UI.DamageNumberScale", "UI.DamageNumberScale",
+        sink.Record("UI.DamageNumberScale", "UI.DamageNumberScale",
             "单个共享 Screen Space-Overlay 画布（唯一、不随伤害新增）；字号随伤害分档（5→1.5x、200→5x 钳制）；Text raycastTarget=false；连续 40 次 Show 活跃/总实例 ≤ 32",
             "sharedOk=" + sharedOk + "; namedCanvasCount=" + namedCanvasCount +
             "; overlayBeforeStress=" + overlayBeforeStress + "; overlayAfterStress=" + overlayAfterStress +
@@ -1144,20 +1144,20 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     /// 口径（SPEC-DIAG-SKILL-2）：①失败施放不扣蓝/不写冷却 ②Q 行为不变（防 Bash 回归）
     /// ③W 效果类型为 HeavySlashEffect ④E/R 复核"空槽=设计内静默"契约。四条全过于算 pass。
     /// </summary>
-    IEnumerator AssertSkillCastSmoke()
+    IEnumerator AssertSkillCastSmoke(IQaSink sink)
     {
         SkillCastFixture fx = null;
         try { fx = SkillCastFixture.Create(SkillFixturePos, true); }
         catch (Exception e)
         {
-            _ev.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建抛异常: " + e.Message, e.StackTrace);
+            sink.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建抛异常: " + e.Message, e.StackTrace);
             yield break;
         }
         if (fx == null || !string.IsNullOrEmpty(fx.Error))
         {
             string err = fx != null ? fx.Error : "null";
             if (fx != null) fx.Dispose();
-            _ev.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建失败: " + err, "");
+            sink.InfraFailure("Skill.CastSmoke", "Skill.CastSmoke", "夹具创建失败: " + err, "");
             yield break;
         }
 
@@ -1178,7 +1178,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             prepState = fx.PrepareState;
             if (!fx.PrepareLocomotion)
             {
-                _ev.BlockedAssertion("Skill.CastSmoke", "Skill.CastSmoke",
+                sink.BlockedAssertion("Skill.CastSmoke", "Skill.CastSmoke",
                     Dict("expected", "失败施放不扣蓝 + Q/W 效果链执行 + E/R 空槽静默"),
                     "夹具未能进入 Locomotion（preState=" + prepState + "）",
                     Dict("prepareState", prepState, "preparePhase", fx.PreparePhase));
@@ -1230,7 +1230,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             failed.slotName, q.slotName, w.slotName, e2.slotName, r2.slotName
         };
 
-        _ev.Record("Skill.CastSmoke", "Skill.CastSmoke",
+        sink.Record("Skill.CastSmoke", "Skill.CastSmoke",
             Dict("失败施放", "Cast(0,null) false；manaDelta=0；CdRemaining=0；无异常",
                  "Q", "Cast(0,enemy) true；effectType=BashEffect；蓝-20；CD>0≈6；命中帧后靶掉血=GetRawDamage；≤0.5s 进入 Q_1",
                  "W", "Cast(1,null) true；effectType=HeavySlashEffect；蓝-30；CD>0；_timer>=0；≤0.5s 进入 W_1",
@@ -1280,7 +1280,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     /// 且 indicator 指向场景 SkillIndicator、skillKeys = Q/W/E/R。
     /// 当前场景缺组件 → 如实记 product_fail（不得改写为 blocked/observed）。
     /// </summary>
-    IEnumerator AssertSkillInputWired()
+    IEnumerator AssertSkillInputWired(IQaSink sink)
     {
         yield return null;
         var ctrls = FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
@@ -1311,7 +1311,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
 
         bool pass = controllerCount == 1 && refOk && keysOk;
-        _ev.Record("Skill.InputWired", "Skill.InputWired",
+        sink.Record("Skill.InputWired", "Skill.InputWired",
             Dict("controllerCount", 1, "indicatorPointsToSceneIndicator", true, "skillKeys", "Q,W,E,R"),
             Dict("controllerCount", controllerCount, "indicatorPointsToSceneIndicator", refOk,
                  "indicator", indicatorName, "skillKeys", keys, "indicatorCount", inds.Length),
@@ -1345,19 +1345,19 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     /// 这里用合成射线（相机 → 敌人胸口）直接验证分类函数，不使用 WorldToScreenPoint（敌人可能不在视锥）。
     /// 瞄准态早退的移除属视觉行为，由 AC-4 人工目检覆盖；本断言只认纯函数返回值。
     /// </summary>
-    IEnumerator AssertCursorHover()
+    IEnumerator AssertCursorHover(IQaSink sink)
     {
         const string AssertionId = "Skill.CursorHover";
         Camera cam = Camera.main;
         if (cam == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
+            sink.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
             yield break;
         }
         var manager = CursorManager.instance;
         if (manager == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "CursorManager.instance 为空（场景未装配光标管理器）", "");
+            sink.InfraFailure(AssertionId, AssertionId, "CursorManager.instance 为空（场景未装配光标管理器）", "");
             yield break;
         }
 
@@ -1365,7 +1365,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             cam.transform.position + cam.transform.forward * 6f, false);
         if (fixture == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "瞄准指针夹具创建失败", "");
+            sink.InfraFailure(AssertionId, AssertionId, "瞄准指针夹具创建失败", "");
             yield break;
         }
         var fh = fixture.GetComponent<UnitHealth>();
@@ -1398,7 +1398,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             }
             catch (Exception e)
             {
-                _ev.InfraFailure(AssertionId, AssertionId,
+                sink.InfraFailure(AssertionId, AssertionId,
                     "ResolveHover 反射调用抛异常: " + e.Message, e.StackTrace);
                 Destroy(fixture);
                 DestroyTarget();
@@ -1410,7 +1410,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         bool enemyIsFixture = hoverEnemy != null && hoverEnemy == fh;
         bool pass = apiPresent && hover == "Attack" && enemyIsFixture;
 
-        _ev.Record(AssertionId, AssertionId,
+        sink.Record(AssertionId, AssertionId,
             "给定瞄准态与一条从相机指向敌人胸口的合成射线，ResolveHover(ray) 返回 Hover.Attack 且命中敌人就是该敌人",
             "apiPresent=" + apiPresent + "; hover=" + hover +
             "; enemy=" + (hoverEnemy != null ? hoverEnemy.name : "none") +
@@ -1453,19 +1453,19 @@ public class SPEC01_ProbeRunner : MonoBehaviour
     /// 瞄准态在 batchmode 下无法稳定保持（无键盘输入、每帧会因空槽取消），
     /// 故只验证纯查询函数本身；PendingRange 如实记录（非瞄准态为 0）。
     /// </summary>
-    IEnumerator AssertTargetPick()
+    IEnumerator AssertTargetPick(IQaSink sink)
     {
         const string AssertionId = "Skill.TargetPick";
         Camera cam = Camera.main;
         if (cam == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
+            sink.InfraFailure(AssertionId, AssertionId, "Camera.main 为空，无法构造合成射线", "");
             yield break;
         }
         var input = SkillInputController.instance;
         if (input == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "SkillInputController.instance 为空（场景未装配技能输入）", "");
+            sink.InfraFailure(AssertionId, AssertionId, "SkillInputController.instance 为空（场景未装配技能输入）", "");
             yield break;
         }
 
@@ -1473,7 +1473,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
             cam.transform.position + cam.transform.forward * 6f + cam.transform.right * 1.5f, false);
         if (fixture == null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId, "点击选敌夹具创建失败", "");
+            sink.InfraFailure(AssertionId, AssertionId, "点击选敌夹具创建失败", "");
             yield break;
         }
         var fh = fixture.GetComponent<UnitHealth>();
@@ -1493,7 +1493,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         }
         if (invokeError != null)
         {
-            _ev.InfraFailure(AssertionId, AssertionId,
+            sink.InfraFailure(AssertionId, AssertionId,
                 "PickEnemyFromRay 反射调用抛异常: " + invokeError.Message, invokeError.StackTrace);
             Destroy(fixture);
             DestroyTarget();
@@ -1506,7 +1506,7 @@ public class SPEC01_ProbeRunner : MonoBehaviour
         bool pickedIsFixture = picked != null && picked == fh;
         bool pass = apiPresent && pickedIsFixture && picked.team == Team.Monster && !picked.dead;
 
-        _ev.Record(AssertionId, AssertionId,
+        sink.Record(AssertionId, AssertionId,
             "给定同一条指向敌人胸口的合成射线，PickEnemyFromRay(ray) 返回该敌人的 UnitHealth（team=Monster、存活）",
             "apiPresent=" + apiPresent +
             "; picked=" + (picked != null ? picked.name : "none") +

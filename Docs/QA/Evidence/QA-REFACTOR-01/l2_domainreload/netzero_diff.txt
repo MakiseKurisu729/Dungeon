@@ -1,0 +1,19 @@
+# AC-7 L2 net-zero proof: the test script touched during the injections is byte-identical to HEAD
+generated: 2026-11-06 17:46:18
+file: Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+
+## git diff --exit-code (empty / exit 0 = no difference)
+$ git -c core.quotepath=false diff --exit-code -- Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+<empty output>
+
+## blob identity
+$ git hash-object Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+852be99a6280674fc3185431e652facf1dd0e96e
+$ git rev-parse HEAD:Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+852be99a6280674fc3185431e652facf1dd0e96e
+
+identical(sha): True
+
+## status of the file (no staged/unstaged change)
+$ git -c core.quotepath=false status --porcelain -- Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+<empty output>

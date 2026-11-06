@@ -1,0 +1,79 @@
+# DIAG launcher console excerpt from Unity Editor.log (lifecycle lines only, last 120 matches)
+# Covers L2 attempts 1-3 (editor_run7/8/9) and the two AC-2 DIAG runs (editor_run10/11).
+# No "[DIAG][WATCHDOG]" line appears in any run (no false watchdog).
+
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/REFACTOR-M4/editor_run16/InEditorResult.txt; task=REFACTOR code=0 finishedAt=2026-11-06 11:50:36.682 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run16 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run39/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 11:54:32.631 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run39 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run40/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 12:34:27.977 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run40 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/REFACTOR-M4/editor_run17/InEditorResult.txt; task=REFACTOR code=0 finishedAt=2026-11-06 12:36:16.670 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run17 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/FND-00B-06/editor_run5/InEditorResult.txt; task=FND00B06 code=0 finishedAt=2026-11-06 12:37:32.193 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run5 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run5; head=df7ea0b088f32b2f83fc3c126313c25dc544705a
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run5/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 12:39:09.479 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run5 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run41/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 12:58:29.520 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run41 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run42/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 13:11:37.632 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run42 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/REFACTOR-M4/editor_run18/InEditorResult.txt; task=REFACTOR code=0 finishedAt=2026-11-06 13:55:04.795 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run18 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/FND-00B-06/editor_run6/InEditorResult.txt; task=FND00B06 code=0 finishedAt=2026-11-06 14:45:05.163 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run6 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run6; head=e3ad251c08d13bf39e385cd9a9b0f88f413d1622
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run6/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 15:27:42.907 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run6 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run7; head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run7/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 16:48:11.658 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run7 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] playModeStateChanged=ExitingEditMode
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run8; head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run8/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 16:55:15.601 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run8 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] playModeStateChanged=ExitingEditMode
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run9; head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run9/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 17:08:19.500 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run9 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run43/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 17:13:31.690 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run43 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/SPEC-01/editor_run44/InEditorResult.txt; task=SPEC01 code=0 finishedAt=2026-11-06 17:15:00.755 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run44 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/REFACTOR-M4/editor_run19/InEditorResult.txt; task=REFACTOR code=0 finishedAt=2026-11-06 17:16:21.621 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run19 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/REFACTOR-M4/editor_run20/InEditorResult.txt; task=REFACTOR code=0 finishedAt=2026-11-06 17:17:37.162 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run20 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/FND-00B-06/editor_run7/InEditorResult.txt; task=FND00B06 code=0 finishedAt=2026-11-06 17:18:54.814 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run7 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/FND-00B-06/editor_run8/InEditorResult.txt; task=FND00B06 code=0 finishedAt=2026-11-06 17:19:47.347 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run8 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] playModeStateChanged=ExitingEditMode
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run10; head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run10/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 17:20:38.511 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run10 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 
+[DIAG] playModeStateChanged=ExitingEditMode
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run11; head=5df13b1a1d67e312b0ef41bed860c0196cfd1ca8
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[DIAG] playModeStateChanged=ExitingPlayMode
+[DIAG] playModeStateChanged=EnteredEditMode
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run11/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 17:21:32.534 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run11 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>} 

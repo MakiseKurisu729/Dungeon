@@ -1,0 +1,4 @@
+﻿[16:54:43.854] watcher2 start
+[16:54:43.862] log length=12233354
+[16:55:09.786] INJECTED marker 2
+[16:55:09.866] AppActivate(Unity)=False

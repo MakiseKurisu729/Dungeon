@@ -1,0 +1,120 @@
+# AC-8 compile evidence (phase E)
+generated: 2026-11-06 17:33:21
+
+## 1. Unity console: error CS count
+command : MCP read_console types=["error"] filter_text="CS" (executed via unityMCP during phase E)
+result  : 0 entries (no compiler error logged in the editor console)
+
+## 2. Editor.log grep (last 4000 lines cover every compile of this phase)
+command : Get-Content Editor.log -Tail 4000 | Select-String -SimpleMatch "error CS"
+actual  : 0
+expected: 0
+
+command : Get-Content Editor.log -Tail 4000 | Select-String -Pattern "Finished compiling|Reloading assemblies"
+actual  : 12 compile/reload markers (>=1 = a compile really ran)
+
+## 3. assembly build stamps vs newest source stamps (compile really included the edits)
+command : Get-Item Library/ScriptAssemblies/Assembly-CSharp*.dll | Select Name,LastWriteTime
+  Assembly-CSharp.dll = 2026-11-06 17:12:34
+  Assembly-CSharp-Editor.dll = 2026-11-06 16:28:28
+command : newest .cs mtime per assembly
+  newest runtime-side .cs : DIAG_ProbeRunner.cs @ 2026-11-06 17:11:10
+  newest editor-side .cs  : QA_InEditorMenu.cs @ 2026-11-06 16:22:38
+  => Assembly-CSharp.dll rebuilt after the newest runtime source; Assembly-CSharp-Editor.dll rebuilt after the newest editor source
+
+## 4. static mutable fields in Assets/_Project/Tests/QA/** (AC-8: no NEW static mutable globals)
+command : grep -R -E "static (readonly )?[A-Za-z<>\[\]]+ _?[A-Za-z]+( =|;)" Assets/_Project/Tests/QA --include=*.cs
+actual  :
+  QA_InEditorMenu.cs : static bool _preflightArmed;
+  QA_InEditorMenu.cs : static double _lastPollAt = -1.0;
+  QA_InEditorMenu.cs : static int _stableSamples;
+  QA_InEditorMenu.cs : static PropertyInfo _isDomainReloadPendingProp;
+  QA_InEditorMenu.cs : static readonly string[] SuiteEnvKeys =
+    {
+        "SPEC01_MODE",
+        "SPEC01_RUN",
+        "SPEC01_EVIDENCE_TAG",
+        "FND00B06_RUN",
+        "DIAG_RUN",
+        "DIAG_MODE",
+        "REFACTOR_RUN",
+        "REFACTOR_MILESTONE",
+        EvidenceSubdirEnv
+    };
+  QaEvidence.cs : static readonly QaSummaryKey[] DefaultSummaryFields =
+    {
+        QaSummaryKey.Task, QaSummaryKey.Mode, QaSummaryKey.Run, QaSummaryKey.StartedAt,
+        QaSummaryKey.FinishedAt, QaSummaryKey.UnityVersion, QaSummaryKey.Scene,
+        QaSummaryKey.RandomSeed, QaSummaryKey.AssertionFile, QaSummaryKey.AssertionLinesInFile,
+        QaSummaryKey.Pass, QaSummaryKey.Fail, QaSummaryKey.Blocked, QaSummaryKey.InfraFail,
+        QaSummaryKey.Observed, QaSummaryKey.Extra, QaSummaryKey.ExitReason
+    };
+  QaFixtures.cs : public static readonly string[] PlayerNames = { "Knight_Unit", "Archer_Unit", "Mage_Unit" };
+  QaLauncher.cs : static float _missingSince = -1f;
+  QaLauncher.cs : static GameObject _runner;
+  QaLauncher.cs : static QaLaunchSpec _current;
+  QaLauncher.cs : static readonly QaLaunchSpec[] Registry =
+    {
+        new QaLaunchSpec
+        {
+            SuiteId = "SPEC01",
+            LogTag = "SPEC01",
+            KeyPrefix = "SPEC01.",
+            RunnerName = "SPEC01_Runner",
+            RunnerType = typeof(SPEC01_ProbeRunner),
+            EvidenceFolder = "SPEC-01",
+            EnvKeys = new[] { "SPEC01_MODE", "SPEC01_RUN" },
+            EnvValues = new[] { "green", "1" },
+            Launch = SPEC01_BatchAcceptance.Run
+        },
+        new QaLaunchSpec
+        {
+            SuiteId = "FND00B06",
+            LogTag = "FND00B06",
+            KeyPrefix = "FND00B06.",
+            RunnerName = "FND00B06_Runner",
+            RunnerType = typeof(FND00B06_ProbeRunner),
+            EvidenceFolder = "FND-00B-06",
+            EnvKeys = new[] { "FND00B06_RUN" },
+            EnvValues = new[] { "1" },
+            Launch = FND00B06_BatchAcceptance.Run
+        },
+        new QaLaunchSpec
+        {
+            SuiteId = "DIAG",
+            LogTag = "DIAG",
+            KeyPrefix = "DIAG.",
+            RunnerName = "DIAG_Runner",
+            RunnerType = typeof(DIAG_ProbeRunner),
+            EvidenceFolder = "DIAG-SKILL",
+            EnvKeys = new[] { "DIAG_MODE", "DIAG_RUN" },
+            EnvValues = new[] { "probe", "1" },
+            Launch = DIAG_BatchAcceptance.Run
+        },
+        new QaLaunchSpec
+        {
+            SuiteId = "REFACTOR",
+            LogTag = "REFACTOR",
+            KeyPrefix = "REFACTOR.",
+            RunnerName = "REFACTOR_Runner",
+            RunnerType = typeof(REFACTOR_ProbeRunner),
+            MilestonePrefix = "REFACTOR-",
+            MilestoneEnvVar = "REFACTOR_MILESTONE",
+            DefaultMilestone = REFACTOR_BatchAcceptance.DefaultMilestone,
+            EnvKeys = new[] { "REFACTOR_RUN" },
+            EnvValues = new[] { "1" },
+            Launch = REFACTOR_BatchAcceptance.Run
+        }
+    };
+  SkillCastFixture.cs : static FieldInfo _swordTimerField;
+
+classification:
+  QaLauncher._current / _runner / _missingSince  -> MIGRATED from the four *_Boot classes
+      old: SPEC01_Boot._runner/_missingSince, REFACTOR_Boot._runner/_missingSince,
+           FND00B06_Boot._runner/_missingSince, DIAG_Boot._runner/_missingSince  (8 mutable statics)
+      new: _runner/_missingSince (2, shared: only one suite can be Active at a time) + _current (1, the
+           resolved spec; replaces the per-class "which suite am I" compile-time binding). Net -5.
+  QaLauncher.Registry        -> static readonly registry required by the task (data table, not state)
+  QA_InEditorMenu._lastPollAt/_stableSamples/_preflightArmed/_isDomainReloadPendingProp -> pre-existing (phase 0/MCP work), untouched
+  QaEvidence.DefaultSummaryFields / QaFixtures.PlayerNames / QA_InEditorMenu.SuiteEnvKeys -> static readonly data tables, pre-existing
+  SkillCastFixture._swordTimerField -> pre-existing reflection cache (file moved in phase A, content unchanged)

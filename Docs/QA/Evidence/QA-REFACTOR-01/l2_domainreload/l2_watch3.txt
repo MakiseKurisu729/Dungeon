@@ -1,0 +1,3 @@
+﻿[17:07:44.234] watcher3 start
+[17:07:44.241] log length=12270826
+[17:08:13.733] INJECTED marker 3

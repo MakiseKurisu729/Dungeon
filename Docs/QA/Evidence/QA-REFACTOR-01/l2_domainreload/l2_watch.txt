@@ -1,0 +1,3 @@
+﻿[16:47:19.578] watcher start; log=C:\Users\lll\AppData\Local\Unity\Editor\Editor.log
+[16:47:19.596] log length=12196402
+[16:48:05.938] INJECTED comment into DIAG_ProbeRunner.cs

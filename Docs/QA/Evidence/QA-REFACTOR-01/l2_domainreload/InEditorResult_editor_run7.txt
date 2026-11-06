@@ -1,0 +1,7 @@
+task=DIAG
+code=2
+finishedAt=2026-11-06 16:48:11.658
+unityVersion=2022.3.62f3c1
+scenario=in-editor
+evidenceSubdir=editor_run7
+envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>}

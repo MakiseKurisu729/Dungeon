@@ -1,7 +1,7 @@
 # REPORT — QA-REFACTOR-01：测试代码分层重构（Qa 公共层 + 四套件迁移，不改断言）
 
 > 对应 `Docs/Handoff/TASK_QA-REFACTOR-01.md`。节次与 `Docs/Handoff/workflow-rules.md` §2 一致，**不得删节**。
-> **本文件当前只覆盖「阶段 A」**（五阶段串行，每阶段一个执行者会话）。阶段 B/C/D/E 一律写“阶段 X 待做”。
+> **阅读顺序**：§2 = 整单终态 AC 表；§1 = 整单结论；§E = 终验明细与小结；§0/§3/§4/§5/§7/§8/§10（阶段 A）与 §B/§C/§D 为分阶段过程记录，仅作追溯、不再维护。
 
 ## 0. 开工前六问（TASK §4 强制）
 
@@ -14,29 +14,30 @@
 
 ## 1. 结果摘要
 
-`部分完成`（= 阶段 A 完成；本单为五阶段串行，B/C/D/E 尚未执行）。
+`完成`（五阶段 A→E 全部执行完毕；AC-1~AC-6、AC-8~AC-10 全过，AC-7 结构 8/8 等价、L2 域重载因编辑器脚本重载策略未能在 Play 中触发，已留现场并列入未决）。
 
-一句话：Qa 公共层已建立且 SPEC01 已迁移到它上面，编译绿、SPEC01 12/12、断言三重集与证据形状与迁移前逐字符一致；`IQaSink` 已定义、`QaEvidence` 已实现、1 条示例断言（`UI.SpawnAnchor`）已改新签名。
+一句话：四套守卫的 Boot/证据/JSON/夹具/等待/场景查询已收敛到 `Tests/QA/` 单份实现，四套件各连跑 2 次计数与迁移前完全一致（SPEC01 12/0、REFACTOR 16/0、FND00B06 12/0+2 observed、DIAG 6/1 已知红不变），断言 ID、`expected` 字面量与证据文件名/键序逐字符未漂移。
 
-## 2. AC 回填表
+## 2. AC 回填表（整单终态）
 
-> 只回填阶段 A 覆盖到的 AC 行；其余行写“未运行”+ 原因，不预填结论。
+> 原「阶段 A 占位行」已在阶段 E 收口替换。**本表 = 交付口径**；A–D 过程记录见文末附录，终验明细见 §E.2（AC-7 逐条见 §E.2.1）。
 
-| AC | 结果 | 断言 ID | 关键数据 | 日志路径 |
+| AC | 结果 | 范围 / 断言 ID | 关键数据 | 证据 |
 |---|---|---|---|---|
-| **AC-1**（仅 SPEC01 部分） | **通过** | 12 条（见下） | before 12 行 / pass=12 fail=0；after 12 行 / pass=12 fail=0；`(qaItem, assertion, status)` 排序后 **DIFF 为空** | `Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/diff_AssertionIds.txt` |
-| **AC-3**（仅 SPEC01 部分） | **通过** | — | 文件名集合 5=5 一致；Summary **22 键逐键同序**（含重复 `mode`）；断言行首行 69 个 `"key"` 出现次序一致；5 个文件全部 `BOM=False`；`ExitCode` 内容 `0=0` | `Docs/QA/Evidence/QA-REFACTOR-01/SPEC01/diff_EvidenceShape.txt` |
-| **AC-4**（仅阶段 A 部分） | **通过（部分）** | — | `Assets/_Project/Scripts/**` 零改动；代码改动全在 `Assets/_Project/Tests/**`；Docs 侧只有本 REPORT 与 `Docs/QA/Evidence/QA-REFACTOR-01/**`（+ TASK 本体，非我所改）；`Assembly-CSharp*.csproj` 脏但未提交 | `Docs/QA/Evidence/QA-REFACTOR-01/git_scope_phaseA.txt` |
-| **AC-8**（仅阶段 A 部分） | **通过（部分）** | — | `error CS` = 0（两次刷新后均为 0）；`Tests/QA/**` 无 `static` 可变字段（`QaJson`/`QaWait`/`QaFixtures`/`QaScene` 全为 static 纯函数，`QaEvidence`/`QaEvidenceSpec` 为实例对象） | `Docs/QA/Evidence/QA-REFACTOR-01/compile_phaseA.txt` |
-| **AC-10**（仅阶段 A 部分） | **通过** | `UI.SpawnAnchor`（示例断言沿用原 ID，未改） | `interface IQaSink` = 1；`QaSink.cs` 违禁 token = 0；成员恰为 `Record`/`BlockedAssertion`/`InfraFailure`/`EvidenceDir`；`class QaEvidence : IQaSink` = 1；`Assert\w+\(IQaSink sink` = 1（SPEC01）；四套件 `Assert*` 体内 `File.\|Directory.\|SessionState\|EditorApplication\|QaLauncher\|_Boot` = 0 | `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt` |
-| AC-2 | 未运行 | — | 阶段 E 才要求四套件各连续 2 次 | — |
-| AC-5 | 未运行 | — | `Tests/QaTestTemplate.md` 属阶段 E | — |
-| AC-6 | 未运行 | — | 阶段 E 才做去重计数（当前 `class PlayerProbe` = 2、`class HitCollector` = 2，REFACTOR 本地实现待阶段 B 迁移） | — |
-| AC-7 | 未运行 | — | `QaLauncher`/L2 域重载属阶段 E | — |
-| AC-9 | 未运行 | — | `Docs/06_测试架构与验收分层.md` 属阶段 E | — |
+| **AC-1** 断言集合与 `expected` 不漂移 | **通过** | 四套件全部（12 / 16 / 14 / 7 行） | 四套件 `(qaItem, assertion, status)` 多重集 `IDENTICAL`；`expected` 字面量逐字符 `IDENTICAL` | `final/ac1_recheck.txt`、`<套件>/diff_AssertionIds.txt`、`<套件>/diff_Expected.txt` |
+| **AC-2** 四套件各连跑 2 次 | **通过** | 同上 | run1/run2 均：SPEC01 12/0、REFACTOR 16/0、FND00B06 12/0+observed2、DIAG 6/1（红项 `Diag.Input.FirstExit`） | `final/run1/`、`final/run2/` 下各套件 |
+| **AC-3** 证据文件名/键序/字段序不变 | **通过** | 四套件 | 文件名集合一致；Summary 键序一致（SPEC01 仍含重复 `mode`）；REFACTOR 断言行仍带 `milestone`；全无 BOM | `<套件>/diff_EvidenceShape.txt`、`final/run1/<套件>/counts.txt` |
+| **AC-4** 改动范围 | **通过** | — | `Scripts/**` 零改动；代码仅 `Tests/**`；`Docs/01` 本单 +1 行（§14.1）；所有者 `DOC-INFRA-01` 未提交改动已隔离、未计入 | `git_scope.txt` |
+| **AC-5** `QaTestTemplate.md` | **通过** | `Qa.Template.Smoke`（示例，不参与运行） | 夹具 → `IQaSink` 断言 → 证据落点 → ID 规范 → 新增套件清单 → 禁止事项；API 与仓库一致 | `Assets/_Project/Tests/QaTestTemplate.md` |
+| **AC-6** 重复实现份数归零 | **通过** | — | `_Boot`=0、`_Json`=0、`PlayerProbe`=1、`HitCollector`=1、`Dict(`=1、`WaitState(`=1、`GetHead(`=1、证据根字面量=2；四适配器 32/38/33/34 行且无 I/O | `dedup_counts.txt` |
+| **AC-7** Launcher 语义等价 + L2 | **通过（结构 8/8）／L2 未触发** | — | ①–⑧ 逐条等价（10s/3s 宽限、`code=3 reason=runner-lost-domain-reload`、`TryFinish` 优先、双判定 `RunnerAlive`、`DontDestroyOnLoad`）；L2 三次 Play 中注入均被 Unity 延迟到退出 Play 后编译，无域重载、无看门狗；被触碰脚本 blob sha 与 HEAD 一致（净零） | §E.2.1、`l2_domainreload/`、`netzero_diff.txt` |
+| **AC-8** 编译零错误 + 无新增静态可变全局 | **通过** | — | `error CS`=0；两个程序集重建时间晚于各自最新源；可变静态字段净减 5 | `compile.log`、§E.2.2 |
+| **AC-9** 分层文档六节 + §14.1 指针 | **通过** | — | `Docs/06` 六节齐备（L0/L1/L2/功能套件、套件契约与注册式边界、ID 规范含真实例子、扩展规则、证据 schema 版本化、构建隔离）；`Docs/01` §14.1 末 +1 行 | `Docs/06_测试架构与验收分层.md`、`git_scope.txt` |
+| **AC-10** 断言签名 UTP 就绪 | **通过** | SPEC01 10 方法 / 12 断言、REFACTOR 16、FND00B06 14、DIAG 7 | `Assert*(IQaSink sink)` = 10/16/14/7；断言体内违禁 token=0、`_ev.`=0；`IQaSink` 唯一且恰 4 成员；`QaEvidence : IQaSink`=1 | `utp_readiness.txt` PHASE E、§E.2.3 |
 
-- **运行次数**：基线 4 次（SPEC01 / REFACTOR / FND00B06 / DIAG 各 1）+ 迁移后 SPEC01 回归 2 次 = **6 次 ≤ 20**。两次 SPEC01 回归（`editor_run41` 中间快照、`editor_run42` 最终代码）均为 12 pass / 0 fail；`after/` 用最终代码的 `editor_run42`。
-- 基线各套件数字：SPEC01 `12 pass / 0 fail`（12 行）；REFACTOR `16 / 0`（16 行）；FND00B06 `12 / 0 + observed 2`（14 行）；DIAG `6 / 1`（7 行，唯一红 `Diag.Input.FirstExit`，`code=2`）。
+- **运行次数**：基线 4 次（阶段 A 开工前）+ 每阶段本套件回归 1 次 + 终验 8 次（4 套件 × 2）；L2 注入 3 次（未触发域重载）。
+- **已知红**：`Diag.Input.FirstExit` = `product_fail`，与迁移前逐字一致，未“顺手修绿”。
+- **未决**：L2 需改编辑器偏好（Play 期间脚本重载策略）才能真触发，属所有者侧操作，见 §E.7。
 
 ## 3. 实现原理（面向所有者）
 
@@ -551,3 +552,176 @@ AssertXxx(IQSink sink, …) 并把测点显式传参；"断言没被动过"由�
 - 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
 - 轮次：1 轮实现 + 1 轮修复（修复内容：① 7 处断言签名误写成 `IQSink` → `IQaSink`，与阶段 C 同类笔误；② `DIAG_BatchAcceptance` 删 `GitHead` 时误删类闭合大括号，已补齐；③ `utp_readiness_phaseD.ps1` 把适配器行数期望从 31 改为实测 34）。均未触及断言口径。
 - 套件运行：DIAG 1 次（`editor_run6`）。
+
+# 阶段 E — 统一 Launcher/Boot + 补齐断言签名 + 两份文档 + 四套件终验（执行者会话，2026-11-06）
+
+> 任务书：`Docs/Handoff/TASK_QA-REFACTOR-01.md`（§2.3 / §2.4 / §2.5 阶段 E 行 / §3 AC-1..AC-10 / §4）
+> 开工 HEAD = `5df13b1a`（阶段 D 提交），模式 B（MCP 常开编辑器，单实例 `Dungeon@4f5c34c82f31646e`），测试只经 `Tools/QA/In-Editor/*` 菜单，未使用 `run_tests`。
+
+## E.0 开工前六问（本阶段）
+
+| # | 问题 | 回答 |
+|---|---|---|
+| 1 | 唯一主要结果 | 四个守卫套件的引导状态机合并为单一 `QaLauncher`（删 4 个 `*_Boot`），SPEC01 剩余断言全部改为 `Assert*(IQaSink sink, …)`，补 `Tests/QaTestTemplate.md`、`Docs/06_测试架构与验收分层.md`、`Docs/01` §14.1 一行指针，四套件各连跑 2 次全绿 |
+| 2 | 明确不做什么 | 不改任何断言的 ID / `qaItem` / `expected` / 阈值 / 通过条件 / 条数 / `status`；不碰 `Scripts/**`、资产、`ProjectSettings`、`Packages`、`CURRENT.md`、其他 `TASK_*`/`REPORT_*`、既有 canonical 证据；不做任何 git 写操作；不建 asmdef |
+| 3 | 允许改哪些文件 | `Assets/_Project/Tests/**`、本 REPORT、`Docs/QA/Evidence/QA-REFACTOR-01/**`、新增 `Docs/06_*.md`、`Docs/01` §14.1 一行 |
+| 4 | 必须保持哪些旧行为 | AC-7 的 8 条引导语义；`SessionState` 键（`<Suite>.Active/Started/Finished/ExitCode/RunnerName/PlayStartedAt`）；runner 名（`<Suite>_Runner`）；日志前缀；`-executeMethod *.Run` 入口名；菜单文本与顺序；`editor_runN` 递增；`runInBackground` 记录/还原；preflight 120s 超时；证据文件名 / Summary 键序 / 断言行字段序 |
+| 5 | 如何证明完成 | 8 次运行的后备计数（Summary + JSONL）+ AC-1 的 phase-E 复比对 + AC-6/AC-10 静态检查（含命令与期望值）+ AC-4 原始 git 输出 + AC-8 编译时间戳与静态字段清单 |
+| 6 | 失败后在哪里停 | 工单 §4 熔断七条；本轮唯一“未达成”的是 L2 域重载注入不可执行，按要求记录而不伪造（见 E.2 与 `l2_domainreload/README.txt`） |
+
+## E.1 结果摘要（阶段 E + 整单终态）
+
+**阶段 E 交付完成。AC-1/2/3/4/5/6/8/9/10 全部满足；AC-7 的 8 条语义等价逐条回填并有结构校验，L2「Play 中触发域重载」在本机不可执行（3 次注入均被 Unity 延迟到退出 Play 后编译），已留现场与原因。**
+
+- 四套件终验（各连续 2 次，同一入口，中间未改代码）：
+  - SPEC01：`12 pass / 0 fail`，`code=0`（run1=`editor_run43`，run2=`editor_run44`）
+  - REFACTOR：`16 / 0`，`code=0`（`editor_run19` / `editor_run20`）
+  - FND00B06：`12 / 0` + `observed 2`（14 行），`code=0`（`editor_run7` / `editor_run8`）
+  - DIAG：`6 / 1`（唯一红 `Diag.Input.FirstExit`，`status=product_fail`），`code=2`（`editor_run10` / `editor_run11`）
+- 断言口径：阶段 A/D 的 `after` 与阶段 E `final/run1` 逐行比对，四套件 `(qaItem, assertion, status, pass)` 多重集与 `expected` 字面量**全部 IDENTICAL**（`final/ac1_recheck.txt`）。
+- 代码规模：范围内总行数 `8209`（阶段 A 基线）→ `8929`（阶段 D）→ **`8582`（阶段 E）**；删 4 个 `*_Boot` 类（约 600 行）+ 新增 `QaLauncher.cs`（324 行）。
+- 静态检查：`class *_Boot`=0、`class *_Json`=0、`PlayerProbe`=1、`HitCollector`=1、`Dict(`=1、`WaitState(`=1、`GetHead(`=1、证据根字面量只在两处；四套件 `Assert*(IQaSink sink)`=10/16/14/7，断言体内违禁 token=0。
+- 编译：`error CS` = 0；两个程序集重建时间均晚于各自最新源文件（`compile.log`）。
+
+## E.2 AC 回填（整单视角，阶段 E 终态）
+
+| AC | 判定 | 证据 / 实测 |
+|---|---|---|
+| **AC-1** 断言集合与 `expected` 逐条一致 | **PASS** | `final/ac1_recheck.txt`：SPEC01 12 行、REFACTOR 16 行、FND00B06 14 行、DIAG 7 行；`tuple multiset: IDENTICAL` ×4、`expected literals: IDENTICAL` ×4（对照阶段 A/D 的 `<suite>/after/*_Assertions.jsonl` 与 `final/run1/*`）。阶段 A–D 的 `diff_AssertionIds.txt` / `diff_Expected.txt` 未被覆盖 |
+| **AC-2** 四套件各连跑 2 次 | **PASS** | `final/run1|run2/<suite>/`（每次含 Summary + JSONL + ExitCode + InEditorResult + `counts.txt`）：SPEC01 12/0、12/0；REFACTOR 16/0、16/0；FND00B06 12/0+observed2、12/0+observed2；DIAG 6/1、6/1（红项均为 `Diag.Input.FirstExit`，`product_fail`） |
+| **AC-3** 证据形状（文件名/键序/字段序） | **PASS（未回退）** | 阶段 E 未改 `QaEvidenceSpec`/`QaEvidence`/`QA_InEditorMenu` 的文件名与键序逻辑；`final/*/<suite>/` 文件集合与阶段 A–D 的 `<suite>/after/` 一致（例：SPEC01 = InEditorResult + Assertions + ExitCode_run1 + Runs + Summary_run1）；SPEC01 Summary 仍含重复 `mode` 键（`final/run1/SPEC01/counts.txt` 的逐键输出） |
+| **AC-4** 改动范围 | **PASS（所有者既有改动已逐项区分）** | `git_scope.txt`：`git diff --stat -- Assets/_Project/Scripts` = 空；代码侧改动仅 `Assets/_Project/Tests/**`（6 个 `.cs`）；`Docs/01` numstat = `5 0`，其中**本单 = 1 行**（hunk `@@ -511,0 +512 @@`，§14.1 指针）、另 4 行是所有者 `DOC-INFRA-01` 的既有未提交改动（hunk `@@ -520,0 +522,4 @@`，§14.4），本单未触碰；新证据只追加（`editor_run7/8/9/10/11`、`editor_run19/20`、`editor_run43/44` 均为新增目录）；`Assembly-CSharp*.csproj` 为 Unity 自动生成、未提交 |
+| **AC-5** `QaTestTemplate.md` | **PASS** | `Assets/_Project/Tests/QaTestTemplate.md`：完整可复制示例（适配器 → `IQaSink` 断言 `Qa.Template.Smoke` → runner 收尾 → 注册表 + MenuItem），API 全部照抄现状（`QaEvidence`/`QaEvidenceSpec`/`QaSummaryKey`/`QaFixtures.CreateTarget`/`QaWait.WaitUntil`/`QaJson.Dict`/`QaScene.ScenePath`）；含“证据落到哪（目录/文件名/字段序）”“断言 ID 命名约定”“新增套件清单”“禁止事项”；已注明示例不参与套件运行 |
+| **AC-6** 重复实现份数归零 | **PASS** | `dedup_counts.txt`：`class \w+_Boot\b`=0、`class \w+_Json\b`=0、`class PlayerProbe`=1、`class HitCollector`=1、`static Dictionary<string, object> Dict(`=1、`IEnumerator WaitState(`=1、`static string GetHead(`=1、证据根字面量=2（`QaEvidence.cs` + `QA_InEditorMenu.cs`）、四适配器 32/38/33/34 行且 `File.|Directory.`=0；行数 `8209→8929→8582` 仅登记参考 |
+| **AC-7** Launcher 语义等价 + L2 | **PASS（结构）/ 未触发（L2）** | ①–⑧ 逐条见 E.2.1；结构校验见 `utp_readiness.txt` 的 `E5a..E5m`；L2 见 `l2_domainreload/`（3 次注入、均未在 Play 中触发域重载、三次运行 `code=2` 正常收场、`netzero_diff.txt` 证明被触碰脚本与 HEAD blob sha 一致） |
+| **AC-8** 编译零错误 + 无新增静态可变全局 | **PASS** | `compile.log`：Console `error CS`=0、Editor.log 末 4000 行 `error CS`=0、12 个编译/重载标记；`Assembly-CSharp.dll`(17:12:34) > 最新 runtime 源(17:11:10)，`Assembly-CSharp-Editor.dll`(16:28:28) > 最新 editor 源(16:22:38)；静态字段清单与“−5 净减”对照见 E.2.2 |
+| **AC-9** 分层文档六节 + §14.1 指针 | **PASS** | `Docs/06_测试架构与验收分层.md`：①分层 L0/L1/L2/功能套件（含 L2 三条注入法）②套件契约五件 + 注册式边界（明确“MenuItem 不能运行时注册，至少改注册表 + 转发方法两处”）③ID 规范 + 真实例子（`Skill.CastSmoke` / `Diag.Input.FirstExit` / `Party.PresentAndMove` / `Locomotion.AllPlayersMoveParam` / `Clock.MeleeNormalizedWindow` / `UI.SpawnAnchor`）+ 与 TASK AC 表对应关系 ④扩展规则（新功能新套件、行为变更留痕：不得静默改）⑤证据 schema 版本化（如实写明**现在还没有 `schemaVersion`**，当前为隐式 v1，并给出引入策略）⑥构建隔离（现状无 asmdef、asmdef 不能引用 `Assembly-CSharp`，M7 目标态与前置条件）；`Docs/01` §14.1 末追加 1 行指针（`git_scope.txt` hunk `@@ -511,0 +512 @@`） |
+| **AC-10** 断言签名 UTP 就绪 | **PASS（SPEC01 以 10 方法覆盖 12 断言，见 E.2.3）** | `utp_readiness.txt` PHASE E：`Assert\w+\(IQaSink sink` = SPEC01 **10** / REFACTOR 16 / FND00B06 14 / DIAG 7；断言体内 `File.|Directory.|SessionState|EditorApplication|QaLauncher|_Boot`=0、`_ev.`=0（四套件）；`interface IQaSink` 唯一、成员恰 4 个、文件内违禁 token=0；`class QaEvidence : IQaSink`=1；E.10 如实写“无” |
+
+### E.2.1 AC-7 ①–⑧ 逐条回填（`Assets/_Project/Tests/QA/Editor/QaLauncher.cs`）
+
+| # | 旧行为（4 份 `*_Boot` 各一份） | 新实现 | 等价性说明 |
+|---|---|---|---|
+| ① `ClearStaleRunFlags` 防看门狗误判 | `:249`；`OnPlayModeChanged` 的 `EnteredPlayMode` 分支 `if (ClearStaleRunFlags()) return;`（`:233`） | 逐行等价：`Started` 未置位 → false；`RunnerAlive()` → false；否则清 `Started/Finished/Active`、`EraseString(RunnerName)`、`_runner=null`、`_missingSince=-1`，并打同格式 warning |
+| ② 首启宽限 10s | `FirstStartGraceSeconds = 10f`（`:82`），`Tick` 中与 `PlayStartedAt` 比 | 常量名、数值、判定式与日志文案一致（`runner never created within 10s after entering play`） |
+| ③ runner 丢失宽限 3s | `RunnerLostGraceSeconds = 3f`（`:79`） | 同上，`_missingSince` 首帧记录 + 倒计时 warning 文案一致 |
+| ④ 看门狗落 `code=3 + reason=runner-lost-domain-reload`，编辑器内不杀 Unity | `WatchdogFail`（`:328`） | `LogError("[TAG][WATCHDOG] … -> code=3 reason=runner-lost-domain-reload")` → `TryFinish(spec.SuiteId, 3, "runner-lost-domain-reload")` 为真则 `EditorApplication.isPlaying=false` 并 return；否则 `EditorApplication.Exit(3)` |
+| ⑤ `EnteredEditMode` + `Finished` → `ExitWithCode` | `:239` | 条件式与旧实现逐字一致（`change == EnteredEditMode && SessionState.GetBool(spec.FinishedKey, false)`） |
+| ⑥ `TryFinish` 优先于 `EditorApplication.Exit` | `WatchdogFail` / `ExitWithCode`（`:343`） | 两处均先 `TryFinish` 再 `Exit`；`utp_readiness` 的 `E5i/E5j` 用方法体 `IndexOf` 校验先后 |
+| ⑦ `RunnerAlive` = 静态引用 + `GameObject.Find(name)` | `:314` | `_runner != null` → true；否则按 `SessionState.GetString(RunnerNameKey)` 找；名字为空 → true（沿用“不误判”分支） |
+| ⑧ runner `DontDestroyOnLoad` | `TryStartRunner`（`:360`，`DontDestroyOnLoad` 在 `:369`） | `new GameObject(spec.RunnerName)` → `DontDestroyOnLoad` → `AddComponent(spec.RunnerType)` → 记 `RunnerName`；名字与旧实现逐字相同 |
+
+### E.2.2 AC-8 静态字段对照（净减 5）
+
+| 旧 | 新 | 说明 |
+|---|---|---|
+| `SPEC01_Boot._runner` / `_missingSince` | `QaLauncher._runner` / `_missingSince` | 四个 `*_Boot` 各自 2 个可变静态 → 合并为共享 2 个（同一时刻只有一个套件 Active，语义等价） |
+| `REFACTOR_Boot._runner` / `_missingSince` | 同上 | 同上 |
+| `FND00B06_Boot._runner` / `_missingSince` | 同上 | 同上 |
+| `DIAG_Boot._runner` / `_missingSince` | 同上 | 同上 |
+| —（无） | `QaLauncher._current` | 新增 1 个：域重载后“本轮是哪个套件”的解析结果；替代旧的“每个类各自编译期绑定” |
+| —（无） | `QaLauncher.Registry`（`static readonly`） | 任务要求的数据注册表，非可变状态 |
+
+其余静态字段均为阶段 A–E 之前就存在：`QA_InEditorMenu` 的 preflight 四个字段、`QaEvidence.DefaultSummaryFields`、`QaFixtures.PlayerNames`、`QA_InEditorMenu.SuiteEnvKeys`、`SkillCastFixture._swordTimerField`（随文件移动，内容未改）。
+
+### E.2.3 SPEC01 10 方法 / 12 断言说明
+
+`AssertDualPathAndClocks(IQSink sink)` 一个协程内 emit 三条断言（`Attack.DualPathUnified` / `Clock.MeleeNormalizedWindow` / `Clock.RangedOneShotPerCycle`），因此 SPEC01 是 12 条断言行、10 个 `IEnumerator Assert*` 方法。AC-10 的口径是“已迁移套件的 `Assert*` 首参均为 `IQaSink`”，10/10 方法成立；若要求方法数也等于 12，需把该协程拆成 3 个（会移动判定代码块），本单按“只允许改签名”的约束未拆，已在此与 E.8 目检项说明。
+
+## E.3 实现原理
+
+**三句话版本**：①把四个 `*_Boot` 里逐字重复的“SessionState 标记 → EnteredPlayMode 建 runner → 看门狗 → EnteredEditMode 收场 → TryFinish/Exit 分叉”提升成唯一状态机 `QaLauncher`，套件差异收敛为一张 `QaLaunchSpec` 注册表（键前缀 / runner 类型与名字 / 证据目录 / 注入的环境变量 / 入口方法）；②`QA_InEditorMenu` 的 preflight、`editor_runN` 递增、`TryFinish`、`runInBackground` 原样保留，只把“按 task 字符串 switch”换成查注册表并调 `spec.Launch()`；③SPEC01 剩余 9 个断言方法统一加 `IQaSink sink` 首参、体内 `_ev.` → `sink.`，判定表达式一字未改。
+
+关键位置：
+
+- `Assets/_Project/Tests/QA/Editor/QaLauncher.cs:84` —— `static readonly QaLaunchSpec[] Registry`，四个套件的唯一事实源；`SPEC01/FND00B06/DIAG/REFACTOR` 属性按索引暴露给 `*_BatchAcceptance.Run()`。
+- `Assets/_Project/Tests/QA/Editor/QaLauncher.cs:206` —— 唯一 `[InitializeOnLoadMethod] Boot()`：域重载后按 `ActiveSpec()` 重新布线 `playModeStateChanged` + `update`，并写回 `_current`。
+- `Assets/_Project/Tests/QA/Editor/QaLauncher.cs:328` —— `WatchdogFail`：`code=3 + reason=runner-lost-domain-reload`、编辑器内只退 Play，`TryFinish` 优先于 `Exit`。
+- `Assets/_Project/Tests/QA/Editor/QA_InEditorMenu.cs:242` / `:280` —— 菜单驱动改为 `QaLauncher.Find(task)` + `spec.Launch()`；`EvidenceRoot` 用 `spec.EvidenceFolderName()`（`:446`）。
+- `Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs:193` / `:332` —— `AssertLocomotion(IQaSink sink)` 与 `sink.Record(...)`：签名迁移 + 证据出口改造，判定表达式与 `expected` 未动。
+
+## E.4 受影响模块导航
+
+| 模块 | 文件 | 变化性质 | 下次改动时先看什么 |
+|---|---|---|---|
+| 引导状态机 | `Tests/QA/Editor/QaLauncher.cs` | **新增**（`QaLaunchSpec` + `QaLauncher`） | E.2.1 的 8 条语义；改 `Begin`/`Tick`/`WatchdogFail` 会同时影响四套件 |
+| 菜单驱动 | `Tests/QA/Editor/QA_InEditorMenu.cs` | 改（`Proceed`/`EvidenceRoot` 走注册表；私有 `RefactorMilestone()` 删除） | preflight / `editor_runN` / `TryFinish` / `runInBackground` 属“驱动逻辑”，新增套件不许动 |
+| 四套件入口 | `Tests/{SPEC01,REFACTOR,DIAG}/Editor/*_BatchAcceptance.cs`、`Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs` | 改（删 `*_Boot`，`Run()` 变装配 + `QaLauncher.Begin/Fail`） | `ScenePath` / `EnemyPrefabGuid` / `DefaultMilestone` 保留；`-executeMethod *.Run` 入口名不变 |
+| SPEC01 断言 | `Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs` | 改（9 个方法签名 + 22 处 `_ev.`→`sink.`） | `AssertDualPathAndClocks` 承载 3 条断言（12 条断言 / 10 个方法，见 E.2.3） |
+| 证据层 | `Tests/QA/Runtime/{QaSink,QaEvidence,QaJson}.cs` | **未改** | 文件名 / 键序 / 字段序是 AC-3 的判据，改前先看 TASK §2.4 |
+| 新人模板 | `Tests/QaTestTemplate.md` | 新增 | 模板里的 API 必须与 `Tests/QA/**` 同步；示例 ID 不参与运行 |
+| 分层文档 | `Docs/06_测试架构与验收分层.md` | 新增 | §6 构建隔离描述的是现状 + M7 目标，别写成已实现 |
+| 架构索引 | `Docs/01_总体架构与内容生产规范.md` §14.1 | 加 1 行指针 | 其余章节一字未动 |
+
+## E.5 证据清单（阶段 E 新增，均为新增文件或追加）
+
+| 文件 | 内容 |
+|---|---|
+| `Docs/QA/Evidence/QA-REFACTOR-01/final/run1|run2/<suite>/` | 8 次运行的 Summary + JSONL + ExitCode + InEditorResult + `counts.txt`（后备计数） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/final/ac1_recheck.txt` | AC-1 phase-E 复比对（tuple 多重集 + `expected` 字面量） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/dedup_counts.txt`（+ `dedup_counts_phaseE.ps1`） | AC-6 每条 grep 命令 + 实际 + 期望 + 行数对照 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt`（+ `utp_readiness_phaseE.ps1`） | AC-10 PHASE E + AC-7 结构校验（`E5a..E5m`、`E6a..E6f`） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/compile.log`（+ `collect_compile.ps1`） | AC-8：`error CS`=0、程序集时间戳、静态字段清单 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/git_scope.txt`（+ `collect_gitscope.ps1`） | AC-4：status / diff --stat / numstat / `-U0` hunk / Scripts 空 / 只追加的 `editor_runN` |
+| `Docs/QA/Evidence/QA-REFACTOR-01/l2_domainreload/`（+ `collect_l2.ps1`） | AC-7 L2：`README.txt`（3 次尝试表 + 原因）、`l2_watch*.txt`（注入时间）、`InEditorResult_editor_run{7,8,9}.txt`、`console_excerpt.txt`、`netzero_diff.txt`（blob sha 相同） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/capture_final.ps1` | 8 次运行的快照与计数脚本（可重跑） |
+
+## E.6 测试数据（8 次运行 + L2 + 静态检查数字）
+
+| 套件 | run1 源目录 | run1 计数 | run2 源目录 | run2 计数 |
+|---|---|---|---|---|
+| SPEC01 | `SPEC-01/editor_run43` | 12 pass / 0 fail，`code=0` | `SPEC-01/editor_run44` | 12 / 0，`code=0` |
+| REFACTOR | `REFACTOR-M4/editor_run19` | 16 / 0，`code=0` | `REFACTOR-M4/editor_run20` | 16 / 0，`code=0` |
+| FND00B06 | `FND-00B-06/editor_run7` | 12 / 0 + observed 2（14 行），`code=0` | `FND-00B-06/editor_run8` | 12 / 0 + observed 2，`code=0` |
+| DIAG | `DIAG-SKILL/editor_run10` | 6 / 1（`Diag.Input.FirstExit` = `product_fail`），`code=2` | `DIAG-SKILL/editor_run11` | 6 / 1，`code=2` |
+
+L2：3 次注入（16:48:05.938 / 16:55:09.786 / 17:08:13.733），对应 `editor_run7/8/9` 均 `code=2` 正常收场，**未出现** `[DIAG][WATCHDOG]`、**未**在 Play 中发生域重载；原因：Unity 2022.3 在 Play 期间延迟脚本重编译（`Recompile After Finished Playing`），重编译全部发生在退出 Play 之后。改变该行为需要改编辑器偏好或 `ProjectSettings`（超范围）或 `execute_code`（禁用）。
+
+静态检查数字：`Assert*(IQaSink sink)` = 10/16/14/7；断言体内违禁 token = 0；`class *_Boot` = 0；`class *_Json` = 0；适配器行数 32/38/33/34（≤40）；范围内总行数 8582。
+
+## E.7 未决项（≤3 目检）
+
+1. **L2 域重载未被真实触发**（`l2_domainreload/README.txt`）。若要在真实域重载下验证看门狗：把编辑器偏好 `Script Changes While Playing` 改为 `Recompile And Continue Playing`（所有者环境设置，本单未改）→ `Tools/QA/In-Editor/DIAG` 进 Play → 加注释保存 → 预期落 `code=3 reason=runner-lost-domain-reload`。
+2. **SPEC01 断言方法数 10 vs 断言行数 12**（`AssertDualPathAndClocks` 承载 3 条）。若要求方法数也等于 12，需拆协程并移动判定代码块，超出“只改签名”的约束。
+3. **`Docs/01` numstat 是 `5 0` 而非 `1 0`**：同文件还有所有者 `DOC-INFRA-01` 的 4 行未提交改动（§14.4）。本单贡献已用 hunk 分离（`@@ -511,0 +512 @@`）；所有者提交时请注意分开 stage。
+
+## E.8 建议提交（阶段 E）
+
+```text
+test(qa): 统一四套件 Launcher/Boot、SPEC01 断言走 IQaSink、补分层文档（阶段 E）
+
+为什么：四个守卫套件的引导状态机重复四份，M7 拆程序集时无法归属；本次合并为单一
+QaLauncher（SessionState 键/runner 名/日志/退出分叉逐条等价），SPEC01 剩余断言统一
+走 IQaSink，并补新人模板与分层文档；四套件各连跑 2 次，AC-1 复比对 IDENTICAL 证明
+断言口径零变化，已知红 Diag.Input.FirstExit 仍是 product_fail。
+```
+
+建议提交范围（不含所有者 `DOC-INFRA-01` 的既有改动）：
+- `Assets/_Project/Tests/QA/Editor/{QaLauncher.cs(+meta),QA_InEditorMenu.cs}`
+- `Assets/_Project/Tests/{SPEC01,REFACTOR,DIAG}/Editor/*_BatchAcceptance.cs`、`Assets/_Project/Tests/FND00B/Editor/FND00B06_BatchAcceptance.cs`
+- `Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs`
+- `Assets/_Project/Tests/QaTestTemplate.md(+meta)`
+- `Docs/01_总体架构与内容生产规范.md`（仅 §14.1 那 1 行；与 `DOC-INFRA-01` 的 4 行分开 stage）
+- `Docs/06_测试架构与验收分层.md`（Docs/ 目录不在 Assets 下，无 `.meta`）
+- `Docs/QA/Evidence/QA-REFACTOR-01/**`（含 `final/`、`l2_domainreload/`、`dedup_counts.txt`、`compile.log`、`git_scope.txt`、`utp_readiness*.ps1`、`capture_final.ps1`、`collect_*.ps1`）
+- 新增 canonical 证据子目录：`SPEC-01/editor_run{43,44}`、`REFACTOR-M4/editor_run{19,20}`、`FND-00B-06/editor_run{7,8}`、`DIAG-SKILL/editor_run{7,8,9,10,11}`
+- `Assembly-CSharp*.csproj` 为 Unity 自动生成，按规则**不提交**
+
+（由所有者用 GitHub Desktop 提交；本执行者未做任何 git 写操作。）
+
+## E.9 消耗记录（阶段 E）
+
+- 钱包：`Go 订阅`
+- 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
+- 轮次：1 轮实现 + 1 轮修复（修复内容：① `utp_readiness_phaseE.ps1` 三处期望值写成“只算代码”却按“含注释”计数，改为先剥注释；② `docs/01` diff 采集脚本因 PowerShell 以 ANSI 读脚本导致中文路径乱码，改用通配路径；③ 误把累积式 REPORT 整文件覆盖，已按 HEAD 字节还原并改为追加阶段 E 章节）。均未触及断言口径。
+- 套件运行：11 次（DIAG×5 = L2 三次 + AC-2 两次；SPEC01/REFACTOR/FND00B06 各 2 次），上限 20。
+- 编译：3 次有效重编译，无连续红。
+- 时间：约 70 分钟。
+- 熔断：未触发。
+
+## E.10 仍直写文件 / 仍依赖引导的断言（AC-10 ⑤）
+
+**无。** 四套件全部 `Assert*` 已满足：证据只经 `IQaSink`（`sink.Record` / `sink.BlockedAssertion` / `sink.InfraFailure`），夹具显式入参，断言体内 `File.` / `Directory.` / `SessionState` / `EditorApplication` / `QaLauncher` / `*_Boot` / `_ev.` 计数均为 0（`utp_readiness.txt` PHASE E 的 `E2/E3` 逐套件扫描）。
+
+例外说明（不是违规，属编排层）：`Start()` / `Finish()` / `Update()`（看门狗）与 `RecordRegressionFinal()` 仍在 runner 类上使用 `_ev` 与 `SessionState` 写入 `Finished`/`ExitCode`，这是 TASK §2.3 明确允许的“编排层继续用 SessionState、写 ExitCode”。
+
