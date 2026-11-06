@@ -1,0 +1,26 @@
+# DIAG expected-field diff (literal spec must not drift)  [QA-REFACTOR-01 AC-1]
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\before\DIAG_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\after\DIAG_Assertions.jsonl
+BEFORE count=7  AFTER count=7
+
+=== BEFORE ===
+Diag.CastChain.EmptySlots :: Diag.CastChain.EmptySlots :: {"castReturn2":false,"castReturn3":false,"manaDelta":0,"exception":null}
+Diag.CastChain.Q :: Diag.CastChain.Q :: {"castReturn":true,"manaDelta":20,"cdRemaining":">0 且≈6","targetDamage":"== MeleeCombat.GetRawDamage()","animState":"Q_1（≤0.5s）"}
+Diag.CastChain.W :: Diag.CastChain.W :: {"castReturn":true,"manaDelta":30,"cdRemaining":">0","swordTimer":">=0（反射 _timer，证明效果已执行）","animState":"W_1（≤0.5s）"}
+DIAG-SKILL :: Diag.Input.FirstExit :: {"expected":"MISSING_CONTROLLER","note":"按 Q 首个失效节点"}
+DIAG-SKILL :: Diag.Prefab.Slots :: {"slotCount":4,"Q":"非空","W":"非空","E":"空","R":"空"}
+DIAG-SKILL :: Diag.Scene.Indicator :: {"expectedCount":1,"matAssigned":true,"hasConsumer":true}
+DIAG-SKILL :: Diag.Scene.SkillInputController :: {"expectedCount":1,"note":"DungeonWorld 运行期应恰好存在 1 个 SkillInputController"}
+
+=== AFTER ===
+Diag.CastChain.EmptySlots :: Diag.CastChain.EmptySlots :: {"castReturn2":false,"castReturn3":false,"manaDelta":0,"exception":null}
+Diag.CastChain.Q :: Diag.CastChain.Q :: {"castReturn":true,"manaDelta":20,"cdRemaining":">0 且≈6","targetDamage":"== MeleeCombat.GetRawDamage()","animState":"Q_1（≤0.5s）"}
+Diag.CastChain.W :: Diag.CastChain.W :: {"castReturn":true,"manaDelta":30,"cdRemaining":">0","swordTimer":">=0（反射 _timer，证明效果已执行）","animState":"W_1（≤0.5s）"}
+DIAG-SKILL :: Diag.Input.FirstExit :: {"expected":"MISSING_CONTROLLER","note":"按 Q 首个失效节点"}
+DIAG-SKILL :: Diag.Prefab.Slots :: {"slotCount":4,"Q":"非空","W":"非空","E":"空","R":"空"}
+DIAG-SKILL :: Diag.Scene.Indicator :: {"expectedCount":1,"matAssigned":true,"hasConsumer":true}
+DIAG-SKILL :: Diag.Scene.SkillInputController :: {"expectedCount":1,"note":"DungeonWorld 运行期应恰好存在 1 个 SkillInputController"}
+
+=== DIFF (char-by-char) ===
+(empty)
+RESULT: IDENTICAL (7 assertions, char-by-char)

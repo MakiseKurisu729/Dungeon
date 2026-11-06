@@ -1,0 +1,50 @@
+QA-REFACTOR-01 phase D - editor state (mode B / MCP, never closed the editor)
+instance: Dungeon@4f5c34c82f31646e   unity: 2022.3.62f3c1   platform: WindowsEditor   is_batch_mode: false
+
+=== 1. START (before any edit) ===
+observed_at_unix_ms: 1793949360273   sequence: 7
+editor.play_mode.is_playing      : false
+editor.active_scene.path         : Assets/Scenes/DungeonWorld.unity
+compilation.is_compiling         : false
+compilation.is_domain_reload_pending : false
+compilation.last_domain_reload_after_unix_ms: 1793947488330
+assets.external_changes_dirty    : false
+
+=== 2. AFTER COMPILE (refresh_unity + IQSink->IQaSink fix) ===
+observed_at_unix_ms: 1793950019280   sequence: 4
+editor.play_mode.is_playing      : false
+compilation.is_compiling         : false
+compilation.is_domain_reload_pending : false
+compilation.last_domain_reload_after_unix_ms: 1793949972454   <- new domain reload saw the phase D scripts
+console "error CS" (300 entries) : 0
+console warnings (100 entries)   : 1   (only "MCP-FOR-UNITY [WebSocket] Unexpected receive error: WebSocket is not initialised", infrastructure, not a compile issue)
+
+=== 3. SUITE RUN (menu only, run_tests NOT used) ===
+menu path: Tools/QA/In-Editor/DIAG   (execute_menu_item)
+evidence subdir: Docs/QA/Evidence/DIAG-SKILL/editor_run6   (menu auto-increment, append-only)
+InEditorResult.txt:
+  task=DIAG
+  code=2
+  finishedAt=2026-11-06 15:27:42.907
+  unityVersion=2022.3.62f3c1
+  scenario=in-editor
+  evidenceSubdir=editor_run6
+DIAG_Assertions.jsonl : 7 lines
+DIAG_Summary.json     : pass=6 fail=1 blocked=0 infraFail=0 observed=0
+DIAG_ExitCode.txt     : 2
+only red row          : Diag.Input.FirstExit status=product_fail (known red, unchanged)
+
+=== 4. END (after run + evidence copies) ===
+sequence: 7
+editor.play_mode.is_playing      : false      (diag runner left play mode normally)
+editor.active_scene.path         : Assets/Scenes/DungeonWorld.unity
+compilation.is_compiling         : false
+compilation.is_domain_reload_pending : false
+compilation.last_domain_reload_after_unix_ms: 1793950055461
+console "error CS"               : 0
+console warnings                 : 0
+
+=== 5. NOTES ===
+- Editor stayed open the whole phase (mode B). No batchmode run in phase D.
+- No asset write tool was used: only script file edits (own editor), refresh_unity, read_console, read resources, execute_menu_item.
+- CI/batchmode regression (mode A) is still required in phase E per TASK §3.2.1.6.

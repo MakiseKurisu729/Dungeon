@@ -1,0 +1,45 @@
+DIAG evidence shape diff (before vs after migration)
+BEFORE dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\before
+AFTER  dir: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\after
+
+=== FILE NAMES ===
+BEFORE (4): DIAG_Assertions.jsonl, DIAG_ExitCode.txt, DIAG_Summary.json, InEditorResult.txt
+AFTER  (4): DIAG_Assertions.jsonl, DIAG_ExitCode.txt, DIAG_Summary.json, InEditorResult.txt
+FILE NAME DIFF: (empty) IDENTICAL
+
+=== RUNS INDEX (must be absent) ===
+BEFORE runs-index files=0  AFTER runs-index files=0
+RUNS INDEX: (absent both sides) IDENTICAL
+
+=== SUMMARY KEY ORDER (DIAG_Summary.json) ===
+BEFORE (16): task, mode, run, startedAt, finishedAt, unityVersion, scene, head, assertionFile, pass, fail, blocked, infraFail, observed, conclusion, exitReason
+AFTER  (16): task, mode, run, startedAt, finishedAt, unityVersion, scene, head, assertionFile, pass, fail, blocked, infraFail, observed, conclusion, exitReason
+SUMMARY KEY DIFF: (empty) IDENTICAL (order-sensitive)
+
+=== ASSERTION LINE FIELD ORDER (first line) ===
+BEFORE (20): run, qaItem, assertion, expected, expectedCount, note, actual, count, waitedSeconds, pass, status, kind, timestamp, data, scene, waitedSeconds, controllerCount, controllerNames, indicatorCount, note
+AFTER  (20): run, qaItem, assertion, expected, expectedCount, note, actual, count, waitedSeconds, pass, status, kind, timestamp, data, scene, waitedSeconds, controllerCount, controllerNames, indicatorCount, note
+ASSERTION LINE DIFF: (empty) IDENTICAL
+
+=== ENCODING ===
+DIAG_Assertions.jsonl: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+DIAG_ExitCode.txt: beforeBOM=False afterBOM=False beforeCRLF=True afterCRLF=True
+DIAG_Summary.json: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+InEditorResult.txt: beforeBOM=False afterBOM=False beforeCRLF=False afterCRLF=False
+
+=== EXITCODE CONTENT ===
+before=2 after=2 IDENTICAL
+
+=== SUMMARY CONSTANT VALUES ===
+task: IDENTICAL
+mode: IDENTICAL
+run: IDENTICAL
+unityVersion: IDENTICAL
+scene: IDENTICAL
+pass: IDENTICAL
+fail: IDENTICAL
+blocked: IDENTICAL
+infraFail: IDENTICAL
+observed: IDENTICAL
+conclusion: IDENTICAL
+exitReason: IDENTICAL

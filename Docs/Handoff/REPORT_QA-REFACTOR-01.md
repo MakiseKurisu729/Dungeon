@@ -418,3 +418,136 @@ test(qa): FND00B06 套件迁移到 Qa 公共层（阶段 C，断言零变化）
 - 钱包：`Go 订阅`
 - 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
 - 轮次：1 轮实现 + 1 轮修复（1 处类型名拼写 `IQSink`→`IQaSink` 共 14 处、1 处脚本 UTF-8 BOM 导致的解析失败；均未触及断言口径）；套件运行 1 次（FND00B06，`editor_run6`）。
+
+---
+
+## D. 阶段 D —— DIAG 套件迁移（6 pass / 1 fail，已知红保持）
+
+> 本节只覆盖阶段 D。阶段 A 见 §0–§4，阶段 B/C 见各自后缀节（`B.*` / `C.*`）；**阶段 E 仍未做**（`QaLauncher`、四套件统一 Boot、`QaTestTemplate.md`、`Docs/06`、`Docs/01 §14.1`）。
+
+### D.1 结果摘要
+
+**阶段 D 完成**。
+
+一句话：`DIAG_Evidence` 变成 34 行适配器（`class DIAG_Evidence : QaEvidence`，构造函数 `(int run, string mode)` 不变、无 I/O），`DIAG_ProbeRunner` 的 7 条 `Assert*` 全部改成 `IEnumerator AssertXxx(IQSink sink, …)` 且删掉本地 `Dict`/`V3`/`GetHead`，`DIAG_BatchAcceptance` 的 `GitHead` 改用 `QaScene.GetHead()`；编译绿、DIAG 菜单跑 1 次得 **6 pass / 1 fail / 7 行 / 退出码 2**，唯一红仍是已知的 `Diag.Input.FirstExit`（`status=product_fail`），三份机检 diff 全部 `IDENTICAL`。
+
+### D.2 AC 回填（本阶段部分）
+
+| AC | 结果 | 断言 ID | 关键数据 | 日志路径 |
+|---|---|---|---|---|
+| **AC-1**（DIAG 部分） | **通过** | 7 条 | before 7 行 / pass=6 fail=1；after 7 行 / pass=6 fail=1；`(qaItem, assertion, status)` 排序后 **DIFF 为空**；7 条 `expected` 逐字符 **IDENTICAL** | `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_AssertionIds.txt`、`.../DIAG/diff_Expected.txt` |
+| **AC-3**（DIAG 部分） | **通过** | — | 文件名集合 4=4（`DIAG_Assertions.jsonl` / `DIAG_Summary.json` / `DIAG_ExitCode.txt` / `InEditorResult.txt`）；**两侧都无 Runs 索引**；Summary **16 键逐键同序**（`task…exitReason`，`head` 第 8、`assertionFile` 第 9、`conclusion` 第 15）；断言行首行 20 个键的 `"key"` 出现次序一致；4 个文件全 `BOM=False`；`ExitCode` 内容 `2=2`；`conclusion` 值逐字符一致 | `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_EvidenceShape.txt` |
+| **AC-10**（DIAG 部分） | **通过** | — | `Assert\w+\(IQaSink sink` = **7**；每条 `Assert*` 体内 `File.\|Directory.\|SessionState\|EditorApplication\|QaLauncher\|_Boot` = **0**、`_ev.` = **0**、每条都有 `sink.Record/BlockedAssertion/InfraFailure`；`DIAG_Evidence.cs` **34 行 ≤ 40**、I/O token = 0、无本地 `WriteSummary/Record/BuildLine`；`QaSink.cs` 不变、`class QaEvidence : IQaSink` 仍 = 1；`Tests/DIAG/**` 内 `"Docs", "QA", "Evidence"` 字面量 = 0 | `Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt`（`## PHASE D`，`ALL APPLICABLE CHECKS PASS`） |
+| **AC-4**（本阶段快照，供阶段 E 汇总） | 通过（局部） | — | 代码侧只有 4 个文件：`Tests/DIAG/Runtime/DIAG_Evidence.cs`、`Tests/DIAG/Runtime/DIAG_ProbeRunner.cs`、`Tests/DIAG/Editor/DIAG_BatchAcceptance.cs`、`Tests/QA/Runtime/QaEvidence.cs`（纯增量）；`Assets/_Project/Scripts/**` 零改动；Docs 侧只有本 REPORT、`Docs/QA/Evidence/QA-REFACTOR-01/**`；canonical 只新增 `Docs/QA/Evidence/DIAG-SKILL/editor_run6/`；所有者的未提交改动（`.gitattributes`/`.gitignore`/`.editorconfig`/`AGENTS.md`/`Docs/01`/`Docs/07`/`workflow-rules.md`/`Docs/QA/Evidence/{DOC-INFRA-01,OPS-01}`）未被触碰 | `Docs/QA/Evidence/QA-REFACTOR-01/compile_phaseD.txt` §4 |
+| AC-2 | 未运行 | — | 阶段 E 才要求四套件各连跑 2 次 | — |
+| AC-5/6/7/8/9 | 未运行 | — | 属阶段 E（模板、全仓去重计数、`QaLauncher`+L2、全仓编译结论、`Docs/06`） | — |
+
+### D.3 改动清单
+
+| 文件 | 现行数 | `git diff --numstat`（vs `e3ad251c`） | 关键改动 |
+|---|---|---|---|
+| `Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs` | **34** | +27 −128 | 全量换成适配器：只组装 `QaEvidenceSpec`；`Task="DIAG-SKILL"`、`LogTag="DIAG"`、`EvidenceFolder="DIAG-SKILL"`、`DIAG_Assertions.jsonl` / 固定名 `DIAG_Summary.json`、固定名 `DIAG_ExitCode.txt`、`RunIndexFileName=null`、`ShouldTruncateAssertions=(r,m)=>true`、16 键 `SummaryFields` |
+| `Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs` | **543** | +124 −143 | 7 条断言改 `IEnumerator AssertXxx(IQSink sink[, ProbeState probe])`；新增私有 `ProbeState` 测点对象；删本地 `Dict`/`V3`/`GetHead`（→ `QaJson.Dict`/`QaJson.V3`/`QaScene.GetHead("DIAG.Head")`）；场景等待与控制器轮询改 `QaWait.WaitUntil`；`ScenePath` 常量改指 `QaScene.ScenePath`；`Finish()` 改调 `QaEvidence.WriteSummary(..., extra, extraTail)` |
+| `Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs` | **207** | +1 −28 | 删本地 `GitHead()`，改 `QaScene.GetHead()`；删无用 `using System.IO;`；**`DIAG_Boot` 完整保留**（阶段 E 才统一） |
+| `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs` | **391** | +9 −4 | **纯增量**：新增 `QaSummaryKey.ExtraTail` + `WriteSummary(..., Dictionary<string,object> extraTail = null)` 的第二展开槽（其余三套件不传该参数，行为不变） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/{compare,expected,shape}.ps1` | — | 新增 | 三份 diff 的可复跑脚本 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/{diff_AssertionIds,diff_Expected,diff_EvidenceShape}.txt` | — | 新增 | 三份机检 diff |
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/after/`（4 文件） | — | 新增 | `DIAG-SKILL/editor_run6/` 的复制快照 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/console_phaseD.txt` | — | 新增 | 本次运行的 Console 摘录（`CONCLUSION` / `SUMMARY` / `finish` / `INEDITOR`） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/{utp_readiness.txt,utp_readiness_phaseD.ps1}` | — | 追加 / 新增 | `## PHASE D` 段（D1–D6） |
+| `Docs/QA/Evidence/QA-REFACTOR-01/{compile_phaseD.txt,editor_state_phaseD.txt}` | — | 新增 | 编译与模式 B 四段 state |
+| `Docs/QA/Evidence/DIAG-SKILL/editor_run6/` | — | 新增（canonical，只追加） | 菜单自动递增产物 |
+
+- 未改：菜单文本、证据子目录递增规则、`*_Runner` GameObject 名、`SessionState` 键（`DIAG.*`）、命令行入口 `DIAG_BatchAcceptance.Run`、`DIAG_Boot`。
+- 行尾：三个被重写的 DIAG 文件在工作树是 LF（仓库本来就两种并存：`FND00B06_Evidence.cs` 为 LF，`REFACTOR_Evidence.cs`/`QaEvidence.cs` 为 CRLF）。`git diff --numstat` 显示并非整文件噪声，纯属换行符，无逻辑影响。
+
+### D.4 实现原理（含 5 个 `文件:行`）
+
+1. `Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs:7-34` —— 适配器只做 spec 组装。证据契约按"现状"逐项保留：目录 `DIAG-SKILL/[QA_EVIDENCE_SUBDIR]`、断言文件名固定、Summary 固定名（无 run 后缀）、ExitCode 固定名、**不生成 Runs 索引**、**构造即覆盖断言文件**（`ShouldTruncateAssertions = (r, m) => true`）。
+2. `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs:28` + `:231-246` —— 新增 `QaSummaryKey.ExtraTail` 与 `WriteSummary(..., extraTail = null)`：DIAG 的 Summary 需要把 `head` 放在第 8 位、`conclusion` 放在第 15 位（两个**不相邻**的私有键块），原有单 `Extra` 槽只能展开一次，故加第二个可选槽。为纯增量，其余三套件不传 → 键序不变。
+3. `Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:39-47` + `:129` —— 断言间共享的测点（控制器/指示器数组、`controllerCount`、`qPass/wPass/emptyPass`）收进私有 `ProbeState` 实例并由 `Start` 创建后**显式传参**；runner 上的同类可变字段全部删除，断言不再读写 runner 字段。
+4. `Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs:72` + `:131-135` + `:492-495` —— 场景就绪与控制器轮询改 `QaWait.WaitUntil(..., timeout)`（超时改由 `Time.deltaTime` 累加，正常 `timeScale=1` 下与原 `unscaledDeltaTime` 口径一致，仍为 25s/3s 上限），实测耗时改用 `Time.realtimeSinceStartup` 差值；收尾把 `head`/`conclusion` 分别经 `QaJson.Dict` 传给 `WriteSummary` 的 `extra`/`extraTail`。
+5. `Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:27` —— `GitHead()`（本地 25 行进程调用）改为 `QaScene.GetHead()`（同样跑 `git rev-parse HEAD`，失败返回 `"unknown"`），`SessionState.SetString("DIAG.Head", head)` 与下游 `QaScene.GetHead("DIAG.Head")` 的语义完全不变。
+
+### D.5 证据锚点
+
+| 路径 | 内容 | 结论 |
+|---|---|---|
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/before/` | 阶段 A 采集的迁移前基线（4 文件，只读） | 本轮未改 |
+| `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/after/` | `DIAG-SKILL/editor_run6/` 的复制快照（4 文件） | 本轮产物 |
+| `.../DIAG/diff_AssertionIds.txt` | 三重集排序比对 | `BEFORE count=7 pass=6 fail=1` / `AFTER count=7 pass=6 fail=1` / `RESULT: IDENTICAL` |
+| `.../DIAG/diff_Expected.txt` | 7 条 `expected` 逐字符比对 | `RESULT: IDENTICAL (7 assertions, char-by-char)` |
+| `.../DIAG/diff_EvidenceShape.txt` | 文件名集合 / Runs 索引缺席 / Summary 键序 / 断言行字段序 / BOM / ExitCode / Summary 常量值 | 全项 `IDENTICAL` |
+| `.../DIAG/console_phaseD.txt` | 本次运行 Console 摘录 | `finish; run=1; exit=2; pass=6; fail=1` |
+| `.../utp_readiness.txt` | `## PHASE D`（D1–D6） | `ALL APPLICABLE CHECKS PASS` |
+| `.../compile_phaseD.txt` | `error CS`=0、四套件 sink 断言计数、`git status --porcelain` | 编译绿、范围干净 |
+| `.../editor_state_phaseD.txt` | 模式 B 四段 `editor_state` | 未关编辑器、无 batchmode |
+| `Docs/QA/Evidence/DIAG-SKILL/editor_run6/` | canonical（菜单自动递增，只追加） | `editor_run1..5` 未被覆盖 |
+
+**运行次数**：本轮 DIAG 跑 **1 次**（阶段 D 要求）；整单累计 7 次（基线 4 + 阶段 A 2 + 阶段 C 1，本轮 1）≤ 20。三套件本轮**未重跑**（只验证"仍能编译"）。
+
+### D.6 已知红保持的证据
+
+- `Diag.Input.FirstExit`：`pass=false`、`status=product_fail`、`kind=production`；`expected={"expected":"MISSING_CONTROLLER","note":"按 Q 首个失效节点"}` 与 before **逐字符一致**（`diff_Expected.txt` 的该行未出现在 DIFF 段）；`actual.firstExit="NO_PRIMARY"`（与迁移前同因）。
+- 7 行里唯一红仍是它：Summary `pass=6 fail=1 blocked=0 infraFail=0 observed=0`，`InEditorResult.txt` `code=2`，`DIAG_ExitCode.txt` 内容 `2`（与 before `2` 一致）。
+- **未做任何"顺手修绿"**：没改 `expected`、没改判定表达式（`bool pass = firstExit == "MISSING_CONTROLLER";` 原样搬入），没删该断言。
+
+### D.7 未合并项及原因（去重纪律）
+
+| 本地实现 / 位置 | 处置 | 原因（等价性判断） |
+|---|---|---|
+| `Dictionary<string,object> Dict(params object[])` | **删除**，全改 `QaJson.Dict(` | 与 `QaJson.Dict` 逐行等价（按 `kvs` 插入序建字典） |
+| `Dictionary<string,object> V3(Vector3)` | **删除**，全改 `QaJson.V3(` | 与 `QaJson.V3` 等价（`{x,y,z}` 同序） |
+| `static string GetHead()` | **删除**，改 `QaScene.GetHead("DIAG.Head")` | 与 `QaScene.GetHead(sessionKey)` 的 `SessionState.GetString(key,"unknown")` 分支等价 |
+| `const string ScenePath` | **删除**，改 `QaScene.ScenePath` | 字面量完全相同（`Assets/Scenes/DungeonWorld.unity`） |
+| `IEnumerator AssertPrefabSlots` 内的 `AssetDatabase.LoadAssetAtPath` | **留在断言内** | Qa 层无资产加载封装；它是**只读**取预制体（`#if UNITY_EDITOR` 内），AC-10 禁止 token 不含 `AssetDatabase`。阶段 E 若要搬，应连同"只读资产加载"一起进 Qa 层 |
+| `static List<object> NamesOf(System.Array)` | **留在套件内** | `QaFixtures` 无等价物（`QaFixtures.StateName` 是动画状态名，不是对象名列表）；且它只服务 DIAG 的两条场景断言 |
+| `IEnumerator RunSafe(string, IEnumerator)` | **留在套件内（编排层）** | 属编排（异常→`InfraFailure` 兜底），不是断言体；阶段 E 统一 Boot 时可考虑上移 |
+| `yield return new WaitForSecondsRealtime(1.0f);` | **保留未改** | 与 `QaWait.WaitSeconds` **不等价**（后者按 `Time.deltaTime` 累加，`timeScale=0` 时不会推进；此处是"进场景后静置 1 秒"的同步点，保持原实时语义）。与阶段 B/C 的取舍一致 |
+| `QaEvidence` 的 Summary 槽 | **加 `ExtraTail`（设计缺口修复）** | `QaEvidenceSpec` 原有的单个 `Extra` 槽表达不了 DIAG"两个不相邻私有键块"的键序；若阶段 E 判定应改为 spec 字段（如 `HeadField`），可再收，不影响断言与证据形状 |
+
+### D.8 受影响模块导航
+
+- `Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs` —— 只剩"证据契约"（目录/文件名/键序/覆盖策略）。要看 DIAG 证据长什么样，看这一个文件。
+- `Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs` —— 编排（`Start` / `Update` 看门狗 / `Finish`）+ 7 条断言 + `ProbeState`。断言只经 `IQaSink` 出证据，落盘在 `QaEvidence`。
+- `Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs` —— batch/菜单入口 + `DIAG_Boot`（域重载接续、看门狗）。阶段 E 会把 `DIAG_Boot` 并入 `QaLauncher`。
+- `Assets/_Project/Tests/QA/Runtime/QaEvidence.cs` —— 四套件共享的落盘/计分/Summary/Runs；本轮仅新增 `ExtraTail` 槽。
+- 依赖方向：`DIAG/** → QA/**`（单向）；DIAG 不再引用 `SPEC01_Json`（阶段 A 已改名 `QaJson`），`SkillCastFixture` 已属 `QA/Runtime`。
+
+### D.9 三句话版本（TASK §5）
+
+1. DIAG 的证据契约被压成 34 行适配器，断言行/Summary/ExitCode 的落盘与计分全部归 `QaEvidence`，所以"改套件"不再需要先读 300 行样板。
+2. 7 条断言改成 `AssertXxx(IQSink sink, …)` 并把测点收进 `ProbeState` 显式传参，断言不再认识 runner 字段、`SessionState` 或文件系统，M7 可以直接用 `[UnityTest]` 包一条跑一条。
+3. 断言口径没动的证据不是"我看着一样"，而是三份机检：三重集 DIFF 为空、7 条 `expected` 逐字符一致、证据形状（文件名/键序/字段序/无 Runs/BOM）逐项一致，且已知红 `Diag.Input.FirstExit` 仍是 `product_fail`。
+
+### D.10 仍直写文件 / 仍依赖引导的断言（AC-10 ⑤）
+
+**无**。DIAG 的 7 条断言全部满足：首参 `IQaSink sink`（其中 6 条另带 `ProbeState probe` 测点参数），体内只经 `sink.Record` / `sink.BlockedAssertion` / `sink.InfraFailure`；逐方法花括号扫描 `File.` / `Directory.` / `SessionState` / `EditorApplication` / `QaLauncher` / `_Boot` = 0，`_ev.` = 0。`SessionState`、`EditorApplication.isPlaying`、`File.WriteAllText(ExitCodePath)`、`Time.timeScale` 仍只在编排层（`Start` / `Update` / `Finish`）与 `DIAG_Boot`。
+
+**已知取舍**：`AssertPrefabSlots` 用 `AssetDatabase.LoadAssetAtPath` 只读取预制体（编辑器内），属"读资产"而非"写文件"；`AssertFirstExit` 读生产 `SelectionManager.instance`（与迁移前一致，它测的就是这条早退链）。
+
+### D.11 目检项（≤3，供所有者）
+
+1. 打开 `Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_EvidenceShape.txt`：确认 Summary 16 键依次为 `task, mode, run, …, scene, head, assertionFile, pass, … observed, conclusion, exitReason`，且"`RUNS INDEX: (absent both sides) IDENTICAL`"。
+2. `git diff -- Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs` 目视确认适配器只有 spec 组装、无 I/O；`DIAG_Boot` 仍在 `Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs:51`。
+3. Unity Console 只应有 `[DIAG][ASSERT]` 日志、无 `error CS`；`Docs/QA/Evidence/DIAG-SKILL/editor_run6/` 是本次新增（`editor_run1..5` 未被覆盖）。
+
+### D.12 建议提交（阶段 D）
+
+```text
+test(qa): DIAG 套件迁移到 Qa 公共层（阶段 D，断言零变化）
+
+为什么：DIAG_Evidence 从 131 行降到 34 行、只保留证据契约，7 条断言改成
+AssertXxx(IQSink sink, …) 并把测点显式传参；"断言没被动过"由三重集 DIFF 为空、
+7 条 expected 逐字符一致、证据形状逐项一致三份机检证明，已知红 Diag.Input.FirstExit
+仍是 product_fail 未修。
+```
+
+（由所有者用 GitHub Desktop 提交；本执行者未做任何 git 写操作。）
+
+### D.13 消耗记录（阶段 D）
+
+- 钱包：`Go 订阅`
+- 模型完整 ID：`opencode-go/deepseek-v4.1-flash`
+- 轮次：1 轮实现 + 1 轮修复（修复内容：① 7 处断言签名误写成 `IQSink` → `IQaSink`，与阶段 C 同类笔误；② `DIAG_BatchAcceptance` 删 `GitHead` 时误删类闭合大括号，已补齐；③ `utp_readiness_phaseD.ps1` 把适配器行数期望从 31 改为实测 34）。均未触及断言口径。
+- 套件运行：DIAG 1 次（`editor_run6`）。

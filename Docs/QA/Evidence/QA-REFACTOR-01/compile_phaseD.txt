@@ -1,0 +1,59 @@
+QA-REFACTOR-01 phase D (DIAG suite migration) - compile + scope evidence
+captured: 2026-11-06 15:41:04
+HEAD: e3ad251c
+HEAD(long): e3ad251c08d13bf39e385cd9a9b0f88f413d1622
+
+=== 1. COMPILE ===
+unity instance: Dungeon@4f5c34c82f31646e   version: 2022.3.62f3c1   mode: B (editor open, MCP)
+is_compiling = False ; is_domain_reload_pending = False (settled before menu run)
+Console filter "error CS" (whole editor, 300 entries) : 0
+Console type=warning after final compile          : 0
+
+--- round 1 (first write) : 7 x error CS0246 IQSink, fixed by rename IQSink -> IQaSink (assertion signatures only) ---
+Assets\\_Project\\Tests\\DIAG\\Runtime\\DIAG_ProbeRunner.cs(129,34): error CS0246: The type or namespace name 'IQSink' could not be found
+same at 154, 189, 251, 298, 362, 425 (7 occurrences, all Assert* signatures)
+--- round 2 (after rename + refresh_unity) : 0 error CS ---
+
+=== 2. CODE CHANGED IN PHASE D (git diff --numstat vs HEAD) ===
+Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs        +27  -128   now  34 lines (adapter, limit <= 40)
+Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs     +124 -143   now 543 lines
+Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs  +1   -28    now 207 lines (GitHead removed, DIAG_Boot kept)
+Assets/_Project/Tests/QA/Runtime/QaEvidence.cs             +9   -4     now 391 lines (additive: ExtraTail slot)
+
+Note on line endings: the three rewritten DIAG files are LF in the working tree (repo already carries both conventions: FND00B06_Evidence.cs = LF, REFACTOR_Evidence.cs / QaEvidence.cs = CRLF).
+git diff --numstat above shows the diff is NOT whole-file noise, so the conversion is cosmetic only.
+
+=== 3. OTHER THREE SUITES STILL COMPILE (Assert*(IQaSink sink) tally unchanged) ===
+SPEC01_ProbeRunner   : 1   (phase C = 1)
+REFACTOR_ProbeRunner : 16  (phase C = 16)
+FND00B06_ProbeRunner : 14  (phase C = 14)
+DIAG_ProbeRunner     : 7   (phase C = 0, migrated this phase)
+repo-wide "error CS" = 0 -> all four suites compile together; no functional change to the other three.
+
+=== 4. git status --porcelain (read-only snapshot; NO git write performed) ===
+ M .gitattributes
+ M .gitignore
+ M AGENTS.md
+ M Assembly-CSharp-Editor.csproj
+ M Assembly-CSharp.csproj
+ M Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+ M Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+ M Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+ M "Docs/01_\346\200\273\344\275\223\346\236\266\346\236\204\344\270\216\345\206\205\345\256\271\347\224\237\344\272\247\350\247\204\350\214\203.md"
+ M Docs/Handoff/workflow-rules.md
+ M Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness.txt
+?? .editorconfig
+?? "Docs/07_\345\267\245\347\250\213\350\247\204\350\214\203\344\270\216\345\237\272\347\241\200\350\256\276\346\226\275.md"
+?? Docs/QA/Evidence/DIAG-SKILL/editor_run6/
+?? Docs/QA/Evidence/DOC-INFRA-01/
+?? Docs/QA/Evidence/OPS-01/
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/after/
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/compare.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_AssertionIds.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_EvidenceShape.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/diff_Expected.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/expected.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/DIAG/shape.ps1
+?? Docs/QA/Evidence/QA-REFACTOR-01/compile_phaseD.txt
+?? Docs/QA/Evidence/QA-REFACTOR-01/utp_readiness_phaseD.ps1

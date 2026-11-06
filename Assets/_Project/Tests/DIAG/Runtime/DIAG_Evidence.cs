@@ -1,135 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using UnityEngine;
-
 /// <summary>
-/// DIAG-SKILL 一次性探针的结构化证据写入（极简 JSONL）。
-/// 输出目录：Docs/QA/Evidence/DIAG-SKILL/
-///   - DIAG_Assertions.jsonl（每条断言一行；启动时清空）
-///   - DIAG_Summary.json / DIAG_ExitCode.txt（收尾写）
-/// 只写 Docs 证据，不修改任何生产资产。
-/// JSON 序列化复用 QaJson（同程序集，纯工具类）。
+/// DIAG-SKILL 证据契约适配器：只组装 <see cref="QaEvidenceSpec"/>；断言行/计分/Summary/ExitCode 全部由 QaEvidence 完成。
+/// 证据目录 Docs/QA/Evidence/DIAG-SKILL/[QA_EVIDENCE_SUBDIR]；每次构造清空断言文件（现状：每轮覆盖）；
+/// 无 Runs 索引；Summary 固定名 DIAG_Summary.json（无 run 后缀），键序与迁移前逐字符一致
+/// （head 与 conclusion 是两个不相邻的套件私有键块，分别走 Extra 与 ExtraTail 槽）。
 /// </summary>
-public class DIAG_Evidence
+public class DIAG_Evidence : QaEvidence
 {
-    public readonly int Run;
-    public readonly string Mode;
-    public readonly DateTime StartedAt = DateTime.Now;
-    public readonly List<string> Records = new List<string>();
+    public DIAG_Evidence(int run, string mode) : base(Spec(), run, mode) { }
 
-    public int Pass;
-    public int Fail;
-    public int Blocked;
-    public int Infra;
-    public int Observed;
-
-    readonly string _dir;
-    readonly string _assertPath;
-
-    public DIAG_Evidence(int run, string mode)
+    static QaEvidenceSpec Spec()
     {
-        Run = run;
-        Mode = mode;
-        string root = Directory.GetParent(Application.dataPath).FullName;
-        _dir = Path.Combine(root, "Docs", "QA", "Evidence", "DIAG-SKILL");
-        string subdir = Environment.GetEnvironmentVariable("QA_EVIDENCE_SUBDIR");
-        if (!string.IsNullOrEmpty(subdir)) _dir = Path.Combine(_dir, subdir.Trim());
-        Directory.CreateDirectory(_dir);
-        _assertPath = Path.Combine(_dir, "DIAG_Assertions.jsonl");
-        try { if (File.Exists(_assertPath)) File.Delete(_assertPath); }
-        catch (Exception e) { Debug.LogWarning("[DIAG] 清空断言文件失败: " + e.Message); }
-    }
-
-    public string EvidenceDir { get { return _dir; } }
-    public string AssertionPath { get { return _assertPath; } }
-
-    /// <param name="kind">production = 产品断言；infra = 测试基础设施</param>
-    /// <param name="status">pass / product_fail / blocked / observed / infra_fail</param>
-    public void Record(string qaItem, string assertion, object expected, object actual,
-                       bool pass, string status, string kind, Dictionary<string, object> data)
-    {
-        string line = BuildLine(qaItem, assertion, expected, actual, pass, status, kind, data);
-        Records.Add(line);
-
-        if (status == "infra_fail") Infra++;
-        else if (status == "blocked") Blocked++;
-        else if (status == "observed") Observed++;
-        else if (pass) Pass++;
-        else Fail++;
-
-        try { File.AppendAllText(_assertPath, line + "\n", new UTF8Encoding(false)); }
-        catch (Exception e) { Debug.LogError("[DIAG] 断言写入失败: " + e); }
-
-        Debug.Log("[DIAG][ASSERT] " + line);
-    }
-
-    public void BlockedAssertion(string qaItem, string assertion, object expected, string reason,
-                                 Dictionary<string, object> data)
-    {
-        var d = data ?? new Dictionary<string, object>();
-        d["blockedReason"] = reason;
-        Record(qaItem, assertion, expected, new Dictionary<string, object> { { "blocked", reason } },
-               false, "blocked", "production", d);
-    }
-
-    public void InfraFailure(string qaItem, string assertion, string message, string stack)
-    {
-        Record(qaItem, assertion, "可执行", new Dictionary<string, object> { { "error", message } },
-               false, "infra_fail", "infra",
-               new Dictionary<string, object> { { "stack", stack ?? "" } });
-    }
-
-    public void WriteSummary(string scenePath, string exitReason, string conclusion, string head)
-    {
-        var sb = new StringBuilder();
-        sb.Append("{\n");
-        sb.Append("  \"task\": \"DIAG-SKILL\",\n");
-        sb.Append("  \"mode\": ").Append(QaJson.Value(Mode)).Append(",\n");
-        sb.Append("  \"run\": ").Append(Run).Append(",\n");
-        sb.Append("  \"startedAt\": ").Append(QaJson.Value(StartedAt.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
-        sb.Append("  \"finishedAt\": ").Append(QaJson.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",\n");
-        sb.Append("  \"unityVersion\": ").Append(QaJson.Value(Application.unityVersion)).Append(",\n");
-        sb.Append("  \"scene\": ").Append(QaJson.Value(scenePath)).Append(",\n");
-        sb.Append("  \"head\": ").Append(QaJson.Value(head)).Append(",\n");
-        sb.Append("  \"assertionFile\": ").Append(QaJson.Value(_assertPath)).Append(",\n");
-        sb.Append("  \"pass\": ").Append(Pass).Append(",\n");
-        sb.Append("  \"fail\": ").Append(Fail).Append(",\n");
-        sb.Append("  \"blocked\": ").Append(Blocked).Append(",\n");
-        sb.Append("  \"infraFail\": ").Append(Infra).Append(",\n");
-        sb.Append("  \"observed\": ").Append(Observed).Append(",\n");
-        sb.Append("  \"conclusion\": ").Append(QaJson.Value(conclusion ?? "")).Append(",\n");
-        sb.Append("  \"exitReason\": ").Append(QaJson.Value(exitReason)).Append("\n");
-        sb.Append("}\n");
-
-        string path = Path.Combine(_dir, "DIAG_Summary.json");
-        try { File.WriteAllText(path, sb.ToString(), new UTF8Encoding(false)); }
-        catch (Exception e) { Debug.LogError("[DIAG] 汇总写入失败: " + e); }
-        Debug.Log("[DIAG][SUMMARY] " + sb.ToString().Replace("\n", " "));
-    }
-
-    public string ExitCodePath()
-    {
-        return Path.Combine(_dir, "DIAG_ExitCode.txt");
-    }
-
-    string BuildLine(string qaItem, string assertion, object expected, object actual,
-                     bool pass, string status, string kind, Dictionary<string, object> data)
-    {
-        var sb = new StringBuilder();
-        sb.Append("{");
-        sb.Append("\"run\":").Append(Run).Append(",");
-        sb.Append("\"qaItem\":").Append(QaJson.Value(qaItem)).Append(",");
-        sb.Append("\"assertion\":").Append(QaJson.Value(assertion)).Append(",");
-        sb.Append("\"expected\":").Append(QaJson.Value(expected)).Append(",");
-        sb.Append("\"actual\":").Append(QaJson.Value(actual)).Append(",");
-        sb.Append("\"pass\":").Append(pass ? "true" : "false").Append(",");
-        sb.Append("\"status\":").Append(QaJson.Value(status)).Append(",");
-        sb.Append("\"kind\":").Append(QaJson.Value(kind)).Append(",");
-        sb.Append("\"timestamp\":").Append(QaJson.Value(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"))).Append(",");
-        sb.Append("\"data\":").Append(QaJson.Value(data));
-        sb.Append("}");
-        return sb.ToString();
+        return new QaEvidenceSpec
+        {
+            Task = "DIAG-SKILL",
+            LogTag = "DIAG",
+            EvidenceFolder = "DIAG-SKILL",
+            AssertionFileName = "DIAG_Assertions.jsonl",
+            SummaryFileName = "DIAG_Summary.json",
+            ExitCodeFileName = "DIAG_ExitCode.txt",
+            RunIndexFileName = null,
+            ShouldTruncateAssertions = (r, m) => true,
+            SummaryFields = new[]
+            {
+                QaSummaryKey.Task, QaSummaryKey.Mode, QaSummaryKey.Run, QaSummaryKey.StartedAt,
+                QaSummaryKey.FinishedAt, QaSummaryKey.UnityVersion, QaSummaryKey.Scene,
+                QaSummaryKey.Extra, QaSummaryKey.AssertionFile,
+                QaSummaryKey.Pass, QaSummaryKey.Fail, QaSummaryKey.Blocked,
+                QaSummaryKey.InfraFail, QaSummaryKey.Observed,
+                QaSummaryKey.ExtraTail, QaSummaryKey.ExitReason
+            }
+        };
     }
 }

@@ -1,0 +1,15 @@
+QA-REFACTOR-01 phase D - DIAG run console excerpt
+source: Unity Console via MCP read_console (filtered), run = Tools/QA/In-Editor/DIAG
+evidence dir: Docs/QA/Evidence/DIAG-SKILL/editor_run6 (copied to QA-REFACTOR-01/DIAG/after)
+
+[DIAG] boot; isPlaying=False; started=False; finished=False
+[DIAG] playModeStateChanged=EnteredPlayMode
+[DIAG] play-mode runner created
+[DIAG] runner start; mode=probe; run=1; unity=2022.3.62f3c1; evidenceDir=D:\unity\Dungeon\Docs\QA\Evidence\DIAG-SKILL\editor_run6; head=e3ad251c08d13bf39e385cd9a9b0f88f413d1622
+[DIAG] active scene=Assets/Scenes/DungeonWorld.unity; waited=0.067s
+[DIAG][ASSERT] ... 7 lines total, see editor_run6/DIAG_Assertions.jsonl
+[DIAG][CONCLUSION] 见断言数据（Q/W 链条或控制器状态与预期不符）
+[DIAG][SUMMARY] {   "task": "DIAG-SKILL",   "mode": "probe",   "run": 1,   "startedAt": "2026-11-06 15:27:38.144",   "finishedAt": "2026-11-06 15:27:42.402",   "unityVersion": "2022.3.62f3c1",   "scene": "Assets/Scenes/DungeonWorld.unity",   "head": "e3ad251c08d13bf39e385cd9a9b0f88f413d1622",   "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\DIAG-SKILL\\editor_run6\\DIAG_Assertions.jsonl",   "pass": 6,   "fail": 1,   "blocked": 0,   "infraFail": 0,   "observed": 0,   "conclusion": "见断言数据（Q/W 链条或控制器状态与预期不符）",   "exitReason": "completed" }
+[DIAG] finish; run=1; exit=2; pass=6; fail=1; blocked=0; infra=0; observed=0
+[QA][INEDITOR] result D:/unity/Dungeon/Docs/QA/Evidence/DIAG-SKILL/editor_run6/InEditorResult.txt; task=DIAG code=2 finishedAt=2026-11-06 15:27:42.907 unityVersion=2022.3.62f3c1 scenario=in-editor evidenceSubdir=editor_run6 envAfter={SPEC01_MODE=<null>;SPEC01_RUN=<null>;SPEC01_EVIDENCE_TAG=<null>;FND00B06_RUN=<null>;DIAG_RUN=<null>;DIAG_MODE=<null>;REFACTOR_RUN=<null>;REFACTOR_MILESTONE=<null>;QA_EVIDENCE_SUBDIR=<null>}
+[QA][INEDITOR] done task=DIAG code=2

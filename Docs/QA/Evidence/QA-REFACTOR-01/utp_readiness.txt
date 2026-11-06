@@ -213,3 +213,116 @@ result  : INFO - phase C expectation = 0 [DIAG migrates in phase D]
 
 === PHASE C OVERALL ===
 ALL APPLICABLE CHECKS PASS
+
+## PHASE D (DIAG suite migration) - appended 2026-11-06 15:35:48
+root: D:\unity\Dungeon\Assets\_Project\Tests
+
+## D1. Assert*(IQaSink sink) in DIAG_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 7
+expected: 7
+result  : PASS
+
+   methods: AssertController, AssertIndicator, AssertFirstExit, AssertPrefabSlots, AssertQ, AssertW, AssertEmptySlots
+
+## D2. forbidden tokens inside DIAG Assert* bodies
+command : per-method brace scan: grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher|_Boot" in every Assert* body
+actual  : 0
+expected: 0
+result  : PASS
+
+   methods scanned (7): AssertController, AssertEmptySlots, AssertFirstExit, AssertIndicator, AssertPrefabSlots, AssertQ, AssertW
+   still reading runner field `_ev` / not calling sink (phase D target = none): (none)
+
+## D3a. DIAG_Evidence.cs line count (adapter limit <= 40, measured)
+command : wc -l Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+actual  : 34
+expected: 34
+result  : PASS
+
+## D3b. class DIAG_Evidence : QaEvidence
+command : grep -E "class DIAG_Evidence\s*:\s*QaEvidence" Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## D3c. no I/O / boot tokens inside DIAG_Evidence.cs (adapter is pure spec assembly)
+command : grep -E "File\.|Directory\.|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## D3d. DIAG_Evidence.cs declares no local WriteSummary/Record/BuildLine implementation
+command : grep -E "void WriteSummary|void Record|string BuildLine" Assets/_Project/Tests/DIAG/Runtime/DIAG_Evidence.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## D4a. QaSink.cs forbidden tokens (unchanged)
+command : grep -E "File|Directory|SessionState|EditorApplication|QaLauncher" Assets/_Project/Tests/QA/Runtime/QaSink.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## D4b. QaEvidence still declares IQaSink (unchanged)
+command : grep -E "class QaEvidence\s*:\s*IQaSink" Assets/_Project/Tests/QA/Runtime/QaEvidence.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## D4c. "Docs","QA","Evidence" literal inside DIAG/** (adapter must not hardcode the root)
+command : grep -R "\"Docs\", \"QA\", \"Evidence\"" Assets/_Project/Tests/DIAG --include=*.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## D5. Assert*(IQaSink sink) in SPEC01/Runtime/SPEC01_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## D5. Assert*(IQaSink sink) in REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+actual  : 16
+expected: 16
+result  : PASS
+
+## D5. Assert*(IQaSink sink) in FND00B/Runtime/FND00B06_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+actual  : 14
+expected: 14
+result  : PASS
+
+## D5. Assert*(IQaSink sink) in DIAG/Runtime/DIAG_ProbeRunner.cs
+command : grep -E "Assert\w+\(IQaSink sink" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 7
+expected: 7
+result  : PASS
+
+## D6a. local GitHead removed from DIAG_BatchAcceptance.cs (uses QaScene.GetHead)
+command : grep -E "static string GitHead|GitHead\(\)" Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+## D6b. QaScene.GetHead call sites in DIAG_BatchAcceptance.cs
+command : grep -E "QaScene.GetHead" Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## D6c. class DIAG_Boot kept for phase E (must still exist)
+command : grep -E "class DIAG_Boot" Assets/_Project/Tests/DIAG/Editor/DIAG_BatchAcceptance.cs
+actual  : 1
+expected: 1
+result  : PASS
+
+## D6d. local Dict/V3/GetHead removed from DIAG_ProbeRunner.cs
+command : grep -E "Dictionary<string, object> Dict|Dictionary<string, object> V3|static string GetHead" Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+actual  : 0
+expected: 0
+result  : PASS
+
+=== PHASE D OVERALL ===
+ALL APPLICABLE CHECKS PASS

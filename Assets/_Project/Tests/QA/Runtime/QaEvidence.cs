@@ -24,6 +24,8 @@ public enum QaSummaryKey
     Observed,
     /// <summary>就地展开 WriteSummary 传入的 extra 字典（插入序），用于套件私有键。</summary>
     Extra,
+    /// <summary>就地展开 WriteSummary 传入的 extraTail 字典（插入序），用于与 Extra 不相邻的第二段私有键。</summary>
+    ExtraTail,
     /// <summary>就地展开 <see cref="QaEvidenceSpec.PrefixedFields"/>（插入序），用于 run 之前的前置键。</summary>
     PrefixedFields,
     ExitReason
@@ -227,7 +229,8 @@ public class QaEvidence : IQaSink
     }
 
     public void WriteSummary(string scenePath, int seed, string exitReason,
-                             Dictionary<string, object> extra)
+                             Dictionary<string, object> extra,
+                             Dictionary<string, object> extraTail = null)
     {
         string path = SummaryPath();
         if (path == null) return;
@@ -235,10 +238,12 @@ public class QaEvidence : IQaSink
         var pairs = new List<KeyValuePair<string, object>>();
         foreach (var key in _spec.SummaryFields ?? DefaultSummaryFields)
         {
-            if (key == QaSummaryKey.Extra || key == QaSummaryKey.PrefixedFields)
+            if (key == QaSummaryKey.Extra || key == QaSummaryKey.PrefixedFields || key == QaSummaryKey.ExtraTail)
             {
-                IEnumerable<KeyValuePair<string, object>> src =
-                    key == QaSummaryKey.Extra ? extra : (IEnumerable<KeyValuePair<string, object>>)_spec.PrefixedFields;
+                IEnumerable<KeyValuePair<string, object>> src;
+                if (key == QaSummaryKey.Extra) src = extra;
+                else if (key == QaSummaryKey.ExtraTail) src = extraTail;
+                else src = _spec.PrefixedFields;
                 if (src == null) continue;
                 foreach (var kv in src) pairs.Add(new KeyValuePair<string, object>(kv.Key, kv.Value));
                 continue;

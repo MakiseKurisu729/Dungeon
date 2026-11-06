@@ -1,0 +1,28 @@
+DIAG assertion triple diff - (qaItem, assertion, status) sorted
+BEFORE: D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\before\DIAG_Assertions.jsonl
+AFTER : D:\unity\Dungeon\Docs\QA\Evidence\QA-REFACTOR-01\DIAG\after\DIAG_Assertions.jsonl
+
+BEFORE count=7 pass=6 fail=1
+AFTER  count=7 pass=6 fail=1
+
+=== BEFORE ===
+Diag.CastChain.EmptySlots | Diag.CastChain.EmptySlots | pass
+Diag.CastChain.Q | Diag.CastChain.Q | pass
+Diag.CastChain.W | Diag.CastChain.W | pass
+DIAG-SKILL | Diag.Input.FirstExit | product_fail
+DIAG-SKILL | Diag.Prefab.Slots | pass
+DIAG-SKILL | Diag.Scene.Indicator | pass
+DIAG-SKILL | Diag.Scene.SkillInputController | pass
+
+=== AFTER ===
+Diag.CastChain.EmptySlots | Diag.CastChain.EmptySlots | pass
+Diag.CastChain.Q | Diag.CastChain.Q | pass
+Diag.CastChain.W | Diag.CastChain.W | pass
+DIAG-SKILL | Diag.Input.FirstExit | product_fail
+DIAG-SKILL | Diag.Prefab.Slots | pass
+DIAG-SKILL | Diag.Scene.Indicator | pass
+DIAG-SKILL | Diag.Scene.SkillInputController | pass
+
+=== DIFF ===
+(empty)
+RESULT: IDENTICAL

@@ -15,12 +15,14 @@ using UnityEditor;
 /// 顺序：场景控制器普查 → 指示器消费者 → 第一退出点 → 预制体槽位 →
 ///       CastChain Q → CastChain W → EmptySlots → 结论。
 /// 只读生产状态；夹具在内存中创建并在结束前销毁；不写场景、不改资产。
+/// 分层：断言只经 <see cref="IQaSink"/> 出证据、夹具/测点经参数传入；落盘/计分在 QaEvidence，
+///       引导与退出码仍在编排层（Start / Update 看门狗 / Finish）。
 /// </summary>
 public class DIAG_ProbeRunner : MonoBehaviour
 {
-    const string ScenePath = "Assets/Scenes/DungeonWorld.unity";
     const string FinishedKey = "DIAG.Finished";
     const string ExitCodeKey = "DIAG.ExitCode";
+    const string HeadSessionKey = "DIAG.Head";
 
     static readonly Vector3 FixturePos = new Vector3(50f, 0f, 50f);
 
@@ -33,14 +35,16 @@ public class DIAG_ProbeRunner : MonoBehaviour
     string _mode;
     float _deadline;
 
-    SkillInputController[] _controllers = new SkillInputController[0];
-    SkillIndicator[] _indicators = new SkillIndicator[0];
-    int _controllerCount;
-    string _firstExit = "UNKNOWN";
-
-    bool _qPass;
-    bool _wPass;
-    bool _emptyPass;
+    /// <summary>断言之间共享的测点快照（不是引导状态）：断言只读自己或前序断言测到的值。</summary>
+    class ProbeState
+    {
+        public SkillInputController[] controllers = new SkillInputController[0];
+        public SkillIndicator[] indicators = new SkillIndicator[0];
+        public int controllerCount;
+        public bool qPass;
+        public bool wPass;
+        public bool emptyPass;
+    }
 
     void Awake()
     {
@@ -58,32 +62,30 @@ public class DIAG_ProbeRunner : MonoBehaviour
 
         _ev = new DIAG_Evidence(_run, _mode);
         _deadline = Time.realtimeSinceStartup + 300f;
+        var probe = new ProbeState();
 
         Debug.Log("[DIAG] runner start; mode=" + _mode + "; run=" + _run +
                   "; unity=" + Application.unityVersion +
-                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + GetHead());
+                  "; evidenceDir=" + _ev.EvidenceDir + "; head=" + QaScene.GetHead(HeadSessionKey));
 
-        float waited = 0f;
-        while (SceneManager.GetActiveScene().path != ScenePath && waited < 25f)
-        {
-            waited += Time.unscaledDeltaTime;
-            yield return null;
-        }
+        float sceneWaitStart = Time.realtimeSinceStartup;
+        yield return QaWait.WaitUntil(() => SceneManager.GetActiveScene().path == QaScene.ScenePath, 25f);
+        float waited = Time.realtimeSinceStartup - sceneWaitStart;
         Debug.Log("[DIAG] active scene=" + SceneManager.GetActiveScene().path + "; waited=" + waited.ToString("0.###") + "s");
 
         yield return new WaitForSecondsRealtime(1.0f);
 
-        yield return RunSafe("Diag.Scene.SkillInputController", AssertController());
-        yield return RunSafe("Diag.Scene.Indicator", AssertIndicator());
-        yield return RunSafe("Diag.Input.FirstExit", AssertFirstExit());
-        yield return RunSafe("Diag.Prefab.Slots", AssertPrefabSlots());
-        yield return RunSafe("Diag.CastChain.Q", AssertQ());
-        yield return RunSafe("Diag.CastChain.W", AssertW());
-        yield return RunSafe("Diag.CastChain.EmptySlots", AssertEmptySlots());
+        yield return RunSafe("Diag.Scene.SkillInputController", AssertController(_ev, probe));
+        yield return RunSafe("Diag.Scene.Indicator", AssertIndicator(_ev, probe));
+        yield return RunSafe("Diag.Input.FirstExit", AssertFirstExit(_ev, probe));
+        yield return RunSafe("Diag.Prefab.Slots", AssertPrefabSlots(_ev));
+        yield return RunSafe("Diag.CastChain.Q", AssertQ(_ev, probe));
+        yield return RunSafe("Diag.CastChain.W", AssertW(_ev, probe));
+        yield return RunSafe("Diag.CastChain.EmptySlots", AssertEmptySlots(_ev, probe));
 
-        _conclusion = (_controllerCount == 0 && _qPass && _emptyPass)
+        _conclusion = (probe.controllerCount == 0 && probe.qPass && probe.emptyPass)
             ? "Q 下游施法链可独立跑通；失效点在输入层，第一个未执行节点 = SkillInputController.Update()"
-              + (_wPass
+              + (probe.wPass
                   ? "；W 下游链亦可跑通"
                   : "；W 另有一个独立资产缺陷（W_Slash_Effect 解析为 BashEffect），不属输入层")
             : "见断言数据（Q/W 链条或控制器状态与预期不符）";
@@ -124,69 +126,67 @@ public class DIAG_ProbeRunner : MonoBehaviour
     // ============================================================
     // 场景：控制器 / 指示器 / 第一退出点
     // ============================================================
-    IEnumerator AssertController()
+    IEnumerator AssertController(IQaSink sink, ProbeState probe)
     {
-        float waited = 0f;
-        while (waited < 3f)
-        {
-            _controllers = FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            if (_controllers.Length > 0) break;
-            waited += Time.unscaledDeltaTime;
-            yield return null;
-        }
-        _controllers = FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        _controllerCount = _controllers.Length;
-        _indicators = FindObjectsByType<SkillIndicator>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        float waitStart = Time.realtimeSinceStartup;
+        yield return QaWait.WaitUntil(
+            () => FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Length > 0,
+            3f);
+        float waited = Time.realtimeSinceStartup - waitStart;
 
-        bool pass = _controllerCount == 1;
-        _ev.Record("DIAG-SKILL", "Diag.Scene.SkillInputController",
-            Dict("expectedCount", 1, "note", "DungeonWorld 运行期应恰好存在 1 个 SkillInputController"),
-            Dict("count", _controllerCount, "waitedSeconds", waited),
+        probe.controllers = FindObjectsByType<SkillInputController>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        probe.controllerCount = probe.controllers.Length;
+        probe.indicators = FindObjectsByType<SkillIndicator>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        bool pass = probe.controllerCount == 1;
+        sink.Record("DIAG-SKILL", "Diag.Scene.SkillInputController",
+            QaJson.Dict("expectedCount", 1, "note", "DungeonWorld 运行期应恰好存在 1 个 SkillInputController"),
+            QaJson.Dict("count", probe.controllerCount, "waitedSeconds", waited),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("scene", SceneManager.GetActiveScene().path,
+            QaJson.Dict("scene", SceneManager.GetActiveScene().path,
                  "waitedSeconds", waited,
-                 "controllerCount", _controllerCount,
-                 "controllerNames", NamesOf(_controllers),
-                 "indicatorCount", _indicators.Length,
+                 "controllerCount", probe.controllerCount,
+                 "controllerNames", NamesOf(probe.controllers),
+                 "indicatorCount", probe.indicators.Length,
                  "note", "count=0 即复现目标缺陷：输入层组件缺失，Update() 从未执行"));
     }
 
-    IEnumerator AssertIndicator()
+    IEnumerator AssertIndicator(IQaSink sink, ProbeState probe)
     {
         yield return null;
-        _indicators = FindObjectsByType<SkillIndicator>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        probe.indicators = FindObjectsByType<SkillIndicator>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
-        bool matOk = _indicators.Length == 1 && _indicators[0].mat != null;
+        bool matOk = probe.indicators.Length == 1 && probe.indicators[0].mat != null;
         bool consumerOk = false;
         int consumerIndicatorId = -1;
         string controllerIndicator = "none";
-        if (_controllers.Length == 1 && _controllers[0] != null)
+        if (probe.controllers.Length == 1 && probe.controllers[0] != null)
         {
-            var ind = _controllers[0].indicator;
+            var ind = probe.controllers[0].indicator;
             if (ind != null)
             {
                 consumerIndicatorId = ind.GetInstanceID();
                 controllerIndicator = ind.name;
-                consumerOk = System.Array.IndexOf(_indicators, ind) >= 0;
+                consumerOk = System.Array.IndexOf(probe.indicators, ind) >= 0;
             }
         }
-        bool pass = _indicators.Length == 1 && matOk && consumerOk;
+        bool pass = probe.indicators.Length == 1 && matOk && consumerOk;
 
-        _ev.Record("DIAG-SKILL", "Diag.Scene.Indicator",
-            Dict("expectedCount", 1, "matAssigned", true, "hasConsumer", true),
-            Dict("count", _indicators.Length, "matAssigned", matOk,
+        sink.Record("DIAG-SKILL", "Diag.Scene.Indicator",
+            QaJson.Dict("expectedCount", 1, "matAssigned", true, "hasConsumer", true),
+            QaJson.Dict("count", probe.indicators.Length, "matAssigned", matOk,
                  "hasConsumer", consumerOk, "consumerIndicatorId", consumerIndicatorId),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("count", _indicators.Length,
+            QaJson.Dict("count", probe.indicators.Length,
                  "matAssigned", matOk,
-                 "matName", _indicators.Length == 1 && _indicators[0].mat != null ? _indicators[0].mat.name : "none",
+                 "matName", probe.indicators.Length == 1 && probe.indicators[0].mat != null ? probe.indicators[0].mat.name : "none",
                  "hasConsumer", consumerOk,
                  "controllerIndicator", controllerIndicator,
-                 "indicatorNames", NamesOf(_indicators),
+                 "indicatorNames", NamesOf(probe.indicators),
                  "note", "有指示器、无输入消费者 = 孤儿组件（当前复现）"));
     }
 
-    IEnumerator AssertFirstExit()
+    IEnumerator AssertFirstExit(IQaSink sink, ProbeState probe)
     {
         yield return null;
         var sm = SelectionManager.instance;
@@ -195,14 +195,15 @@ public class DIAG_ProbeRunner : MonoBehaviour
         bool primaryHasSkillSystem = false;
         string slot0 = "n/a";
         int slot0Effects = -1;
+        string firstExit;
 
-        if (_controllerCount == 0)
+        if (probe.controllerCount == 0)
         {
-            _firstExit = "MISSING_CONTROLLER";
+            firstExit = "MISSING_CONTROLLER";
         }
         else if (primary == null)
         {
-            _firstExit = "NO_PRIMARY";
+            firstExit = "NO_PRIMARY";
         }
         else
         {
@@ -210,32 +211,32 @@ public class DIAG_ProbeRunner : MonoBehaviour
             primaryHasSkillSystem = ss != null;
             if (ss == null)
             {
-                _firstExit = "NO_PRIMARY";
+                firstExit = "NO_PRIMARY";
             }
             else
             {
                 var s = ss.GetSkill(0);
                 slot0 = s != null ? s.name : "<empty>";
                 slot0Effects = s != null && s.effects != null ? s.effects.Length : 0;
-                if (s == null) _firstExit = "EMPTY_SLOT";
-                else if (s.effects == null || s.effects.Length == 0) _firstExit = "NO_EFFECTS";
-                else _firstExit = "NONE";
+                if (s == null) firstExit = "EMPTY_SLOT";
+                else if (s.effects == null || s.effects.Length == 0) firstExit = "NO_EFFECTS";
+                else firstExit = "NONE";
             }
         }
 
-        bool pass = _firstExit == "MISSING_CONTROLLER";
-        _ev.Record("DIAG-SKILL", "Diag.Input.FirstExit",
-            Dict("expected", "MISSING_CONTROLLER", "note", "按 Q 首个失效节点"),
-            Dict("firstExit", _firstExit,
-                 "controllerCount", _controllerCount,
+        bool pass = firstExit == "MISSING_CONTROLLER";
+        sink.Record("DIAG-SKILL", "Diag.Input.FirstExit",
+            QaJson.Dict("expected", "MISSING_CONTROLLER", "note", "按 Q 首个失效节点"),
+            QaJson.Dict("firstExit", firstExit,
+                 "controllerCount", probe.controllerCount,
                  "selectionManagerInstance", sm != null,
                  "primary", primaryName,
                  "primaryHasSkillSystem", primaryHasSkillSystem,
                  "slot0", slot0,
                  "slot0Effects", slot0Effects),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("enumeratedOrder", "MISSING_CONTROLLER → NO_PRIMARY → EMPTY_SLOT → NO_EFFECTS → NONE",
-                 "controllerCount", _controllerCount,
+            QaJson.Dict("enumeratedOrder", "MISSING_CONTROLLER → NO_PRIMARY → EMPTY_SLOT → NO_EFFECTS → NONE",
+                 "controllerCount", probe.controllerCount,
                  "selectionManagerInstance", sm != null,
                  "primary", primaryName,
                  "primaryHasSkillSystem", primaryHasSkillSystem,
@@ -247,7 +248,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
     // ============================================================
     // 预制体槽位（只读资产）
     // ============================================================
-    IEnumerator AssertPrefabSlots()
+    IEnumerator AssertPrefabSlots(IQaSink sink)
     {
         GameObject prefab = null;
         string loadError = null;
@@ -259,9 +260,9 @@ public class DIAG_ProbeRunner : MonoBehaviour
 #endif
         if (prefab == null)
         {
-            _ev.BlockedAssertion("DIAG-SKILL", "Diag.Prefab.Slots",
-                Dict("path", SkillCastFixture.KnightPrefabPath),
-                "无法加载预制体: " + (loadError ?? "null"), Dict("loadError", loadError));
+            sink.BlockedAssertion("DIAG-SKILL", "Diag.Prefab.Slots",
+                QaJson.Dict("path", SkillCastFixture.KnightPrefabPath),
+                "无法加载预制体: " + (loadError ?? "null"), QaJson.Dict("loadError", loadError));
             yield break;
         }
 
@@ -277,11 +278,11 @@ public class DIAG_ProbeRunner : MonoBehaviour
                     ss.skills[0] != null && ss.skills[1] != null &&
                     ss.skills[2] == null && ss.skills[3] == null;
 
-        _ev.Record("DIAG-SKILL", "Diag.Prefab.Slots",
-            Dict("slotCount", 4, "Q", "非空", "W", "非空", "E", "空", "R", "空"),
-            Dict("slotCount", len, "slotNames", names),
+        sink.Record("DIAG-SKILL", "Diag.Prefab.Slots",
+            QaJson.Dict("slotCount", 4, "Q", "非空", "W", "非空", "E", "空", "R", "空"),
+            QaJson.Dict("slotCount", len, "slotNames", names),
             pass, pass ? "pass" : "product_fail", "production",
-            Dict("prefab", SkillCastFixture.KnightPrefabPath,
+            QaJson.Dict("prefab", SkillCastFixture.KnightPrefabPath,
                  "slotCount", len,
                  "slotNames", names,
                  "Q", names[0],
@@ -294,21 +295,21 @@ public class DIAG_ProbeRunner : MonoBehaviour
     // ============================================================
     // 施法链
     // ============================================================
-    IEnumerator AssertQ()
+    IEnumerator AssertQ(IQaSink sink, ProbeState probe)
     {
         SkillCastFixture fx = null;
         var r = new CastProbeResult();
         try { fx = SkillCastFixture.Create(FixturePos, true); }
         catch (Exception e)
         {
-            _ev.InfraFailure("Diag.CastChain.Q", "Diag.CastChain.Q", "夹具创建抛异常: " + e.Message, e.StackTrace);
+            sink.InfraFailure("Diag.CastChain.Q", "Diag.CastChain.Q", "夹具创建抛异常: " + e.Message, e.StackTrace);
             yield break;
         }
         if (fx == null || !string.IsNullOrEmpty(fx.Error))
         {
             string err = fx != null ? fx.Error : "null";
             if (fx != null) fx.Dispose();
-            _ev.InfraFailure("Diag.CastChain.Q", "Diag.CastChain.Q", "夹具创建失败: " + err, "");
+            sink.InfraFailure("Diag.CastChain.Q", "Diag.CastChain.Q", "夹具创建失败: " + err, "");
             yield break;
         }
 
@@ -317,10 +318,10 @@ public class DIAG_ProbeRunner : MonoBehaviour
             yield return fx.Prepare(6f);
             if (!fx.PrepareLocomotion)
             {
-                _ev.BlockedAssertion("Diag.CastChain.Q", "Diag.CastChain.Q",
-                    Dict("expectedState", "Q_1", "damage", "hitTime 后靶掉血"),
+                sink.BlockedAssertion("Diag.CastChain.Q", "Diag.CastChain.Q",
+                    QaJson.Dict("expectedState", "Q_1", "damage", "hitTime 后靶掉血"),
                     "夹具未能进入 Locomotion（preState=" + fx.PrepareState + "）",
-                    Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
+                    QaJson.Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
                 yield break;
             }
 
@@ -330,16 +331,16 @@ public class DIAG_ProbeRunner : MonoBehaviour
             bool cdOk = r.cdRemaining > 0f && Mathf.Abs(r.cdRemaining - 6f) <= 0.05f;
             bool dmgOk = r.damageObserved && Mathf.Abs(r.damageApplied - r.expectedDamage) < 0.01f;
             bool animOk = r.animEntered && r.animEntrySeconds >= 0f && r.animEntrySeconds <= 0.5f;
-            _qPass = r.castReturn && manaOk && cdOk && dmgOk && animOk;
+            probe.qPass = r.castReturn && manaOk && cdOk && dmgOk && animOk;
 
-            _ev.Record("Diag.CastChain.Q", "Diag.CastChain.Q",
-                Dict("castReturn", true, "manaDelta", 20f, "cdRemaining", ">0 且≈6",
+            sink.Record("Diag.CastChain.Q", "Diag.CastChain.Q",
+                QaJson.Dict("castReturn", true, "manaDelta", 20f, "cdRemaining", ">0 且≈6",
                      "targetDamage", "== MeleeCombat.GetRawDamage()", "animState", "Q_1（≤0.5s）"),
                 r.Data(),
-                _qPass, _qPass ? "pass" : "product_fail", "production",
-                Dict("slot", 0,
+                probe.qPass, probe.qPass ? "pass" : "product_fail", "production",
+                QaJson.Dict("slot", 0,
                      "fixturePath", fx.CasterPath(),
-                     "fixturePos", V3(FixturePos),
+                     "fixturePos", QaJson.V3(FixturePos),
                      "prepareState", fx.PrepareState,
                      "preparePhase", fx.PreparePhase,
                      "prepareSeconds", fx.PrepareSeconds,
@@ -358,21 +359,21 @@ public class DIAG_ProbeRunner : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator AssertW()
+    IEnumerator AssertW(IQaSink sink, ProbeState probe)
     {
         SkillCastFixture fx = null;
         var r = new CastProbeResult();
         try { fx = SkillCastFixture.Create(FixturePos, false); }
         catch (Exception e)
         {
-            _ev.InfraFailure("Diag.CastChain.W", "Diag.CastChain.W", "夹具创建抛异常: " + e.Message, e.StackTrace);
+            sink.InfraFailure("Diag.CastChain.W", "Diag.CastChain.W", "夹具创建抛异常: " + e.Message, e.StackTrace);
             yield break;
         }
         if (fx == null || !string.IsNullOrEmpty(fx.Error))
         {
             string err = fx != null ? fx.Error : "null";
             if (fx != null) fx.Dispose();
-            _ev.InfraFailure("Diag.CastChain.W", "Diag.CastChain.W", "夹具创建失败: " + err, "");
+            sink.InfraFailure("Diag.CastChain.W", "Diag.CastChain.W", "夹具创建失败: " + err, "");
             yield break;
         }
 
@@ -381,10 +382,10 @@ public class DIAG_ProbeRunner : MonoBehaviour
             yield return fx.Prepare(6f);
             if (!fx.PrepareLocomotion)
             {
-                _ev.BlockedAssertion("Diag.CastChain.W", "Diag.CastChain.W",
-                    Dict("expectedState", "W_1", "swordTimer", ">=0"),
+                sink.BlockedAssertion("Diag.CastChain.W", "Diag.CastChain.W",
+                    QaJson.Dict("expectedState", "W_1", "swordTimer", ">=0"),
                     "夹具未能进入 Locomotion（preState=" + fx.PrepareState + "）",
-                    Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
+                    QaJson.Dict("prepareState", fx.PrepareState, "preparePhase", fx.PreparePhase));
                 yield break;
             }
 
@@ -394,16 +395,16 @@ public class DIAG_ProbeRunner : MonoBehaviour
             bool cdOk = r.cdRemaining > 0f;
             bool timerOk = r.swordTimer >= 0f;
             bool animOk = r.animEntered && r.animEntrySeconds >= 0f && r.animEntrySeconds <= 0.5f;
-            _wPass = r.castReturn && manaOk && cdOk && timerOk && animOk;
+            probe.wPass = r.castReturn && manaOk && cdOk && timerOk && animOk;
 
-            _ev.Record("Diag.CastChain.W", "Diag.CastChain.W",
-                Dict("castReturn", true, "manaDelta", 30f, "cdRemaining", ">0",
+            sink.Record("Diag.CastChain.W", "Diag.CastChain.W",
+                QaJson.Dict("castReturn", true, "manaDelta", 30f, "cdRemaining", ">0",
                      "swordTimer", ">=0（反射 _timer，证明效果已执行）", "animState", "W_1（≤0.5s）"),
                 r.Data(),
-                _wPass, _wPass ? "pass" : "product_fail", "production",
-                Dict("slot", 1,
+                probe.wPass, probe.wPass ? "pass" : "product_fail", "production",
+                QaJson.Dict("slot", 1,
                      "fixturePath", fx.CasterPath(),
-                     "fixturePos", V3(FixturePos),
+                     "fixturePos", QaJson.V3(FixturePos),
                      "prepareState", fx.PrepareState,
                      "preparePhase", fx.PreparePhase,
                      "prepareSeconds", fx.PrepareSeconds,
@@ -421,7 +422,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator AssertEmptySlots()
+    IEnumerator AssertEmptySlots(IQaSink sink, ProbeState probe)
     {
         SkillCastFixture fx = null;
         var e = new CastProbeResult();
@@ -429,7 +430,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
         try { fx = SkillCastFixture.Create(FixturePos, false); }
         catch (Exception ex)
         {
-            _ev.InfraFailure("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
+            sink.InfraFailure("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
                 "夹具创建抛异常: " + ex.Message, ex.StackTrace);
             yield break;
         }
@@ -437,7 +438,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
         {
             string err = fx != null ? fx.Error : "null";
             if (fx != null) fx.Dispose();
-            _ev.InfraFailure("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
+            sink.InfraFailure("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
                 "夹具创建失败: " + err, "");
             yield break;
         }
@@ -447,10 +448,10 @@ public class DIAG_ProbeRunner : MonoBehaviour
             yield return fx.Prepare(6f);
             if (!fx.PrepareLocomotion)
             {
-                _ev.BlockedAssertion("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
-                    Dict("castReturn", false, "manaDelta", 0f, "exception", null),
+                sink.BlockedAssertion("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
+                    QaJson.Dict("castReturn", false, "manaDelta", 0f, "exception", null),
                     "夹具未能进入 Locomotion（preState=" + fx.PrepareState + "）",
-                    Dict("prepareState", fx.PrepareState));
+                    QaJson.Dict("prepareState", fx.PrepareState));
                 yield break;
             }
 
@@ -460,13 +461,13 @@ public class DIAG_ProbeRunner : MonoBehaviour
             bool pass = !e.castReturn && !rr.castReturn &&
                         Mathf.Abs(e.manaDelta) < 0.0001f && Mathf.Abs(rr.manaDelta) < 0.0001f &&
                         string.IsNullOrEmpty(e.exception) && string.IsNullOrEmpty(rr.exception);
-            _emptyPass = pass;
+            probe.emptyPass = pass;
 
-            _ev.Record("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
-                Dict("castReturn2", false, "castReturn3", false, "manaDelta", 0f, "exception", null),
-                Dict("slot2", e.Data(), "slot3", rr.Data()),
+            sink.Record("Diag.CastChain.EmptySlots", "Diag.CastChain.EmptySlots",
+                QaJson.Dict("castReturn2", false, "castReturn3", false, "manaDelta", 0f, "exception", null),
+                QaJson.Dict("slot2", e.Data(), "slot3", rr.Data()),
                 pass, pass ? "pass" : "product_fail", "production",
-                Dict("slot2", e.Data(),
+                QaJson.Dict("slot2", e.Data(),
                      "slot3", rr.Data(),
                      "slotNames", new List<object> { e.slotName, rr.slotName },
                      "note", "空槽=设计内静默，非缺陷（不修）"));
@@ -479,7 +480,7 @@ public class DIAG_ProbeRunner : MonoBehaviour
     }
 
     // ============================================================
-    // 收尾
+    // 收尾（编排层：SessionState / 退出码 / 退出编辑器）
     // ============================================================
     void Finish()
     {
@@ -488,8 +489,10 @@ public class DIAG_ProbeRunner : MonoBehaviour
 
         if (_ev != null)
         {
-            _ev.WriteSummary(ScenePath, string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason,
-                _conclusion, GetHead());
+            _ev.WriteSummary(QaScene.ScenePath, 0,
+                string.IsNullOrEmpty(_exitReason) ? "completed" : _exitReason,
+                QaJson.Dict("head", QaScene.GetHead(HeadSessionKey)),
+                QaJson.Dict("conclusion", _conclusion ?? ""));
         }
 
         int code;
@@ -524,17 +527,8 @@ public class DIAG_ProbeRunner : MonoBehaviour
     }
 
     // ============================================================
-    // 工具
+    // 工具（Qa 层无等价物的留在本套件）
     // ============================================================
-    static string GetHead()
-    {
-#if UNITY_EDITOR
-        return SessionState.GetString("DIAG.Head", "unknown");
-#else
-        return "n/a";
-#endif
-    }
-
     static List<object> NamesOf(System.Array arr)
     {
         var list = new List<object>();
@@ -545,18 +539,5 @@ public class DIAG_ProbeRunner : MonoBehaviour
             list.Add(o != null ? o.name : "null");
         }
         return list;
-    }
-
-    static Dictionary<string, object> Dict(params object[] kvs)
-    {
-        var d = new Dictionary<string, object>();
-        for (int i = 0; i + 1 < kvs.Length; i += 2)
-            d[(string)kvs[i]] = kvs[i + 1];
-        return d;
-    }
-
-    static Dictionary<string, object> V3(Vector3 v)
-    {
-        return new Dictionary<string, object> { { "x", v.x }, { "y", v.y }, { "z", v.z } };
     }
 }
