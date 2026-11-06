@@ -1,0 +1,73 @@
+# 本步提交前已核对 git status：仅本步声明文件（外加 3 个大脑-owned 文档，不提交）。
+# 以下为提交内容 name-status（提交后按该提交复原，供复核）。
+A	Assets/_Project/Scripts/App.meta
+R011	Assets/_Project/Scripts/Core/RunFlow.cs	Assets/_Project/Scripts/App/AppFlow.cs
+R100	Assets/_Project/Scripts/Core/AppFlow.cs.meta	Assets/_Project/Scripts/App/AppFlow.cs.meta
+R006	Assets/_Project/Scripts/Core/GameData.cs	Assets/_Project/Scripts/App/GameData.cs
+R100	Assets/_Project/Scripts/Core/GameData.cs.meta	Assets/_Project/Scripts/App/GameData.cs.meta
+R004	Assets/_Project/Scripts/Core/GameFlow.cs	Assets/_Project/Scripts/App/GameFlow.cs
+R100	Assets/_Project/Scripts/Core/GameFlow.cs.meta	Assets/_Project/Scripts/App/GameFlow.cs.meta
+R007	Assets/_Project/Scripts/Core/MetaState.cs	Assets/_Project/Scripts/App/MetaState.cs
+R100	Assets/_Project/Scripts/Core/MetaState.cs.meta	Assets/_Project/Scripts/App/MetaState.cs.meta
+R005	Assets/_Project/Scripts/Core/PauseManager.cs	Assets/_Project/Scripts/App/PauseManager.cs
+R100	Assets/_Project/Scripts/Core/PauseManager.cs.meta	Assets/_Project/Scripts/App/PauseManager.cs.meta
+R003	Assets/_Project/Scripts/Core/AppFlow.cs	Assets/_Project/Scripts/App/RunFlow.cs
+R100	Assets/_Project/Scripts/Core/RunFlow.cs.meta	Assets/_Project/Scripts/App/RunFlow.cs.meta
+M	Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs
+M	Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs
+M	Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs
+M	Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs
+M	Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs
+M	Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs
+M	Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs
+M	Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs
+M	Assets/_Project/Scripts/UI/EscMenuPanel.cs
+M	Assets/_Project/Scripts/UI/HUD.cs
+M	Assets/_Project/Scripts/UI/MainMenuPanel.cs
+M	Assets/_Project/Scripts/UI/UIManager.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B04_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+M	Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs
+M	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+M	Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+M	Docs/QA/Evidence/M7-1/coverage.txt
+M	Docs/QA/Evidence/M7-1/cycles.md
+M	Docs/QA/Evidence/M7-1/edges.csv
+M	Docs/QA/Evidence/M7-1/edges.json
+M	Docs/QA/Evidence/M7-1/files.csv
+M	Docs/QA/Evidence/M7-1/graph.mmd
+M	Docs/QA/Evidence/M7-1/layer-matrix.md
+M	Docs/QA/Evidence/M7-1/layer-plan.md
+M	Docs/QA/Evidence/M7-1/module-matrix.md
+M	Docs/QA/Evidence/M7-1/stats.json
+M	Docs/QA/Evidence/M7-1/types.csv
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/ExitCode.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/Summary.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/audit/audit-output.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/audit/coverage.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/audit/edges.csv"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/audit/files.csv"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/audit/stats.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/compile-editorlog-tail.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/compile.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-refactor/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-refactor/REFACTOR_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-refactor/REFACTOR_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-refactor/REFACTOR_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-spec01/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-spec01/SPEC01_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-spec01/SPEC01_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suite-spec01/SPEC01_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/suites.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2713/verify.txt"
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run24/InEditorResult.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run24/REFACTOR_Assertions.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run24/REFACTOR_ExitCode_run1.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run24/REFACTOR_Runs.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run24/REFACTOR_Summary_run1.json
+A	Docs/QA/Evidence/SPEC-01/editor_run48/InEditorResult.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run48/SPEC01_Assertions.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run48/SPEC01_ExitCode_run1.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run48/SPEC01_Runs.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run48/SPEC01_Summary_run1.json

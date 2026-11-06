@@ -1,0 +1,76 @@
+7116b3d0 重构：M7-1 批4 UI/Editor 目录与命名空间归一（M7-1/批4） 为什么：批 4 收口剩余 UI/Editor 目录与测试 using，使 77 个脚本全部达到“目录=命名空间”，为 M7-2/3 的 asmdef 拆分清除位置障碍。 验证：编译 0 error；REFACTOR 16/0 ×2；SPEC01 12/0 ×2；audit upward=11；verify stage5 9 PASS；Play 30s 无 error/Missing/NRE；证据 Docs/QA/Evidence/M7-1/批4/
+ Assets/_Project/Scripts/Editor.meta                |   8 +
+ .../Scripts/{Debug => Editor}/DebugTestTools.cs    | 286 +++++------
+ .../{Debug => Editor}/DebugTestTools.cs.meta       |   0
+ .../Gameplay/Player/PlayerCommandController.cs     |   1 +
+ .../Gameplay/Player/SkillInputController.cs        |   1 +
+ .../_Project/Scripts/Gameplay/World/DungeonDoor.cs |   1 +
+ Assets/_Project/Scripts/UI/BasePanel.cs            |  64 +--
+ Assets/_Project/Scripts/UI/CursorManager.cs        | 288 +++++------
+ Assets/_Project/Scripts/UI/EscMenuPanel.cs         |  56 +--
+ Assets/_Project/Scripts/UI/HUD.cs                  |  80 +--
+ Assets/_Project/Scripts/UI/InventoryUI.cs          | 214 +++++----
+ Assets/_Project/Scripts/UI/MainMenuPanel.cs        |  36 +-
+ Assets/_Project/Scripts/UI/SkillBarUI.cs           |  90 ++--
+ Assets/_Project/Scripts/UI/SlotClickHandler.cs     |  12 +-
+ Assets/_Project/Scripts/UI/TransitionFader.cs      |  56 +--
+ Assets/_Project/Scripts/UI/UIManager.cs            | 214 +++++----
+ .../Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs   |   1 +
+ .../Tests/FND02A/Runtime/FND02A_ProbeRunner.cs     |   1 +
+ .../Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs |   1 +
+ .../Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs     |   1 +
+ Docs/QA/Evidence/M7-1/cycles.md                    |  42 +-
+ Docs/QA/Evidence/M7-1/edges.csv                    | 260 +++++-----
+ Docs/QA/Evidence/M7-1/edges.json                   | 292 +++++------
+ Docs/QA/Evidence/M7-1/files.csv                    |  28 +-
+ Docs/QA/Evidence/M7-1/graph.mmd                    |  14 +-
+ Docs/QA/Evidence/M7-1/layer-matrix.md              |  52 +-
+ Docs/QA/Evidence/M7-1/layer-plan.md                |   2 +-
+ Docs/QA/Evidence/M7-1/module-matrix.md             |  76 +--
+ Docs/QA/Evidence/M7-1/stats.json                   |  10 +-
+ Docs/QA/Evidence/M7-1/types.csv                    |  34 +-
+ "Docs/QA/Evidence/M7-1/\346\211\2714/ExitCode.txt" | Bin 0 -> 26 bytes
+ "Docs/QA/Evidence/M7-1/\346\211\2714/Summary.md"   |  30 ++
+ .../M7-1/\346\211\2714/audit/audit-output.txt"     | Bin 0 -> 4152 bytes
+ .../M7-1/\346\211\2714/audit/coverage.txt"         |  19 +
+ .../Evidence/M7-1/\346\211\2714/audit/edges.csv"   | 534 +++++++++++++++++++++
+ .../Evidence/M7-1/\346\211\2714/audit/files.csv"   |  78 +++
+ .../Evidence/M7-1/\346\211\2714/audit/stats.json"  | 120 +++++
+ .../M7-1/\346\211\2714/compile-editorlog-tail.txt" |  22 +
+ "Docs/QA/Evidence/M7-1/\346\211\2714/compile.md"   |  10 +
+ .../QA/Evidence/M7-1/\346\211\2714/play-smoke.md"  |  15 +
+ .../suite-refactor-1/InEditorResult.txt"           |   7 +
+ .../suite-refactor-1/REFACTOR_ExitCode_run1.txt"   |   1 +
+ .../suite-refactor-1/REFACTOR_Summary_run1.json"   |  19 +
+ .../suite-refactor-2/InEditorResult.txt"           |   7 +
+ .../suite-refactor-2/REFACTOR_ExitCode_run1.txt"   |   1 +
+ .../suite-refactor-2/REFACTOR_Summary_run1.json"   |  19 +
+ .../suite-spec01-1/InEditorResult.txt"             |   7 +
+ .../suite-spec01-1/SPEC01_ExitCode_run1.txt"       |   1 +
+ .../suite-spec01-1/SPEC01_Summary_run1.json"       |  24 +
+ .../suite-spec01-2/InEditorResult.txt"             |   7 +
+ .../suite-spec01-2/SPEC01_ExitCode_run1.txt"       |   1 +
+ .../suite-spec01-2/SPEC01_Summary_run1.json"       |  24 +
+ "Docs/QA/Evidence/M7-1/\346\211\2714/suites.md"    |  26 +
+ "Docs/QA/Evidence/M7-1/\346\211\2714/verify.txt"   | Bin 0 -> 2022 bytes
+ .../REFACTOR-M4/editor_run25/InEditorResult.txt    |   7 +
+ .../editor_run25/REFACTOR_Assertions.jsonl         |  16 +
+ .../editor_run25/REFACTOR_ExitCode_run1.txt        |   1 +
+ .../REFACTOR-M4/editor_run25/REFACTOR_Runs.jsonl   |   1 +
+ .../editor_run25/REFACTOR_Summary_run1.json        |  19 +
+ .../REFACTOR-M4/editor_run26/InEditorResult.txt    |   7 +
+ .../editor_run26/REFACTOR_Assertions.jsonl         |  16 +
+ .../editor_run26/REFACTOR_ExitCode_run1.txt        |   1 +
+ .../REFACTOR-M4/editor_run26/REFACTOR_Runs.jsonl   |   1 +
+ .../editor_run26/REFACTOR_Summary_run1.json        |  19 +
+ .../SPEC-01/editor_run49/InEditorResult.txt        |   7 +
+ .../SPEC-01/editor_run49/SPEC01_Assertions.jsonl   |  12 +
+ .../SPEC-01/editor_run49/SPEC01_ExitCode_run1.txt  |   1 +
+ .../SPEC-01/editor_run49/SPEC01_Runs.jsonl         |   1 +
+ .../SPEC-01/editor_run49/SPEC01_Summary_run1.json  |  24 +
+ .../SPEC-01/editor_run50/InEditorResult.txt        |   7 +
+ .../SPEC-01/editor_run50/SPEC01_Assertions.jsonl   |  12 +
+ .../SPEC-01/editor_run50/SPEC01_ExitCode_run1.txt  |   1 +
+ .../SPEC-01/editor_run50/SPEC01_Runs.jsonl         |   1 +
+ .../SPEC-01/editor_run50/SPEC01_Summary_run1.json  |  24 +
+ 74 files changed, 2279 insertions(+), 1092 deletions(-)

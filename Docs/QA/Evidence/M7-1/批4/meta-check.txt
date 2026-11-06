@@ -1,0 +1,88 @@
+﻿# M7-1 AC-5：`.cs`↔`.meta` 与 rename 检查（base `483678fb`..HEAD）
+
+命令：`git diff --summary --find-renames=1% 483678fb..HEAD -- Assets/_Project/Scripts`
+
+## 结论（PASS）
+
+| 检查 | 实测 | 期望 |
+|---|---|---|
+| `.cs.meta` rename（100%） | **60** | 60 |
+| 被删除的 `.cs.meta` | **0** | 0 |
+| 新建的 `.cs.meta` | **0** | 0 |
+| 每个 `.cs` 都有同名 `.cs.meta` | PASS（`verify` 的 `M7-1.Structure.Meta`） | — |
+| 移动文件 GUID 与基线一致 | PASS（`guid_bad=[]`） | — |
+| 孤儿 `.cs.meta` | 0 | 0 |
+
+## 关于 `.cs` 的 rename 显示
+
+- 每个 `.cs` 都增加了 `namespace` 行并整体右移 4 空格，**逐行内容都变了**，git 的行相似度检测无法稳定配对源/目标；`--find-renames=1%` 会把部分 `.cs` 配成错误源文件（例如把 `RunFlow.cs` 配给 `AppFlow.cs`），属 diff 展示问题，不是文件错误。
+- 实际移动正确性由以下三项独立证明：
+  1. 60 个 `.cs.meta` 100% rename 的源/目标路径与工单 §2.1 完全一致；
+  2. `verify_m7_1.py --stage 5` 的 `M7-1.Structure.Files` 校验当前 77 个 `.cs` 的路径集合 = 工单目标结构；
+  3. `M7-1.Structure.Meta` 逐一比对移动文件 `.meta` 的 `guid:` 与基线，`guid_bad=[]`。
+- 因此 AC-5 的实质要求（`.meta` 成对移动、GUID 不变、无删除+新增配对）**满足**。
+
+## 60 个 `.cs.meta` rename（100%）
+
+```text
+ rename Assets/_Project/Scripts/{Core => App}/AppFlow.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => App}/GameData.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => App}/GameFlow.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => App}/MetaState.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => App}/PauseManager.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => App}/RunFlow.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Items => Content}/ItemData.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Units => Content}/UnitStats.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Combat => Content}/WeaponData.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Units => Core}/Team.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Combat => Core}/ICharacterCombat.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Framework => Core}/Cooldown.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Debug => Editor}/DebugTestTools.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/CombatFeedback.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/DamageInfo.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/DamageNumber.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/ExplosionFx.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/FireballProjectile.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/HeavySlashEffect.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/MeleeCombat.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/Projectile.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/RangedCombat.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/SimplePool.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/SkillCastContext.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/SkillEffectBase.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/SkillEffectFireball.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Combat/SkillEffects.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Items/ChestItem.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Items/Inventory.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Player/PlayerCommandController.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Player/Selectable.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Player/SelectionManager.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Player/SkillIndicator.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Player/SkillInputController.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/BossBrain.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/CharacterBrain.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/DownedRescue.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/MonsterBrain.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/ShieldedUnitHealth.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/SkeletonWander.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/SkillData.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/SkillSystem.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/SleepingSkeleton.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/UnitAnimatorSpeed.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/UnitBrain.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/UnitHealth.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/UnitMana.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/UnitMotion.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => Gameplay/Units}/UnitRegistry.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/Visibility.cs.meta (100%)
+ rename Assets/_Project/Scripts/{ => Gameplay}/Units/WorldHealthBar.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/Chest.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Debug => Gameplay/World}/DebugCameraSwitcher.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/DungeonDoor.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/FogOfWar.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/ForestGenerator.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/Interactable.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Debug => Gameplay/World}/Mirror.cs.meta (100%)
+ rename Assets/_Project/Scripts/{System => Gameplay/World}/SkeletonSpawner.cs.meta (100%)
+ rename Assets/_Project/Scripts/{Core => Gameplay/World}/WaveSpawner.cs.meta (100%)
+```

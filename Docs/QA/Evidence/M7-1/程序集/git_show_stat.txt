@@ -1,0 +1,16 @@
+d35d43da 重构：M7-1 建 Core/Content 程序集（M7-1/程序集） 为什么：用 asmdef 固化 Core/Content 的依赖方向，让后续批次和 M7-2 的越界引用在编译期暴露。 验证：编译 0 error；verify stage4 9 PASS；Dungeon.Core references=[]；Dungeon.Content 只引 Dungeon.Core；Core→非Core 边 0；audit upward=11；证据 Docs/QA/Evidence/M7-1/程序集/
+ .../Scripts/Content/Dungeon.Content.asmdef         |  16 +++
+ .../Scripts/Content/Dungeon.Content.asmdef.meta    |   7 ++
+ Assets/_Project/Scripts/Core/Dungeon.Core.asmdef   |  14 +++
+ .../_Project/Scripts/Core/Dungeon.Core.asmdef.meta |   7 ++
+ Docs/QA/Evidence/M7-1/verify_m7_1.py               |   2 +-
+ .../ExitCode.txt"                                  | Bin 0 -> 26 bytes
+ .../Summary.md"                                    |  20 ++++
+ .../asmdef.md"                                     |  62 +++++++++++
+ .../audit/audit-output.txt"                        | Bin 0 -> 4152 bytes
+ .../audit/coverage.txt"                            |  19 ++++
+ .../audit/stats.json"                              | 120 +++++++++++++++++++++
+ .../compile-editorlog-tail.txt"                    |  22 ++++
+ .../compile.md"                                    |  10 ++
+ .../verify.txt"                                    | Bin 0 -> 2018 bytes
+ 14 files changed, 298 insertions(+), 1 deletion(-)

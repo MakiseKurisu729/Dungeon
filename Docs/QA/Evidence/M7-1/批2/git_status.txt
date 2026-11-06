@@ -1,0 +1,177 @@
+# 本步提交前已核对 git status：仅本步声明文件（外加 3 个大脑-owned 文档，不提交）。
+# 以下为提交内容 name-status（提交后按该提交复原，供复核）。
+D	Assets/_Project/Scripts/Combat/SkillCastContext.cs
+D	Assets/_Project/Scripts/Combat/SkillEffectBase.cs
+D	Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+M	Assets/_Project/Scripts/Core/AppFlow.cs
+M	Assets/_Project/Scripts/Core/GameData.cs
+M	Assets/_Project/Scripts/Core/MetaState.cs
+M	Assets/_Project/Scripts/Core/RunFlow.cs
+D	Assets/_Project/Scripts/Core/UnitRegistry.cs
+M	Assets/_Project/Scripts/Debug/DebugTestTools.cs
+D	Assets/_Project/Scripts/Debug/Mirror.cs
+A	Assets/_Project/Scripts/Gameplay/Combat.meta
+R005	Assets/_Project/Scripts/Combat/CombatFeedback.cs	Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs
+R100	Assets/_Project/Scripts/Combat/CombatFeedback.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs.meta
+R003	Assets/_Project/Scripts/Combat/DamageInfo.cs	Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs
+R100	Assets/_Project/Scripts/Combat/DamageInfo.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs.meta
+R004	Assets/_Project/Scripts/Combat/DamageNumber.cs	Assets/_Project/Scripts/Gameplay/Combat/DamageNumber.cs
+R100	Assets/_Project/Scripts/Combat/DamageNumber.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/DamageNumber.cs.meta
+R006	Assets/_Project/Scripts/Units/BossBrain.cs	Assets/_Project/Scripts/Gameplay/Combat/ExplosionFx.cs
+R100	Assets/_Project/Scripts/Combat/ExplosionFx.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/ExplosionFx.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Combat/FireballProjectile.cs
+R100	Assets/_Project/Scripts/Combat/FireballProjectile.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/FireballProjectile.cs.meta
+R005	Assets/_Project/Scripts/Combat/HeavySlashEffect.cs	Assets/_Project/Scripts/Gameplay/Combat/HeavySlashEffect.cs
+R100	Assets/_Project/Scripts/Combat/HeavySlashEffect.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/HeavySlashEffect.cs.meta
+R003	Assets/_Project/Scripts/Combat/MeleeCombat.cs	Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs
+R100	Assets/_Project/Scripts/Combat/MeleeCombat.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Combat/Projectile.cs
+R100	Assets/_Project/Scripts/Combat/Projectile.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/Projectile.cs.meta
+R008	Assets/_Project/Scripts/Combat/RangedCombat.cs	Assets/_Project/Scripts/Gameplay/Combat/RangedCombat.cs
+R100	Assets/_Project/Scripts/Combat/RangedCombat.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/RangedCombat.cs.meta
+R005	Assets/_Project/Scripts/Items/Inventory.cs	Assets/_Project/Scripts/Gameplay/Combat/SimplePool.cs
+R100	Assets/_Project/Scripts/Combat/SimplePool.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/SimplePool.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Combat/SkillCastContext.cs
+R100	Assets/_Project/Scripts/Combat/SkillCastContext.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/SkillCastContext.cs.meta
+R003	Assets/_Project/Scripts/Units/UnitMana.cs	Assets/_Project/Scripts/Gameplay/Combat/SkillEffectBase.cs
+R100	Assets/_Project/Scripts/Combat/SkillEffectBase.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/SkillEffectBase.cs.meta
+R006	Assets/_Project/Scripts/Combat/SkillEffects.cs	Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs
+R100	Assets/_Project/Scripts/Combat/SkillEffectFireball.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs.meta
+R005	Assets/_Project/Scripts/Units/UnitBrain.cs	Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs
+R100	Assets/_Project/Scripts/Combat/SkillEffects.cs.meta	Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs.meta
+M	Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs
+M	Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs
+M	Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs
+A	Assets/_Project/Scripts/Gameplay/Items.meta
+R014	Assets/_Project/Scripts/Items/ChestItem.cs	Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs
+R100	Assets/_Project/Scripts/Items/ChestItem.cs.meta	Assets/_Project/Scripts/Gameplay/Items/ChestItem.cs.meta
+R009	Assets/_Project/Scripts/Combat/SimplePool.cs	Assets/_Project/Scripts/Gameplay/Items/Inventory.cs
+R100	Assets/_Project/Scripts/Items/Inventory.cs.meta	Assets/_Project/Scripts/Gameplay/Items/Inventory.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Player.meta
+A	Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs
+R100	Assets/_Project/Scripts/Player/PlayerCommandController.cs.meta	Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs.meta
+R004	Assets/_Project/Scripts/Player/Selectable.cs	Assets/_Project/Scripts/Gameplay/Player/Selectable.cs
+R100	Assets/_Project/Scripts/Player/Selectable.cs.meta	Assets/_Project/Scripts/Gameplay/Player/Selectable.cs.meta
+R007	Assets/_Project/Scripts/Player/SelectionManager.cs	Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs
+R100	Assets/_Project/Scripts/Player/SelectionManager.cs.meta	Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs.meta
+R006	Assets/_Project/Scripts/Player/PlayerCommandController.cs	Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs
+R100	Assets/_Project/Scripts/Player/SkillIndicator.cs.meta	Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs.meta
+R006	Assets/_Project/Scripts/Player/SkillInputController.cs	Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs
+R100	Assets/_Project/Scripts/Player/SkillInputController.cs.meta	Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units.meta
+A	Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs
+R100	Assets/_Project/Scripts/Units/BossBrain.cs.meta	Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs
+R100	Assets/_Project/Scripts/Units/CharacterBrain.cs.meta	Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs
+R100	Assets/_Project/Scripts/Units/DownedRescue.cs.meta	Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs.meta
+R004	Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs	Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs
+R100	Assets/_Project/Scripts/Units/MonsterBrain.cs.meta	Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs.meta
+R006	Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs	Assets/_Project/Scripts/Gameplay/Units/ShieldedUnitHealth.cs
+R100	Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs.meta	Assets/_Project/Scripts/Gameplay/Units/ShieldedUnitHealth.cs.meta
+R006	Assets/_Project/Scripts/Units/SkeletonWander.cs	Assets/_Project/Scripts/Gameplay/Units/SkeletonWander.cs
+R100	Assets/_Project/Scripts/Units/SkeletonWander.cs.meta	Assets/_Project/Scripts/Gameplay/Units/SkeletonWander.cs.meta
+R005	Assets/_Project/Scripts/Units/SkillData.cs	Assets/_Project/Scripts/Gameplay/Units/SkillData.cs
+R100	Assets/_Project/Scripts/Units/SkillData.cs.meta	Assets/_Project/Scripts/Gameplay/Units/SkillData.cs.meta
+R004	Assets/_Project/Scripts/System/FogOfWar.cs	Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs
+R100	Assets/_Project/Scripts/Units/SkillSystem.cs.meta	Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs.meta
+R004	Assets/_Project/Scripts/Units/SleepingSkeleton.cs	Assets/_Project/Scripts/Gameplay/Units/SleepingSkeleton.cs
+R100	Assets/_Project/Scripts/Units/SleepingSkeleton.cs.meta	Assets/_Project/Scripts/Gameplay/Units/SleepingSkeleton.cs.meta
+R004	Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs	Assets/_Project/Scripts/Gameplay/Units/UnitAnimatorSpeed.cs
+R100	Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitAnimatorSpeed.cs.meta
+R008	Assets/_Project/Scripts/Units/MonsterBrain.cs	Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs
+R100	Assets/_Project/Scripts/Units/UnitBrain.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitBrain.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs
+R100	Assets/_Project/Scripts/Units/UnitHealth.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs.meta
+R005	Assets/_Project/Scripts/Combat/FireballProjectile.cs	Assets/_Project/Scripts/Gameplay/Units/UnitMana.cs
+R100	Assets/_Project/Scripts/Units/UnitMana.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitMana.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs
+R100	Assets/_Project/Scripts/Units/UnitMotion.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitMotion.cs.meta
+R003	Assets/_Project/Scripts/Units/DownedRescue.cs	Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs
+R100	Assets/_Project/Scripts/Core/UnitRegistry.cs.meta	Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs.meta
+A	Assets/_Project/Scripts/Gameplay/Units/Visibility.cs
+R100	Assets/_Project/Scripts/Units/Visibility.cs.meta	Assets/_Project/Scripts/Gameplay/Units/Visibility.cs.meta
+R005	Assets/_Project/Scripts/Units/WorldHealthBar.cs	Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs
+R100	Assets/_Project/Scripts/Units/WorldHealthBar.cs.meta	Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs.meta
+A	Assets/_Project/Scripts/Gameplay/World.meta
+R007	Assets/_Project/Scripts/System/Chest.cs	Assets/_Project/Scripts/Gameplay/World/Chest.cs
+R100	Assets/_Project/Scripts/System/Chest.cs.meta	Assets/_Project/Scripts/Gameplay/World/Chest.cs.meta
+A	Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs
+R100	Assets/_Project/Scripts/Debug/DebugCameraSwitcher.cs.meta	Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs.meta
+R004	Assets/_Project/Scripts/System/DungeonDoor.cs	Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs
+R100	Assets/_Project/Scripts/System/DungeonDoor.cs.meta	Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs.meta
+R004	Assets/_Project/Scripts/Combat/ExplosionFx.cs	Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs
+R100	Assets/_Project/Scripts/System/FogOfWar.cs.meta	Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs.meta
+A	Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs
+R100	Assets/_Project/Scripts/System/ForestGenerator.cs.meta	Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs.meta
+R003	Assets/_Project/Scripts/System/Interactable.cs	Assets/_Project/Scripts/Gameplay/World/Interactable.cs
+R100	Assets/_Project/Scripts/System/Interactable.cs.meta	Assets/_Project/Scripts/Gameplay/World/Interactable.cs.meta
+R004	Assets/_Project/Scripts/Player/SkillIndicator.cs	Assets/_Project/Scripts/Gameplay/World/Mirror.cs
+R100	Assets/_Project/Scripts/Debug/Mirror.cs.meta	Assets/_Project/Scripts/Gameplay/World/Mirror.cs.meta
+R004	Assets/_Project/Scripts/System/SkeletonSpawner.cs	Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs
+R100	Assets/_Project/Scripts/System/SkeletonSpawner.cs.meta	Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs.meta
+R006	Assets/_Project/Scripts/Core/WaveSpawner.cs	Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs
+R100	Assets/_Project/Scripts/Core/WaveSpawner.cs.meta	Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs.meta
+D	Assets/_Project/Scripts/System/ForestGenerator.cs
+M	Assets/_Project/Scripts/UI/CursorManager.cs
+M	Assets/_Project/Scripts/UI/HUD.cs
+M	Assets/_Project/Scripts/UI/InventoryUI.cs
+M	Assets/_Project/Scripts/UI/SkillBarUI.cs
+M	Assets/_Project/Scripts/UI/UIManager.cs
+D	Assets/_Project/Scripts/Units/CharacterBrain.cs
+D	Assets/_Project/Scripts/Units/SkillSystem.cs
+D	Assets/_Project/Scripts/Units/UnitHealth.cs
+D	Assets/_Project/Scripts/Units/UnitMotion.cs
+D	Assets/_Project/Scripts/Units/Visibility.cs
+M	Assets/_Project/Tests/DIAG/Runtime/DIAG_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B04_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+M	Assets/_Project/Tests/FND02A/Editor/FND02A_BatchAcceptance.cs
+M	Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs
+M	Assets/_Project/Tests/QA/Runtime/QaFixtures.cs
+M	Assets/_Project/Tests/QA/Runtime/QaWait.cs
+M	Assets/_Project/Tests/QA/Runtime/SkillCastFixture.cs
+M	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+M	Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+M	Docs/QA/Evidence/M7-1/coverage.txt
+M	Docs/QA/Evidence/M7-1/cycles.md
+M	Docs/QA/Evidence/M7-1/edges.csv
+M	Docs/QA/Evidence/M7-1/edges.json
+M	Docs/QA/Evidence/M7-1/files.csv
+M	Docs/QA/Evidence/M7-1/graph.mmd
+M	Docs/QA/Evidence/M7-1/layer-matrix.md
+M	Docs/QA/Evidence/M7-1/layer-plan.md
+M	Docs/QA/Evidence/M7-1/module-matrix.md
+M	Docs/QA/Evidence/M7-1/stats.json
+M	Docs/QA/Evidence/M7-1/types.csv
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/ExitCode.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/Summary.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/audit/audit-output.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/audit/coverage.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/audit/edges.csv"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/audit/files.csv"
+R001	Assets/_Project/Scripts/Combat/Projectile.cs	"Docs/QA/Evidence/M7-1/\346\211\2712/audit/stats.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/compile-editorlog-tail.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/compile.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/play-smoke.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-refactor/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-refactor/REFACTOR_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-refactor/REFACTOR_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-refactor/REFACTOR_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-spec01/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-spec01/SPEC01_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-spec01/SPEC01_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suite-spec01/SPEC01_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/suites.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2712/verify.txt"
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run23/InEditorResult.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run23/REFACTOR_Assertions.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run23/REFACTOR_ExitCode_run1.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run23/REFACTOR_Runs.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run23/REFACTOR_Summary_run1.json
+A	Docs/QA/Evidence/SPEC-01/editor_run47/InEditorResult.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run47/SPEC01_Assertions.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run47/SPEC01_ExitCode_run1.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run47/SPEC01_Runs.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run47/SPEC01_Summary_run1.json

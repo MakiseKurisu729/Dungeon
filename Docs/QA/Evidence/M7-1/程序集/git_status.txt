@@ -1,0 +1,16 @@
+# 本步提交前已核对 git status：仅本步声明文件（外加 3 个大脑-owned 文档，不提交）。
+# 以下为提交内容 name-status（提交后按该提交复原，供复核）。
+A	Assets/_Project/Scripts/Content/Dungeon.Content.asmdef
+A	Assets/_Project/Scripts/Content/Dungeon.Content.asmdef.meta
+A	Assets/_Project/Scripts/Core/Dungeon.Core.asmdef
+A	Assets/_Project/Scripts/Core/Dungeon.Core.asmdef.meta
+M	Docs/QA/Evidence/M7-1/verify_m7_1.py
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/ExitCode.txt"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/Summary.md"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/asmdef.md"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/audit/audit-output.txt"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/audit/coverage.txt"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/audit/stats.json"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/compile-editorlog-tail.txt"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/compile.md"
+A	"Docs/QA/Evidence/M7-1/\347\250\213\345\272\217\351\233\206/verify.txt"

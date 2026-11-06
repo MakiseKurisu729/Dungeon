@@ -1,9 +1,4 @@
-﻿commit 84f7555e5f149c4df8dda4e46b14ca9732f9b01c
-Author: MakiseKurisu729 <1127589746@qq.com>
-Date:   Fri Nov 6 19:47:49 2026 +0800
-
-    閲嶆瀯锛歁7-1 鎵? Core+Content 鐩綍涓庡懡鍚嶇┖闂村綊涓€锛圡7-1/鎵?锛?    涓轰粈涔堬細鍏堟敹鍙ｆ渶搴曞眰锛屽悗缁壒娆″彧鏀逛笂灞傦紝閬垮厤璺ㄥ眰寮曠敤鍙嶅鍙樺姩锛涙湰杞寜鎵€鏈夎€呰姹傚彧鍋氭壒 1锛屽仛瀹屽嵆鍋溿€?    楠岃瘉锛氱紪璇?0 error锛汻EFACTOR 16/0锛汼PEC01 12/0锛沘udit upward=11锛泇erify 9 PASS锛坰tage 1锛夛紱璇佹嵁 Docs/QA/Evidence/M7-1/鎵?/
-
+84f7555e 重构：M7-1 批1 Core+Content 目录与命名空间归一（M7-1/批1） 为什么：先收口最底层，后续批次只改上层，避免跨层引用反复变动；本轮按所有者要求只做批 1，做完即停。 验证：编译 0 error；REFACTOR 16/0；SPEC01 12/0；audit upward=11；verify 9 PASS（stage 1）；证据 Docs/QA/Evidence/M7-1/批1/
  Assets/_Project/Scripts/Combat/CombatFeedback.cs   |    1 +
  Assets/_Project/Scripts/Combat/DamageInfo.cs       |    1 +
  Assets/_Project/Scripts/Combat/ExplosionFx.cs      |    2 +

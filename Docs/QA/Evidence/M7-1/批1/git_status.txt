@@ -1,89 +1,114 @@
-﻿ M Assets/_Project/Scripts/Combat/CombatFeedback.cs
- M Assets/_Project/Scripts/Combat/DamageInfo.cs
- M Assets/_Project/Scripts/Combat/ExplosionFx.cs
- D Assets/_Project/Scripts/Combat/ICharacterCombat.cs
- D Assets/_Project/Scripts/Combat/ICharacterCombat.cs.meta
- M Assets/_Project/Scripts/Combat/MeleeCombat.cs
- M Assets/_Project/Scripts/Combat/Projectile.cs
- M Assets/_Project/Scripts/Combat/RangedCombat.cs
- M Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
- M Assets/_Project/Scripts/Combat/SkillEffects.cs
- D Assets/_Project/Scripts/Combat/WeaponData.cs
- D Assets/_Project/Scripts/Combat/WeaponData.cs.meta
- M Assets/_Project/Scripts/Core/AppFlow.cs
- M Assets/_Project/Scripts/Core/EventBus.cs
- M Assets/_Project/Scripts/Core/GameData.cs
- M Assets/_Project/Scripts/Core/MessageFeed.cs
- M Assets/_Project/Scripts/Core/MetaState.cs
- M Assets/_Project/Scripts/Core/RunFlow.cs
- M Assets/_Project/Scripts/Core/RunState.cs
- M Assets/_Project/Scripts/Core/UnitId.cs
- M Assets/_Project/Scripts/Core/UnitRegistry.cs
- M Assets/_Project/Scripts/Core/WaveSpawner.cs
- M Assets/_Project/Scripts/Debug/DebugTestTools.cs
- D Assets/_Project/Scripts/Framework/Cooldown.cs
- D Assets/_Project/Scripts/Framework/Cooldown.cs.meta
- M Assets/_Project/Scripts/Items/ChestItem.cs
- M Assets/_Project/Scripts/Items/Inventory.cs
- D Assets/_Project/Scripts/Items/ItemData.cs
- D Assets/_Project/Scripts/Items/ItemData.cs.meta
- M Assets/_Project/Scripts/Player/SelectionManager.cs
- M Assets/_Project/Scripts/Player/SkillInputController.cs
- M Assets/_Project/Scripts/System/Chest.cs
- M Assets/_Project/Scripts/System/DungeonDoor.cs
- M Assets/_Project/Scripts/System/FogOfWar.cs
- M Assets/_Project/Scripts/UI/CursorManager.cs
- M Assets/_Project/Scripts/UI/HUD.cs
- M Assets/_Project/Scripts/UI/InventoryUI.cs
- M Assets/_Project/Scripts/Units/BossBrain.cs
- M Assets/_Project/Scripts/Units/CharacterBrain.cs
- M Assets/_Project/Scripts/Units/DownedRescue.cs
- M Assets/_Project/Scripts/Units/MonsterBrain.cs
- M Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs
- M Assets/_Project/Scripts/Units/SkeletonWander.cs
- M Assets/_Project/Scripts/Units/SkillData.cs
- M Assets/_Project/Scripts/Units/SkillSystem.cs
- D Assets/_Project/Scripts/Units/Team.cs
- D Assets/_Project/Scripts/Units/Team.cs.meta
- M Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs
- M Assets/_Project/Scripts/Units/UnitBrain.cs
- M Assets/_Project/Scripts/Units/UnitHealth.cs
- D Assets/_Project/Scripts/Units/UnitStats.cs
- D Assets/_Project/Scripts/Units/UnitStats.cs.meta
- M Assets/_Project/Scripts/Units/Visibility.cs
- M Assets/_Project/Scripts/Units/WorldHealthBar.cs
- M Assets/_Project/Tests/FND00B/Runtime/FND00B04_ProbeRunner.cs
- M Assets/_Project/Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs
- M Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
- M Assets/_Project/Tests/FND02A/Editor/FND02A_BatchAcceptance.cs
- M Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs
- M Assets/_Project/Tests/QA/Runtime/QaFixtures.cs
- M Assets/_Project/Tests/QA/Runtime/SkillCastFixture.cs
- M Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
- M Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
-?? Assets/_Project/Scripts/Content.meta
-?? Assets/_Project/Scripts/Content/
-?? Assets/_Project/Scripts/Core/Cooldown.cs
-?? Assets/_Project/Scripts/Core/Cooldown.cs.meta
-?? Assets/_Project/Scripts/Core/ICharacterCombat.cs
-?? Assets/_Project/Scripts/Core/ICharacterCombat.cs.meta
-?? Assets/_Project/Scripts/Core/Team.cs
-?? Assets/_Project/Scripts/Core/Team.cs.meta
-?? Docs/QA/Evidence/M7-1/coverage.txt
-?? Docs/QA/Evidence/M7-1/cycles.md
-?? Docs/QA/Evidence/M7-1/edges.csv
-?? Docs/QA/Evidence/M7-1/edges.json
-?? Docs/QA/Evidence/M7-1/files.csv
-?? Docs/QA/Evidence/M7-1/graph.mmd
-?? Docs/QA/Evidence/M7-1/layer-matrix.md
-?? Docs/QA/Evidence/M7-1/layer-plan.md
-?? Docs/QA/Evidence/M7-1/module-matrix.md
-?? Docs/QA/Evidence/M7-1/stats.json
-?? Docs/QA/Evidence/M7-1/types.csv
-?? Docs/QA/Evidence/M7-1/verify_m7_1.py
-?? "Docs/QA/Evidence/M7-1/\346\211\2710/"
-?? "Docs/QA/Evidence/M7-1/\346\211\2711/"
-?? Docs/QA/Evidence/REFACTOR-M4/editor_run22/
-?? Docs/QA/Evidence/SPEC-01/editor_run46/
-?? "Docs/\344\272\244\346\216\245/TASK_M7-1_\347\233\256\345\275\225\344\270\216\345\221\275\345\220\215\347\251\272\351\227\264\345\275\222\344\270\200.md"
-?? "Docs/\344\272\244\346\216\245/\351\225\277\344\273\273\345\212\241\350\256\241\345\210\222_M7-1.md"
+# 本步提交前已核对 git status：仅本步声明文件（外加 3 个大脑-owned 文档，不提交）。
+# 以下为提交内容 name-status（提交后按该提交复原，供复核）。
+M	Assets/_Project/Scripts/Combat/CombatFeedback.cs
+M	Assets/_Project/Scripts/Combat/DamageInfo.cs
+M	Assets/_Project/Scripts/Combat/ExplosionFx.cs
+M	Assets/_Project/Scripts/Combat/MeleeCombat.cs
+M	Assets/_Project/Scripts/Combat/Projectile.cs
+M	Assets/_Project/Scripts/Combat/RangedCombat.cs
+M	Assets/_Project/Scripts/Combat/SkillEffectFireball.cs
+M	Assets/_Project/Scripts/Combat/SkillEffects.cs
+A	Assets/_Project/Scripts/Content.meta
+R004	Assets/_Project/Scripts/Items/ItemData.cs	Assets/_Project/Scripts/Content/ItemData.cs
+R100	Assets/_Project/Scripts/Items/ItemData.cs.meta	Assets/_Project/Scripts/Content/ItemData.cs.meta
+R001	Assets/_Project/Scripts/Units/UnitStats.cs	Assets/_Project/Scripts/Content/UnitStats.cs
+R100	Assets/_Project/Scripts/Units/UnitStats.cs.meta	Assets/_Project/Scripts/Content/UnitStats.cs.meta
+R002	Assets/_Project/Scripts/Combat/WeaponData.cs	Assets/_Project/Scripts/Content/WeaponData.cs
+R100	Assets/_Project/Scripts/Combat/WeaponData.cs.meta	Assets/_Project/Scripts/Content/WeaponData.cs.meta
+M	Assets/_Project/Scripts/Core/AppFlow.cs
+R004	Assets/_Project/Scripts/Framework/Cooldown.cs	Assets/_Project/Scripts/Core/Cooldown.cs
+R100	Assets/_Project/Scripts/Framework/Cooldown.cs.meta	Assets/_Project/Scripts/Core/Cooldown.cs.meta
+M	Assets/_Project/Scripts/Core/EventBus.cs
+M	Assets/_Project/Scripts/Core/GameData.cs
+R008	Assets/_Project/Scripts/Combat/ICharacterCombat.cs	Assets/_Project/Scripts/Core/ICharacterCombat.cs
+R100	Assets/_Project/Scripts/Combat/ICharacterCombat.cs.meta	Assets/_Project/Scripts/Core/ICharacterCombat.cs.meta
+M	Assets/_Project/Scripts/Core/MessageFeed.cs
+M	Assets/_Project/Scripts/Core/MetaState.cs
+M	Assets/_Project/Scripts/Core/RunFlow.cs
+M	Assets/_Project/Scripts/Core/RunState.cs
+A	Assets/_Project/Scripts/Core/Team.cs
+R100	Assets/_Project/Scripts/Units/Team.cs.meta	Assets/_Project/Scripts/Core/Team.cs.meta
+M	Assets/_Project/Scripts/Core/UnitId.cs
+M	Assets/_Project/Scripts/Core/UnitRegistry.cs
+M	Assets/_Project/Scripts/Core/WaveSpawner.cs
+M	Assets/_Project/Scripts/Debug/DebugTestTools.cs
+M	Assets/_Project/Scripts/Items/ChestItem.cs
+M	Assets/_Project/Scripts/Items/Inventory.cs
+M	Assets/_Project/Scripts/Player/SelectionManager.cs
+M	Assets/_Project/Scripts/Player/SkillInputController.cs
+M	Assets/_Project/Scripts/System/Chest.cs
+M	Assets/_Project/Scripts/System/DungeonDoor.cs
+M	Assets/_Project/Scripts/System/FogOfWar.cs
+M	Assets/_Project/Scripts/UI/CursorManager.cs
+M	Assets/_Project/Scripts/UI/HUD.cs
+M	Assets/_Project/Scripts/UI/InventoryUI.cs
+M	Assets/_Project/Scripts/Units/BossBrain.cs
+M	Assets/_Project/Scripts/Units/CharacterBrain.cs
+M	Assets/_Project/Scripts/Units/DownedRescue.cs
+M	Assets/_Project/Scripts/Units/MonsterBrain.cs
+M	Assets/_Project/Scripts/Units/ShieldedUnitHealth.cs
+M	Assets/_Project/Scripts/Units/SkeletonWander.cs
+M	Assets/_Project/Scripts/Units/SkillData.cs
+M	Assets/_Project/Scripts/Units/SkillSystem.cs
+D	Assets/_Project/Scripts/Units/Team.cs
+M	Assets/_Project/Scripts/Units/UnitAnimatorSpeed.cs
+M	Assets/_Project/Scripts/Units/UnitBrain.cs
+M	Assets/_Project/Scripts/Units/UnitHealth.cs
+M	Assets/_Project/Scripts/Units/Visibility.cs
+M	Assets/_Project/Scripts/Units/WorldHealthBar.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B04_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B05_ProbeRunner.cs
+M	Assets/_Project/Tests/FND00B/Runtime/FND00B06_ProbeRunner.cs
+M	Assets/_Project/Tests/FND02A/Editor/FND02A_BatchAcceptance.cs
+M	Assets/_Project/Tests/FND02A/Runtime/FND02A_ProbeRunner.cs
+M	Assets/_Project/Tests/QA/Runtime/QaFixtures.cs
+M	Assets/_Project/Tests/QA/Runtime/SkillCastFixture.cs
+M	Assets/_Project/Tests/REFACTOR/Runtime/REFACTOR_ProbeRunner.cs
+M	Assets/_Project/Tests/SPEC01/Runtime/SPEC01_ProbeRunner.cs
+A	Docs/QA/Evidence/M7-1/coverage.txt
+A	Docs/QA/Evidence/M7-1/cycles.md
+A	Docs/QA/Evidence/M7-1/edges.csv
+A	Docs/QA/Evidence/M7-1/edges.json
+A	Docs/QA/Evidence/M7-1/files.csv
+A	Docs/QA/Evidence/M7-1/graph.mmd
+A	Docs/QA/Evidence/M7-1/layer-matrix.md
+A	Docs/QA/Evidence/M7-1/layer-plan.md
+A	Docs/QA/Evidence/M7-1/module-matrix.md
+A	Docs/QA/Evidence/M7-1/stats.json
+A	Docs/QA/Evidence/M7-1/types.csv
+A	Docs/QA/Evidence/M7-1/verify_m7_1.py
+A	"Docs/QA/Evidence/M7-1/\346\211\2710/audit/audit-output.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2710/audit/coverage.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2710/audit/stats.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/ExitCode-red-baseline.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/ExitCode.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/Summary.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/audit/audit-output.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/audit/coverage.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/audit/edges.csv"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/audit/files.csv"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/audit/stats.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/compile-editorlog-tail.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/compile.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/git_status.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-refactor/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-refactor/REFACTOR_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-refactor/REFACTOR_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-refactor/REFACTOR_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-spec01/InEditorResult.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-spec01/SPEC01_ExitCode_run1.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-spec01/SPEC01_Runs.jsonl"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suite-spec01/SPEC01_Summary_run1.json"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/suites.md"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/verify-red-baseline.txt"
+A	"Docs/QA/Evidence/M7-1/\346\211\2711/verify.txt"
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run22/InEditorResult.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run22/REFACTOR_Assertions.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run22/REFACTOR_ExitCode_run1.txt
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run22/REFACTOR_Runs.jsonl
+A	Docs/QA/Evidence/REFACTOR-M4/editor_run22/REFACTOR_Summary_run1.json
+A	Docs/QA/Evidence/SPEC-01/editor_run46/InEditorResult.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run46/SPEC01_Assertions.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run46/SPEC01_ExitCode_run1.txt
+A	Docs/QA/Evidence/SPEC-01/editor_run46/SPEC01_Runs.jsonl
+A	Docs/QA/Evidence/SPEC-01/editor_run46/SPEC01_Summary_run1.json

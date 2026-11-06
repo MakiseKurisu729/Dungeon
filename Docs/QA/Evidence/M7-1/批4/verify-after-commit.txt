@@ -1,0 +1,11 @@
+PASS M7-1.Structure.Files n=77 missing=[] extra=[] counts={'App': 6, 'Content': 3, 'Core': 7, 'Editor': 1, 'Gameplay/Combat': 14, 'Gameplay/Interaction': 3, 'Gameplay/Items': 2, 'Gameplay/Player': 5, 'Gameplay/Units': 17, 'Gameplay/World': 9, 'UI': 10} want={'Core': 7, 'Content': 3, 'Gameplay/Units': 17, 'Gameplay/Combat': 14, 'Gameplay/Player': 5, 'Gameplay/World': 9, 'Gameplay/Items': 2, 'Gameplay/Interaction': 3, 'App': 6, 'UI': 10, 'Editor': 1}
+PASS M7-1.Structure.Namespace bad=0 []
+PASS M7-1.Structure.Meta missing_meta=[] orphan_meta=[] guid_bad=[]
+PASS M7-1.Structure.Tests n=30 namespace_files=[]
+PASS M7-1.Structure.Asmdef problems=[]
+PASS M7-1.Audit upward=11 layer_file_counts={'Core': 7, 'Content': 3, 'Gameplay': 50, 'App': 6, 'UI': 10, 'Editor': 1} file_count=77
+PASS M7-1.NoLogicChange problems=0 []
+PASS M7-1.RaiseChanged public static void RaiseChanged found=True
+PASS M7-1.NoLogicChange.DiffScan plus=3345 minus=3073 offenders=0 []
+SUMMARY stage=5 base=483678fb pass=9 fail=0
+ExitCode=0
