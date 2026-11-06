@@ -74,6 +74,7 @@
 | `Assets/_Project/Scripts/Gameplay/World/Interactable.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/World/Mirror.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
+| `Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs` | Gameplay/World | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/UI/BasePanel.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
 | `Assets/_Project/Scripts/UI/CursorManager.cs` | UI | **UI** | 面板与视图，只依赖下层公开契约 |
@@ -90,7 +91,7 @@
 
 - Core: 9 个文件
 - Content: 3 个文件
-- Gameplay: 51 个文件
+- Gameplay: 52 个文件
 - App: 6 个文件
 - UI: 10 个文件
 - Editor: 1 个文件

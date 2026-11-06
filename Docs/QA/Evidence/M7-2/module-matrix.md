@@ -10,11 +10,11 @@
 | **Gameplay/Units** | 56 | 10 | (98) | 13 | 7 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 189 |
 | **Gameplay/Combat** | 13 | 9 | 24 | (39) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 85 |
 | **Gameplay/Interaction** | 0 | 0 | 6 | 0 | (7) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
-| **Gameplay/World** | 6 | 2 | 13 | 0 | 10 | (3) | 0 | 7 | 0 | 1 | 0 | 0 | 42 |
+| **Gameplay/World** | 7 | 2 | 13 | 0 | 10 | (4) | 0 | 7 | 0 | 0 | 0 | 0 | 43 |
 | **Gameplay/Player** | 13 | 0 | 33 | 0 | 6 | 4 | (17) | 0 | 0 | 0 | 0 | 2 | 75 |
 | **Gameplay/Items** | 0 | 4 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 0 | 0 | 0 | 4 |
 | **App** | 21 | 0 | 5 | 2 | 0 | 0 | 0 | 0 | (15) | 0 | 0 | 0 | 43 |
-| **UI** | 11 | 0 | 11 | 1 | 0 | 11 | 12 | 8 | 7 | (18) | 0 | 3 | 82 |
+| **UI** | 13 | 0 | 11 | 1 | 0 | 14 | 12 | 8 | 7 | (18) | 0 | 3 | 87 |
 | **Editor** | 3 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 8 |
 | **Gameplay/IUiModalState.cs** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 0 |
 
@@ -106,10 +106,10 @@
 - `Assets/_Project/Scripts/Gameplay/Interaction/InteractionDefinition.cs`：CharacterBrain@28
 - `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`：CharacterBrain@18; CharacterBrain@22
 
-### Gameplay/World → Core（6 条，4 个来源文件）
+### Gameplay/World → Core（7 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：MessageFeed@107; RunState@106
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@54
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：EventBus@50; Team@53
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：Team@86
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：MessageFeed@42; MessageFeed@72
 
@@ -120,7 +120,7 @@
 ### Gameplay/World → Gameplay/Units（13 条，5 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：CharacterBrain@53; CharacterBrain@70; CharacterBrain@72; CharacterBrain@75
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：CharacterBrain@38; CharacterBrain@40; CharacterBrain@42; UnitRegistry@54
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：CharacterBrain@37; CharacterBrain@39; CharacterBrain@41; UnitRegistry@53
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：UnitRegistry@86
 - `Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs`：SkeletonWander@42; Visibility@43
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：UnitHealth@26; UnitHealth@68
@@ -128,16 +128,12 @@
 ### Gameplay/World → Gameplay/Interaction（10 条，3 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：IInteractionTarget@15; InteractionDefinition@72; InteractionPriority@66
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：IInteractionTarget@13; InteractionPriority@34; InteractionRunner@24; InteractionRunner@26
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：IInteractionTarget@12; InteractionPriority@33; InteractionRunner@23; InteractionRunner@25
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`：IInteractionTarget@14; IInteractionTarget@16; IInteractionTarget@17
 
 ### Gameplay/World → Gameplay/Items（7 条，1 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：ChestItem@38; ChestItem@47; ChestItem@93; ChestItem@102; Inventory@28; Inventory@32; Inventory@36
-
-### Gameplay/World → UI（1 条，1 个来源文件）
-
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
 
 ### Gameplay/Player → Core（13 条，3 个来源文件）
 
@@ -188,11 +184,12 @@
 - `Assets/_Project/Scripts/App/GameData.cs`：MeleeCombat@26
 - `Assets/_Project/Scripts/App/MetaState.cs`：MeleeCombat@21
 
-### UI → Core（11 条，3 个来源文件）
+### UI → Core（13 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@75; Team@124; Team@154
 - `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@53; MessageFeed@55
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@128; MessageFeed@138; RunState@137; Team@37
+- `Assets/_Project/Scripts/UI/TransitionFader.cs`：EventBus@22; EventBus@24
 
 ### UI → Gameplay/Units（11 条，4 个来源文件）
 
@@ -205,10 +202,11 @@
 
 - `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@50
 
-### UI → Gameplay/World（11 条，3 个来源文件）
+### UI → Gameplay/World（14 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52
+- `Assets/_Project/Scripts/UI/TransitionFader.cs`：TransitionRequest@22; TransitionRequest@24; TransitionRequest@26
 - `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@47; Chest@53; Chest@57; Chest@127
 
 ### UI → Gameplay/Player（12 条，4 个来源文件）

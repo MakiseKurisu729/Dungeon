@@ -28,7 +28,7 @@ using PauseState = Dungeon.Core.PauseState;
 /// 只读生产状态；测试自身唯一写入面为 Docs 证据、SessionState 退出码、
 /// 以及运行期内存夹具（结束前销毁）。
 ///
-/// 16 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
+/// 20 条断言（每条都走生产入口，不复制 SPEC01 的数值口径）：
 ///   1. Party.PresentAndMove       三职业存在 + 生产移动命令可移动
 ///   2. Combat.MeleeHit            骑士近战普攻命中，命中瞬间处于 AttackMelee
 ///   3. Combat.RangedShot          弓/法远程普攻发射，发射瞬间处于 Attack_Release
@@ -45,6 +45,10 @@ using PauseState = Dungeon.Core.PauseState;
 ///  14. Refactor.StateFacade       状态/流程门面（新旧 API 双向一致 / 事件恰好一次 / 暂停 timeScale）
 ///  15. Refactor.InteractionContract 交互契约（接口语义 / KeyInteractable / 开箱事件恰好一次 / Runner 复用）
 ///  16. Skill.MotionUnlocked       运动锁复位（技能结束 / 被打断 / 倒地复活三条路径后 isStopped==false 且能移动）
+///  17. Refactor.ProgressionFacade 升级门面（MetaState.Level 转发 ProgressionState.Level，收益不变）
+///  18. Refactor.PauseFacade       暂停门面（PauseState 与 timeScale 解耦，团灭 timeScale=0 不算暂停）
+///  19. Refactor.ModalFacade       模态门面（UiModalState.Current == UIManager，IsModalOpen == IsInventoryOpen）
+///  20. Refactor.DoorTransitionEvent 门过场事件（TransitionRequest 订阅 → 黑屏 → midAction → 亮屏）
 /// </summary>
 public class REFACTOR_ProbeRunner : MonoBehaviour
 {
@@ -119,7 +123,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
                 "Hit.InterruptAttack", "Downed.Knockdown", "Rescue.ChannelInterrupt", "Chest.Interact",
                 "Refactor.RegistrySemantics", "Refactor.StateFacade", "Refactor.InteractionContract",
                 "Skill.MotionUnlocked", "Refactor.ProgressionFacade", "Refactor.PauseFacade",
-                "Refactor.ModalFacade"
+                "Refactor.ModalFacade", "Refactor.DoorTransitionEvent"
             };
             foreach (string id in ids)
                 _ev.BlockedAssertion(id, id, "三角色齐备才能跑的护栏断言",
@@ -148,6 +152,7 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
         yield return RunSafe("Refactor.ProgressionFacade", AssertProgressionFacade(_ev));
         yield return RunSafe("Refactor.PauseFacade", AssertPauseFacade(_ev));
         yield return RunSafe("Refactor.ModalFacade", AssertModalFacade(_ev));
+        yield return RunSafe("Refactor.DoorTransitionEvent", AssertDoorTransitionEvent(_ev));
         RestoreMonstersAndUi();
         CleanupFixtures();
         Finish();
@@ -2020,6 +2025,64 @@ public class REFACTOR_ProbeRunner : MonoBehaviour
             allPass, allPass ? "pass" : "product_fail", "production",
             QaJson.Dict("steps", rows,
                  "note", "M7-2 子项 3 新增第 19 条；只读/写入均走 UIManager 生产入口，结束前关闭背包"));
+        yield break;
+    }
+    // ============================================================
+    // 20. Refactor.DoorTransitionEvent（M7-2 子项 4：门过场改事件）
+    // ============================================================
+    /// <summary>门过场事件：DungeonDoor 不再直接调 TransitionFader；TransitionFader 在 OnEnable/OnDisable
+    /// 成对订阅/退订 TransitionRequest。断言：事件送达、midAction 被执行、黑屏 alpha 先升后归零。</summary>
+    IEnumerator AssertDoorTransitionEvent(IQaSink sink)
+    {
+        const string Id = "Refactor.DoorTransitionEvent";
+        // DungeonWorld 场景本身没有 DungeonDoor/TransitionFader（门在副本/其他场景），
+        // 按既有夹具惯例创建运行期 fader（结束前销毁），只验证生产组件的事件订阅与过场行为。
+        GameObject fixture = null;
+        TransitionFader fader = null;
+        bool signal = false, midRan = false;
+        float peakAlpha = 0f, finalAlpha = 1f;
+        float seconds = 0f;
+        System.Action<TransitionRequest> handler = req => { signal = true; };
+        bool subscribed = false;
+
+        try
+        {
+            fixture = new GameObject("REFACTOR_TransitionFaderFixture");
+            fixture.SetActive(false);
+            var cg = fixture.AddComponent<CanvasGroup>();
+            fader = fixture.AddComponent<TransitionFader>();
+            fader.canvasGroup = cg;
+            fixture.SetActive(true);   // Awake + OnEnable：注册 instance、订阅 TransitionRequest
+
+            EventBus.Subscribe(handler);
+            subscribed = true;
+            EventBus.Publish(new TransitionRequest { midAction = () => { midRan = true; } });
+
+            float timeout = 2f * fader.fadeTime + 0.5f;
+            while (seconds < timeout)
+            {
+                yield return null;
+                seconds += Time.unscaledDeltaTime;
+                if (fader.canvasGroup.alpha > peakAlpha) peakAlpha = fader.canvasGroup.alpha;
+            }
+            finalAlpha = fader.canvasGroup.alpha;
+        }
+        finally
+        {
+            if (subscribed) EventBus.Unsubscribe(handler);
+            if (ReferenceEquals(TransitionFader.instance, fader)) TransitionFader.instance = null;
+            if (fixture != null) Destroy(fixture);
+        }
+
+        bool alphaOk = peakAlpha > 0.5f && finalAlpha <= 0.001f;
+        bool allPass = signal && midRan && alphaOk;
+        sink.Record(Id, Id,
+            "门过场事件：订阅 TransitionRequest 后 Publish 能送达；TransitionFader 收到后黑屏（alpha 峰值>0.5）→ 执行 midAction → 亮屏（最终 alpha=0）",
+            "signal=" + signal + "; midActionRan=" + midRan + "; peakAlpha=" + F(peakAlpha) +
+            "; finalAlpha=" + F(finalAlpha) + "; seconds=" + F(seconds),
+            allPass, allPass ? "pass" : "product_fail", "production",
+            QaJson.Dict("seconds", seconds, "fadeTime", fader.fadeTime,
+                 "note", "M7-2 子项 4 新增第 20 条；临时 handler 只观察事件送达，midAction 只由 TransitionFader 调用"));
         yield break;
     }
     static bool Contains(IReadOnlyList<UnitHealth> list, UnitHealth unit)

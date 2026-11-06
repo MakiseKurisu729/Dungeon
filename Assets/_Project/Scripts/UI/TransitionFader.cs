@@ -1,6 +1,8 @@
 // ⑥ TransitionFader.cs
 using System.Collections;
 using UnityEngine;
+using Dungeon.Core;
+using Dungeon.Gameplay.World;
 namespace Dungeon.UI {
 
     /// <summary>过场黑屏：黑屏淡入 → 执行传送 → 亮屏淡出。Canvas 上挂，配全屏黑 Image + CanvasGroup。</summary>
@@ -16,6 +18,12 @@ namespace Dungeon.UI {
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
         }
+
+        void OnEnable() { EventBus.Subscribe<TransitionRequest>(OnTransitionRequest); }
+
+        void OnDisable() { EventBus.Unsubscribe<TransitionRequest>(OnTransitionRequest); }
+
+        void OnTransitionRequest(TransitionRequest req) { Transition(req.midAction); }
 
         public static void Transition(System.Action midAction)
         {

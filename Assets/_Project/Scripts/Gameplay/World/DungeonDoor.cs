@@ -4,7 +4,6 @@ using UnityEngine.AI;
 using Dungeon.Core;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Units;
-using Dungeon.UI;
 namespace Dungeon.Gameplay.World {
 
     /// <summary>地牢入口：实现 <see cref="IInteractionTarget"/>（唯一 KeyInteractable 目标）。
@@ -48,7 +47,7 @@ namespace Dungeon.Gameplay.World {
         void Enter()
         {
             _used = true;
-            TransitionFader.Transition(() =>
+            EventBus.Publish(new TransitionRequest { midAction = () =>
             {
                 int i = 0;
                 foreach (var uh in UnitRegistry.OfTeam(Team.Player))
@@ -65,7 +64,7 @@ namespace Dungeon.Gameplay.World {
                 if (cam != null && dungeonEntryPoint != null) cam.SetFocus(dungeonEntryPoint);
                 var rig = Camera.main != null ? Camera.main.transform.root : null;
                 if (rig != null && cameraPoint != null) rig.position = cameraPoint.position;
-            });
+            } });
         }
     }
 }

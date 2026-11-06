@@ -4819,7 +4819,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 38,
+  "line": 37,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4830,7 +4830,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 40,
+  "line": 39,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4841,7 +4841,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 42,
+  "line": 41,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4852,7 +4852,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 64,
+  "line": 63,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/World",
@@ -4863,7 +4863,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 13,
+  "line": 50,
+  "type": "EventBus",
+  "dst": "Assets/_Project/Scripts/Core/EventBus.cs",
+  "module_src": "Gameplay/World",
+  "module_dst": "Core",
+  "layer_src": "Gameplay",
+  "layer_dst": "Core",
+  "snippet": "EventBus.Publish(new TransitionRequest { midAction = () =>"
+ },
+ {
+  "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
+  "line": 12,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/World",
@@ -4874,7 +4885,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 34,
+  "line": 33,
   "type": "InteractionPriority",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/World",
@@ -4885,7 +4896,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 24,
+  "line": 23,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/World",
@@ -4896,7 +4907,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 26,
+  "line": 25,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/World",
@@ -4907,7 +4918,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 54,
+  "line": 53,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/World",
@@ -4918,18 +4929,18 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 51,
-  "type": "TransitionFader",
-  "dst": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 50,
+  "type": "TransitionRequest",
+  "dst": "Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs",
   "module_src": "Gameplay/World",
-  "module_dst": "UI",
+  "module_dst": "Gameplay/World",
   "layer_src": "Gameplay",
-  "layer_dst": "UI",
-  "snippet": "TransitionFader.Transition(() =>"
+  "layer_dst": "Gameplay",
+  "snippet": "EventBus.Publish(new TransitionRequest { midAction = () =>"
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 54,
+  "line": 53,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/World",
@@ -5696,6 +5707,61 @@
   "layer_src": "UI",
   "layer_dst": "Gameplay",
   "snippet": "return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 22,
+  "type": "EventBus",
+  "dst": "Assets/_Project/Scripts/Core/EventBus.cs",
+  "module_src": "UI",
+  "module_dst": "Core",
+  "layer_src": "UI",
+  "layer_dst": "Core",
+  "snippet": "void OnEnable() { EventBus.Subscribe<TransitionRequest>(OnTransitionRequest); }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 24,
+  "type": "EventBus",
+  "dst": "Assets/_Project/Scripts/Core/EventBus.cs",
+  "module_src": "UI",
+  "module_dst": "Core",
+  "layer_src": "UI",
+  "layer_dst": "Core",
+  "snippet": "void OnDisable() { EventBus.Unsubscribe<TransitionRequest>(OnTransitionRequest); }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 22,
+  "type": "TransitionRequest",
+  "dst": "Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs",
+  "module_src": "UI",
+  "module_dst": "Gameplay/World",
+  "layer_src": "UI",
+  "layer_dst": "Gameplay",
+  "snippet": "void OnEnable() { EventBus.Subscribe<TransitionRequest>(OnTransitionRequest); }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 24,
+  "type": "TransitionRequest",
+  "dst": "Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs",
+  "module_src": "UI",
+  "module_dst": "Gameplay/World",
+  "layer_src": "UI",
+  "layer_dst": "Gameplay",
+  "snippet": "void OnDisable() { EventBus.Unsubscribe<TransitionRequest>(OnTransitionRequest); }"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/TransitionFader.cs",
+  "line": 26,
+  "type": "TransitionRequest",
+  "dst": "Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs",
+  "module_src": "UI",
+  "module_dst": "Gameplay/World",
+  "layer_src": "UI",
+  "layer_dst": "Gameplay",
+  "snippet": "void OnTransitionRequest(TransitionRequest req) { Transition(req.midAction); }"
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",

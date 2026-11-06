@@ -7,17 +7,16 @@
 |---|---|---|---|---|---|---|---|
 | **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 1 |
-| **Gameplay** | 88 | 25 | (294) | 0 | 1 | 0 | 408 |
+| **Gameplay** | 89 | 25 | (295) | 0 | 0 | 0 | 409 |
 | **App** | 21 | 0 | 7 | (15) | 0 | 0 | 43 |
-| **UI** | 11 | 0 | 46 | 7 | (18) | 0 | 82 |
+| **UI** | 13 | 0 | 49 | 7 | (18) | 0 | 87 |
 | **Editor** | 3 | 0 | 5 | 0 | 0 | (0) | 8 |
 
 括号内为同组内部引用。
 
 ## 违规方向（下层 → 上层，M7 必须先消）
 
-- **Gameplay → UI**：1 条边
-  - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:51` 引用 `TransitionFader` → `Assets/_Project/Scripts/UI/TransitionFader.cs`
+无。
 
 ## 每个依赖组的来源文件
 
@@ -25,7 +24,7 @@
 
 - `Assets/_Project/Scripts/Content/UnitStats.cs`：Team@11
 
-### Gameplay → Core（88 条，25 个来源文件）
+### Gameplay → Core（89 条，25 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs`：EventBus@15; EventBus@20
 - `Assets/_Project/Scripts/Gameplay/Combat/ExplosionFx.cs`：Team@147
@@ -49,7 +48,7 @@
 - `Assets/_Project/Scripts/Gameplay/Units/Visibility.cs`：Team@43
 - `Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs`：Team@41; Team@47; Team@63
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：MessageFeed@107; RunState@106
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@54
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：EventBus@50; Team@53
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：Team@86
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：MessageFeed@42; MessageFeed@72
 
@@ -70,10 +69,6 @@
 - `Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs`：DamageType@66; DamageType@94; UnitStats@13
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：ItemData@46; ItemData@100
 
-### Gameplay → UI（1 条，1 个来源文件）
-
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
-
 ### App → Core（21 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/App/AppFlow.cs`：PauseState@15; PauseState@20; PauseState@27; PauseState@36; Team@44
@@ -88,18 +83,20 @@
 - `Assets/_Project/Scripts/App/MetaState.cs`：MeleeCombat@21; UnitHealth@21
 - `Assets/_Project/Scripts/App/RunFlow.cs`：DownedRescue@46; UnitRegistry@44
 
-### UI → Core（11 条，3 个来源文件）
+### UI → Core（13 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@75; Team@124; Team@154
 - `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@53; MessageFeed@55
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@128; MessageFeed@138; RunState@137; Team@37
+- `Assets/_Project/Scripts/UI/TransitionFader.cs`：EventBus@22; EventBus@24
 
-### UI → Gameplay（46 条，5 个来源文件）
+### UI → Gameplay（49 条，6 个来源文件）
 
 - `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@138; Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131; Selectable@65; Selectable@108 …
 - `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@50; SelectionManager@47; SelectionManager@48; UnitHealth@49
 - `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52; Inventory@20; Inventory@28; Inventory@39; Inventory@46; Inventory@52; Inventory@81 …
 - `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@57; SelectionManager@58; SkillSystem@55; SkillSystem@58
+- `Assets/_Project/Scripts/UI/TransitionFader.cs`：TransitionRequest@22; TransitionRequest@24; TransitionRequest@26
 - `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@47; Chest@53; Chest@57; Chest@127; IUiModalState@15; Inventory@127; Inventory@131; SelectionManager@130 …
 
 ### UI → App（7 条，4 个来源文件）

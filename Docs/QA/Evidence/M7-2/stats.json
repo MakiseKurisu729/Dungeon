@@ -1,9 +1,9 @@
 {
-  "file_count": 80,
+  "file_count": 81,
   "files_with_zero_declared_types": [],
-  "type_count": 94,
-  "edge_count": 542,
-  "cross_module_edge_count": 345,
+  "type_count": 95,
+  "edge_count": 548,
+  "cross_module_edge_count": 350,
   "duplicate_type_names": {},
   "file_scc_count": 4,
   "file_scc_sizes": [
@@ -12,29 +12,14 @@
     3,
     3
   ],
-  "layer_sccs": [
-    [
-      "App",
-      "Gameplay",
-      "UI"
-    ]
-  ],
+  "layer_sccs": [],
   "layer_file_counts": {
     "Core": 9,
     "Content": 3,
-    "Gameplay": 51,
+    "Gameplay": 52,
     "App": 6,
     "UI": 10,
     "Editor": 1
   },
-  "upward_layer_edges": [
-    {
-      "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-      "line": 51,
-      "type": "TransitionFader",
-      "dst": "Assets/_Project/Scripts/UI/TransitionFader.cs",
-      "src_layer": "Gameplay",
-      "dst_layer": "UI"
-    }
-  ]
+  "upward_layer_edges": []
 }

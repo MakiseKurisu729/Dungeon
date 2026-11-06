@@ -73,13 +73,14 @@ Visibility,class,Assets/_Project/Scripts/Gameplay/Units/Visibility.cs,7,Gameplay
 WorldHealthBar,class,Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs,11,Gameplay/Units,Gameplay
 Chest,class,Assets/_Project/Scripts/Gameplay/World/Chest.cs,15,Gameplay/World,Gameplay
 DebugCameraSwitcher,class,Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs,11,Gameplay/World,Gameplay
-DungeonDoor,class,Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs,13,Gameplay/World,Gameplay
+DungeonDoor,class,Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs,12,Gameplay/World,Gameplay
 FogOfWar,class,Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs,8,Gameplay/World,Gameplay
 ForestGenerator,class,Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs,8,Gameplay/World,Gameplay
 Kind,enum,Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs,57,Gameplay/World,Gameplay
 Interactable,class,Assets/_Project/Scripts/Gameplay/World/Interactable.cs,8,Gameplay/World,Gameplay
 Mirror,class,Assets/_Project/Scripts/Gameplay/World/Mirror.cs,8,Gameplay/World,Gameplay
 SkeletonSpawner,class,Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs,9,Gameplay/World,Gameplay
+TransitionRequest,struct,Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs,3,Gameplay/World,Gameplay
 WaveSpawner,class,Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs,8,Gameplay/World,Gameplay
 Wave,class,Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs,11,Gameplay/World,Gameplay
 BasePanel,class,Assets/_Project/Scripts/UI/BasePanel.cs,9,UI,UI
@@ -91,5 +92,5 @@ InventoryUI,class,Assets/_Project/Scripts/UI/InventoryUI.cs,15,UI,UI
 MainMenuPanel,class,Assets/_Project/Scripts/UI/MainMenuPanel.cs,8,UI,UI
 SkillBarUI,class,Assets/_Project/Scripts/UI/SkillBarUI.cs,8,UI,UI
 SlotClickHandler,class,Assets/_Project/Scripts/UI/SlotClickHandler.cs,6,UI,UI
-TransitionFader,class,Assets/_Project/Scripts/UI/TransitionFader.cs,7,UI,UI
+TransitionFader,class,Assets/_Project/Scripts/UI/TransitionFader.cs,9,UI,UI
 UIManager,class,Assets/_Project/Scripts/UI/UIManager.cs,15,UI,UI

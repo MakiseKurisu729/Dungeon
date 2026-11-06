@@ -62,12 +62,13 @@ Assets/_Project/Scripts/Gameplay/Units/Visibility.cs,Gameplay/Units,Gameplay,58,
 Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs,Gameplay/Units,Gameplay,70,1,52570a2b4646032f63b60d8655aa661877f51fe3fe80b60ddb9b7ff5bb1cd018
 Assets/_Project/Scripts/Gameplay/World/Chest.cs,Gameplay/World,Gameplay,110,1,fa80911f6f105035b4c41a40331a769315ccb715e564f951a90a98cf50c8f211
 Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs,Gameplay/World,Gameplay,227,1,01ae78b280d4ae48849fe1a9d507d2a6c7e25946176e731d36f0cd4bc6457593
-Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs,Gameplay/World,Gameplay,71,1,cd293973992c121f65e37090a1f8d8188afc72d39982bc7444547467e90dacfd
+Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs,Gameplay/World,Gameplay,70,1,8539e6b05be4d0d0a7d0aca275842ed3b56500b101331f0f760a381d6b86dc70
 Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs,Gameplay/World,Gameplay,124,1,573a8bf5c32eef3b64e9454bc1918a2b9050038129a6f5bd6dd300a88fa21718
 Assets/_Project/Scripts/Gameplay/World/ForestGenerator.cs,Gameplay/World,Gameplay,143,2,c76cd247cf545a1f9b7993dfd295f5c3ca7ef736c8caeb5af801c7230620cc31
 Assets/_Project/Scripts/Gameplay/World/Interactable.cs,Gameplay/World,Gameplay,21,1,5a08a12648fde97bc3ce5164cf504f78a04f30bb22fe3f59b6205211fa4633d2
 Assets/_Project/Scripts/Gameplay/World/Mirror.cs,Gameplay/World,Gameplay,37,1,d4f829d4ee2b205d88144173d36d450df0e751427dd19f31c8c71e3b0c52f98b
 Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs,Gameplay/World,Gameplay,61,1,9ce1187ac5e15714c30a31e6ea293c61c76428276021ccbdfcd5ea2d8c65b9e7
+Assets/_Project/Scripts/Gameplay/World/TransitionRequest.cs,Gameplay/World,Gameplay,8,1,1f0cd507c088a7734ab819e404a04138c87f1c050f530be0438ae4d131b7fbee
 Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs,Gameplay/World,Gameplay,75,2,87936671c535a97d58f222080f7b63af99da7de6adbedbc301cad232c3744adc
 Assets/_Project/Scripts/UI/BasePanel.cs,UI,UI,39,1,ef88b9f61bcef5bead201df07522196d9a45dcf7bc9708c2bf29e2b058233d56
 Assets/_Project/Scripts/UI/CursorManager.cs,UI,UI,189,2,d0135d71af51a84f04712b45d04fea414daf1e9559f90d226a31b891ed9d6255
@@ -77,5 +78,5 @@ Assets/_Project/Scripts/UI/InventoryUI.cs,UI,UI,143,1,0d671e7ef1ea93e8f66d3d917d
 Assets/_Project/Scripts/UI/MainMenuPanel.cs,UI,UI,27,1,31ed26d0931a296074f57d39aa7f5a291c4d7e3ecde6d835fd1022be574c830a
 Assets/_Project/Scripts/UI/SkillBarUI.cs,UI,UI,61,1,93c2da0069b5a959e19207940daa0b7cfe4da99e40c9a934e5507861028d0396
 Assets/_Project/Scripts/UI/SlotClickHandler.cs,UI,UI,11,1,f7cf8b8d32fc528e442f857b2eb4eb36654933b375982e2a9dc138b982d33868
-Assets/_Project/Scripts/UI/TransitionFader.cs,UI,UI,38,1,b25337b9619c525e88fbf98534a31ada36296d8e28d067ea31402df86bbc43b8
+Assets/_Project/Scripts/UI/TransitionFader.cs,UI,UI,46,1,0ef68fecd3c5cb8b4959a08a9166d216d1b3dbe92bad2a61dc1f7c6de60e15fc
 Assets/_Project/Scripts/UI/UIManager.cs,UI,UI,141,1,494c9c28b368a9cd1151f259546d973d609ede11f4682c103ce90c6f5d59da45

@@ -65,6 +65,7 @@ graph TD
     NGameplay_World_Interactable_cs["Interactable"]
     NGameplay_World_Mirror_cs["Mirror"]
     NGameplay_World_SkeletonSpawner_cs["SkeletonSpawner"]
+    NGameplay_World_TransitionRequest_cs["TransitionRequest"]
     NGameplay_World_WaveSpawner_cs["WaveSpawner"]
   end
   subgraph Gameplay/Player[Gameplay/Player]
@@ -233,12 +234,12 @@ graph TD
   NGameplay_World_Chest_cs --> NGameplay_Items_ChestItem_cs
   NGameplay_World_Chest_cs --> NGameplay_Items_Inventory_cs
   NGameplay_World_Chest_cs --> NGameplay_Units_CharacterBrain_cs
+  NGameplay_World_DungeonDoor_cs --> NCore_EventBus_cs
   NGameplay_World_DungeonDoor_cs --> NCore_Team_cs
   NGameplay_World_DungeonDoor_cs --> NGameplay_Interaction_IInteractionTarget_cs
   NGameplay_World_DungeonDoor_cs --> NGameplay_Interaction_InteractionRunner_cs
   NGameplay_World_DungeonDoor_cs --> NGameplay_Units_CharacterBrain_cs
   NGameplay_World_DungeonDoor_cs --> NGameplay_Units_UnitRegistry_cs
-  NGameplay_World_DungeonDoor_cs --> NUI_TransitionFader_cs
   NGameplay_World_FogOfWar_cs --> NCore_Team_cs
   NGameplay_World_FogOfWar_cs --> NGameplay_Units_UnitRegistry_cs
   NGameplay_World_Interactable_cs --> NGameplay_Interaction_IInteractionTarget_cs
@@ -268,6 +269,8 @@ graph TD
   NUI_MainMenuPanel_cs --> NApp_AppFlow_cs
   NUI_SkillBarUI_cs --> NGameplay_Player_SelectionManager_cs
   NUI_SkillBarUI_cs --> NGameplay_Units_SkillSystem_cs
+  NUI_TransitionFader_cs --> NCore_EventBus_cs
+  NUI_TransitionFader_cs --> NGameplay_World_TransitionRequest_cs
   NUI_UIManager_cs --> NApp_AppFlow_cs
   NUI_UIManager_cs --> NApp_RunFlow_cs
   NUI_UIManager_cs --> NGameplay_IUiModalState_cs
