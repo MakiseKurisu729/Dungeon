@@ -1,0 +1,16 @@
+{
+    "name": "Dungeon.Content",
+    "rootNamespace": "Dungeon.Content",
+    "references": [
+        "Dungeon.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

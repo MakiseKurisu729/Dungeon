@@ -124,7 +124,7 @@ MOVE = {
     "Core/MetaState.cs": ("App/MetaState.cs", 3),
     "Core/PauseManager.cs": ("App/PauseManager.cs", 3),
     "Core/RunFlow.cs": ("App/RunFlow.cs", 3),
-    "Debug/DebugTestTools.cs": ("Editor/DebugTestTools.cs", 4),
+    "Debug/DebugTestTools.cs": ("Editor/DebugTestTools.cs", 5),
 }
 
 STAGE_DIRS = {

@@ -1,0 +1,22 @@
+﻿### Editor.log lines 4609-4624 (程序集步骤编译段尾部)
+4609: info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+4610:       Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/PostProcessAssembly application/grpc - - 200 - application/grpc 10.3185ms
+4611: ExitCode: 0 Duration: 2s625ms
+4612: Finished compiling graph: 749 nodes, 10547 flattened edges (8507 ToBuild, 122 ToUse), maximum node priority 728
+4613: [379/746    0s] WriteResponseFile Library/Bee/artifacts/rsp/8401374052829133595.rsp
+4614: [392/746    0s] WriteResponseFile Library/Bee/artifacts/rsp/15550410042451988797.rsp
+4615: [397/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp
+4616: [398/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Core.rsp2
+4617: [399/746    0s] WriteResponseFile Library/Bee/artifacts/rsp/10678863128556690338.rsp
+4618: [400/746    0s] WriteResponseFile Library/Bee/artifacts/rsp/2781082588993088484.rsp
+4619: [401/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Core.UnityAdditionalFile.txt
+4620: [402/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Core.dll.mvfrm.rsp
+4621: [403/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+4622: [463/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Core.rsp
+4623: [502/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Content.UnityAdditionalFile.txt
+4624: [510/746    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Dungeon.Content.rsp2
+
+### 全日志统计
+total_lines_measure=4443
+last_error_CS_line=none
+finished_compiling_graph_last_line=4612
