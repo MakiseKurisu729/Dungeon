@@ -5,19 +5,19 @@
 
 | 文件 | 现目录 | 目标层 | 理由 |
 |---|---|---|---|
+| `Assets/_Project/Scripts/App/AppFlow.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
+| `Assets/_Project/Scripts/App/GameData.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
+| `Assets/_Project/Scripts/App/GameFlow.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
+| `Assets/_Project/Scripts/App/MetaState.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
+| `Assets/_Project/Scripts/App/PauseManager.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
+| `Assets/_Project/Scripts/App/RunFlow.cs` | App | **App** | 局流程/整备/成长/存档/组合根 |
 | `Assets/_Project/Scripts/Content/ItemData.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
 | `Assets/_Project/Scripts/Content/UnitStats.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
 | `Assets/_Project/Scripts/Content/WeaponData.cs` | Content | **Content** | ScriptableObject 内容定义，不持有局内运行状态 |
-| `Assets/_Project/Scripts/Core/AppFlow.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
 | `Assets/_Project/Scripts/Core/Cooldown.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/EventBus.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
-| `Assets/_Project/Scripts/Core/GameData.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
-| `Assets/_Project/Scripts/Core/GameFlow.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
 | `Assets/_Project/Scripts/Core/ICharacterCombat.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/MessageFeed.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
-| `Assets/_Project/Scripts/Core/MetaState.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
-| `Assets/_Project/Scripts/Core/PauseManager.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
-| `Assets/_Project/Scripts/Core/RunFlow.cs` | Core | **App** | 局流程/整备/成长/存档/组合根 |
 | `Assets/_Project/Scripts/Core/RunState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/Team.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/UnitId.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |

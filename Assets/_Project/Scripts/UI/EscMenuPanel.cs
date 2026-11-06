@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Dungeon.App;
 
 /// <summary>
 /// Esc 菜单（独占面板）：打开=全局暂停，关闭=恢复。

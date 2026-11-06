@@ -13,6 +13,7 @@ using Dungeon.Core;
 using Dungeon.Gameplay.Player;
 using Dungeon.Gameplay.Units;
 using Dungeon.Gameplay.World;
+using Dungeon.App;
 #endif
 
 /// <summary>

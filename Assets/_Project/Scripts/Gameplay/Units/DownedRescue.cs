@@ -7,6 +7,7 @@ using Dungeon.Gameplay.Combat;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Player;
 using Dungeon.Gameplay.World;
+using Dungeon.App;
 namespace Dungeon.Gameplay.Units {
 
     /// <summary>倒地与救援（指令式、动画机驱动）：挂玩家单位，且同物体挂 Interactable。

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Dungeon.App;
 
 /// <summary>
 /// 开始界面（门户面板）：打开时 timeScale=0 冻结全场；点"进入地牢"→ 解冻 + GameStarted=true。

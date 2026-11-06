@@ -1,16 +1,10 @@
 graph TD
   %% M7-0 文件级依赖图（仅跨模块边；模块内边见 edges.csv）
   subgraph Core[Core]
-    NCore_AppFlow_cs["AppFlow"]
     NCore_Cooldown_cs["Cooldown"]
     NCore_EventBus_cs["EventBus"]
-    NCore_GameData_cs["GameData"]
-    NCore_GameFlow_cs["GameFlow"]
     NCore_ICharacterCombat_cs["ICharacterCombat"]
     NCore_MessageFeed_cs["MessageFeed"]
-    NCore_MetaState_cs["MetaState"]
-    NCore_PauseManager_cs["PauseManager"]
-    NCore_RunFlow_cs["RunFlow"]
     NCore_RunState_cs["RunState"]
     NCore_Team_cs["Team"]
     NCore_UnitId_cs["UnitId"]
@@ -82,6 +76,14 @@ graph TD
     NGameplay_Items_ChestItem_cs["ChestItem"]
     NGameplay_Items_Inventory_cs["Inventory"]
   end
+  subgraph App[App]
+    NApp_AppFlow_cs["AppFlow"]
+    NApp_GameData_cs["GameData"]
+    NApp_GameFlow_cs["GameFlow"]
+    NApp_MetaState_cs["MetaState"]
+    NApp_PauseManager_cs["PauseManager"]
+    NApp_RunFlow_cs["RunFlow"]
+  end
   subgraph UI[UI]
     NUI_BasePanel_cs["BasePanel"]
     NUI_CursorManager_cs["CursorManager"]
@@ -97,14 +99,21 @@ graph TD
   subgraph Debug[Debug]
     NDebug_DebugTestTools_cs["DebugTestTools"]
   end
+  NApp_AppFlow_cs --> NCore_Team_cs
+  NApp_AppFlow_cs --> NGameplay_Units_UnitRegistry_cs
+  NApp_GameData_cs --> NCore_MessageFeed_cs
+  NApp_GameData_cs --> NCore_RunState_cs
+  NApp_GameData_cs --> NGameplay_Combat_MeleeCombat_cs
+  NApp_GameData_cs --> NGameplay_Units_UnitHealth_cs
+  NApp_MetaState_cs --> NCore_MessageFeed_cs
+  NApp_MetaState_cs --> NCore_RunState_cs
+  NApp_MetaState_cs --> NGameplay_Combat_MeleeCombat_cs
+  NApp_MetaState_cs --> NGameplay_Units_UnitHealth_cs
+  NApp_RunFlow_cs --> NCore_MessageFeed_cs
+  NApp_RunFlow_cs --> NCore_Team_cs
+  NApp_RunFlow_cs --> NGameplay_Units_DownedRescue_cs
+  NApp_RunFlow_cs --> NGameplay_Units_UnitRegistry_cs
   NContent_UnitStats_cs --> NCore_Team_cs
-  NCore_AppFlow_cs --> NGameplay_Units_UnitRegistry_cs
-  NCore_GameData_cs --> NGameplay_Combat_MeleeCombat_cs
-  NCore_GameData_cs --> NGameplay_Units_UnitHealth_cs
-  NCore_MetaState_cs --> NGameplay_Combat_MeleeCombat_cs
-  NCore_MetaState_cs --> NGameplay_Units_UnitHealth_cs
-  NCore_RunFlow_cs --> NGameplay_Units_DownedRescue_cs
-  NCore_RunFlow_cs --> NGameplay_Units_UnitRegistry_cs
   NDebug_DebugTestTools_cs --> NCore_Team_cs
   NDebug_DebugTestTools_cs --> NGameplay_Units_SkillSystem_cs
   NDebug_DebugTestTools_cs --> NGameplay_Units_UnitHealth_cs
@@ -116,10 +125,10 @@ graph TD
   NGameplay_Combat_ExplosionFx_cs --> NContent_WeaponData_cs
   NGameplay_Combat_ExplosionFx_cs --> NCore_Team_cs
   NGameplay_Combat_ExplosionFx_cs --> NGameplay_Units_UnitHealth_cs
+  NGameplay_Combat_MeleeCombat_cs --> NApp_MetaState_cs
   NGameplay_Combat_MeleeCombat_cs --> NContent_UnitStats_cs
   NGameplay_Combat_MeleeCombat_cs --> NContent_WeaponData_cs
   NGameplay_Combat_MeleeCombat_cs --> NCore_ICharacterCombat_cs
-  NGameplay_Combat_MeleeCombat_cs --> NCore_MetaState_cs
   NGameplay_Combat_MeleeCombat_cs --> NCore_Team_cs
   NGameplay_Combat_MeleeCombat_cs --> NGameplay_Units_UnitHealth_cs
   NGameplay_Combat_Projectile_cs --> NContent_WeaponData_cs
@@ -141,10 +150,10 @@ graph TD
   NGameplay_Interaction_InteractionRunner_cs --> NGameplay_Units_CharacterBrain_cs
   NGameplay_Items_ChestItem_cs --> NContent_ItemData_cs
   NGameplay_Items_Inventory_cs --> NContent_ItemData_cs
-  NGameplay_Player_PlayerCommandController_cs --> NCore_AppFlow_cs
+  NGameplay_Player_PlayerCommandController_cs --> NApp_AppFlow_cs
   NGameplay_Player_PlayerCommandController_cs --> NGameplay_Units_CharacterBrain_cs
   NGameplay_Player_PlayerCommandController_cs --> NUI_UIManager_cs
-  NGameplay_Player_SelectionManager_cs --> NCore_AppFlow_cs
+  NGameplay_Player_SelectionManager_cs --> NApp_AppFlow_cs
   NGameplay_Player_SelectionManager_cs --> NCore_MessageFeed_cs
   NGameplay_Player_SelectionManager_cs --> NCore_Team_cs
   NGameplay_Player_SelectionManager_cs --> NGameplay_Interaction_IInteractionTarget_cs
@@ -153,7 +162,7 @@ graph TD
   NGameplay_Player_SelectionManager_cs --> NGameplay_Units_UnitHealth_cs
   NGameplay_Player_SelectionManager_cs --> NGameplay_Units_UnitRegistry_cs
   NGameplay_Player_SelectionManager_cs --> NGameplay_World_DebugCameraSwitcher_cs
-  NGameplay_Player_SkillInputController_cs --> NCore_AppFlow_cs
+  NGameplay_Player_SkillInputController_cs --> NApp_AppFlow_cs
   NGameplay_Player_SkillInputController_cs --> NCore_MessageFeed_cs
   NGameplay_Player_SkillInputController_cs --> NCore_Team_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_CharacterBrain_cs
@@ -162,20 +171,20 @@ graph TD
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitHealth_cs
   NGameplay_Player_SkillInputController_cs --> NGameplay_Units_UnitRegistry_cs
   NGameplay_Player_SkillInputController_cs --> NUI_UIManager_cs
+  NGameplay_Units_BossBrain_cs --> NApp_AppFlow_cs
   NGameplay_Units_BossBrain_cs --> NContent_UnitStats_cs
   NGameplay_Units_BossBrain_cs --> NContent_WeaponData_cs
-  NGameplay_Units_BossBrain_cs --> NCore_AppFlow_cs
   NGameplay_Units_BossBrain_cs --> NCore_MessageFeed_cs
   NGameplay_Units_BossBrain_cs --> NCore_RunState_cs
   NGameplay_Units_BossBrain_cs --> NCore_Team_cs
-  NGameplay_Units_CharacterBrain_cs --> NCore_AppFlow_cs
+  NGameplay_Units_CharacterBrain_cs --> NApp_AppFlow_cs
   NGameplay_Units_CharacterBrain_cs --> NCore_ICharacterCombat_cs
   NGameplay_Units_CharacterBrain_cs --> NCore_Team_cs
   NGameplay_Units_CharacterBrain_cs --> NGameplay_Combat_DamageInfo_cs
   NGameplay_Units_CharacterBrain_cs --> NGameplay_Interaction_IInteractionTarget_cs
   NGameplay_Units_CharacterBrain_cs --> NGameplay_Interaction_InteractionRunner_cs
   NGameplay_Units_CharacterBrain_cs --> NGameplay_World_Interactable_cs
-  NGameplay_Units_DownedRescue_cs --> NCore_AppFlow_cs
+  NGameplay_Units_DownedRescue_cs --> NApp_AppFlow_cs
   NGameplay_Units_DownedRescue_cs --> NCore_MessageFeed_cs
   NGameplay_Units_DownedRescue_cs --> NGameplay_Combat_DamageInfo_cs
   NGameplay_Units_DownedRescue_cs --> NGameplay_Interaction_IInteractionTarget_cs
@@ -183,7 +192,7 @@ graph TD
   NGameplay_Units_DownedRescue_cs --> NGameplay_Interaction_InteractionRunner_cs
   NGameplay_Units_DownedRescue_cs --> NGameplay_Player_Selectable_cs
   NGameplay_Units_DownedRescue_cs --> NGameplay_World_Interactable_cs
-  NGameplay_Units_MonsterBrain_cs --> NCore_AppFlow_cs
+  NGameplay_Units_MonsterBrain_cs --> NApp_AppFlow_cs
   NGameplay_Units_MonsterBrain_cs --> NCore_ICharacterCombat_cs
   NGameplay_Units_MonsterBrain_cs --> NCore_RunState_cs
   NGameplay_Units_MonsterBrain_cs --> NCore_Team_cs
@@ -237,9 +246,9 @@ graph TD
   NUI_CursorManager_cs --> NGameplay_Units_DownedRescue_cs
   NUI_CursorManager_cs --> NGameplay_Units_UnitHealth_cs
   NUI_CursorManager_cs --> NGameplay_World_Interactable_cs
-  NUI_EscMenuPanel_cs --> NCore_AppFlow_cs
+  NUI_EscMenuPanel_cs --> NApp_AppFlow_cs
+  NUI_HUD_cs --> NApp_MetaState_cs
   NUI_HUD_cs --> NCore_MessageFeed_cs
-  NUI_HUD_cs --> NCore_MetaState_cs
   NUI_HUD_cs --> NGameplay_Combat_MeleeCombat_cs
   NUI_HUD_cs --> NGameplay_Player_SelectionManager_cs
   NUI_HUD_cs --> NGameplay_Units_UnitHealth_cs
@@ -249,11 +258,11 @@ graph TD
   NUI_InventoryUI_cs --> NGameplay_Items_Inventory_cs
   NUI_InventoryUI_cs --> NGameplay_Units_UnitRegistry_cs
   NUI_InventoryUI_cs --> NGameplay_World_Chest_cs
-  NUI_MainMenuPanel_cs --> NCore_AppFlow_cs
+  NUI_MainMenuPanel_cs --> NApp_AppFlow_cs
   NUI_SkillBarUI_cs --> NGameplay_Player_SelectionManager_cs
   NUI_SkillBarUI_cs --> NGameplay_Units_SkillSystem_cs
-  NUI_UIManager_cs --> NCore_AppFlow_cs
-  NUI_UIManager_cs --> NCore_RunFlow_cs
+  NUI_UIManager_cs --> NApp_AppFlow_cs
+  NUI_UIManager_cs --> NApp_RunFlow_cs
   NUI_UIManager_cs --> NGameplay_Items_Inventory_cs
   NUI_UIManager_cs --> NGameplay_Player_SelectionManager_cs
   NUI_UIManager_cs --> NGameplay_World_Chest_cs
