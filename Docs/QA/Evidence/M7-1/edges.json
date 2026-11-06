@@ -418,88 +418,88 @@
   "snippet": "public Team team = Team.Monster;"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 112,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 113,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Gameplay/Units",
   "layer_src": "Editor",
   "layer_dst": "Gameplay",
   "snippet": "var skills = h.GetComponentInParent<SkillSystem>();"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 36,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 37,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Core",
   "layer_src": "Editor",
   "layer_dst": "Core",
   "snippet": "if (h == null || h.team != Team.Monster) continue;"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 68,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 69,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Core",
   "layer_src": "Editor",
   "layer_dst": "Core",
   "snippet": "bool ok = health != null && !health.dead && health.team == Team.Monster;"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 96,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 97,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Core",
   "layer_src": "Editor",
   "layer_dst": "Core",
   "snippet": "if (h == null || h.team != Team.Player) continue;"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 67,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 68,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Gameplay/Units",
   "layer_src": "Editor",
   "layer_dst": "Gameplay",
   "snippet": "var health = go.GetComponent<UnitHealth>();"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 109,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 110,
   "type": "UnitMana",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitMana.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Gameplay/Units",
   "layer_src": "Editor",
   "layer_dst": "Gameplay",
   "snippet": "var mana = h.GetComponentInParent<UnitMana>();"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 34,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 35,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Gameplay/Units",
   "layer_src": "Editor",
   "layer_dst": "Gameplay",
   "snippet": "foreach (var h in UnitRegistry.All(true))"
  },
  {
-  "src": "Assets/_Project/Scripts/Debug/DebugTestTools.cs",
-  "line": 94,
+  "src": "Assets/_Project/Scripts/Editor/DebugTestTools.cs",
+  "line": 95,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
-  "module_src": "Debug",
+  "module_src": "Editor",
   "module_dst": "Gameplay/Units",
   "layer_src": "Editor",
   "layer_dst": "Gameplay",
@@ -1629,7 +1629,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 26,
+  "line": 27,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "Gameplay/Player",
@@ -1640,7 +1640,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 14,
+  "line": 15,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1651,7 +1651,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 19,
+  "line": 20,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1662,7 +1662,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 34,
+  "line": 35,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -1673,7 +1673,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 32,
+  "line": 33,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "Gameplay/Player",
@@ -1684,7 +1684,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 31,
+  "line": 32,
   "type": "SkillInputController",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
   "module_src": "Gameplay/Player",
@@ -1695,7 +1695,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs",
-  "line": 27,
+  "line": 28,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "Gameplay/Player",
@@ -2179,7 +2179,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 47,
+  "line": 48,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "Gameplay/Player",
@@ -2190,7 +2190,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 74,
+  "line": 75,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -2201,7 +2201,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 121,
+  "line": 122,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/Player",
@@ -2212,7 +2212,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 103,
+  "line": 104,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2223,7 +2223,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 117,
+  "line": 118,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2234,7 +2234,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 175,
+  "line": 176,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2245,7 +2245,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 177,
+  "line": 178,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "Gameplay/Player",
@@ -2256,7 +2256,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 168,
+  "line": 169,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "Gameplay/Player",
@@ -2267,7 +2267,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 169,
+  "line": 170,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "Gameplay/Player",
@@ -2278,7 +2278,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 148,
+  "line": 149,
   "type": "SkillData",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillData.cs",
   "module_src": "Gameplay/Player",
@@ -2289,7 +2289,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 27,
+  "line": 28,
   "type": "SkillIndicator",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SkillIndicator.cs",
   "module_src": "Gameplay/Player",
@@ -2300,7 +2300,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 36,
+  "line": 37,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2311,7 +2311,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 166,
+  "line": 167,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2322,7 +2322,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 169,
+  "line": 170,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2333,7 +2333,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 173,
+  "line": 174,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "Gameplay/Player",
@@ -2344,7 +2344,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 196,
+  "line": 197,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2355,7 +2355,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 222,
+  "line": 223,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/Player",
@@ -2366,7 +2366,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 48,
+  "line": 49,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "Gameplay/Player",
@@ -2377,7 +2377,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 39,
+  "line": 40,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2388,7 +2388,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 59,
+  "line": 60,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2399,7 +2399,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 181,
+  "line": 182,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2410,7 +2410,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 189,
+  "line": 190,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2421,7 +2421,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 195,
+  "line": 196,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2432,7 +2432,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 205,
+  "line": 206,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "Gameplay/Player",
@@ -2443,7 +2443,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs",
-  "line": 222,
+  "line": 223,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/Player",
@@ -4753,7 +4753,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 37,
+  "line": 38,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4764,7 +4764,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 39,
+  "line": 40,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4775,7 +4775,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 41,
+  "line": 42,
   "type": "CharacterBrain",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs",
   "module_src": "Gameplay/World",
@@ -4786,7 +4786,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 63,
+  "line": 64,
   "type": "DebugCameraSwitcher",
   "dst": "Assets/_Project/Scripts/Gameplay/World/DebugCameraSwitcher.cs",
   "module_src": "Gameplay/World",
@@ -4797,7 +4797,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 12,
+  "line": 13,
   "type": "IInteractionTarget",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/World",
@@ -4808,7 +4808,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 33,
+  "line": 34,
   "type": "InteractionPriority",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs",
   "module_src": "Gameplay/World",
@@ -4819,7 +4819,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 23,
+  "line": 24,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/World",
@@ -4830,7 +4830,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 25,
+  "line": 26,
   "type": "InteractionRunner",
   "dst": "Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs",
   "module_src": "Gameplay/World",
@@ -4841,7 +4841,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 53,
+  "line": 54,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "Gameplay/World",
@@ -4852,7 +4852,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 50,
+  "line": 51,
   "type": "TransitionFader",
   "dst": "Assets/_Project/Scripts/UI/TransitionFader.cs",
   "module_src": "Gameplay/World",
@@ -4863,7 +4863,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs",
-  "line": 53,
+  "line": 54,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "Gameplay/World",
@@ -4995,7 +4995,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 137,
+  "line": 138,
   "type": "DownedRescue",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs",
   "module_src": "UI",
@@ -5006,7 +5006,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 63,
+  "line": 64,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "UI",
@@ -5017,7 +5017,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 106,
+  "line": 107,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "UI",
@@ -5028,7 +5028,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 111,
+  "line": 112,
   "type": "Interactable",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
   "module_src": "UI",
@@ -5036,17 +5036,6 @@
   "layer_src": "UI",
   "layer_dst": "Gameplay",
   "snippet": "Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,"
- },
- {
-  "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 129,
-  "type": "Interactable",
-  "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
-  "module_src": "UI",
-  "module_dst": "Gameplay/World",
-  "layer_src": "UI",
-  "layer_dst": "Gameplay",
-  "snippet": "if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)"
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
@@ -5057,11 +5046,22 @@
   "module_dst": "Gameplay/World",
   "layer_src": "UI",
   "layer_dst": "Gameplay",
+  "snippet": "if (inter == null && h.collider.GetComponentInParent<Interactable>() != null)"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
+  "line": 131,
+  "type": "Interactable",
+  "dst": "Assets/_Project/Scripts/Gameplay/World/Interactable.cs",
+  "module_src": "UI",
+  "module_dst": "Gameplay/World",
+  "layer_src": "UI",
+  "layer_dst": "Gameplay",
   "snippet": "inter = h.collider.GetComponentInParent<Interactable>();"
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 74,
+  "line": 75,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5072,7 +5072,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 64,
+  "line": 65,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "UI",
@@ -5083,7 +5083,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 107,
+  "line": 108,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "UI",
@@ -5094,7 +5094,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 111,
+  "line": 112,
   "type": "Selectable",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
   "module_src": "UI",
@@ -5102,17 +5102,6 @@
   "layer_src": "UI",
   "layer_dst": "Gameplay",
   "snippet": "Hover ResolveHover(Ray ray, out UnitHealth enemy, out Interactable inter, out Selectable selectable,"
- },
- {
-  "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 118,
-  "type": "Selectable",
-  "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
-  "module_src": "UI",
-  "module_dst": "Gameplay/Player",
-  "layer_src": "UI",
-  "layer_dst": "Gameplay",
-  "snippet": "if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)"
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
@@ -5123,11 +5112,22 @@
   "module_dst": "Gameplay/Player",
   "layer_src": "UI",
   "layer_dst": "Gameplay",
+  "snippet": "if (selectable == null && h.collider.GetComponentInParent<Selectable>() != null)"
+ },
+ {
+  "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
+  "line": 120,
+  "type": "Selectable",
+  "dst": "Assets/_Project/Scripts/Gameplay/Player/Selectable.cs",
+  "module_src": "UI",
+  "module_dst": "Gameplay/Player",
+  "layer_src": "UI",
+  "layer_dst": "Gameplay",
   "snippet": "selectable = h.collider.GetComponentInParent<Selectable>();"
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 150,
+  "line": 151,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5138,7 +5138,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 123,
+  "line": 124,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "UI",
@@ -5149,7 +5149,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 153,
+  "line": 154,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "UI",
@@ -5160,7 +5160,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 53,
+  "line": 54,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "UI",
@@ -5171,7 +5171,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 62,
+  "line": 63,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5182,7 +5182,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 98,
+  "line": 99,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5193,7 +5193,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 104,
+  "line": 105,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5204,7 +5204,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 111,
+  "line": 112,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5215,7 +5215,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 122,
+  "line": 123,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5226,7 +5226,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/CursorManager.cs",
-  "line": 152,
+  "line": 153,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5237,7 +5237,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
-  "line": 13,
+  "line": 14,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "UI",
@@ -5248,7 +5248,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
-  "line": 18,
+  "line": 19,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "UI",
@@ -5259,7 +5259,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
-  "line": 31,
+  "line": 32,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "UI",
@@ -5270,7 +5270,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
-  "line": 9,
+  "line": 10,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5281,7 +5281,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
-  "line": 24,
+  "line": 25,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "UI",
@@ -5292,7 +5292,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 49,
+  "line": 50,
   "type": "MeleeCombat",
   "dst": "Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs",
   "module_src": "UI",
@@ -5303,7 +5303,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 31,
+  "line": 32,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5314,7 +5314,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 33,
+  "line": 34,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5325,7 +5325,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 52,
+  "line": 53,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5336,7 +5336,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 54,
+  "line": 55,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5347,7 +5347,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 51,
+  "line": 52,
   "type": "MetaState",
   "dst": "Assets/_Project/Scripts/App/MetaState.cs",
   "module_src": "UI",
@@ -5358,7 +5358,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 46,
+  "line": 47,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5369,7 +5369,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 47,
+  "line": 48,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5380,7 +5380,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/HUD.cs",
-  "line": 48,
+  "line": 49,
   "type": "UnitHealth",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitHealth.cs",
   "module_src": "UI",
@@ -5391,7 +5391,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 14,
+  "line": 15,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5402,7 +5402,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 28,
+  "line": 29,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5413,7 +5413,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 51,
+  "line": 52,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5424,7 +5424,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 19,
+  "line": 20,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5435,7 +5435,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 27,
+  "line": 28,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5446,7 +5446,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 38,
+  "line": 39,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5457,7 +5457,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 45,
+  "line": 46,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5468,7 +5468,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 51,
+  "line": 52,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5479,7 +5479,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 80,
+  "line": 81,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5490,7 +5490,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 127,
+  "line": 128,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5501,7 +5501,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 137,
+  "line": 138,
   "type": "MessageFeed",
   "dst": "Assets/_Project/Scripts/Core/MessageFeed.cs",
   "module_src": "UI",
@@ -5512,7 +5512,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 136,
+  "line": 137,
   "type": "RunState",
   "dst": "Assets/_Project/Scripts/Core/RunState.cs",
   "module_src": "UI",
@@ -5523,7 +5523,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 105,
+  "line": 106,
   "type": "SlotClickHandler",
   "dst": "Assets/_Project/Scripts/UI/SlotClickHandler.cs",
   "module_src": "UI",
@@ -5534,7 +5534,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 36,
+  "line": 37,
   "type": "Team",
   "dst": "Assets/_Project/Scripts/Core/Team.cs",
   "module_src": "UI",
@@ -5545,7 +5545,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/InventoryUI.cs",
-  "line": 36,
+  "line": 37,
   "type": "UnitRegistry",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/UnitRegistry.cs",
   "module_src": "UI",
@@ -5556,7 +5556,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/MainMenuPanel.cs",
-  "line": 17,
+  "line": 18,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "UI",
@@ -5567,7 +5567,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/MainMenuPanel.cs",
-  "line": 7,
+  "line": 8,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5578,7 +5578,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/MainMenuPanel.cs",
-  "line": 23,
+  "line": 24,
   "type": "UIManager",
   "dst": "Assets/_Project/Scripts/UI/UIManager.cs",
   "module_src": "UI",
@@ -5589,7 +5589,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/SkillBarUI.cs",
-  "line": 56,
+  "line": 57,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5600,7 +5600,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/SkillBarUI.cs",
-  "line": 57,
+  "line": 58,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5611,7 +5611,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/SkillBarUI.cs",
-  "line": 54,
+  "line": 55,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "UI",
@@ -5622,7 +5622,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/SkillBarUI.cs",
-  "line": 57,
+  "line": 58,
   "type": "SkillSystem",
   "dst": "Assets/_Project/Scripts/Gameplay/Units/SkillSystem.cs",
   "module_src": "UI",
@@ -5633,7 +5633,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 65,
+  "line": 66,
   "type": "AppFlow",
   "dst": "Assets/_Project/Scripts/App/AppFlow.cs",
   "module_src": "UI",
@@ -5644,7 +5644,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 21,
+  "line": 22,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5655,7 +5655,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 23,
+  "line": 24,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5666,7 +5666,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 30,
+  "line": 31,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5677,7 +5677,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 93,
+  "line": 94,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5688,7 +5688,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 100,
+  "line": 101,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5699,7 +5699,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 111,
+  "line": 112,
   "type": "BasePanel",
   "dst": "Assets/_Project/Scripts/UI/BasePanel.cs",
   "module_src": "UI",
@@ -5710,7 +5710,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 41,
+  "line": 42,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5721,7 +5721,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 46,
+  "line": 47,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5732,7 +5732,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 50,
+  "line": 51,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5743,7 +5743,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 120,
+  "line": 121,
   "type": "Chest",
   "dst": "Assets/_Project/Scripts/Gameplay/World/Chest.cs",
   "module_src": "UI",
@@ -5754,7 +5754,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 25,
+  "line": 26,
   "type": "EscMenuPanel",
   "dst": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
   "module_src": "UI",
@@ -5765,7 +5765,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 106,
+  "line": 107,
   "type": "EscMenuPanel",
   "dst": "Assets/_Project/Scripts/UI/EscMenuPanel.cs",
   "module_src": "UI",
@@ -5776,7 +5776,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 120,
+  "line": 121,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5787,7 +5787,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 124,
+  "line": 125,
   "type": "Inventory",
   "dst": "Assets/_Project/Scripts/Gameplay/Items/Inventory.cs",
   "module_src": "UI",
@@ -5798,7 +5798,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 19,
+  "line": 20,
   "type": "InventoryUI",
   "dst": "Assets/_Project/Scripts/UI/InventoryUI.cs",
   "module_src": "UI",
@@ -5809,7 +5809,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 27,
+  "line": 28,
   "type": "MainMenuPanel",
   "dst": "Assets/_Project/Scripts/UI/MainMenuPanel.cs",
   "module_src": "UI",
@@ -5820,7 +5820,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 106,
+  "line": 107,
   "type": "MainMenuPanel",
   "dst": "Assets/_Project/Scripts/UI/MainMenuPanel.cs",
   "module_src": "UI",
@@ -5831,7 +5831,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 65,
+  "line": 66,
   "type": "RunFlow",
   "dst": "Assets/_Project/Scripts/App/RunFlow.cs",
   "module_src": "UI",
@@ -5842,7 +5842,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 123,
+  "line": 124,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",
@@ -5853,7 +5853,7 @@
  },
  {
   "src": "Assets/_Project/Scripts/UI/UIManager.cs",
-  "line": 124,
+  "line": 125,
   "type": "SelectionManager",
   "dst": "Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs",
   "module_src": "UI",

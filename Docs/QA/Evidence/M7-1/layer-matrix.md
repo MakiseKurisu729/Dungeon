@@ -18,17 +18,17 @@
 
 - **Gameplay → App**：8 条边
   - `Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs:150` 引用 `MetaState` → `Assets/_Project/Scripts/App/MetaState.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:26` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
+  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:27` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
   - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:94` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:47` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
+  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
   - `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs:74` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
   - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:149` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
   - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs:215` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
   - `Assets/_Project/Scripts/Gameplay/Units/MonsterBrain.cs:121` 引用 `AppFlow` → `Assets/_Project/Scripts/App/AppFlow.cs`
 - **Gameplay → UI**：3 条边
-  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:27` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
-  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
-  - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:50` 引用 `TransitionFader` → `Assets/_Project/Scripts/UI/TransitionFader.cs`
+  - `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs:28` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
+  - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:49` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`
+  - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:51` 引用 `TransitionFader` → `Assets/_Project/Scripts/UI/TransitionFader.cs`
 
 ## 每个依赖组的来源文件
 
@@ -45,7 +45,7 @@
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffectFireball.cs`：MessageFeed@30; MessageFeed@32; MessageFeed@34
 - `Assets/_Project/Scripts/Gameplay/Combat/SkillEffects.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@36
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@128; Team@109; Team@169; Team@232
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@103; MessageFeed@117; MessageFeed@175; MessageFeed@177; Team@196; Team@222
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@104; MessageFeed@118; MessageFeed@176; MessageFeed@178; Team@197; Team@223
 - `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：MessageFeed@67; MessageFeed@84; RunState@65; RunState@66; Team@135; Team@180
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：ICharacterCombat@98; Team@28
 - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：MessageFeed@93; MessageFeed@175; MessageFeed@203; MessageFeed@295; MessageFeed@310
@@ -59,7 +59,7 @@
 - `Assets/_Project/Scripts/Gameplay/Units/Visibility.cs`：Team@43
 - `Assets/_Project/Scripts/Gameplay/Units/WorldHealthBar.cs`：Team@41; Team@47; Team@63
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：MessageFeed@107; RunState@106
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@53
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@54
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：Team@86
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：MessageFeed@42; MessageFeed@72
 
@@ -83,9 +83,9 @@
 ### Gameplay → App（8 条，8 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/Combat/MeleeCombat.cs`：MetaState@150
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：AppFlow@26
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：AppFlow@27
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：AppFlow@94
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：AppFlow@47
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：AppFlow@48
 - `Assets/_Project/Scripts/Gameplay/Units/BossBrain.cs`：AppFlow@74
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`：AppFlow@149
 - `Assets/_Project/Scripts/Gameplay/Units/DownedRescue.cs`：AppFlow@215
@@ -93,9 +93,9 @@
 
 ### Gameplay → UI（3 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@27
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@48
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@50
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@28
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@49
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
 
 ### App → Core（15 条，4 个来源文件）
 
@@ -113,29 +113,29 @@
 
 ### UI → Core（11 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@74; Team@123; Team@153
-- `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@31; MessageFeed@33; MessageFeed@52; MessageFeed@54
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@127; MessageFeed@137; RunState@136; Team@36
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@75; Team@124; Team@154
+- `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@53; MessageFeed@55
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@128; MessageFeed@138; RunState@137; Team@37
 
 ### UI → Gameplay（43 条，5 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@137; Interactable@63; Interactable@106; Interactable@111; Interactable@129; Interactable@130; Selectable@64; Selectable@107 …
-- `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@49; SelectionManager@46; SelectionManager@47; UnitHealth@48
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@28; Chest@51; Inventory@19; Inventory@27; Inventory@38; Inventory@45; Inventory@51; Inventory@80 …
-- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@56; SelectionManager@57; SkillSystem@54; SkillSystem@57
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@41; Chest@46; Chest@50; Chest@120; Inventory@120; Inventory@124; SelectionManager@123; SelectionManager@124
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@138; Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131; Selectable@65; Selectable@108 …
+- `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@50; SelectionManager@47; SelectionManager@48; UnitHealth@49
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52; Inventory@20; Inventory@28; Inventory@39; Inventory@46; Inventory@52; Inventory@81 …
+- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@57; SelectionManager@58; SkillSystem@55; SkillSystem@58
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@42; Chest@47; Chest@51; Chest@121; Inventory@121; Inventory@125; SelectionManager@124; SelectionManager@125
 
 ### UI → App（7 条，4 个来源文件）
 
-- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@13; AppFlow@18; AppFlow@31
-- `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@51
-- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@17
-- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@65; RunFlow@65
+- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@14; AppFlow@19; AppFlow@32
+- `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@52
+- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@18
+- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@66; RunFlow@66
 
 ### Editor → Core（3 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Debug/DebugTestTools.cs`：Team@36; Team@68; Team@96
+- `Assets/_Project/Scripts/Editor/DebugTestTools.cs`：Team@37; Team@69; Team@97
 
 ### Editor → Gameplay（5 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Debug/DebugTestTools.cs`：SkillSystem@112; UnitHealth@67; UnitMana@109; UnitRegistry@34; UnitRegistry@94
+- `Assets/_Project/Scripts/Editor/DebugTestTools.cs`：SkillSystem@113; UnitHealth@68; UnitMana@110; UnitRegistry@35; UnitRegistry@95

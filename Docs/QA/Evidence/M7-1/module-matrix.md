@@ -3,7 +3,7 @@
 > 由 `audit_scripts.py` 生成；行=引用方，列=被引用方，单元格为**边数**（同一文件/行/类型去重后）。
 > 逐边原始记录（含 `文件:行` 与源码片段）见 `edges.csv`。
 
-| 引用方 \ 被引用 | Core | Content | Gameplay/Units | Gameplay/Combat | Gameplay/Interaction | Gameplay/World | Gameplay/Player | Gameplay/Items | App | UI | Debug | 合计 |
+| 引用方 \ 被引用 | Core | Content | Gameplay/Units | Gameplay/Combat | Gameplay/Interaction | Gameplay/World | Gameplay/Player | Gameplay/Items | App | UI | Editor | 合计 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Core** | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Content** | 1 | (0) | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -15,7 +15,7 @@
 | **Gameplay/Items** | 0 | 4 | 0 | 0 | 0 | 0 | 0 | (0) | 0 | 0 | 0 | 4 |
 | **App** | 15 | 0 | 5 | 2 | 0 | 0 | 0 | 0 | (15) | 0 | 0 | 37 |
 | **UI** | 11 | 0 | 11 | 1 | 0 | 11 | 12 | 8 | 7 | (18) | 0 | 79 |
-| **Debug** | 3 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 8 |
+| **Editor** | 3 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (0) | 8 |
 
 括号内为同组内部引用。
 
@@ -119,7 +119,7 @@
 ### Gameplay/World → Core（6 条，4 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：MessageFeed@107; RunState@106
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@53
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：Team@54
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：Team@86
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：MessageFeed@42; MessageFeed@72
 
@@ -130,7 +130,7 @@
 ### Gameplay/World → Gameplay/Units（13 条，5 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：CharacterBrain@53; CharacterBrain@70; CharacterBrain@72; CharacterBrain@75
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：CharacterBrain@37; CharacterBrain@39; CharacterBrain@41; UnitRegistry@53
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：CharacterBrain@38; CharacterBrain@40; CharacterBrain@42; UnitRegistry@54
 - `Assets/_Project/Scripts/Gameplay/World/FogOfWar.cs`：UnitRegistry@86
 - `Assets/_Project/Scripts/Gameplay/World/SkeletonSpawner.cs`：SkeletonWander@42; Visibility@43
 - `Assets/_Project/Scripts/Gameplay/World/WaveSpawner.cs`：UnitHealth@26; UnitHealth@68
@@ -138,7 +138,7 @@
 ### Gameplay/World → Gameplay/Interaction（10 条，3 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs`：IInteractionTarget@15; InteractionDefinition@72; InteractionPriority@66
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：IInteractionTarget@12; InteractionPriority@33; InteractionRunner@23; InteractionRunner@25
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：IInteractionTarget@13; InteractionPriority@34; InteractionRunner@24; InteractionRunner@26
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs`：IInteractionTarget@14; IInteractionTarget@16; IInteractionTarget@17
 
 ### Gameplay/World → Gameplay/Items（7 条，1 个来源文件）
@@ -147,18 +147,18 @@
 
 ### Gameplay/World → UI（1 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@50
+- `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs`：TransitionFader@51
 
 ### Gameplay/Player → Core（10 条，2 个来源文件）
 
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：MessageFeed@128; Team@109; Team@169; Team@232
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@103; MessageFeed@117; MessageFeed@175; MessageFeed@177; Team@196; Team@222
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：MessageFeed@104; MessageFeed@118; MessageFeed@176; MessageFeed@178; Team@197; Team@223
 
 ### Gameplay/Player → Gameplay/Units（33 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：CharacterBrain@14; CharacterBrain@19; CharacterBrain@34
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：CharacterBrain@15; CharacterBrain@20; CharacterBrain@35
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：CharacterBrain@34; CharacterBrain@39; CharacterBrain@80; CharacterBrain@84; CharacterBrain@190; CharacterBrain@199; CharacterBrain@211; CharacterBrain@233 …
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：CharacterBrain@74; CharacterBrain@121; SkillData@148; SkillSystem@36; SkillSystem@166; SkillSystem@169; SkillSystem@173; UnitHealth@39 …
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：CharacterBrain@75; CharacterBrain@122; SkillData@149; SkillSystem@37; SkillSystem@167; SkillSystem@170; SkillSystem@174; UnitHealth@40 …
 
 ### Gameplay/Player → Gameplay/Interaction（6 条，1 个来源文件）
 
@@ -170,14 +170,14 @@
 
 ### Gameplay/Player → App（3 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：AppFlow@26
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：AppFlow@27
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`：AppFlow@94
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：AppFlow@47
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：AppFlow@48
 
 ### Gameplay/Player → UI（2 条，2 个来源文件）
 
-- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@27
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@48
+- `Assets/_Project/Scripts/Gameplay/Player/PlayerCommandController.cs`：UIManager@28
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs`：UIManager@49
 
 ### Gameplay/Items → Content（4 条，2 个来源文件）
 
@@ -205,50 +205,50 @@
 
 ### UI → Core（11 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@74; Team@123; Team@153
-- `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@31; MessageFeed@33; MessageFeed@52; MessageFeed@54
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@127; MessageFeed@137; RunState@136; Team@36
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：MessageFeed@75; Team@124; Team@154
+- `Assets/_Project/Scripts/UI/HUD.cs`：MessageFeed@32; MessageFeed@34; MessageFeed@53; MessageFeed@55
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：MessageFeed@128; MessageFeed@138; RunState@137; Team@37
 
 ### UI → Gameplay/Units（11 条，4 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@137; UnitHealth@62; UnitHealth@98; UnitHealth@104; UnitHealth@111; UnitHealth@122; UnitHealth@152
-- `Assets/_Project/Scripts/UI/HUD.cs`：UnitHealth@48
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：UnitRegistry@36
-- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SkillSystem@54; SkillSystem@57
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：DownedRescue@138; UnitHealth@63; UnitHealth@99; UnitHealth@105; UnitHealth@112; UnitHealth@123; UnitHealth@153
+- `Assets/_Project/Scripts/UI/HUD.cs`：UnitHealth@49
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：UnitRegistry@37
+- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SkillSystem@55; SkillSystem@58
 
 ### UI → Gameplay/Combat（1 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@49
+- `Assets/_Project/Scripts/UI/HUD.cs`：MeleeCombat@50
 
 ### UI → Gameplay/World（11 条，3 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：Interactable@63; Interactable@106; Interactable@111; Interactable@129; Interactable@130
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@28; Chest@51
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@41; Chest@46; Chest@50; Chest@120
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：Interactable@64; Interactable@107; Interactable@112; Interactable@130; Interactable@131
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Chest@29; Chest@52
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Chest@42; Chest@47; Chest@51; Chest@121
 
 ### UI → Gameplay/Player（12 条，4 个来源文件）
 
-- `Assets/_Project/Scripts/UI/CursorManager.cs`：Selectable@64; Selectable@107; Selectable@111; Selectable@118; Selectable@119; SelectionManager@150
-- `Assets/_Project/Scripts/UI/HUD.cs`：SelectionManager@46; SelectionManager@47
-- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@56; SelectionManager@57
-- `Assets/_Project/Scripts/UI/UIManager.cs`：SelectionManager@123; SelectionManager@124
+- `Assets/_Project/Scripts/UI/CursorManager.cs`：Selectable@65; Selectable@108; Selectable@112; Selectable@119; Selectable@120; SelectionManager@151
+- `Assets/_Project/Scripts/UI/HUD.cs`：SelectionManager@47; SelectionManager@48
+- `Assets/_Project/Scripts/UI/SkillBarUI.cs`：SelectionManager@57; SelectionManager@58
+- `Assets/_Project/Scripts/UI/UIManager.cs`：SelectionManager@124; SelectionManager@125
 
 ### UI → Gameplay/Items（8 条，2 个来源文件）
 
-- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Inventory@19; Inventory@27; Inventory@38; Inventory@45; Inventory@51; Inventory@80
-- `Assets/_Project/Scripts/UI/UIManager.cs`：Inventory@120; Inventory@124
+- `Assets/_Project/Scripts/UI/InventoryUI.cs`：Inventory@20; Inventory@28; Inventory@39; Inventory@46; Inventory@52; Inventory@81
+- `Assets/_Project/Scripts/UI/UIManager.cs`：Inventory@121; Inventory@125
 
 ### UI → App（7 条，4 个来源文件）
 
-- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@13; AppFlow@18; AppFlow@31
-- `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@51
-- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@17
-- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@65; RunFlow@65
+- `Assets/_Project/Scripts/UI/EscMenuPanel.cs`：AppFlow@14; AppFlow@19; AppFlow@32
+- `Assets/_Project/Scripts/UI/HUD.cs`：MetaState@52
+- `Assets/_Project/Scripts/UI/MainMenuPanel.cs`：AppFlow@18
+- `Assets/_Project/Scripts/UI/UIManager.cs`：AppFlow@66; RunFlow@66
 
-### Debug → Core（3 条，1 个来源文件）
+### Editor → Core（3 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Debug/DebugTestTools.cs`：Team@36; Team@68; Team@96
+- `Assets/_Project/Scripts/Editor/DebugTestTools.cs`：Team@37; Team@69; Team@97
 
-### Debug → Gameplay/Units（5 条，1 个来源文件）
+### Editor → Gameplay/Units（5 条，1 个来源文件）
 
-- `Assets/_Project/Scripts/Debug/DebugTestTools.cs`：SkillSystem@112; UnitHealth@67; UnitMana@109; UnitRegistry@34; UnitRegistry@94
+- `Assets/_Project/Scripts/Editor/DebugTestTools.cs`：SkillSystem@113; UnitHealth@68; UnitMana@110; UnitRegistry@35; UnitRegistry@95

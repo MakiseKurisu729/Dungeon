@@ -96,8 +96,8 @@ graph TD
     NUI_TransitionFader_cs["TransitionFader"]
     NUI_UIManager_cs["UIManager"]
   end
-  subgraph Debug[Debug]
-    NDebug_DebugTestTools_cs["DebugTestTools"]
+  subgraph Editor[Editor]
+    NEditor_DebugTestTools_cs["DebugTestTools"]
   end
   NApp_AppFlow_cs --> NCore_Team_cs
   NApp_AppFlow_cs --> NGameplay_Units_UnitRegistry_cs
@@ -114,11 +114,11 @@ graph TD
   NApp_RunFlow_cs --> NGameplay_Units_DownedRescue_cs
   NApp_RunFlow_cs --> NGameplay_Units_UnitRegistry_cs
   NContent_UnitStats_cs --> NCore_Team_cs
-  NDebug_DebugTestTools_cs --> NCore_Team_cs
-  NDebug_DebugTestTools_cs --> NGameplay_Units_SkillSystem_cs
-  NDebug_DebugTestTools_cs --> NGameplay_Units_UnitHealth_cs
-  NDebug_DebugTestTools_cs --> NGameplay_Units_UnitMana_cs
-  NDebug_DebugTestTools_cs --> NGameplay_Units_UnitRegistry_cs
+  NEditor_DebugTestTools_cs --> NCore_Team_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_SkillSystem_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitHealth_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitMana_cs
+  NEditor_DebugTestTools_cs --> NGameplay_Units_UnitRegistry_cs
   NGameplay_Combat_CombatFeedback_cs --> NCore_EventBus_cs
   NGameplay_Combat_DamageInfo_cs --> NContent_WeaponData_cs
   NGameplay_Combat_DamageInfo_cs --> NGameplay_Units_UnitHealth_cs

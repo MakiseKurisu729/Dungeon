@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using Dungeon.Core;
 using Dungeon.Gameplay.Interaction;
 using Dungeon.Gameplay.Units;
+using Dungeon.UI;
 namespace Dungeon.Gameplay.World {
 
     /// <summary>地牢入口：实现 <see cref="IInteractionTarget"/>（唯一 KeyInteractable 目标）。

@@ -105,15 +105,15 @@
   `void SingleSelect(Selectable s)`
 - `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs:248` 引用 `Selectable` → `Assets/_Project/Scripts/Gameplay/Player/Selectable.cs`  
   `void ToggleSelect(Selectable s)`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:48` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:49` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
   `if (UIManager.instance != null && UIManager.instance.IsInventoryOpen) return;`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:74` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:75` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = _pendingCaster.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:121` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:122` 引用 `CharacterBrain` → `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs`  
   `var brain = ss.GetComponent<CharacterBrain>();`
-- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:168` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
-  `if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;`
 - `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:169` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+  `if (SelectionManager.instance == null || SelectionManager.instance.Primary == null) return null;`
+- `Assets/_Project/Scripts/Gameplay/Player/SkillInputController.cs:170` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `return SelectionManager.instance.Primary.GetComponentInParent<SkillSystem>();`
 - `Assets/_Project/Scripts/Gameplay/Units/CharacterBrain.cs:23` 引用 `InteractionRunner` → `Assets/_Project/Scripts/Gameplay/Interaction/InteractionRunner.cs`  
   `InteractionRunner _runner;`
@@ -173,37 +173,37 @@
   `var target = GetComponent<IInteractionTarget>();`
 - `Assets/_Project/Scripts/Gameplay/World/Interactable.cs:17` 引用 `IInteractionTarget` → `Assets/_Project/Scripts/Gameplay/Interaction/IInteractionTarget.cs`  
   `return target != null ? target : GetComponentInParent<IInteractionTarget>();`
-- `Assets/_Project/Scripts/UI/EscMenuPanel.cs:24` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+- `Assets/_Project/Scripts/UI/EscMenuPanel.cs:25` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
   `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
-- `Assets/_Project/Scripts/UI/InventoryUI.cs:28` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/InventoryUI.cs:29` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `Chest _chest;`
-- `Assets/_Project/Scripts/UI/InventoryUI.cs:51` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/InventoryUI.cs:52` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `public void SetChestData(Inventory chestInv, Chest chest)`
-- `Assets/_Project/Scripts/UI/MainMenuPanel.cs:23` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
+- `Assets/_Project/Scripts/UI/MainMenuPanel.cs:24` 引用 `UIManager` → `Assets/_Project/Scripts/UI/UIManager.cs`  
   `if (UIManager.instance != null) UIManager.instance.ClosePanel(this);`
-- `Assets/_Project/Scripts/UI/UIManager.cs:19` 引用 `InventoryUI` → `Assets/_Project/Scripts/UI/InventoryUI.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:20` 引用 `InventoryUI` → `Assets/_Project/Scripts/UI/InventoryUI.cs`  
   `public InventoryUI inventoryPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:25` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:26` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
   `public EscMenuPanel escMenuPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:27` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:28` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
   `public MainMenuPanel mainMenuPanel;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:41` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:42` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `Chest.Opened += OnChestOpened;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:46` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:47` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `Chest.Opened -= OnChestOpened;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:50` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:51` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `void OnChestOpened(Chest chest)`
-- `Assets/_Project/Scripts/UI/UIManager.cs:65` 引用 `RunFlow` → `Assets/_Project/Scripts/App/RunFlow.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:66` 引用 `RunFlow` → `Assets/_Project/Scripts/App/RunFlow.cs`  
   `bool gameOn = AppFlow.GameStarted && !RunFlow.IsWiped;`
-- `Assets/_Project/Scripts/UI/UIManager.cs:106` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:107` 引用 `EscMenuPanel` → `Assets/_Project/Scripts/UI/EscMenuPanel.cs`  
   `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
-- `Assets/_Project/Scripts/UI/UIManager.cs:106` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:107` 引用 `MainMenuPanel` → `Assets/_Project/Scripts/UI/MainMenuPanel.cs`  
   `if (!(panel is EscMenuPanel) && !(panel is MainMenuPanel))`
-- `Assets/_Project/Scripts/UI/UIManager.cs:120` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
+- `Assets/_Project/Scripts/UI/UIManager.cs:121` 引用 `Chest` → `Assets/_Project/Scripts/Gameplay/World/Chest.cs`  
   `public void ShowInventory(Inventory chestInv, Chest chest)`
-- `Assets/_Project/Scripts/UI/UIManager.cs:123` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
-  `if (chestInv == null && SelectionManager.instance != null && SelectionManager.instance.Primary != null)`
 - `Assets/_Project/Scripts/UI/UIManager.cs:124` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
+  `if (chestInv == null && SelectionManager.instance != null && SelectionManager.instance.Primary != null)`
+- `Assets/_Project/Scripts/UI/UIManager.cs:125` 引用 `SelectionManager` → `Assets/_Project/Scripts/Gameplay/Player/SelectionManager.cs`  
   `inventoryPanel.BindPlayer(SelectionManager.instance.Primary.GetComponentInParent<Inventory>());`
 
 **建议解法**：

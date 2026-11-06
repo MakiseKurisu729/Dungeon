@@ -14,6 +14,7 @@ using Dungeon.Gameplay.Player;
 using Dungeon.Gameplay.Units;
 using Dungeon.Gameplay.World;
 using Dungeon.App;
+using Dungeon.UI;
 #endif
 
 /// <summary>

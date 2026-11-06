@@ -21,7 +21,7 @@
 | `Assets/_Project/Scripts/Core/RunState.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/Team.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
 | `Assets/_Project/Scripts/Core/UnitId.cs` | Core | **Core** | 纯数据/契约/事件/时间，无场景与玩法依赖 |
-| `Assets/_Project/Scripts/Debug/DebugTestTools.cs` | Debug | **Editor** | UNITY_EDITOR 专用，运行时代码不得反向依赖 |
+| `Assets/_Project/Scripts/Editor/DebugTestTools.cs` | Editor | **Editor** | UNITY_EDITOR 专用，运行时代码不得反向依赖 |
 | `Assets/_Project/Scripts/Gameplay/Combat/CombatFeedback.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Combat/DamageInfo.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
 | `Assets/_Project/Scripts/Gameplay/Combat/DamageNumber.cs` | Gameplay/Combat | **Gameplay** | 运行时玩法（单位/战斗/交互/AI/世界） |
