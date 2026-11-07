@@ -6,7 +6,7 @@
 
 ## 1. 结果摘要
 
-**完成（01B 补齐）**。A（Esc 接线）、B（宝箱 Collider/Interactable）、C（门 prefab + fader）的 **wiring 全部到位并读回通过**；01B 补了 `EventSystem + StandaloneInputModule`（不用含 `InputSystemUIInputModule` 的 StarterAssets prefab），并确认 `chest_gold` 开箱非空（**金币袋 ×2**：嵌套 `coin_stack_medium` 原本就带 1 个，本单按批准清单又加 `Loot_Gold` 1 个）。四套件各 2 次与基线一致。三项真实键鼠功能仍留目检。另核对出：Canvas 原本已有 `GraphicRaycaster`（01B 的 B 项为 no-op）。
+**完成（01C 修 Esc 根因）**。A（Esc 接线）、B（宝箱 Collider/Interactable）、C（门 prefab + fader）的 **wiring 全部到位并读回通过**；01B 补了 `EventSystem + StandaloneInputModule`（不用含 `InputSystemUIInputModule` 的 StarterAssets prefab）；01C 找到并修复了 Esc 的**真正根因**：`InventoryUI` 组件挂在 Canvas 自身，`UIManager.Awake` 隐藏它时把整个 Canvas 关掉，导致 `UIManager` 停更。现组件已移到 `Canvas/PanelRoot`，并修正 `chestGrid.parent` 误用；Play 读回 **Esc / 宝箱 / Tab 三条路径全通**。四套件各 2 次与基线一致。真实键鼠点击/按键仍留 3 项目检。
 
 ## 2. AC 回填表
 
@@ -22,6 +22,9 @@
 | AC-8 | `M7-FIX-01B.EventSystem` | **PASS（静态 + Play）** | 场景 `EventSystem` + `StandaloneInputModule`；无 `InputSystemUIInputModule`；Canvas 自身有 `GraphicRaycaster`（no-op） | `补充/wiring_01B.txt`、`补充/readback_01B.txt` |
 | AC-9 | `M7-FIX-01B.ChestContent` | **PASS（Play 读回）** | `chest_gold` `ChestItem` ×2（均金币袋 50）；Play 模式 `Contents.nonNull=2`、`total=8` | `补充/readback_01B.txt` |
 | AC-10 | `M7-FIX-01B.Suites` | **PASS** | `REFACTOR` 20/0 ×2（run46/47）；`SPEC01` 12/0 ×2（run65/66）；`FND00B06` 12/0+2obs ×2（run15/16）；`DIAG` 6/1 ×2（run17/18，已知红） | `补充/Summary.md` |
+| AC-11 | `M7-FIX-01C.EscRootCause` | **PASS（Play 读回）** | 起始 `Canvas.activeSelf=True`、`UIManager` 可找到、`PanelRoot.activeSelf=False`；`openEsc: paused=True timeScale=0 panelActive=True`；关闭恢复 1/false | `补充/readback_01C.txt` |
+| AC-12 | `M7-FIX-01C.InventoryHost` | **PASS（静态）** | `InventoryUI` 在 `PanelRoot`、不在 Canvas；`UIManager.inventoryPanel` 指向 PanelRoot；代码无 `chestGrid.parent.gameObject` | `补充/wiring_01C.txt`（27 PASS） |
+| AC-13 | `M7-FIX-01C.Suites` | **PASS** | `REFACTOR` 20/0 ×2（run48/49）；`SPEC01` 12/0 ×2（run67/68）；`FND00B06` 12/0+2obs ×2（run17/18）；`DIAG` 6/1 ×2（run19/20，已知红） | `补充/Summary.md` |
 
 **运行次数**：四套件各连续 2 次；两次 `pass/fail/observed` 一致。
 
@@ -29,15 +32,18 @@
 
 ### 3.1 根因
 
-1. **Esc 无响应**：`DungeonWorld` 的 `UIManager.escMenuPanel` 序列化为 `{fileID: 0}`；`UIManager.cs:81` 的 `if (gameOn && escMenuPanel != null)` 因此永不进入。场景里虽有 `PausePanel`，但没有 `EscMenuPanel` 组件。
+0. **Esc 真正根因（01C 追加）**：`InventoryUI` 组件挂在 **Canvas 自身**（`1013740463` on `1013740459`）；`UIManager.Awake` 第 45 行 `inventoryPanel.gameObject.SetActive(false)` 把整个 Canvas 关掉 → `UIManager` 被禁用 → `Update()` 不跑 → Esc 永远无响应。`BasePanel.Close` 对同一组件也会再关一次 Canvas。
+1. **Esc 面板未接线**：`DungeonWorld` 的 `UIManager.escMenuPanel` 序列化为 `{fileID: 0}`；`UIManager.cs:81` 的 `if (gameOn && escMenuPanel != null)` 因此永不进入。场景里虽有 `PausePanel`，但没有 `EscMenuPanel` 组件。
 2. **宝箱点不动**：`SelectionManager.cs:151` 用 `Physics.RaycastAll` 找 `IInteractionTarget`；两个宝箱 prefab 根只有 `Chest`+`Inventory`，**没有 Collider**，射线不命中。`Chest.cs:37` 还依赖同物体的 `Interactable` 提供 hint，也没有。
 3. **门没得测**：`DungeonWorld` 没有 `DungeonDoor`，也没有 `TransitionFader`；M7-2 的 `Refactor.DoorTransitionEvent` 用的是测试运行期假 fader，不代表场景可用。
 
-### 3.2 修法（最小 wiring，无代码改动）
+### 3.2 修法（最小 wiring + 1 处代码修复）
 
 - A：给 `PausePanel` 加 `EscMenuPanel`，加 3 个 `Button`（`UnityEventTools.AddPersistentListener` 接 `OnClickResume/OnClickRestart/OnClickQuitToMenu`），把 `UIManager.escMenuPanel` 指向它。
 - B：在挂 `Chest` 的物体上，按**所有子 Renderer 合并 bounds** 加 `BoxCollider`，加 `Interactable`（hint「点击开启宝箱」）。`chest_gold` 是 `chest_base` 变体，自动继承。
 - C：新建 `dungeon_door.prefab`（`DungeonDoor` + `BoxCollider` + `DoorModel` + `DungeonEntryPoint`/`CameraPoint`），场景实例放在 `(4,0.08,2)`，入口 `(4,0.08,5)` 经 `NavMesh.SamplePosition` 校验；新增 `TransitionCanvas`（CanvasGroup+黑 Image+`TransitionFader`）。
+- **01B**：新建 `EventSystem + StandaloneInputModule`（不用含 `InputSystemUIInputModule` 的 StarterAssets prefab）。
+- **01C（Esc 根因）**：把 `InventoryUI` 组件从 `Canvas` 移到 `Canvas/PanelRoot`，`UIManager.inventoryPanel` 重指；`InventoryUI.OnOpen/OnClose` 的 `chestGrid.parent.gameObject` 改为 `chestGrid.gameObject`（`ChestPanel`），避免面板把 `PanelRoot` 自己关掉。
 
 ### 3.3 关键位置（`文件:行`）
 
@@ -46,6 +52,8 @@
 - `Assets/_Project/Scripts/Gameplay/World/Chest.cs:37` —— `Chest.Awake` 缓存同物体 `Interactable`；`Chest.cs:64` 的 `Hint` 依赖它。
 - `Assets/_Project/Scripts/Gameplay/World/DungeonDoor.cs:50` —— M7-2 已改为 `EventBus.Publish(TransitionRequest)`；本单补场景真实订阅者。
 - `Assets/_Project/Scripts/UI/TransitionFader.cs:22` —— `OnEnable` 订阅 `TransitionRequest`，`OnDisable` 退订。
+- `Assets/_Project/Scripts/UI/UIManager.cs:45` —— `inventoryPanel.gameObject.SetActive(false)`；01C 前它指向 Canvas 自身，是 Esc 失效的真正根因。
+- `Assets/_Project/Scripts/UI/InventoryUI.cs:58-71` —— 01C 把显隐目标从 `chestGrid.parent` 改为 `chestGrid`（`ChestPanel`），避免误关 `PanelRoot`。
 
 ### 3.4 边界 / 失败模式
 
@@ -61,9 +69,9 @@
 
 ### 3.6 与计划的差异
 
-- 未改任何 `.cs`：根因都在资产 wiring，代码逻辑（M7-2 下沉点）已验证正确。
+- 01（Esc/宝箱/门）+ 01B（EventSystem）未改 `.cs`；**01C 改了 `InventoryUI.cs` 4 行**（`chestGrid.parent` → `chestGrid`），因为 Esc 根因是组件挂错宿主 + 显隐目标错误。
 - 追加了 `TransitionCanvas` 的 3 个按钮持久监听；清单内 A2 已覆盖。
-- **01B 补齐**：新增 `EventSystem + StandaloneInputModule`（未用含 `InputSystemUIInputModule` 的 StarterAssets prefab）；`chest_gold` 加 `Loot_Gold`。核对发现 `coin_stack_medium` 原本已有 `ChestItem`，故现在金币袋 ×2。
+- **01B 补齐**：新增 `EventSystem + StandaloneInputModule`（未用含 `InputSystemUIInputModule` 的 StarterAssets prefab）；`chest_gold` 曾加 `Loot_Gold`，**所有者已删除**，现只剩嵌套 `coin_stack_medium` 的 1 个金币袋。
 
 ## 4. 受影响模块导航
 
@@ -77,13 +85,14 @@
 
 | 文件 | 动作 |
 |---|---|
-| `Assets/Scenes/DungeonWorld.unity` | 改：PausePanel 组件/按钮、UIManager 引用、TransitionCanvas、door 实例、EventSystem（01B） |
+| `Assets/Scenes/DungeonWorld.unity` | 改：PausePanel 组件/按钮、UIManager 引用、TransitionCanvas、door 实例、EventSystem（01B）、InventoryUI 组件移到 PanelRoot（01C） |
 | `Assets/_Project/Prefabs/chest_base.prefab` | 改：BoxCollider + Interactable |
-| `Assets/_Project/Prefabs/chest_gold.prefab` | 改：变体重存（继承）+ Loot_Gold（ChestItem + GoldPile，01B） |
+| `Assets/_Project/Prefabs/chest_gold.prefab` | 改：变体重存（继承）；`Loot_Gold` 由所有者删除 |
 | `Assets/_Project/Prefabs/dungeon_door.prefab` | 新增 |
 | `Assets/_Project/Prefabs/dungeon_door.prefab.meta` | 新增 |
+| `Assets/_Project/Scripts/UI/InventoryUI.cs` | 改：`chestGrid.parent.gameObject` → `chestGrid.gameObject`（01C，2 处） |
 
-未改：其他场景/预制体/Animator/`.asset`/`ProjectSettings`/`Packages`/任何 `.cs`。
+未改：其他场景/预制体/Animator/`.asset`/`ProjectSettings`/`Packages`。
 
 ## 5. 证据清单
 
@@ -93,7 +102,8 @@
 | `Docs/QA/Evidence/M7-FIX-01/readback.txt` | execute_code 日志、组件读回、NavMesh 读回、偏差 |
 | `Docs/QA/Evidence/M7-FIX-01/wiring_check.py` / `wiring.txt` | 01 wiring 断言（15 PASS；01B 后扩为 23 条） |
 | `Docs/QA/Evidence/M7-FIX-01/Summary.md` | 证据索引与结论 |
-| `Docs/QA/Evidence/M7-FIX-01/补充/` | 01B：清单/批准记录、执行读回、wiring 23 PASS、Summary |
+| `Docs/QA/Evidence/M7-FIX-01/补充/` | 01B/01C：清单/批准记录、执行读回、wiring（27 PASS）、Summary |
+| `Docs/QA/Evidence/M7-FIX-01/补充/readback_01C.txt` | 01C：Esc 根因、组件迁移、Play 三路径读回 |
 | `REFACTOR-M4/editor_run44..45` | 01：20/0 ×2 |
 | `SPEC-01/editor_run63..64` | 01：12/0 ×2 |
 | `FND-00B-06/editor_run13..14` | 01：12/0+2obs ×2 |
@@ -102,6 +112,10 @@
 | `SPEC-01/editor_run65..66` | 01B：12/0 ×2 |
 | `FND-00B-06/editor_run15..16` | 01B：12/0+2obs ×2 |
 | `DIAG-SKILL/editor_run17..18` | 01B：6/1 ×2（已知红） |
+| `REFACTOR-M4/editor_run48..49` | 01C：20/0 ×2 |
+| `SPEC-01/editor_run67..68` | 01C：12/0 ×2 |
+| `FND-00B-06/editor_run17..18` | 01C：12/0+2obs ×2 |
+| `DIAG-SKILL/editor_run19..20` | 01C：6/1 ×2（已知红） |
 
 ## 6. 学习讲稿
 
@@ -109,16 +123,17 @@
 
 ## 7. 未决项
 
-1. **真实键鼠 3 项目检**：Esc 打开后点继续/重开/退出、宝箱点击开箱、门 F 过场（MCP 无法注入输入）。
-2. **宝箱内容为金币袋 ×2**：`coin_stack_medium` 原本已有 1 个 `ChestItem`，本单按清单又加 `Loot_Gold` 1 个；若只要 1 个，删除 `Loot_Gold` 即可。
+1. **真实键鼠 3 项目检**：Esc 打开后点继续/重开/退出、宝箱点击开箱、门 F 过场（MCP 无法注入输入；Play 内已用代码调用验证三条路径的显隐/暂停逻辑）。
+2. **宝箱内容**：所有者已删除 `Loot_Gold`；`chest_gold` 现为嵌套 `coin_stack_medium` 的 **金币袋 ×1（50）**。
 3. **资产未提交**：`DungeonWorld.unity`、`chest_base.prefab`、`chest_gold.prefab`、`dungeon_door.prefab`(+meta) 由所有者提交。
 4. **EventSystem**：已补 `EventSystem + StandaloneInputModule`，无 `InputSystemUIInputModule`；按钮可点性待目检。
+5. **Esc 根因已修**：`InventoryUI` 组件移到 `Canvas/PanelRoot`，Canvas 不再被 `Awake` 关闭；`InventoryUI.cs` 的 `chestGrid.parent` 误用已改为 `chestGrid`。
 
 ## 8. 建议提交
 
 | 组 | 文件 | 提交信息 |
 |---|---|---|
-| 证据/文档（本单自动提交） | `Docs/QA/Evidence/M7-FIX-01/**`、`REPORT_M7-FIX-01`、`REPORT_M7-4`、`醒来目检清单.md` | `修复：M7-FIX-01B 补 EventSystem 与宝箱内容（M7-FIX-01B/收口）` + `为什么` / `验证` |
+| 代码/证据/文档（本单自动提交） | `Assets/_Project/Scripts/UI/InventoryUI.cs`、`Docs/QA/Evidence/M7-FIX-01/**`、`REPORT_M7-FIX-01`、`REPORT_M7-4`、`醒来目检清单.md` | `修复：M7-FIX-01C 修 Esc 根因（Canvas 误关）（M7-FIX-01C/收口）` + `为什么` / `验证` |
 | 资产（所有者提交） | `DungeonWorld.unity`、`chest_base.prefab`、`chest_gold.prefab`、`dungeon_door.prefab`(+meta) | `修复：M7-FIX-01 场景与预制体接线（资产）` |
 
 ## 9. 消耗记录

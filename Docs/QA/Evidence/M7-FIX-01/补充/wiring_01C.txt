@@ -1,0 +1,28 @@
+﻿PASS A.UIManager.escMenuPanel.nonzero            escMenuPanel 宸叉寚鍚戦潪 0 寮曠敤
+PASS A.PausePanel.EscMenuPanel                   鍦烘櫙瀛樺湪 EscMenuPanel 鑴氭湰寮曠敤
+PASS A.Buttons.3                                 缁х画/閲嶅紑/閫€鍑?涓変釜鎸夐挳瀛樺湪
+PASS A.Buttons.persistent                        鎸夐挳 onClick 鎸佷箙鐩戝惉 >= 3
+PASS B.chest_base.BoxCollider                    chest_base 鏈?BoxCollider
+PASS B.chest_base.Interactable                   chest_base 鏈?Interactable
+PASS B.chest_base.hint                           hint 宸插簭鍒楀寲
+PASS B.chest_gold.inherits_base                  chest_gold 鍙樹綋婧?= chest_base
+PASS C.door.DungeonDoor                          闂?prefab 鏈?DungeonDoor
+PASS C.door.BoxCollider                          闂?prefab 鏈?BoxCollider
+PASS C.door.model                                闂?prefab 鏈夊彲瑙佹ā鍨?
+PASS C.door.points                               闂?prefab 鏈変袱涓偣
+PASS C.door.refs                                 涓や釜鐐瑰紩鐢ㄩ潪 0
+PASS C.scene.TransitionFader                     鍦烘櫙鏈?TransitionFader
+PASS C.scene.door_instance                       鍦烘櫙鏈夐棬瀹炰緥
+PASS B01.EventSystem.exists                      鍦烘櫙鏈?EventSystem
+PASS B01.EventSystem.Standalone                  鏈?StandaloneInputModule
+PASS B01.EventSystem.noInputSystem               鏃?InputSystemUIInputModule
+PASS B01.EventSystem.single                      EventSystem 鑴氭湰寮曠敤瀛樺湪锛堜粎 1 涓疄渚嬶紝杩愯鏈熷凡璇诲洖锛?
+PASS B01.Canvas.GraphicRaycaster                 Canvas 鑷韩鎸傛湁 GraphicRaycaster
+PASS B01.chest_gold.ChestItem                    chest_gold 鐨?ChestItem 鏉ユ簮瀛樺湪锛堣嚜韬垨宓屽 coin_stack锛?
+PASS B01.coin_stack.ChestItem                    宓屽 coin_stack_medium 涔熷甫 ChestItem(data=閲戝竵琚?
+PASS B01.chest_gold.includes_coin_stack          chest_gold 寮曠敤 coin_stack_medium
+PASS B01C.InventoryUI.on.PanelRoot               InventoryUI 缁勪欢鍦?PanelRoot 涓?
+PASS B01C.InventoryUI.not.on.Canvas              Canvas 涓婁笉鍐嶆寕 InventoryUI
+PASS B01C.UIManager.inventoryPanel.on.PanelRoot  UIManager.inventoryPanel 鎸囧悜 PanelRoot 涓婄殑缁勪欢
+PASS B01C.InventoryUI.code.noParent              InventoryUI 涓嶅啀鐢?chestGrid.parent 鍒囨崲鏄鹃殣
+SUMMARY pass=27 fail=0

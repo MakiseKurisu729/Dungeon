@@ -26,6 +26,13 @@
 ## 4. 结论
 
 - UI 事件系统：`EventSystem + StandaloneInputModule` 已加，无 `InputSystemUIInputModule`；Canvas 既有 `GraphicRaycaster`（no-op）。
-- 宝箱：`chest_gold` 开箱非空；**实为金币袋 ×2**（嵌套 `coin_stack_medium` 原本就有 1 个，本单按清单又加 `Loot_Gold` 1 个）。
+- 宝箱：`chest_gold` 开箱非空；当前为 **金币袋 ×1**（所有者已删除 `Loot_Gold`，只剩嵌套 `coin_stack_medium`）。
 - 自动化：四套件与基线一致，未回归。
 - 人工功能项仍待目检。
+
+## 5. 01C 追加（2026-11-07）
+
+- 根因：`InventoryUI` 组件挂在 Canvas 自身 → `UIManager.Awake` 把 Canvas 关掉 → UIManager 停更 → Esc 无响应。
+- 修复：组件移到 `PanelRoot` + `UIManager.inventoryPanel` 重指；`InventoryUI.OnOpen/OnClose` 改用 `chestGrid.gameObject`。
+- Play 读回：Esc / 宝箱 / Tab 三条路径全部通过；`Canvas` 保持激活。
+- 细节：`readback_01C.txt`、`wiring_01C.txt`（27 PASS）。

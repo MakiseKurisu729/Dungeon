@@ -1,0 +1,74 @@
+# M7-FIX-01C 执行读回（Esc 根因）
+
+> 执行方式：MCP `execute_code`（组件迁移）+ 直接改 `InventoryUI.cs`；未手改 YAML/GUID。
+> 基线 `72ec2d8b`；执行时间 2026-11-07 12:5x。
+
+## 1. 根因（Play 探针，修复前）
+
+```text
+UIManager=False
+EventSystem=True standalone=True
+```
+
+- `InventoryUI` 组件挂在 Canvas 自身（`1013740463` on `1013740459`）；`UIManager.Awake` 的 `inventoryPanel.gameObject.SetActive(false)` 把 Canvas 整个关掉 → `UIManager` 被禁用 → `Update()` 不跑 → Esc 无响应。
+
+## 2. 改动
+
+### A. 场景组件迁移（execute_code）
+
+```text
+Canvas=True active=True
+PanelRoot=True
+UIManager=True
+old InventoryUI on Canvas=True inventoryPanel=Canvas
+MOVED InventoryUI Canvas -> PanelRoot; playerInv=False chestGrid=True playerGrid=True slotBg=True
+scene saved
+READBACK UIManager=True
+READBACK inventoryPanel=PanelRoot host=PanelRoot
+READBACK Canvas InventoryUI=False
+READBACK PanelRoot InventoryUI=True
+```
+
+> `playerInv=False` 是正常的：该字段原本为空，运行时 `OnInit` 会从玩家单位自动找。
+
+### B. 代码修复（`InventoryUI.cs:58-71`）
+
+```csharp
+protected override void OnOpen(object userData)
+{
+    if (chestGrid != null)
+        chestGrid.gameObject.SetActive(_chestInv != null);
+    Refresh();
+}
+
+protected override void OnClose()
+{
+    if (chestGrid != null)
+        chestGrid.gameObject.SetActive(true);
+    _chestInv = null;
+    _chest = null;
+}
+```
+
+## 3. Play 读回（修复后）
+
+```text
+Canvas.activeSelf=True UIManager=True
+PanelRoot.activeSelf=False GameStarted=True
+openEsc: paused=True timeScale=0 panelActive=True
+closeEsc: paused=False timeScale=1 panelActive=False
+chestOpen: PanelRoot=True invOpen=True chestPanel=True
+chestClose: PanelRoot=False Canvas=True
+tabOpen: PanelRoot=True invOpen=True chestPanel=False
+tabClose: PanelRoot=False Canvas=True
+```
+
+- Esc 路径：`PauseState.IsPaused=true`、`timeScale=0`、PausePanel 可见；关闭恢复。
+- 宝箱路径：`PanelRoot` 可见、ChestPanel 可见；关闭后 `PanelRoot` 隐藏、Canvas 保持激活。
+- Tab 路径：`PanelRoot` 可见、ChestPanel 隐藏、PlayerPanel 保留；关闭后 `PanelRoot` 隐藏、Canvas 激活。
+- 备注：第一次 Play 探针用旧程序集（改完 `.cs` 未触发重编译），`refresh_unity` 后复测全绿。
+
+## 4. 其它事实
+
+- 所有者已删除 `Loot_Gold`；`chest_gold` 现在只有嵌套 `coin_stack_medium` 的 1 个金币袋（50）。
+- wiring 断言：**27 PASS / 0 FAIL**（含 01C 的 4 条）。

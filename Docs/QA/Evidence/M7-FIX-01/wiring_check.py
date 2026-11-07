@@ -31,6 +31,8 @@ GUID = {
     "ChestItem": "cc98114b50e726b4f872c203a71d69b8",
     "GoldBag": "4c1eb5183a519b54eb99651a126f1883",
     "CoinStackPrefab": "de5ebc47c4297c44899d09f027359c50",
+    "InventoryUI": "01ee69bc580a49b49959e7a9b94da0ae",
+    "UIManager": "5c953194cbcb38a45ba55e7b8854e168",
 }
 CHEST_BASE_GUID = "4e0598c14f6d79c46b4b13e24ab29bbd"
 
@@ -148,12 +150,32 @@ def main():
     check("B01.Canvas.GraphicRaycaster", ok_gr, "Canvas 自身挂有 GraphicRaycaster")
 
     # ---- 01B: chest_gold ChestItem ----
-    check("B01.chest_gold.ChestItem", GUID["ChestItem"] in gold and GUID["GoldBag"] in gold,
-          "chest_gold 自带 ChestItem(data=金币袋)")
+    check("B01.chest_gold.ChestItem",
+          (GUID["ChestItem"] in gold and GUID["GoldBag"] in gold)
+          or (GUID["CoinStackPrefab"] in gold and GUID["ChestItem"] in coin and GUID["GoldBag"] in coin),
+          "chest_gold 的 ChestItem 来源存在（自身或嵌套 coin_stack）")
     check("B01.coin_stack.ChestItem", GUID["ChestItem"] in coin and GUID["GoldBag"] in coin,
           "嵌套 coin_stack_medium 也带 ChestItem(data=金币袋)")
     check("B01.chest_gold.includes_coin_stack", GUID["CoinStackPrefab"] in gold,
           "chest_gold 引用 coin_stack_medium")
+
+    # ---- 01C: InventoryUI host & code fix ----
+    check("B01C.InventoryUI.on.PanelRoot", has_component_with_guid(blocks, "PanelRoot", GUID["InventoryUI"]),
+          "InventoryUI 组件在 PanelRoot 上")
+    check("B01C.InventoryUI.not.on.Canvas", not has_component_with_guid(blocks, "Canvas", GUID["InventoryUI"]),
+          "Canvas 上不再挂 InventoryUI")
+    panel_body = gameobject_block(blocks, "PanelRoot")[1] or ""
+    panel_comps = component_ids(panel_body)
+    ref_ok = False
+    for anchor, (cls, body) in blocks.items():
+        if cls == "114" and GUID["UIManager"] in body:
+            m = re.search(r"inventoryPanel: \{fileID: (-?\d+)\}", body)
+            if m:
+                ref_ok = m.group(1) in panel_comps
+    check("B01C.UIManager.inventoryPanel.on.PanelRoot", ref_ok, "UIManager.inventoryPanel 指向 PanelRoot 上的组件")
+    inv_src = read("Assets/_Project/Scripts/UI/InventoryUI.cs")
+    check("B01C.InventoryUI.code.noParent", "chestGrid.parent.gameObject" not in inv_src,
+          "InventoryUI 不再用 chestGrid.parent 切换显隐")
 
     width = max(len(t) for t, _, _ in results)
     ok = True

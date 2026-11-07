@@ -57,15 +57,15 @@ namespace Dungeon.UI {
 
         protected override void OnOpen(object userData)
         {
-            if (chestGrid != null && chestGrid.parent != null)
-                chestGrid.parent.gameObject.SetActive(_chestInv != null);
+            if (chestGrid != null)
+                chestGrid.gameObject.SetActive(_chestInv != null);
             Refresh();
         }
 
         protected override void OnClose()
         {
-            if (chestGrid != null && chestGrid.parent != null)
-                chestGrid.parent.gameObject.SetActive(true);
+            if (chestGrid != null)
+                chestGrid.gameObject.SetActive(true);
             _chestInv = null;
             _chest = null;
         }
