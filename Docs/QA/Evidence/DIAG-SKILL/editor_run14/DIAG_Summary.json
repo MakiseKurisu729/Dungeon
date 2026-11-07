@@ -1,0 +1,18 @@
+{
+  "task": "DIAG-SKILL",
+  "mode": "probe",
+  "run": 1,
+  "startedAt": "2026-11-07 10:37:29.086",
+  "finishedAt": "2026-11-07 10:37:33.308",
+  "unityVersion": "2022.3.62f3c1",
+  "scene": "Assets/Scenes/DungeonWorld.unity",
+  "head": "5ba1b1a8ccd09e46adb040aa35a44ef5af87d872",
+  "assertionFile": "D:\\unity\\Dungeon\\Docs\\QA\\Evidence\\DIAG-SKILL\\editor_run14\\DIAG_Assertions.jsonl",
+  "pass": 6,
+  "fail": 1,
+  "blocked": 0,
+  "infraFail": 0,
+  "observed": 0,
+  "conclusion": "见断言数据（Q/W 链条或控制器状态与预期不符）",
+  "exitReason": "completed"
+}

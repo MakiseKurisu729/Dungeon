@@ -1,0 +1,14 @@
+# M7-4 asmdef 校验
+
+| 程序集 | references | includePlatforms |
+|---|---|---|
+| `Dungeon.Core` | `[]` | `[]` |
+| `Dungeon.Content` | `["Dungeon.Core"]` | `[]` |
+| `Dungeon.Gameplay` | `["Dungeon.Core","Dungeon.Content","UnityEngine.UI"]` | `[]` |
+| `Dungeon.App` | `["Dungeon.Core","Dungeon.Content","Dungeon.Gameplay"]` | `[]` |
+| `Dungeon.UI` | `["Dungeon.Core","Dungeon.Content","Dungeon.Gameplay","Dungeon.App","UnityEngine.UI"]` | `[]` |
+| `Dungeon.Editor` | `["Dungeon.Core","Dungeon.Content","Dungeon.Gameplay","Dungeon.App","Dungeon.UI"]` | `["Editor"]` |
+
+- 全部 `rootNamespace` = name、`autoReferenced=true`、`noEngineReferences=false`
+- 运行时程序集均不引用 `Dungeon.Editor`
+- `verify_m7_4.py` 的 `M7-4.Asmdef` / `M7-4.EditorOnly` 均 PASS

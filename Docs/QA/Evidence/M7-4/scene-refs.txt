@@ -1,0 +1,11 @@
+# M7-4 场景/预制体 m_Script GUID 扫描
+
+- 扫描范围：`Assets/**/*.unity`、`Assets/**/*.prefab`
+- 扫描结果：42 个文件、199 条 `m_Script` 引用
+- GUID 解析范围：`Assets/**/*.meta` + `Packages/**/*.meta` + `Library/PackageCache/**/*.meta`（共 15486 个 meta）
+- 相对 `Assets/**/*.meta` 缺失：19 个 GUID
+  - 17 个由 Packages/PackageCache 解析（uGUI / InputSystem / Cinemachine / SRP 等）
+  - 2 个无解析：`5135d2b4fb4ea6b4183453c2252e87bb`、`9466e0370f31dfe47ae24c150b7fa083`
+- 这 2 个均只出现在 `Assets/StarterAssets/FirstPersonController/Prefabs/PlayerCapsule.prefab`（行 275 / 345），
+  且**基线提交 `0c4c32e4` 的同名 prefab 完全一致**（`pre_base_ok=True`）——属 M7 之前就存在的第三方资源缺失，M7 未改 `Assets`。
+- 最终判定：`unresolved=0`（M7 未引入新的 Missing Script）；2 个预存在缺失列为 known issue，未修（超出本单范围）。

@@ -1,0 +1,2 @@
+﻿M7-4 NoAsset check (0c4c32e4..HEAD, Assets)
+changed=0
