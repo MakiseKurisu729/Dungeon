@@ -15,13 +15,13 @@
 - 静态扫描 42 个 `.unity/.prefab`、199 条 `m_Script` 引用：M7 未引入新的 Missing Script（`unresolved=0`）；发现 **2 个基线已存在的第三方缺失**（`PlayerCapsule.prefab`，M7 未改 Assets），列为 known issue，未修。
 - 6 个 asmdef 字段/引用/平台全部正确；`Dungeon.Editor` 仅 Editor 平台，运行时不回引。
 - 本单只写 `Docs/**`：`git diff 0c4c32e4..HEAD -- Assets` 为空；2 条提交，收口后 `git status` 干净、未 push。
-- M7 全量提交（`483678fb..HEAD`）：**23 条**（M7-1 9 + M7-2 6 + M7-3 6 + M7-4 2；比旧计划写的 21 多 2，是 M7-1 收尾的空目录清理/交接两条）。
+- M7 全量提交（`483678fb..1c013dc4`）：**24 条**（M7-1 9 + M7-2 6 + M7-3 6 + M7-4 3；M7-4 为开工/收口/状态登记三条；比旧计划写的 21 多 3，另 2 条是 M7-1 收尾的空目录清理/交接）。
 
 **三句话版本（M7 收口版）**
 
-1. 77 个脚本已归一为 6 个程序集（Core/Content/Gameplay/App/UI/Editor），`upward=0`，依赖方向由 asmdef 在编译期锁死。
-2. 四套件 ×2 全部与基线一致，`DIAG` 仅保留已知红 `Diag.Input.FirstExit`；场景冒烟无 Missing/NRE/error，M7 没有引入行为回归。
-3. 唯一遗留是第三方 `PlayerCapsule.prefab` 的 2 个基线缺失脚本（与 M7 无关，未修），其余交由所有者 push + 终审。
+1. 81 个脚本已归一为 6 个程序集（Core/Content/Gameplay/App/UI/Editor），`upward=0`，依赖方向由 asmdef 在编译期锁死。
+2. 四套件 ×2 全部与基线一致，`DIAG` 仅保留已知红 `Diag.Input.FirstExit`；场景冒烟无 Missing/NRE/error，**自动化基线未回归**。
+3. **人工功能项 2/4/5 未通过/未验证**（Esc 无响应、宝箱不可交互、门未测试；详见 `M7-FIX-01` 与 `醒来目检清单`），不能用“无行为回归”概括。
 
 ## 2. AC 回填表
 
@@ -32,7 +32,7 @@
 | AC-3 | `M7-4.SceneRefs` | **PASS（含 2 个基线既有例外）** | 42 文件 / 199 refs / 15486 metas；`unresolved=0`；`preexisting=2`（`5135d2b4…`、`9466e037…`，仅 `StarterAssets/.../PlayerCapsule.prefab`，`pre_base_ok=True`） | `scene-refs.txt`、`verify.txt` |
 | AC-4 | `M7-4.Asmdef` / `.EditorOnly` | **PASS** | 6 个 asmdef 字段一致；`Dungeon.Editor.includePlatforms==["Editor"]`；运行时 `references` 不含 Editor | `asmdef.txt`、`verify.txt` |
 | AC-5 | `M7-4.Files` | **PASS** | `Scripts=81`、`Tests=30`、测试 `namespace` 文件 0；`git status` 仅本单 Docs；收口后干净 | `verify.txt` |
-| AC-6 | `M7-4.Wake` | **PASS** | `醒来报告.md`、`醒来目检清单.md` 含 push 前检查/已知问题/恢复步骤/M7 级 8 项 | `Docs/QA/Evidence/M7-4/醒来报告.md`、`醒来目检清单.md` |
+| AC-6 | `M7-4.Wake` | **PASS（仅证明清单文件存在）** | `醒来报告.md`、`醒来目检清单.md` 存在且含 push 前检查/已知问题/恢复步骤；**不证明 2/4/5 功能项通过**（见 `M7-FIX-01`） | `Docs/QA/Evidence/M7-4/醒来报告.md`、`醒来目检清单.md` |
 | AC-7 | `M7-4.NoAsset` | **PASS** | `git diff --name-only 0c4c32e4..HEAD -- Assets` = **0** | `no-asset.txt` |
 | AC-8 | `M7-4.Commits` | **PASS** | 2 条中文提交（开工文档 + 收口）；`git status` 干净；未 push | `收口/git-log.txt` |
 
@@ -76,7 +76,8 @@
 2. `DIAG` 已知红 `Diag.Input.FirstExit` 保持 6/1，未修、未改阈值。
 3. Player 构建/真机未做（TASK 范围外）；`Dungeon.Editor` 的 Player 平台排除仅做 `includePlatforms` 静态校验。
 4. `FND00B06` 的 2 条 `observed` 是既有观察项，非失败。
-5. M7 全量提交实际 23 条（旧计划写 21；差异为 M7-1 收尾的空目录清理 `a939310e` 与交接 `0a78111a`）。
+5. M7 全量提交实际 **24 条**（`483678fb..1c013dc4`；M7-4 为 3 条：开工/收口/状态登记；另 2 条为 M7-1 收尾的空目录清理 `a939310e` 与交接 `0a78111a`）。
+6. **人工功能项 2/4/5 未通过/未验证**（所有者 2026-11-07 目检：Esc 无响应、宝箱不可交互、门未测试）；已由 `M7-FIX-01` 做最小 wiring 修复，真实键鼠路径仍需目检。详见 `REPORT_M7-FIX-01`。
 
 ## 8. 建议提交
 

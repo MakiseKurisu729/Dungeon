@@ -1,0 +1,16 @@
+PASS A.UIManager.escMenuPanel.nonzero  escMenuPanel 已指向非 0 引用
+PASS A.PausePanel.EscMenuPanel         场景存在 EscMenuPanel 脚本引用
+PASS A.Buttons.3                       继续/重开/退出 三个按钮存在
+PASS A.Buttons.persistent              按钮 onClick 持久监听 >= 3
+PASS B.chest_base.BoxCollider          chest_base 有 BoxCollider
+PASS B.chest_base.Interactable         chest_base 有 Interactable
+PASS B.chest_base.hint                 hint 已序列化
+PASS B.chest_gold.inherits_base        chest_gold 变体源 = chest_base
+PASS C.door.DungeonDoor                门 prefab 有 DungeonDoor
+PASS C.door.BoxCollider                门 prefab 有 BoxCollider
+PASS C.door.model                      门 prefab 有可见模型
+PASS C.door.points                     门 prefab 有两个点
+PASS C.door.refs                       两个点引用非 0
+PASS C.scene.TransitionFader           场景有 TransitionFader
+PASS C.scene.door_instance             场景有门实例
+SUMMARY pass=15 fail=0

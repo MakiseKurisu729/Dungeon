@@ -1,0 +1,58 @@
+# M7-FIX-01 资产执行读回
+
+> 执行方式：MCP `execute_code`（一次性编辑器脚本），仅动批准清单 6 项；未手改 YAML/GUID。
+> 基线 `1c013dc4`；执行时间 2026-11-07 11:3x。
+
+## 1. 执行日志（execute_code 返回原文）
+
+```text
+scene=Assets/Scenes/DungeonWorld.unity roots=12 dirty=True
+chest Assets/_Project/Prefabs/chest_base.prefab go=chest_base renderers=2
+  ADD BoxCollider
+  collider center=(0.00, 0.65, 0.02) size=(1.70, 1.30, 1.45)
+  ADD Interactable
+chest Assets/_Project/Prefabs/chest_gold.prefab go=chest_gold renderers=3
+ADD EscMenuPanel on PausePanel
+ADD button Btn_Resume persistent=1
+ADD button Btn_Restart persistent=1
+ADD button Btn_Quit persistent=1
+SET UIManager.escMenuPanel
+ADD TransitionCanvas + TransitionFader
+ADD dungeon_door.prefab at (4.00, 0.08, 2.00)
+ADD scene door instance at (4.00, 0.08, 2.00)
+scene saved
+READBACK UIManager.escMenuPanel=PausePanel
+READBACK PausePanel EscMenuPanel=True
+READBACK buttons=3
+  Btn_Resume persistent=1
+  Btn_Restart persistent=1
+  Btn_Quit persistent=1
+READBACK fader=True canvasGroup=True
+READBACK door entry=(4.00, 0.08, 5.00) onNavMesh=True sampled=(4.00, 0.08, 5.00) cam=True
+```
+
+> 说明：`chest_gold` 是 `chest_base` 变体，`BoxCollider`/`Interactable` 由基预制体继承；变体文件本身仅记录差异，故日志无“ADD”行。
+
+## 2. 场景组件读回（MCP gameobject 资源）
+
+| 对象 | 组件 |
+|---|---|
+| `chest_gold`（场景实例） | `Transform, MeshFilter, MeshRenderer, Chest, Inventory, BoxCollider, Interactable` |
+| `dungeon_door`（场景实例） | `Transform, DungeonDoor, BoxCollider`（子物体：`DoorModel`、`DungeonEntryPoint`、`CameraPoint`） |
+| `TransitionCanvas` | `RectTransform, Canvas, CanvasScaler, GraphicRaycaster, CanvasGroup, TransitionFader` |
+
+## 3. NavMesh 读回（附加条件 ③）
+
+- `DungeonDoor.dungeonEntryPoint` 世界坐标 = `(4.00, 0.08, 5.00)`
+- `NavMesh.SamplePosition(entry, 1f)` = **True**，采样点 `(4.00, 0.08, 5.00)`
+- 门根位置 `(4.00, 0.08, 2.00)`（NavMesh 采样后落点）
+
+## 4. 可见模型（附加条件 ②）
+
+- 门 prefab 子物体 `DoorModel`（Cube，`1.2 × 2.2 × 0.2`，挂在门根下），已移除 Cube 自带 Collider，保留根上的 `BoxCollider`。
+
+## 5. 偏差 / 已知限制
+
+1. **场景无 EventSystem**：`DungeonWorld.unity` 原本没有 `EventSystem`（全项目也没有）。因此新增的 3 个按钮**当前无法接收鼠标点击**；Esc 键盘路径不受影响（`UIManager.Update` 直接读 `Input.GetKeyDown(Escape)`）。补 `EventSystem` 属清单外资产改动，**未执行**，待所有者确认。
+2. `chest_gold.prefab` 被标记为已修改（变体继承/重存），未改变其 GUID 或源变体关系。
+3. 宝箱点击、门 F 交互、Esc 键盘路径需真实键鼠目检（见 REPORT 未决项）。
