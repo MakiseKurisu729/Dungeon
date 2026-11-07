@@ -1,0 +1,13 @@
+﻿M7-3 NoAsset check (164013c3..HEAD, Assets)
+changed_total=8
+bad=0
+
+--- changed paths ---
+Assets/_Project/Scripts/App/Dungeon.App.asmdef
+Assets/_Project/Scripts/App/Dungeon.App.asmdef.meta
+Assets/_Project/Scripts/Editor/Dungeon.Editor.asmdef
+Assets/_Project/Scripts/Editor/Dungeon.Editor.asmdef.meta
+Assets/_Project/Scripts/Gameplay/Dungeon.Gameplay.asmdef
+Assets/_Project/Scripts/Gameplay/Dungeon.Gameplay.asmdef.meta
+Assets/_Project/Scripts/UI/Dungeon.UI.asmdef
+Assets/_Project/Scripts/UI/Dungeon.UI.asmdef.meta
