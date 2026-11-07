@@ -6,7 +6,7 @@
 
 ## 1. 结果摘要
 
-**部分完成**。A（Esc 接线）、B（宝箱 Collider/Interactable）、C（门 prefab + fader）的**资产 wiring 全部到位并读回通过**；四套件各 2 次与基线一致。三项真实键鼠功能（Esc 键、宝箱点击、门 F）**未验证**，留目检。另发现两个范围外缺口：场景无 `EventSystem`（按钮不可点）、宝箱无 `ChestItem`（开箱为空）。
+**完成（01B 补齐）**。A（Esc 接线）、B（宝箱 Collider/Interactable）、C（门 prefab + fader）的 **wiring 全部到位并读回通过**；01B 补了 `EventSystem + StandaloneInputModule`（不用含 `InputSystemUIInputModule` 的 StarterAssets prefab），并确认 `chest_gold` 开箱非空（**金币袋 ×2**：嵌套 `coin_stack_medium` 原本就带 1 个，本单按批准清单又加 `Loot_Gold` 1 个）。四套件各 2 次与基线一致。三项真实键鼠功能仍留目检。另核对出：Canvas 原本已有 `GraphicRaycaster`（01B 的 B 项为 no-op）。
 
 ## 2. AC 回填表
 
@@ -19,6 +19,9 @@
 | AC-5 | `M7-FIX-01.Assets` | **PASS** | 只改 `DungeonWorld.unity`、`chest_base.prefab`、`chest_gold.prefab`、新增 `dungeon_door.prefab`(+meta)；未提交资产 | `资产改动清单.md`、`git status` |
 | AC-6 | `M7-FIX-01.Docs` | **PASS** | `REPORT_M7-4` 已改 4 处（24 条 / 81 脚本 / 去“无回归” / AC-6 口径）；`醒来目检清单` 2/4/5 已加状态 | `REPORT_M7-4_全量回归.md`、`Docs/QA/Evidence/M7-4/醒来目检清单.md` |
 | AC-7 | `M7-FIX-01.Manual` | **NOT RUN** | Esc 键 / 宝箱点击 / 门 F：需真实键鼠，MCP 无法注入 | 见 §7 未决项 |
+| AC-8 | `M7-FIX-01B.EventSystem` | **PASS（静态 + Play）** | 场景 `EventSystem` + `StandaloneInputModule`；无 `InputSystemUIInputModule`；Canvas 自身有 `GraphicRaycaster`（no-op） | `补充/wiring_01B.txt`、`补充/readback_01B.txt` |
+| AC-9 | `M7-FIX-01B.ChestContent` | **PASS（Play 读回）** | `chest_gold` `ChestItem` ×2（均金币袋 50）；Play 模式 `Contents.nonNull=2`、`total=8` | `补充/readback_01B.txt` |
+| AC-10 | `M7-FIX-01B.Suites` | **PASS** | `REFACTOR` 20/0 ×2（run46/47）；`SPEC01` 12/0 ×2（run65/66）；`FND00B06` 12/0+2obs ×2（run15/16）；`DIAG` 6/1 ×2（run17/18，已知红） | `补充/Summary.md` |
 
 **运行次数**：四套件各连续 2 次；两次 `pass/fail/observed` 一致。
 
@@ -60,7 +63,7 @@
 
 - 未改任何 `.cs`：根因都在资产 wiring，代码逻辑（M7-2 下沉点）已验证正确。
 - 追加了 `TransitionCanvas` 的 3 个按钮持久监听；清单内 A2 已覆盖。
-- 发现两个缺口（EventSystem / ChestItem），按“清单外先停”未自行补。
+- **01B 补齐**：新增 `EventSystem + StandaloneInputModule`（未用含 `InputSystemUIInputModule` 的 StarterAssets prefab）；`chest_gold` 加 `Loot_Gold`。核对发现 `coin_stack_medium` 原本已有 `ChestItem`，故现在金币袋 ×2。
 
 ## 4. 受影响模块导航
 
@@ -74,9 +77,9 @@
 
 | 文件 | 动作 |
 |---|---|
-| `Assets/Scenes/DungeonWorld.unity` | 改：PausePanel 组件/按钮、UIManager 引用、TransitionCanvas、door 实例 |
+| `Assets/Scenes/DungeonWorld.unity` | 改：PausePanel 组件/按钮、UIManager 引用、TransitionCanvas、door 实例、EventSystem（01B） |
 | `Assets/_Project/Prefabs/chest_base.prefab` | 改：BoxCollider + Interactable |
-| `Assets/_Project/Prefabs/chest_gold.prefab` | 改：变体重存（继承） |
+| `Assets/_Project/Prefabs/chest_gold.prefab` | 改：变体重存（继承）+ Loot_Gold（ChestItem + GoldPile，01B） |
 | `Assets/_Project/Prefabs/dungeon_door.prefab` | 新增 |
 | `Assets/_Project/Prefabs/dungeon_door.prefab.meta` | 新增 |
 
@@ -88,12 +91,17 @@
 |---|---|
 | `Docs/QA/Evidence/M7-FIX-01/资产改动清单.md` | 资产清单 + 批准记录 + 执行回执 |
 | `Docs/QA/Evidence/M7-FIX-01/readback.txt` | execute_code 日志、组件读回、NavMesh 读回、偏差 |
-| `Docs/QA/Evidence/M7-FIX-01/wiring_check.py` / `wiring.txt` | 15 条 wiring 断言（15 PASS） |
+| `Docs/QA/Evidence/M7-FIX-01/wiring_check.py` / `wiring.txt` | 01 wiring 断言（15 PASS；01B 后扩为 23 条） |
 | `Docs/QA/Evidence/M7-FIX-01/Summary.md` | 证据索引与结论 |
-| `REFACTOR-M4/editor_run44..45` | 20/0 ×2 |
-| `SPEC-01/editor_run63..64` | 12/0 ×2 |
-| `FND-00B-06/editor_run13..14` | 12/0+2obs ×2 |
-| `DIAG-SKILL/editor_run15..16` | 6/1 ×2（已知红） |
+| `Docs/QA/Evidence/M7-FIX-01/补充/` | 01B：清单/批准记录、执行读回、wiring 23 PASS、Summary |
+| `REFACTOR-M4/editor_run44..45` | 01：20/0 ×2 |
+| `SPEC-01/editor_run63..64` | 01：12/0 ×2 |
+| `FND-00B-06/editor_run13..14` | 01：12/0+2obs ×2 |
+| `DIAG-SKILL/editor_run15..16` | 01：6/1 ×2（已知红） |
+| `REFACTOR-M4/editor_run46..47` | 01B：20/0 ×2 |
+| `SPEC-01/editor_run65..66` | 01B：12/0 ×2 |
+| `FND-00B-06/editor_run15..16` | 01B：12/0+2obs ×2 |
+| `DIAG-SKILL/editor_run17..18` | 01B：6/1 ×2（已知红） |
 
 ## 6. 学习讲稿
 
@@ -101,16 +109,16 @@
 
 ## 7. 未决项
 
-1. **真实键鼠 3 项目检**：Esc 暂停/恢复、宝箱点击开箱、门 F 过场（MCP 无法注入输入）。
-2. **按钮不可点**：场景无 `EventSystem`；补 1 个 `EventSystem`（`Assets/StarterAssets/Mobile/Prefabs/EventSystem/UI_EventSystem.prefab` 或新建）属清单外，待批准。
-3. **宝箱为空**：两个 prefab 无 `ChestItem`；需要内容决策（放哪个 `ItemData`）。
-4. 资产未提交：`git status` 的 4 个资产 + 1 个新 meta 由所有者提交。
+1. **真实键鼠 3 项目检**：Esc 打开后点继续/重开/退出、宝箱点击开箱、门 F 过场（MCP 无法注入输入）。
+2. **宝箱内容为金币袋 ×2**：`coin_stack_medium` 原本已有 1 个 `ChestItem`，本单按清单又加 `Loot_Gold` 1 个；若只要 1 个，删除 `Loot_Gold` 即可。
+3. **资产未提交**：`DungeonWorld.unity`、`chest_base.prefab`、`chest_gold.prefab`、`dungeon_door.prefab`(+meta) 由所有者提交。
+4. **EventSystem**：已补 `EventSystem + StandaloneInputModule`，无 `InputSystemUIInputModule`；按钮可点性待目检。
 
 ## 8. 建议提交
 
 | 组 | 文件 | 提交信息 |
 |---|---|---|
-| 证据/文档（本单自动提交） | `Docs/QA/Evidence/M7-FIX-01/**`、`REPORT_M7-FIX-01`、`REPORT_M7-4`、`醒来目检清单.md` | `修复：M7-FIX-01 Esc/宝箱/门最小接线（M7-FIX-01/收口）` + `为什么` / `验证` |
+| 证据/文档（本单自动提交） | `Docs/QA/Evidence/M7-FIX-01/**`、`REPORT_M7-FIX-01`、`REPORT_M7-4`、`醒来目检清单.md` | `修复：M7-FIX-01B 补 EventSystem 与宝箱内容（M7-FIX-01B/收口）` + `为什么` / `验证` |
 | 资产（所有者提交） | `DungeonWorld.unity`、`chest_base.prefab`、`chest_gold.prefab`、`dungeon_door.prefab`(+meta) | `修复：M7-FIX-01 场景与预制体接线（资产）` |
 
 ## 9. 消耗记录

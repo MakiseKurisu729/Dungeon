@@ -1,0 +1,56 @@
+# M7-FIX-01B 执行读回
+
+> 执行方式：MCP `execute_code`（一次性编辑器脚本，仅 A/C）；未手改 YAML/GUID。
+> 基线 `b000ae65`；执行时间 2026-11-07 12:2x。
+
+## 1. 执行日志（execute_code 原文）
+
+```text
+scene=Assets/Scenes/DungeonWorld.unity roots=14 dirty=False
+existing EventSystems=0
+ADD EventSystem + StandaloneInputModule
+StandaloneInputModule=True
+Canvas GraphicRaycaster=True
+ADD Loot_Gold data=金币袋
+SAVE chest_gold.prefab
+scene saved
+READBACK EventSystems=1
+  EventSystem => Transform,EventSystem,StandaloneInputModule,
+READBACK InputSystemUIInputModule=False
+READBACK Canvas GraphicRaycaster=True
+READBACK chest_gold ChestItems=2
+  coin_stack_medium data=金币袋 gold=50
+  Loot_Gold data=金币袋 gold=50
+```
+
+## 2. 组件读回
+
+| 对象 | 组件 |
+|---|---|
+| `EventSystem`（场景新增） | `Transform, EventSystem, StandaloneInputModule` |
+| `Canvas`（既有） | 含 `GraphicRaycaster`（no-op，仅复核） |
+| `chest_gold` prefab | `ChestItem` ×2：`coin_stack_medium`（嵌套 prefab 自带）、`Loot_Gold`（本单新增） |
+
+## 3. Play 模式读回（`Chest.Contents`）
+
+```text
+isPlaying=True
+Chests=1
+  chest_gold ContentsNull=False total=8 nonNull=2 items=金币袋(50),金币袋(50),
+EventSystem=True Standalone=True InputSystemModule=False
+```
+
+- `Contents` 非空；非空物品 **2**（金币袋 ×2）。
+- `EventSystem` + `StandaloneInputModule` 运行期存在；`InputSystemUIInputModule` 不存在。
+
+## 4. 领受信息与实际不符（重要）
+
+1. **Canvas 原本就有 `GraphicRaycaster`**：B 项按 no-op 处理，未重复添加。
+2. **`chest_gold` 原本已有 `ChestItem`**：来自嵌套 prefab `Assets/_Project/Prefabs/coin_stack_medium.prefab:95/98`（`data` = 金币袋 guid `4c1eb518…`）。即“开箱为空”并非因为无 `ChestItem`，而是 M7-FIX-01 之前宝箱没有 Collider、根本点不开。
+3. 按已批准清单仍新增了 `Loot_Gold`，因此现在 `chest_gold` 开箱为 **金币袋 ×2（100 金币）**。如只要 1 个，删除 `Loot_Gold` 即可（1 条脚本/1 次改动）。
+4. `UI_EventSystem.prefab` 确认为 `InputSystemUIInputModule`（`m_ActionsAsset`/`m_PointAction` 等字段），未实例化；改为手建 `EventSystem + StandaloneInputModule`。
+
+## 5. 边界
+
+- 未改 `chest_base`（其他宝箱仍空）；未改角色 prefab / `CharacterController` / `NavMeshAgent` / 其他资产；未新增 `ItemData`；未改门逻辑。
+- 资产未提交（按所有者要求）。
