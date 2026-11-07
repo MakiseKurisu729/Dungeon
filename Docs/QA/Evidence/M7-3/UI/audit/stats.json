@@ -1,0 +1,25 @@
+{
+  "file_count": 81,
+  "files_with_zero_declared_types": [],
+  "type_count": 95,
+  "edge_count": 548,
+  "cross_module_edge_count": 350,
+  "duplicate_type_names": {},
+  "file_scc_count": 4,
+  "file_scc_sizes": [
+    9,
+    4,
+    3,
+    3
+  ],
+  "layer_sccs": [],
+  "layer_file_counts": {
+    "Core": 9,
+    "Content": 3,
+    "Gameplay": 52,
+    "App": 6,
+    "UI": 10,
+    "Editor": 1
+  },
+  "upward_layer_edges": []
+}
