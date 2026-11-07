@@ -1,0 +1,9 @@
+M7-3 editor-only check
+Core: includePlatforms=[] references=[]
+Content: includePlatforms=[] references=['Dungeon.Core']
+Gameplay: includePlatforms=[] references=['Dungeon.Core', 'Dungeon.Content', 'UnityEngine.UI']
+App: includePlatforms=[] references=['Dungeon.Core', 'Dungeon.Content', 'Dungeon.Gameplay']
+UI: includePlatforms=[] references=['Dungeon.Core', 'Dungeon.Content', 'Dungeon.Gameplay', 'Dungeon.App', 'UnityEngine.UI']
+Editor: includePlatforms=['Editor'] references=['Dungeon.Core', 'Dungeon.Content', 'Dungeon.Gameplay', 'Dungeon.App', 'Dungeon.UI']
+EDITOR_ONLY=True
+RUNTIME_NO_EDITOR_REF=True
